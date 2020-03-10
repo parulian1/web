@@ -29,3 +29,23 @@
     white-space: nowrap;
   }
 }
+
+@media screen and (max-width: $mobile-break) {
+  .address {
+    display: none;
+  }
+
+  .mt-header-location {
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: $tablet-break) {
+  .address {
+    display: none;
+  }
+
+  .mt-header-location {
+    margin: 0;
+  }
+}

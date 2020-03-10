@@ -39,3 +39,19 @@
     }
   }
 }
+
+@media screen and (max-width: $mobile-break) {
+  .mt-header-search {
+    width: 100%;
+    margin: 0 0 0 8px;
+    height: 36px;
+  }
+}
+
+@media screen and (max-width: $tablet-break) {
+  .mt-header-search {
+    width: 100%;
+    margin: 0 0 0 8px;
+    height: 36px;
+  }
+}
