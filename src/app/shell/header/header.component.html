@@ -1,0 +1,24 @@
+<div class="inner-container">
+  <mat-toolbar class="mat-elevation-z3 navbar-desktop" color="white">
+    <div class="mt-header-logo">
+      <a [routerLink]="['/home']"><img src="assets/header/logo-mt.svg" alt="Martha Tilaar Logo"></a>
+    </div>
+    <app-store-location></app-store-location>
+    <app-search-bar></app-search-bar>
+    <div class="mt-header-account">
+      <img src="assets/header/logo-account.svg" alt="Account Logo">
+      <button class="auth-btn"><a [routerLink]="['/login']">Masuk / Daftar</a>
+      </button>
+    </div>
+    <div class="mt-header-notification">
+      <mat-icon matBadge="3" matBadgeColor="accent">notifications_none</mat-icon>
+    </div>
+    <div class="mt-header-cart">
+      <mat-icon matBadge="2" matBadgeColor="accent">shopping_cart</mat-icon>
+    </div>
+  </mat-toolbar>
+  <mat-toolbar class="mat-elevation-z3 navbar-mobile" color="white">
+
+  </mat-toolbar>
+</div>
+

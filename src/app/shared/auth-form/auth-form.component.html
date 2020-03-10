@@ -1,0 +1,40 @@
+<app-loader [isLoading]="isLoading"></app-loader>
+<form [formGroup]="mtForm" (ngSubmit)="onSubmit()">
+<!--  Email Input-->
+  <div class="label-form" [ngClass]="{'has-error': email.invalid && (email.dirty || email.touched)}">
+    <label>
+      {{ label }}
+    </label>
+  </div>
+  <div class="input-form" [ngClass]="{'has-error': email.invalid && (email.dirty || email.touched)}">
+    <input type="email" formControlName="email" required>
+  </div>
+  <div *ngIf="email.invalid && (email.dirty || email.touched)" class="form-alert">
+    <p>Mohon masukkan email Anda dengan benar</p>
+  </div>
+<!--  Password Input-->
+  <div class="label-form" [ngClass]="{'has-error': password.invalid && (password.dirty || password.touched)}">
+    <label>
+      Password
+    </label>
+  </div>
+  <div class="input-form" [ngClass]="{'has-error': password.invalid && (password.dirty || password.touched)}">
+    <input type="password" formControlName="password" required>
+  </div>
+  <div *ngIf="password.invalid && (password.dirty || password.touched)" class="form-alert">
+    <p>Mohon masukkan password Anda</p>
+  </div>
+<!--  Lupa Password-->
+  <div *ngIf="!isRegisterPage" class="forgot-password">
+    <a href="#">Lupa Password</a>
+  </div>
+<!--  Button-->
+  <div class="auth-btn">
+    <button *ngIf="!isRegisterPage" class="btn-primary"><a href="#">Login</a></button>
+    <button *ngIf="!isRegisterPage" class="btn-outline"><a [routerLink]="['/register']">Daftar</a></button>
+    <button *ngIf="isRegisterPage" class="btn-primary btn-register" type="submit" [disabled]="isButtonDisabled">Daftar</button>
+  </div>
+  <div class="auth-btn">
+    <app-social-button [currentMode]="currentMode"></app-social-button>
+  </div>
+</form>

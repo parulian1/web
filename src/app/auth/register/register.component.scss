@@ -1,0 +1,24 @@
+@import 'src/theme/base';
+
+.mt-register-container {
+  min-width: 400px;
+
+  .auth-btn {
+    .btn-primary {
+      margin: 36px 0 48px 0;
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-break) {
+  .mt-register-container {
+    min-width: 300px;
+    margin: 0 0 32px 0;
+  }
+}
+
+@media screen and (max-width: $tablet-break) {
+  .mt-register-container {
+    margin: 0 0 32px 0;
+  }
+}
