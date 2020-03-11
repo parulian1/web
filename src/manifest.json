@@ -1,0 +1,9 @@
+{
+  "name": "martha web",
+  "short_name": "martha web",
+  "theme_color": "#488aff",
+  "background_color": "#488aff",
+  "scope": "/",
+  "start_url": "/",
+  "display": "standalone"
+}

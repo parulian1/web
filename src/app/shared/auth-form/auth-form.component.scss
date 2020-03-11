@@ -1,0 +1,37 @@
+@import "src/theme/base";
+
+form {
+  .forgot-password {
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 21px;
+    display: flex;
+    justify-content: flex-end;
+    margin: 8px 0 36px 0;
+
+    a {
+      text-decoration: none;
+      color: $color-primary;
+    }
+  }
+
+  .auth-btn {
+    .btn-outline {
+      margin: 0 0 31px 0;
+    }
+
+    .btn-register {
+      margin: 36px 0 48px 0;
+      cursor: pointer;
+
+      &[disabled] {
+        background: $color-grey;
+      }
+    }
+  }
+
+}
+
+
