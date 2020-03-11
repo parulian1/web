@@ -8,7 +8,7 @@ import { Shell } from '@app/shell/shell.service';
 const routes: Routes = [
   Shell.childRoutes([
     { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'home', component: HomeComponent, data: { title: extract('Martha Tilaar Shop') } }
+    { path: 'home', component: HomeComponent }
   ])
 ];
 

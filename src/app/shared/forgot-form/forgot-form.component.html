@@ -1,0 +1,21 @@
+<app-loader [isLoading]="isLoading"></app-loader>
+<form [formGroup]="mtForgotPasswordForm" (ngSubmit)="onSubmit()">
+  <span class="forgot-password-desc">Masukkan email Anda, kami akan mengirimkan email berisi tautan untuk mengubah kata sandi Anda</span>
+  <div class="label-form" [ngClass]="{'has-error': email.invalid && (email.dirty || email.touched)}">
+    <label>
+      Email
+    </label>
+  </div>
+  <div class="input-form" [ngClass]="{'has-error': email.invalid && (email.dirty || email.touched)}">
+    <input type="email" formControlName="email" placeholder="Masukkan Email Anda" required>
+  </div>
+  <div *ngIf="email.invalid && (email.dirty || email.touched)" class="form-alert">
+    <p>Mohon masukkan email Anda dengan benar</p>
+  </div>
+  <div class="forgot-password-btn">
+    <button class="btn-primary" type="submit" [disabled]="isButtonDisabled">Kirim</button>
+  </div>
+  <span class="back-to-auth">Kembali ke Halaman <a [routerLink]="['/login']">Masuk</a> atau <a
+    [routerLink]="['/register']">Daftar</a></span>
+</form>
+

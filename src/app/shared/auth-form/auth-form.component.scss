@@ -15,7 +15,47 @@ form {
       text-decoration: none;
       color: $color-primary;
     }
+
   }
+
+  .already-register {
+    margin: 24px 0 0 0;
+
+    a {
+      color: $color-accent;
+    }
+  }
+
+  .terms-and-condition {
+    margin: 36px 0 0 0;
+    max-width: 400px;
+
+    .tnc-text {
+      color: $color-primary;
+    }
+
+    .mat-checkbox {
+      max-width: 100%;
+
+      ::ng-deep &-inner-container {
+        margin: 0 16px 0 0;
+      }
+
+      ::ng-deep &-layout {
+        max-width: 100%;
+        align-items: center;
+      }
+
+      ::ng-deep &-label {
+        width: 100%;
+        overflow-wrap: break-word;
+        white-space: normal;
+        font-size: 14px;
+        line-height: 19px;
+      }
+    }
+  }
+
 
   .auth-btn {
     .btn-outline {
@@ -33,5 +73,7 @@ form {
   }
 
 }
+
+
 
 

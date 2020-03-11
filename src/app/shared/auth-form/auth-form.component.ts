@@ -57,7 +57,8 @@ export class AuthFormComponent implements OnInit, DoCheck {
           Validators.required,
           Validators.email
         ])),
-        password: new FormControl('', Validators.required)
+        password: new FormControl('', Validators.required),
+        tnc: new FormControl('', Validators.required)
       });
     }
   }

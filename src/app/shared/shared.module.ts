@@ -10,6 +10,7 @@ import { AuthFormComponent } from './auth-form/auth-form.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import { SocialButtonComponent } from './social-button/social-button.component';
+import { ForgotFormComponent } from './forgot-form/forgot-form.component';
 
 @NgModule({
   imports: [
@@ -24,14 +25,16 @@ import { SocialButtonComponent } from './social-button/social-button.component';
     SearchBarComponent,
     StoreLocationComponent,
     AuthFormComponent,
-    SocialButtonComponent
+    SocialButtonComponent,
+    ForgotFormComponent
   ],
   exports: [
     LoaderComponent,
     SearchBarComponent,
     StoreLocationComponent,
     AuthFormComponent,
-    SocialButtonComponent
+    SocialButtonComponent,
+    ForgotFormComponent
   ]
 })
 export class SharedModule { }
