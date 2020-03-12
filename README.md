@@ -126,3 +126,33 @@ Development, build and quality processes are based on [angular-cli](https://gith
 - [Updating dependencies and tools](docs/updating.md)
 - [Using a backend proxy for development](docs/backend-proxy.md)
 - [Browser routing](docs/routing.md)
+
+
+## Starting Dev Dependencies
+
+We'll make this easier.. but just run this in the terminal for now.
+
+```bash
+docker-compose up -d
+
+docker exec mt-db psql -Udev -c 'CREATE DATABASE iam'
+docker exec mt-iam python manage.py migrate
+
+docker exec mt-db psql -Udev -c 'CREATE DATABASE fulfillment'
+docker exec mt-fulfillment python manage.py migrate
+
+docker exec mt-db psql -Udev -c 'CREATE DATABASE cms'
+
+docker exec mt-db psql -Udev -c 'CREATE DATABASE "order"'
+
+docker exec mt-db psql -Udev -c 'CREATE DATABASE catalog'
+
+```
+
+
+Now the non-automated stuff.
+If you need to create a superuser account:
+
+```bash
+docker exec mt-web_iam_api_1 python manage.py createsuperuser
+```
