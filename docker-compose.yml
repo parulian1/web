@@ -1,28 +1,36 @@
 ---
 version: '3'
 services:
+  nginx:
+    container_name: mt-nginx
+    image: nginx:1.17
+    volumes:
+      - ./nginx-local.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - iam_api
+      - fulfillment_api
+    ports:
+      - "8080:80"
   db:
     container_name: mt-db
     image: postgres:12
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: dev
+
   rabbitmq:
     container_name: mt-rabbitmq
     image: rabbitmq:3.8-management
     ports:
       - "15672:15672"
-      - "5672:5672"
     environment:
       RABBITMQ_DEFAULT_USER: dev
       RABBITMQ_DEFAULT_PASS: dev
+
   redis:
     container_name: mt-redis
     image: redis:5
-    ports:
-      - "6379:6379"
+
   iam_api:
     container_name: mt-iam
     image: gramedia/nusantara-iam-api
@@ -32,8 +40,7 @@ services:
       NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/iam
       NUS_DB_REPLICA: postgresql://dev:dev@db:5432/iam
       NUS_REDIS_URL: redis://redis:6379/1
-    ports:
-      - "8001:8000"
+
   fulfillment_api:
     container_name: mt-fulfillment
     image: gramedia/nusantara-fulfillment-api
@@ -43,5 +50,6 @@ services:
       NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/fulfillment
       NUS_DB_REPLICA: postgresql://dev:dev@db:5432/fulfillment
       NUS_REDIS_URL: redis://redis:6379/2
-    ports:
-      - "8002:8000"
+
+
+
