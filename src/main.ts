@@ -1,10 +1,9 @@
+import {enableProdMode} from '@angular/core';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { AppModule } from './app/app.module';
-import { environment } from '@env/environment';
-import { hmrBootstrap } from './hmr';
+import {AppModule} from './app/app.module';
+import {environment} from '@env/environment';
+import {hmrBootstrap} from './hmr';
 
 if (environment.production) {
   enableProdMode();
@@ -12,10 +11,8 @@ if (environment.production) {
 
 const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
 
-if (environment.hmr) {
-  hmrBootstrap(module, bootstrap);
-} else {
-  document.addEventListener('DOMContentLoaded', () => {
-    bootstrap().catch(err => console.error(err));
-  });
-}
+
+document.addEventListener('DOMContentLoaded', () => {
+  bootstrap().catch(err => console.error(err));
+});
+

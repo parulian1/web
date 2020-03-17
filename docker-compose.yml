@@ -16,7 +16,7 @@ services:
     image: postgres:12
     environment:
       POSTGRES_USER: dev
-      POSTGRES_PASSWORD: dev
+      POSTGRES_PASSWORD: d
 
   rabbitmq:
     container_name: mt-rabbitmq

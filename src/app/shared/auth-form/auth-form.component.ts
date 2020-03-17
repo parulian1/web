@@ -1,5 +1,11 @@
-import {Component, DoCheck, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, DoCheck, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormControl, FormGroup, Form, Validators, AbstractControl} from '@angular/forms';
+import {RegisterService} from "@app/services/register.service";
+import {User} from "@app/models/user";
+import {props, Store} from "@ngrx/store";
+import {AppState} from "@app/store/state/app.state";
+import {Register} from "@app/store/actions/auth.actions";
+
 
 @Component({
   selector: 'app-form',
@@ -7,17 +13,21 @@ import {FormControl, FormGroup, Form, Validators, AbstractControl} from '@angula
   styleUrls: ['./auth-form.component.scss']
 })
 export class AuthFormComponent implements OnInit, DoCheck {
-  public label: String;
-  public currentMode: String;
+  public label: string;
+  public currentMode: string;
   public isButtonDisabled: boolean;
   public isRegisterPage: boolean;
   public mtForm: FormGroup;
   isLoading = false;
+  errorMessage: string = '';
+
+  user: User = new User();
 
   @Input()
   public formType: String;
 
-  constructor() {
+  constructor(private service: RegisterService,
+              private store: Store<AppState>) {
   }
 
   ngOnInit(): void {
@@ -67,15 +77,20 @@ export class AuthFormComponent implements OnInit, DoCheck {
     if (this.formType == 'Register') {
       this.isLoading = true;
 
-      let email = this.email.value;
-      let password = this.password.value;
+      const payload = {
+        email: this.user.email,
+        password: this.user.password
+      };
 
-      this.registerNewUser(email, password);
+      this.store.dispatch(new Register(payload));
+
+      this.store.select(state => state).subscribe(data => {
+        console.log(data.auth.errorMessage);
+        this.errorMessage = data.auth.errorMessage
+      });
+
+
     }
   }
 
-
-  private registerNewUser(email: String, password: String) {
-     console.log('todo: register new user with nusantara api');
-  }
 }

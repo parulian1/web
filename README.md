@@ -147,6 +147,8 @@ docker exec mt-db psql -Udev -c 'CREATE DATABASE "order"'
 
 docker exec mt-db psql -Udev -c 'CREATE DATABASE catalog'
 
+dpcker exec mt-db psql -U dev -it
+
 ```
 
 

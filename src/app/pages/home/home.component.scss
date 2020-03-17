@@ -1,0 +1,14 @@
+@import "src/theme/base";
+
+.email-reminder {
+  width: 100%;
+  background-color: $color-google;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  a {
+    color: $color-accent;
+  }
+}

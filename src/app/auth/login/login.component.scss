@@ -27,3 +27,10 @@
     }
   }
 }
+
+@media screen and (max-width: $mobile-break) {
+  .mt-login-container {
+    min-width: 300px;
+    margin: 0 0 32px 0;
+  }
+}

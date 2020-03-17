@@ -1,23 +1,30 @@
 <div class="inner-container">
-  <mat-toolbar class="mat-elevation-z3 navbar-desktop" color="white">
-    <div class="mt-header-logo">
-      <a [routerLink]="['/home']"><img src="assets/header/logo-mt.svg" alt="Martha Tilaar Logo"></a>
-    </div>
-    <app-store-location></app-store-location>
-    <app-search-bar></app-search-bar>
-    <div class="mt-header-account">
-      <img src="assets/header/logo-account.svg" alt="Account Logo">
-      <button class="auth-btn"><a [routerLink]="['/login']">Masuk / Daftar</a>
-      </button>
-    </div>
-    <div class="mt-header-notification">
-      <mat-icon matBadge="3" matBadgeColor="accent">notifications_none</mat-icon>
-    </div>
-    <div class="mt-header-cart">
-      <mat-icon matBadge="2" matBadgeColor="accent">shopping_cart</mat-icon>
-    </div>
+  <mat-toolbar class="navbar-desktop" color="white">
+    <mat-toolbar-row class="first-row">
+      <div class="mt-header-logo">
+        <a [routerLink]="['/home']"><img src="assets/header/logo-mt.svg" alt="Martha Tilaar Logo"></a>
+      </div>
+      <app-store-location></app-store-location>
+      <app-search-bar></app-search-bar>
+      <div class="mt-header-account">
+        <a [routerLink]="['/profile']"><img src="assets/header/logo-account.svg" alt="Account Logo"></a>
+        <button class="auth-btn"><a [routerLink]="['/login']">Masuk / Daftar</a>
+        </button>
+      </div>
+      <div class="mt-header-notification">
+        <mat-icon matBadge="3" matBadgeColor="accent">notifications_none</mat-icon>
+      </div>
+      <div class="mt-header-cart">
+        <mat-icon matBadge="2" matBadgeColor="accent">shopping_cart</mat-icon>
+      </div>
+    </mat-toolbar-row>
+    <mat-toolbar-row class="second-row">
+      <span class="brands">Brands</span>
+      <span class="kategori">Kategori</span>
+    </mat-toolbar-row>
+
   </mat-toolbar>
-  <mat-toolbar class="mat-elevation-z3 navbar-mobile" color="white">
+  <mat-toolbar class="navbar-mobile" color="white">
     <div class="mobile-container">
       <div class="mobile-left">
         <button mat-icon-button>
@@ -45,5 +52,6 @@
       </div>
     </div>
   </mat-toolbar>
+
 </div>
 
