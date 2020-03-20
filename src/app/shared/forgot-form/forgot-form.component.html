@@ -1,4 +1,3 @@
-<app-loader [isLoading]="isLoading"></app-loader>
 <form [formGroup]="mtForgotPasswordForm" (ngSubmit)="onSubmit()">
   <span class="forgot-password-desc">Masukkan email Anda, kami akan mengirimkan email berisi tautan untuk mengubah kata sandi Anda</span>
   <div class="label-form" [ngClass]="{'has-error': email.invalid && (email.dirty || email.touched)}">

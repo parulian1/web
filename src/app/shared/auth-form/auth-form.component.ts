@@ -83,11 +83,11 @@ export class AuthFormComponent implements OnInit, DoCheck {
       };
 
       this.store.dispatch(new Register(payload));
-
-      this.store.select(state => state).subscribe(data => {
-        console.log(data.auth.errorMessage);
-        this.errorMessage = data.auth.errorMessage
-      });
+      //
+      // this.store.select(state => state).subscribe(data => {
+      //   console.log(data.auth.errorMessage);
+      //   this.errorMessage = data.auth.errorMessage
+      // });
 
 
     }

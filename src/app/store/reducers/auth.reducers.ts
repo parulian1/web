@@ -37,6 +37,9 @@ export function authReducer (state = initialState, action: All): State {
         errorMessage: action.payload.error.error.message
       }
     }
+    case AuthActionTypes.LOGOUT: {
+      return initialState;
+    }
     default: {
       return state;
     }

@@ -1,5 +1,8 @@
 import {Component, DoCheck, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Store} from "@ngrx/store";
+import {AppState} from "@app/store/state/app.state";
+import {ForgotPassword} from "@app/store/actions/auth.actions";
 
 @Component({
   selector: 'app-forgot-form',
@@ -12,7 +15,7 @@ export class ForgotFormComponent implements OnInit, DoCheck {
   public isButtonDisabled: boolean;
 
 
-  constructor() {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit(): void {
@@ -37,13 +40,7 @@ export class ForgotFormComponent implements OnInit, DoCheck {
 
   onSubmit() {
     this.isLoading = true;
-
     let email = this.email.value;
-
-    this.requestForgotPassword(email);
-  }
-
-  private requestForgotPassword(email: String) {
-    console.log('Sending request change password to ', email);
+    this.store.dispatch(new ForgotPassword(email));
   }
 }

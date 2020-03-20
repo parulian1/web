@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Store} from "@ngrx/store";
+import {AppState} from "@app/store/state/app.state";
 
 @Component({
   selector: 'app-profile',
@@ -6,10 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  public currentMode: string;
 
-  constructor() { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
+    this.currentMode = 'Sambungkan';
+
+    this.store.select(state => state).subscribe(data => {
+      console.log(data);
+    });
   }
 
 }

@@ -1,39 +1,28 @@
 import {Injectable} from "@angular/core";
-import {act, Actions, createEffect, Effect, ofType} from "@ngrx/effects";
+import {Actions, Effect, ofType} from "@ngrx/effects";
 import {RegisterService} from "@app/services/register.service";
 import {Router} from "@angular/router";
 import {Observable, of} from "rxjs";
 import {
-  AuthActionTypes,
+  AuthActionTypes, ForgotPassword,
   Register, RegisterFailed,
   RegisterSuccess
 } from "@app/store/actions/auth.actions";
-import {catchError, exhaustMap, map, mergeMap, switchMap, tap} from "rxjs/operators";
-import {createAction} from "@ngrx/store";
-import {EmailActionTypes, VerifyEmail} from "@app/store/actions/email.actions";
+import {catchError, map, switchMap, tap} from "rxjs/operators";
+import {AuthenticationService} from "@app/services/auth/authentication.service";
+import {Credentials} from "@app/models/credentials";
 
 @Injectable()
 export class AuthEffects {
 
+
   constructor(
     private actions: Actions,
-    private authService: RegisterService,
-    private router: Router
+    private registerService: RegisterService,
+    private router: Router,
+    private authService: AuthenticationService
   ) {
   }
-
-  // register$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType('[Auth] Register User'),
-  //     map((action: Register) => action.payload),
-  //     switchMap(payload => {
-  //       return this.authService.createAccount(payload.email, payload.password).pipe(
-  //         map((user) => {
-  //           return new RegisterSuccess({token: user.token, email: payload.email});
-  //         })
-  //       )
-  //     })
-  //   ));
 
 
   @Effect()
@@ -41,7 +30,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.REGISTER),
     map((action: Register) => action.payload),
     switchMap(payload => {
-      return this.authService.createAccount(payload.email, payload.password).pipe(
+      return this.registerService.createAccount(payload.email, payload.password).pipe(
         map((user) => {
           return new RegisterSuccess({token: user.token, email: payload.email});
         }),
@@ -50,36 +39,39 @@ export class AuthEffects {
     })
   );
 
-  // @Effect()
-  // VerifyEmail: Observable<any> = this.actions.pipe(
-  //   ofType(EmailActionTypes.VERIFY_EMAIL),
-  //   map((action: VerifyEmail) => action.payload),
-  //   switchMap(payload => {
-  //     return this.authService.sendVerifyEmail(payload.email, payload.token);
-  //   })
-  // );
-
-  // register$ = createEffect(() =>
-  //   this.actions.pipe(
-  //     ofType(AuthActionTypes.REGISTER),
-  //     exhaustMap(action =>
-  //     this.authService.createAccount(action.payload.email, action.payload.password).pipe(
-  //       map(user => )
-  //     ))
-  //   ))
-
   @Effect({dispatch: false})
   RegisterSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.REGISTER_SUCCESS),
-    tap((user) => {
-      localStorage.setItem('token', user.payload.token);
-      localStorage.setItem('email', user.payload.email);
-
-      // return new VerifyEmail({token: user.payload.token, email: user.payload.email});
+    tap((credentials: Credentials) => {
+      this.authService.register(credentials);
       this.router.navigateByUrl('/home');
     }),
-    // map(user => {
-    //   return new VerifyEmail({token: user.payload.token, email: user.payload.email});
-    // }),
   );
+
+  @Effect()
+  ForgotPassword: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.FORGOT_PASSWORD),
+    map((action: ForgotPassword) => action.payload),
+    switchMap(payload => {
+      return this.registerService.forgotPassword(payload);
+    })
+  );
+
+  @Effect({dispatch: false})
+  public Logout: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.LOGOUT),
+    tap(() => {
+      this.authService.logout();
+      this.router.navigateByUrl('/home');
+    })
+  );
+
+  @Effect()
+  AuthFacebook: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.AUTH_FACEBOOK),
+    tap(() => {
+      return this.registerService.socialConnectFb();
+    })
+  );
+
 }

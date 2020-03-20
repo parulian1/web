@@ -7,14 +7,17 @@ const HttpsProxyAgent = require('https-proxy-agent');
  * For more details and options, see https://angular.io/guide/build#using-corporate-proxy
  */
 const proxyConfig = [
+  // {
+  //   "/api/iam": {
+  //     target: 'https://localhost:8080',
+  //     secure: false
+  //   }
+  // },
   {
-    '*/api/iam/*':{
-      pathRewrite: { '^/api/iam': '' },
-      target: 'https://localhost:8080/api/iam/',
-      changeOrigin: true,
-      secure: false
-    }
-  }
+    context: "/api/iam",
+    target: "http://localhost:8080",
+    secure: false
+  },
 ];
 
 /*
@@ -31,7 +34,9 @@ function setupForCorporateProxy(proxyConfig) {
   if (proxyServer) {
     console.log(`Using corporate proxy server: ${proxyServer}`);
     agent = new HttpsProxyAgent(proxyServer);
-    proxyConfig.forEach(entry => { entry.agent = agent; });
+    proxyConfig.forEach(entry => {
+      entry.agent = agent;
+    });
   }
 
   return proxyConfig;

@@ -53,19 +53,8 @@
     justify-content: center;
     align-items: center;
 
-    .auth-btn {
-      margin: 0 0 0 8px;
-      border: none;
-      font-size: 16px;
-      font-weight: bold;
-      line-height: 22px;
-      background: 0 0;
-      cursor: pointer;
-
-      a {
-        text-decoration: none;
-        color: $color-primary;
-      }
+    a {
+      display: flex;
     }
   }
 

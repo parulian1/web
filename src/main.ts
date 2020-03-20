@@ -12,6 +12,8 @@ if (environment.production) {
 const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
 
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
   bootstrap().catch(err => console.error(err));
 });

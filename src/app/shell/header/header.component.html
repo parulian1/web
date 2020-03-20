@@ -8,8 +8,7 @@
       <app-search-bar></app-search-bar>
       <div class="mt-header-account">
         <a [routerLink]="['/profile']"><img src="assets/header/logo-account.svg" alt="Account Logo"></a>
-        <button class="auth-btn"><a [routerLink]="['/login']">Masuk / Daftar</a>
-        </button>
+        <app-auth-button></app-auth-button>
       </div>
       <div class="mt-header-notification">
         <mat-icon matBadge="3" matBadgeColor="accent">notifications_none</mat-icon>

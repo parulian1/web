@@ -7,6 +7,8 @@ import {VerifyEmail} from "@app/store/actions/email.actions";
 import {Observable} from "rxjs";
 import {RegisterService} from "@app/services/register.service";
 import {map} from "rxjs/operators";
+import {AuthenticationService} from "@app/services/auth/authentication.service";
+import {Credentials} from "@app/models/credentials";
 
 
 @Component({
@@ -19,11 +21,13 @@ export class HomeComponent implements OnInit {
   user: User = new User();
   currState: any;
   user$: Observable<any>;
+  credentials: any;
 
 
   constructor(private localStorage: LocalStorage,
               private store: Store<AppState>,
-              private service: RegisterService) {
+              private service: RegisterService,
+              private authService: AuthenticationService) {
     this.store.select(state => state).subscribe(data => {
       console.log('data', data);
       this.currState = data;
@@ -31,13 +35,9 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('token', localStorage.getItem('token'));
-    console.log('verify', this.service.sendVerifyEmail(localStorage.getItem('email')));
-    this.service.sendVerifyEmail(localStorage.getItem('email')).subscribe(verify => {
-      console.log(verify);
-    });
 
-    console.log('user$', this.user$);
+
+
   }
 
 

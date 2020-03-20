@@ -11,6 +11,8 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import { SocialButtonComponent } from './social-button/social-button.component';
 import { ForgotFormComponent } from './forgot-form/forgot-form.component';
+import { AuthButtonComponent } from './auth-button/auth-button.component';
+import { SideMenuComponent } from './side-menu/side-menu.component';
 
 @NgModule({
   imports: [
@@ -26,15 +28,19 @@ import { ForgotFormComponent } from './forgot-form/forgot-form.component';
     StoreLocationComponent,
     AuthFormComponent,
     SocialButtonComponent,
-    ForgotFormComponent
+    ForgotFormComponent,
+    AuthButtonComponent,
+    SideMenuComponent
   ],
-  exports: [
-    LoaderComponent,
-    SearchBarComponent,
-    StoreLocationComponent,
-    AuthFormComponent,
-    SocialButtonComponent,
-    ForgotFormComponent
-  ]
+    exports: [
+        LoaderComponent,
+        SearchBarComponent,
+        StoreLocationComponent,
+        AuthFormComponent,
+        SocialButtonComponent,
+        ForgotFormComponent,
+        AuthButtonComponent,
+        SideMenuComponent
+    ]
 })
 export class SharedModule { }

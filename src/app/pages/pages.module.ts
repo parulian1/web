@@ -9,6 +9,7 @@ import {MaterialModule} from "@app/material.module";
 import {HomeComponent} from "@app/pages/home/home.component";
 import {ProfileComponent} from "@app/pages/profile/profile.component";
 import {ShellModule} from "@app/shell/shell.module";
+import {AuthenticationService} from "@app/services/auth/authentication.service";
 
 
 @NgModule({
@@ -25,6 +26,9 @@ import {ShellModule} from "@app/shell/shell.module";
     MaterialModule,
     ShellModule,
     PagesRoutingModule,
+  ],
+  providers: [
+    AuthenticationService
   ]
 })
 export class PagesModule {
