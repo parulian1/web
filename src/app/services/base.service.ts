@@ -81,7 +81,10 @@ export abstract class BaseService {
     }
     if (this.auth.isAuthenticated()) {
       const token = this.auth.credentials.payload.token;
-      headers = headers.append('Authorization', 'JWT ' + token);
+      console.log('token', token);
+      // headers = headers.append('Authorization', 'JWT ' + token);
+      headers = headers.set('Authorization', 'JWT ' + token);
+
     }
     return headers;
   }

@@ -32,13 +32,11 @@ export class RegisterService extends BaseService {
   }
 
   sendVerifyEmail(email: string) {
-    console.log('emailverify', email);
-    console.log('postapiemailverify', this.postAPI(`${environment.BASE_API_URL}/auth/verify/`, JSON.stringify({email: email})));
-    return this.postAPI(`${environment.BASE_API_URL}/auth/verify/`, email);
+    console.log('email', email);
+    return this.postAPI(`${environment.BASE_API_URL}/auth/verify/`, JSON.stringify({
+      email: email
+    }));
 
-    // return this.postAPI(`${environment.BASE_API_URL}/auth/verify/`, JSON.stringify({
-    //   email: email
-    // }))
   }
 
   forgotPassword(email: string) {

@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {LocalStorage} from "@app/services/local-storage.service";
+import {AuthenticationService} from "@app/services/auth/authentication.service";
 
 @Component({
   selector: 'app-auth-button',
@@ -10,12 +11,13 @@ export class AuthButtonComponent implements OnInit {
   token: string;
 
 
-  constructor(private localStorage: LocalStorage) {
+  constructor(private auth: AuthenticationService) {
   }
 
   ngOnInit(): void {
-    this.token = localStorage.getItem('token');
-
+    if(this.auth.credentials.payload.token){
+      this.token = this.auth.credentials.payload.token;
+    }
   }
 
 }

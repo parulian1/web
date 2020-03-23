@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {TranslateModule} from '@ngx-translate/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -18,8 +18,26 @@ import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {RegisterService} from "@app/services/register.service";
 import {AuthEffects} from "@app/store/effects/auth.effects";
-import {authReducer} from "@app/store/reducers/auth.reducers";
 import {reducers} from "@app/store/state/app.state";
+import {SocialLoginModule, AuthServiceConfig} from "angularx-social-login";
+import {GoogleLoginProvider, FacebookLoginProvider} from "angularx-social-login";
+import {EmailEffects} from "@app/store/effects/email.effects";
+
+let config = new AuthServiceConfig([
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider("Google-OAuth-Client-Id")
+  },
+  {
+    id: FacebookLoginProvider.PROVIDER_ID,
+    provider: new FacebookLoginProvider("213301019733840")
+  }
+]);
+
+export function provideConfig() {
+  return config;
+}
+
 
 @NgModule({
   imports: [
@@ -35,13 +53,18 @@ import {reducers} from "@app/store/state/app.state";
     ShellModule,
     PagesModule,
     AuthModule,
+    SocialLoginModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([AuthEffects]) // must be imported as the last module as it contains the fallback route
+    EffectsModule.forRoot([AuthEffects,EmailEffects]) // must be imported as the last module as it contains the fallback route
   ],
   declarations: [AppComponent],
   providers: [
     RegisterService,
+    {
+      provide: AuthServiceConfig,
+      useFactory: provideConfig
+    }
   ],
   bootstrap: [AppComponent]
 })

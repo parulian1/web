@@ -1,5 +1,4 @@
 <app-header></app-header>
-
 <div class="container">
-  <div class="email-reminder" *ngIf="!isEmailVerify">Email Anda belum terverifikasi, <a href="#"> Verifikasi Sekarang</a></div>
+  <div class="email-reminder">Email Anda belum terverifikasi, <button (click)="verifyEmail()"> Verifikasi Sekarang</button></div>
 </div>

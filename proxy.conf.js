@@ -15,8 +15,10 @@ const proxyConfig = [
   // },
   {
     context: "/api/iam",
-    target: "http://localhost:8080",
-    secure: false
+    pathRewrite: { '^/api/iam': '' },
+    target: "http://localhost:8080/api/iam",
+    secure: false,
+    changeOrigin: true,
   },
 ];
 
