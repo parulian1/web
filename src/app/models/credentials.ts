@@ -1,7 +1,5 @@
 export interface Credentials {
-  payload : {
-    email: string;
-    token: string;
-  }
-  type? : string;
+  email?: string,
+  token?: string,
+  isEmailVerified?: boolean
 }

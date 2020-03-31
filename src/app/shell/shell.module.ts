@@ -7,6 +7,8 @@ import {MaterialModule} from '@app/material.module';
 import {HeaderComponent} from './header/header.component';
 import {ShellComponent} from '@app/shell/shell.component';
 import {SharedModule} from '@app/shared';
+import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
+import {LoadingBarRouterModule} from "@ngx-loading-bar/router";
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import {SharedModule} from '@app/shared';
     FlexLayoutModule,
     MaterialModule,
     SharedModule,
-    RouterModule
+    RouterModule,
+    LoadingBarHttpClientModule,
+    LoadingBarRouterModule,
   ],
   declarations: [
     ShellComponent,

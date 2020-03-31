@@ -13,7 +13,7 @@ import {IEnvironment} from "@env/environment.interface";
 
 export const environment: IEnvironment = {
   production: false,
-  BASE_API_URL: "http://localhost:8080/api/iam",
+  BASE_API_URL: "/api",
 };
 
 /*

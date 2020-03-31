@@ -70,6 +70,14 @@ form {
         background: $color-grey;
       }
     }
+
+    .btn-login {
+      cursor: pointer;
+
+      &[disabled] {
+        background: $color-grey;
+      }
+    }
   }
 
 }

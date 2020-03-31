@@ -2,9 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {LocalStorage} from "@app/services/local-storage.service";
 import {Store} from "@ngrx/store";
 import {AppState} from "@app/store/state/app.state";
-import {RegisterService} from "@app/services/register.service";
-import {AuthenticationService} from "@app/services/auth/authentication.service";
+import {AuthUserService} from "@app/services/auth-user.service";
+import {CredentialsService} from "@app/core/authentication/credentials.service";
 import {VerifyEmail} from "@app/store/actions/email.actions";
+import {pipe} from "rxjs";
 
 
 @Component({
@@ -16,27 +17,13 @@ export class HomeComponent implements OnInit {
 
   constructor(private localStorage: LocalStorage,
               private store: Store<AppState>,
-              private service: RegisterService,
-              private authService: AuthenticationService) {
+              private service: AuthUserService,
+              private creds: CredentialsService) {
+
   }
 
   ngOnInit() {
-    console.log(this.authService.isAuthenticated());
-
+    console.log('isAuthenticated',this.creds.isAuthenticated());
   }
-
-  verifyEmail() {
-    // const payload = {
-    //   email: this.authService.credentials.payload.email,
-    // };
-    //
-    // this.store.dispatch(new VerifyEmail(payload));
-
-   this.service.sendVerifyEmail(this.authService.credentials.payload.email)
-     .subscribe(res => {
-       console.log('verify', res);
-     })
-  }
-
 
 }

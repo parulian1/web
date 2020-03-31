@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {CredentialsService} from "@app/core/authentication/credentials.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-shell',
@@ -7,10 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ShellComponent implements OnInit {
 
-  constructor() { }
+  constructor(private creds: CredentialsService,
+              private router: Router) { }
 
   ngOnInit() {
-
+    if(this.creds.isAuthenticated()){
+      this.router.navigateByUrl('/home');
+    }
   }
 
 }

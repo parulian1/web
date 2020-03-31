@@ -37,7 +37,7 @@
   </div>
   <!--  Button-->
   <div class="auth-btn">
-    <button *ngIf="!isRegisterPage" class="btn-primary"><a href="#">Login</a></button>
+    <button *ngIf="!isRegisterPage" class="btn-primary btn-login" type="submit" [disabled]="isButtonDisabled">Login</button>
     <button *ngIf="!isRegisterPage" class="btn-outline"><a [routerLink]="['/register']">Daftar</a></button>
     <button *ngIf="isRegisterPage" class="btn-primary btn-register" type="submit" [disabled]="isButtonDisabled">Daftar
     </button>

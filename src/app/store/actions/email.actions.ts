@@ -1,8 +1,16 @@
 import {Action} from "@ngrx/store";
+import {
+  ForgotPassword,
+  Login, LoginSuccess,
+  Logout,
+  Register,
+  RegisterFailed,
+  RegisterSuccess
+} from "@app/store/actions/auth.actions";
 
 export enum EmailActionTypes {
   VERIFY_EMAIL = '[Email] Verify Email',
-  SEND_VERIFY = '[Email] Send Verify'
+  VERIFY_SENT = '[Email] Verify Email Sent'
 }
 
 export class VerifyEmail implements Action {
@@ -11,4 +19,15 @@ export class VerifyEmail implements Action {
   constructor(public payload: any) {
   }
 }
+
+export class VerifySent implements Action {
+  readonly type = EmailActionTypes.VERIFY_SENT;
+
+  constructor(public payload: any) {
+  }
+}
+
+export type AllEmail =
+  | VerifySent
+  | VerifyEmail
 

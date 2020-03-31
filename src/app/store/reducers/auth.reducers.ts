@@ -1,17 +1,15 @@
-import {User} from "@app/models/user";
 import {All, AuthActionTypes} from "@app/store/actions/auth.actions";
-import {createSelector} from "@ngrx/store";
+import {Credentials} from "@app/models/credentials";
+import {Notification} from "@app/models/notification";
 
 export interface State {
-  isAuthenticated: boolean;
-  user: User | null;
-  errorMessage: string | null;
+  credentials: Credentials,
+  notification: Notification
 }
 
 export const initialState: State = {
-  isAuthenticated: false,
-  user: null,
-  errorMessage: null
+  credentials: null,
+  notification: null
 };
 
 export function authReducer (state = initialState, action: All): State {
@@ -19,22 +17,16 @@ export function authReducer (state = initialState, action: All): State {
     case AuthActionTypes.REGISTER_SUCCESS: {
       return {
         ...state,
-        isAuthenticated: true,
-        user: {
-          token: action.payload.token,
-          email: action.payload.email,
-          isAuthenticated: true,
-          isEmailVerified: false
-        },
-        errorMessage: null
+      }
+    }
+    case AuthActionTypes.LOGIN_SUCCESS: {
+      return {
+        ...state,
       }
     }
     case AuthActionTypes.REGISTER_FAILED: {
       return {
         ...state,
-        isAuthenticated: false,
-        user: null,
-        errorMessage: action.payload.error.error.message
       }
     }
     case AuthActionTypes.LOGOUT: {
@@ -45,19 +37,3 @@ export function authReducer (state = initialState, action: All): State {
     }
   }
 }
-
-// export const selectFeature = (state: AppState) => state.authState;
-//
-// export const selectFeatureCount = createSelector(
-//   selectFeature,
-//   (state: State) => state.user
-// );
-
-// export const selectFeature = createFeatureSelector<AppState, State>('auth');
-//
-// export const selectFeatureCount = createSelector(
-//   selectFeature,
-//   (state: State) => state.user
-// );
-
-export const selectAuthState = createSelector((state: State) => state.user, value => value);

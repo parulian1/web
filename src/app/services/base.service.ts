@@ -3,7 +3,8 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import {AuthenticationService} from "@app/services/auth/authentication.service";
+import {AuthenticationService} from "@app/core/authentication/authentication.service";
+import {CredentialsService} from "@app/core/authentication/credentials.service";
 
 export interface IOptionHeaders {
   key: string;
@@ -12,9 +13,8 @@ export interface IOptionHeaders {
 
 @Injectable({ providedIn: 'root' })
 export abstract class BaseService {
-  tempLS: any;
 
-  protected constructor(protected http: HttpClient, protected auth: AuthenticationService, protected router: Router) {}
+  protected constructor(protected http: HttpClient, protected auth: AuthenticationService, protected router: Router, protected credentialsService: CredentialsService) {}
 
   protected getAPI<T>(
     url: string,
@@ -79,12 +79,9 @@ export abstract class BaseService {
         headers = headers.append(options[i].key, options[i].value);
       }
     }
-    if (this.auth.isAuthenticated()) {
-      const token = this.auth.credentials.payload.token;
-      console.log('token', token);
-      // headers = headers.append('Authorization', 'JWT ' + token);
+    if (this.credentialsService.isAuthenticated()) {
+      const token = this.credentialsService.credentials.token;
       headers = headers.set('Authorization', 'JWT ' + token);
-
     }
     return headers;
   }

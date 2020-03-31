@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {RegisterService} from "@app/services/register.service";
+import {AuthUserService} from "@app/services/auth-user.service";
 import {AuthenticationService} from "@app/services/auth/authentication.service";
 
 
@@ -11,7 +11,7 @@ import {AuthenticationService} from "@app/services/auth/authentication.service";
     CommonModule
   ],
   exports: [
-    RegisterService,
+    AuthUserService,
     AuthenticationService
   ]
 })

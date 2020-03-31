@@ -9,24 +9,30 @@ import {MaterialModule} from "@app/material.module";
 import {HomeComponent} from "@app/pages/home/home.component";
 import {ProfileComponent} from "@app/pages/profile/profile.component";
 import {ShellModule} from "@app/shell/shell.module";
-import {AuthenticationService} from "@app/services/auth/authentication.service";
+import {AuthenticationService} from "@app/core/authentication/authentication.service";
+import { ChangePasswordComponent } from './profile/change-password/change-password.component';
+import { UserProfileComponent } from './profile/user-profile/user-profile.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
   declarations: [
     HomeComponent,
-    ProfileComponent
+    ProfileComponent,
+    ChangePasswordComponent,
+    UserProfileComponent
   ],
-  imports: [
-    CommonModule,
-    TranslateModule,
-    CoreModule,
-    SharedModule,
-    FlexLayoutModule,
-    MaterialModule,
-    ShellModule,
-    PagesRoutingModule,
-  ],
+    imports: [
+        CommonModule,
+        TranslateModule,
+        CoreModule,
+        SharedModule,
+        FlexLayoutModule,
+        MaterialModule,
+        ShellModule,
+        PagesRoutingModule,
+        ReactiveFormsModule,
+    ],
   providers: [
     AuthenticationService
   ]

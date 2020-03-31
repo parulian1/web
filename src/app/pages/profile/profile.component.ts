@@ -15,9 +15,6 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.currentMode = 'Sambungkan';
 
-    this.store.select(state => state).subscribe(data => {
-      console.log(data);
-    });
   }
 
 }
