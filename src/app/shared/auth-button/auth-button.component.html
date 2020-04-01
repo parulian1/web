@@ -1,0 +1,4 @@
+<button class="auth-btn">
+  <a [routerLink]="['/login']" *ngIf="!token">Masuk / Daftar</a>
+  <span *ngIf="token">Hai, Teman</span>
+</button>

@@ -1,5 +1,5 @@
 /*
- * Use the Page Object pattern to define the page under test.
+ * Use the Page Object pattern to define the pages under test.
  * See docs/coding-guide/e2e-tests.md for more info.
  */
 

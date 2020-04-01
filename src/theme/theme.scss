@@ -25,7 +25,21 @@ body {
   margin: 0 auto;
   display: flex;
   justify-content: center;
+  padding: 190px 0 0 0;
+}
+
+.main-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
   padding: 150px 0 0 0;
+}
+
+.content {
+  width: 1195px;
+  margin: 0 auto;
+  display: flex;
+  padding: 190px 16px 0 16px;
 }
 
 .inner-container {
@@ -179,4 +193,11 @@ form {
     }
 
   }
+}
+
+.box-content {
+  min-width: 448px;
+  border: solid 1px #E5E5E5;
+  border-radius: $border-radius;
+  padding: 0px 16px 16px 16px;
 }

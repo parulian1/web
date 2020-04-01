@@ -1,0 +1,18 @@
+@import "src/theme/base";
+
+::ng-deep .navbar-reminder {
+  position: fixed;
+  height: 40px;
+  margin: 120px 0 0 0;
+  background-color: $color-google;
+  z-index: 1;
+
+  .notification {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    line-height: 22px;
+  }
+}

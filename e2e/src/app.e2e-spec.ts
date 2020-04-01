@@ -10,11 +10,11 @@ describe('when the app loads', () => {
     await app.navigateAndSetLanguage();
   });
 
-  it('should display the shell page', async () => {
+  it('should display the shell pages', async () => {
     expect(await browser.getCurrentUrl()).toContain('/');
   });
 
-  describe('and the page loads', () => {
+  describe('and the pages loads', () => {
     it('should display the hello message', async () => {
       await browser.wait(until.visibilityOf(shell.welcomeText), 5000, 'Element taking too long to appear');
       expect(await shell.getParagraphText()).toEqual('Hello world !');

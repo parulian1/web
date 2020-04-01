@@ -1,0 +1,50 @@
+@import "src/theme/base";
+
+form {
+  margin: 24px 0 0 0;
+
+  .forgot-password {
+    &-desc {
+      max-width: 100%;
+      overflow-wrap: break-word;
+      white-space: normal;
+      font-size: 14px;
+      line-height: 19px;
+      margin: 0 0 18px 0;
+    }
+
+    &-btn {
+      width: 100%;
+      margin: 0 0 16px 0;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+
+  .back-to-auth {
+    font-size: 16px;
+    line-height: 22px;
+    padding: 0 0 12px 0;
+
+    a {
+      color: $color-primary;
+    }
+  }
+
+  .forgot-password-btn {
+    button {
+      cursor: pointer;
+      margin: 24px 0 0 0;
+
+      &[disabled] {
+        background: $color-grey;
+      }
+    }
+  }
+
+  .input-form {
+    margin: 0 0 16px 0;
+  }
+}

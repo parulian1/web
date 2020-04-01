@@ -1,0 +1,12 @@
+@import "src/theme/base";
+
+.sidebar-menu-profile {
+  width: 211px;
+  display: flex;
+
+  app-side-menu {
+    width: 100%;
+  }
+}
+
+

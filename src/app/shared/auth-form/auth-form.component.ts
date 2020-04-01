@@ -1,5 +1,11 @@
-import {Component, DoCheck, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, DoCheck, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormControl, FormGroup, Form, Validators, AbstractControl} from '@angular/forms';
+import {AuthUserService} from "@app/services/auth-user.service";
+import {User} from "@app/models/user";
+import {props, Store} from "@ngrx/store";
+import {AppState} from "@app/store/state/app.state";
+import {Login, Register} from "@app/store/actions/auth.actions";
+
 
 @Component({
   selector: 'app-form',
@@ -7,30 +13,35 @@ import {FormControl, FormGroup, Form, Validators, AbstractControl} from '@angula
   styleUrls: ['./auth-form.component.scss']
 })
 export class AuthFormComponent implements OnInit, DoCheck {
-  public label: String;
-  public currentMode: String;
+  public label: string;
+  public currentMode: string;
   public isButtonDisabled: boolean;
   public isRegisterPage: boolean;
   public mtForm: FormGroup;
+
   isLoading = false;
+  errorMessage: string = '';
+
+  user: User = new User();
 
   @Input()
   public formType: String;
 
-  constructor() {
+  constructor(private service: AuthUserService,
+              private store: Store<AppState>) {
   }
 
   ngOnInit(): void {
     this.isRegisterPage = false;
+    this.label = (this.formType == 'Login') ? 'Email / Nomor Handphone' : 'Email';
 
     this.initForm();
-
-    this.label = (this.formType == 'Login') ? 'Email / Nomor Handphone' : 'Email';
 
     if (this.formType != 'Login') {
       this.isRegisterPage = true;
       this.currentMode = 'Daftar';
     } else {
+      this.isRegisterPage = false;
       this.currentMode = 'Masuk';
     }
 
@@ -51,30 +62,31 @@ export class AuthFormComponent implements OnInit, DoCheck {
   initForm() {
     this.isButtonDisabled = true;
 
-    if (this.formType == 'Login' || this.formType == 'Register') {
-      this.mtForm = new FormGroup({
-        email: new FormControl('', Validators.compose([
-          Validators.required,
-          Validators.email
-        ])),
-        password: new FormControl('', Validators.required)
-      });
+    this.mtForm = new FormGroup({
+      email: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.email
+      ])),
+      password: new FormControl('', Validators.required),
+    });
+
+    if (this.formType == 'Register') {
+      this.mtForm.addControl('tnc', new FormControl('', Validators.required))
     }
+
   }
 
   onSubmit() {
+    const payload = {
+      email: this.user.email,
+      password: this.user.password
+    };
+
     if (this.formType == 'Register') {
-      this.isLoading = true;
+      this.store.dispatch(new Register(payload));
 
-      let email = this.email.value;
-      let password = this.password.value;
-
-      this.registerNewUser(email, password);
+    } else {
+      this.store.dispatch(new Login(payload));
     }
-  }
-
-
-  private registerNewUser(email: String, password: String) {
-     console.log('todo: register new user with nusantara api');
   }
 }

@@ -81,7 +81,8 @@
           "options": {
             "hmr": true,
             "hmrWarning": false,
-            "browserTarget": "martha-web:build"
+            "browserTarget": "martha-web:build",
+            "proxyConfig": "src/proxy.conf.js"
           },
           "configurations": {
             "production": {
