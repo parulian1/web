@@ -142,6 +142,7 @@ docker exec mt-db psql -Udev -c 'CREATE DATABASE fulfillment'
 docker exec mt-fulfillment python manage.py migrate
 
 docker exec mt-db psql -Udev -c 'CREATE DATABASE cms'
+docker exec mt-cms python manage.py migrate
 
 docker exec mt-db psql -Udev -c 'CREATE DATABASE "order"'
 

@@ -6,13 +6,16 @@ import {Observable, of, pipe} from "rxjs";
 import {
   AuthActionTypes, ForgotPassword,
   Register, RegisterFailed,
-  RegisterSuccess, Login, LoginSuccess, ChangePassword, ChangePasswordSuccess
+  RegisterSuccess, Login, LoginSuccess, ChangePassword, ChangePasswordSuccess, AuthFacebook
 } from "@app/store/actions/auth.actions";
 import {catchError, map, switchMap, tap} from "rxjs/operators";
 import {Credentials} from "@app/models/credentials";
 import {AuthenticationService} from "@app/core/authentication/authentication.service";
 import {VerifyEmail} from "@app/store/actions/email.actions";
 import {logger} from "codelyzer/util/logger";
+import {AuthService, FacebookLoginProvider, GoogleLoginProvider} from "angularx-social-login";
+import {User} from "@app/models/user";
+import {environment} from "@env/environment";
 
 @Injectable()
 export class AuthEffects {
@@ -21,7 +24,8 @@ export class AuthEffects {
     private actions: Actions,
     private authUserService: AuthUserService,
     private router: Router,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private socialAuthService: AuthService,
   ) {
   }
 
@@ -35,11 +39,29 @@ export class AuthEffects {
         .pipe(
           map(res => {
             return new RegisterSuccess({token: res.token, email: payload.email})
-          }),
-          catchError(error => of(new RegisterFailed(error)))
+          })
         )
     })
   );
+
+  @Effect()
+  RegisterSuccess: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.REGISTER_SUCCESS),
+    map((action: RegisterSuccess) => action.payload),
+    map(payload => {
+      this.authService.register(payload);
+      return new VerifyEmail({email: payload.email})
+    })
+  );
+
+  @Effect({dispatch: false})
+  RegisterFailed: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.REGISTER_FAILED),
+    map((action: RegisterFailed) => action.payload),
+    map(payload => {
+      console.log('Register Error', payload);
+    })
+  )
 
   @Effect()
   ChangePassword: Observable<any> = this.actions.pipe(
@@ -87,15 +109,6 @@ export class AuthEffects {
     })
   );
 
-  @Effect()
-  RegisterSuccess: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.REGISTER_SUCCESS),
-    map((action: RegisterSuccess) => action.payload),
-    map(payload => {
-      this.authService.register(payload);
-      return new VerifyEmail({email: payload.email})
-    })
-  );
 
   @Effect()
   ForgotPassword: Observable<any> = this.actions.pipe(
@@ -118,9 +131,37 @@ export class AuthEffects {
   @Effect()
   AuthFacebook: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.AUTH_FACEBOOK),
-    tap(() => {
-      return this.authUserService.socialConnectFb();
-    })
-  );
+    pipe(
+      map(res => {
+        this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID).then((user) => {
+          return this.authUserService.socialConnectFb(user.authToken).toPromise().then(value => {
+            this.authService.login({
+              token: value.token,
+              email: user.email
+            });
+            this.router.navigateByUrl('/home');
+          })
+        })
+      })
+    )
+  )
+
+  @Effect()
+  AuthGoogle: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.AUTH_GOOGLE),
+    pipe(
+      map(res => {
+        this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user) => {
+          return this.authUserService.socialConnectGoogle(user.authToken).toPromise().then(value => {
+            this.authService.login({
+              token: value.token,
+              email: user.email
+            });
+            this.router.navigateByUrl('/home');
+          })
+        })
+      })
+    )
+  )
 
 }

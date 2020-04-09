@@ -19,7 +19,6 @@ export class AuthFormComponent implements OnInit, DoCheck {
   public isRegisterPage: boolean;
   public mtForm: FormGroup;
 
-  isLoading = false;
   errorMessage: string = '';
 
   user: User = new User();
@@ -76,7 +75,7 @@ export class AuthFormComponent implements OnInit, DoCheck {
 
   }
 
-  onSubmit() {
+  defaultAuth() {
     const payload = {
       email: this.user.email,
       password: this.user.password
@@ -84,9 +83,9 @@ export class AuthFormComponent implements OnInit, DoCheck {
 
     if (this.formType == 'Register') {
       this.store.dispatch(new Register(payload));
-
     } else {
       this.store.dispatch(new Login(payload));
     }
+
   }
 }

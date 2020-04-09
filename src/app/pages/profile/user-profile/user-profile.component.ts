@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AuthUserService} from "@app/services/auth-user.service";
 
 @Component({
   selector: 'app-user-profile',
@@ -6,12 +7,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-  public currentMode: string;
 
-  constructor() { }
+  constructor(private authUserService: AuthUserService) {
+  }
 
   ngOnInit(): void {
-    this.currentMode = 'Sambungkan';
+    this.getSocialLink();
+  }
+
+  getSocialLink() {
+    this.authUserService.getSocialLink().subscribe(res => {
+      console.log('social-link ', res);
+    });
   }
 
 }

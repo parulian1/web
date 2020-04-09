@@ -9,6 +9,7 @@ services:
     depends_on:
       - iam_api
       - fulfillment_api
+      - cms_api
     ports:
       - "8080:80"
   db:
@@ -43,7 +44,7 @@ services:
 
   fulfillment_api:
     container_name: mt-fulfillment
-    image: gramedia/nusantara-fulfillment-api
+    image: gramedia/nusantara-fulfillment-api:latest
     environment:
       NUS_DEBUG: 'true'
       NUS_RABBITMQ_URL: amqp://dev:dev@rabbitmq:5672
@@ -51,5 +52,14 @@ services:
       NUS_DB_REPLICA: postgresql://dev:dev@db:5432/fulfillment
       NUS_REDIS_URL: redis://redis:6379/2
 
+  cms_api:
+    container_name: mt-cms
+    image: gramedia/nusantara-cms-api:feature_project-setup
+    environment:
+      NUS_DEBUG: 'true'
+      NUS_RABBITMQ_URL: amqp://dev:dev@rabbitmq:5672
+      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/cms
+      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/cms
+      NUS_REDIS_URL: redis://redis:6379/3
 
 
