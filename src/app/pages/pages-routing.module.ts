@@ -6,6 +6,7 @@ import {extract} from "@app/core";
 import {AuthenticationGuard} from "@app/core/authentication/authentication.guard";
 import {ChangePasswordComponent} from "@app/pages/profile/change-password/change-password.component";
 import {UserProfileComponent} from "@app/pages/profile/user-profile/user-profile.component";
+import {StoreComponent} from "@app/pages/store/store.component";
 
 
 const routes: Routes = [
@@ -20,7 +21,10 @@ const routes: Routes = [
       {path: '', component: UserProfileComponent},
       {path: 'change-password', component: ChangePasswordComponent}
     ]
-  }
+  },
+  {path: 'store', component: StoreComponent},
+  {path:'store/:current-state', component: StoreComponent},
+
 ];
 
 @NgModule({

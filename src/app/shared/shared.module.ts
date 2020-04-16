@@ -13,7 +13,8 @@ import {SocialButtonComponent} from './social-button/social-button.component';
 import {ForgotFormComponent} from './forgot-form/forgot-form.component';
 import {AuthButtonComponent} from './auth-button/auth-button.component';
 import {SideMenuComponent} from './side-menu/side-menu.component';
-import { ReminderBarComponent } from './reminder-bar/reminder-bar.component';
+import {ReminderBarComponent} from './reminder-bar/reminder-bar.component';
+import {StoreSideMenuComponent} from './store-side-menu/store-side-menu.component';
 
 @NgModule({
   imports: [
@@ -32,19 +33,22 @@ import { ReminderBarComponent } from './reminder-bar/reminder-bar.component';
     ForgotFormComponent,
     AuthButtonComponent,
     SideMenuComponent,
-    ReminderBarComponent
+    ReminderBarComponent,
+    StoreSideMenuComponent,
   ],
-    exports: [
-        LoaderComponent,
-        SearchBarComponent,
-        StoreLocationComponent,
-        AuthFormComponent,
-        SocialButtonComponent,
-        ForgotFormComponent,
-        AuthButtonComponent,
-        SideMenuComponent,
-        ReminderBarComponent
-    ]
+  exports: [
+    LoaderComponent,
+    SearchBarComponent,
+    StoreLocationComponent,
+    AuthFormComponent,
+    SocialButtonComponent,
+    ForgotFormComponent,
+    AuthButtonComponent,
+    SideMenuComponent,
+    ReminderBarComponent,
+    StoreSideMenuComponent,
+
+  ]
 })
 export class SharedModule {
 }

@@ -1,0 +1,24 @@
+<app-header></app-header>
+<div class="content">
+  <div class="sidebar-menu-profile">
+    <app-store-side-menu [address]="addresses"
+                         [storeList]="storeList">
+    </app-store-side-menu>
+  </div>
+  <div class="store-list" *ngIf="storeList">
+    <form [formGroup]="storeForm">
+      <span *ngFor="let item of storeList">
+      <input
+        type="radio"
+        formControlName="store"
+        value="{{item.code}}">
+        <span class="store-name-address">
+          <span class="title">{{item.name}}</span>
+          <span class="address">{{item.addr}}</span>
+        </span>
+      </span>
+
+    </form>
+  </div>
+
+</div>

@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {RouterModule} from '@angular/router';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -10,6 +10,8 @@ import {SharedModule} from '@app/shared';
 import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
 import {LoadingBarRouterModule} from "@ngx-loading-bar/router";
 import { SlaComponent } from './sla/sla.component';
+import { BannerComponent } from './banner/banner.component';
+import { TestimonialComponent } from './testimonial/testimonial.component';
 
 
 @NgModule({
@@ -26,13 +28,20 @@ import { SlaComponent } from './sla/sla.component';
   declarations: [
     ShellComponent,
     HeaderComponent,
-    SlaComponent
+    SlaComponent,
+    BannerComponent,
+    TestimonialComponent
   ],
-    exports: [
-        ShellComponent,
-        HeaderComponent,
-        SlaComponent
-    ]
+  exports: [
+    ShellComponent,
+    HeaderComponent,
+    SlaComponent,
+    BannerComponent,
+    TestimonialComponent
+  ],
+  providers:[
+    DatePipe
+  ]
 })
 export class ShellModule {
 }

@@ -1,0 +1,162 @@
+@import "src/theme/base";
+
+.testimonial {
+  width: 1152px;
+  padding: 16px 0 0 0;
+
+  .testi {
+    margin: 24px 0 0 0;
+    width: 100%;
+
+    &-cell {
+      width: 564px;
+      height: 212px;
+      margin-right: 24px;
+      border-radius: $border-radius;
+      display: flex;
+
+      .item {
+        display: flex;
+        background-color: $white;
+        align-items: flex-start;
+        padding: 8px;
+        border-radius: $border-radius;
+
+        .photo {
+          width: 196px;
+          height: 196px;
+
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .desc {
+          width: calc(100% - 196px);
+          margin: 0 0 0 24px;
+          display: flex;
+          flex-direction: column;
+
+          .title {
+            font-size: 18px;
+            line-height: 25px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+          }
+
+          .comment {
+            font-size: 14px;
+            line-height: 19px;
+            margin: 0 0 5px 0;
+            height: 137px;
+          }
+
+          .name {
+            font-size: 14px;
+            line-height: 19px;
+            color: $color-secondary;
+          }
+        }
+      }
+    }
+
+    &-cell:before {
+      display: block;
+      text-align: center;
+      line-height: 200px;
+      font-size: 80px;
+      color: white;
+    }
+
+    ::ng-deep .flickity-viewport {
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+
+      &:focus {
+        outline-color: $white;
+      }
+
+      ::ng-deep .flickity-slider {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        img {
+          &:focus {
+            outline-color: $white;
+          }
+        }
+
+        &:focus {
+          outline-color: $white;
+        }
+
+      }
+    }
+
+    ::ng-deep .flickity-button {
+      position: absolute;
+      background: hsla(0, 0%, 100%, 0.75);
+      border: none;
+      color: #333;
+      cursor: pointer;
+
+      &-icon {
+        width: 18px;
+        height: 18px;
+      }
+
+
+    }
+
+    ::ng-deep .flickity-prev-next-button {
+      top: 50%;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      transform: translateY(-50%);
+    }
+
+    ::ng-deep .flickity-prev-next-button.next {
+      right: 10px;
+
+
+    }
+
+    ::ng-deep .flickity-prev-next-button.previous {
+      left: 10px;
+
+    }
+
+    ::ng-deep .flickity-page-dots {
+      position: absolute;
+      width: 100%;
+      bottom: -45px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      text-align: center;
+      line-height: 1;
+
+      ::ng-deep .dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin: 0 8px;
+        background: #333;
+        border-radius: 50%;
+        opacity: 0.25;
+        cursor: pointer;
+      }
+
+      ::ng-deep .dot.is-selected {
+        background-color: $color-accent;
+        opacity: 1;
+        width: 40px;
+        border-radius: 12px;
+      }
+    }
+  }
+}

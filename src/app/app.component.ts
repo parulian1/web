@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AppState} from "@app/store/state/app.state";
 import {Store} from "@ngrx/store";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-root',
@@ -9,14 +10,15 @@ import {Store} from "@ngrx/store";
 })
 export class AppComponent implements OnInit {
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>,
+              private title: Title) {
     this.store.select(state => state).subscribe(data => {
       console.log('data', data);
     });
   }
 
   ngOnInit() {
-
+    this.title.setTitle('Martha Tilaar Shop');
   }
 
 

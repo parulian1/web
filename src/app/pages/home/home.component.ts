@@ -14,6 +14,7 @@ import {pipe} from "rxjs";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  bannerDate: string = '2020-04-01T06:00:00+07:00';
 
   constructor(private localStorage: LocalStorage,
               private store: Store<AppState>,
@@ -24,6 +25,10 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     console.log('isAuthenticated',this.creds.isAuthenticated());
+
+
+
+
   }
 
 }

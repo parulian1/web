@@ -42,6 +42,8 @@
     "@ngx-translate/core": "^11.0.1",
     "angularx-social-login": "^2.2.1",
     "express": "^4.15.2",
+    "flickity": "^2.2.1",
+    "imports-loader": "^0.8.0",
     "material-design-icons-iconfont": "^5.0.1",
     "rxjs": "^6.5.2",
     "tslib": "^1.10.0",

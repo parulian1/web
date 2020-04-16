@@ -1,6 +1,6 @@
-<div class="mt-header-location">
+<div class="mt-header-location" *ngIf="distance">
   <img src="assets/header/logo-pin.svg" alt="Logo Pin"/>
-  <div class="information">
+  <div class="information" [routerLink]="['/store', distance[0].state]">
     <span class="store">Taman Anggrek Mal</span>
     <span class="address">Jl. Letjen S.Parman Kav.21, Jakarta Barat</span>
   </div>

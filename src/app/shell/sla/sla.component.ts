@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
 import {Sla} from "@app/models/sla";
 import {SlaService} from "@app/services/sla.service";
-import {Observable} from "rxjs";
+import {DatePipe, formatDate} from "@angular/common";
+
 
 @Component({
   selector: 'app-sla',
@@ -11,7 +12,9 @@ import {Observable} from "rxjs";
 export class SlaComponent implements OnInit {
   public sla: Array<Sla> = [];
 
-  constructor(private slaService: SlaService) {
+  constructor(private slaService: SlaService,
+              private datePipe: DatePipe,
+              @Inject(LOCALE_ID) private locale: string) {
   }
 
   ngOnInit(): void {
@@ -19,6 +22,9 @@ export class SlaComponent implements OnInit {
       .subscribe(sla => {
         this.sla = sla;
       })
+
+
   }
+
 
 }

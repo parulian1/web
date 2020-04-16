@@ -13,6 +13,7 @@ import {AuthenticationService} from "@app/core/authentication/authentication.ser
 import { ChangePasswordComponent } from './profile/change-password/change-password.component';
 import { UserProfileComponent } from './profile/user-profile/user-profile.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import { StoreComponent } from './store/store.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import {ReactiveFormsModule} from "@angular/forms";
     HomeComponent,
     ProfileComponent,
     ChangePasswordComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    StoreComponent
   ],
     imports: [
         CommonModule,
