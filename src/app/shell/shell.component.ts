@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CredentialsService} from "@app/core/authentication/credentials.service";
 import {Router} from "@angular/router";
 
@@ -10,10 +10,11 @@ import {Router} from "@angular/router";
 export class ShellComponent implements OnInit {
 
   constructor(private creds: CredentialsService,
-              private router: Router) { }
+              private router: Router) {
+  }
 
   ngOnInit() {
-    if(this.creds.isAuthenticated()){
+    if (this.creds.isAuthenticated()) {
       this.router.navigateByUrl('/home');
     }
   }

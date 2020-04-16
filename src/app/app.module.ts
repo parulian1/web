@@ -7,7 +7,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MaterialModule} from './material.module';
 import {environment} from '@env/environment';
-import {ApiPrefixInterceptor, CoreModule} from '@app/core';
+import {CoreModule, ErrorHandlerInterceptor} from '@app/core';
 import {SharedModule} from '@app/shared';
 import {ShellModule} from './shell/shell.module';
 import {AppComponent} from './app.component';
@@ -21,8 +21,22 @@ import {AuthEffects} from "@app/store/effects/auth.effects";
 import {reducers} from "@app/store/state/app.state";
 import {EmailEffects} from "@app/store/effects/email.effects";
 import {TokenInterceptor} from "@app/core/http/token.interceptor";
-import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
-import {LoadingBarRouterModule} from "@ngx-loading-bar/router";
+import {AuthServiceConfig, FacebookLoginProvider, GoogleLoginProvider, SocialLoginModule} from "angularx-social-login";
+
+let config = new AuthServiceConfig([
+  {
+    id: FacebookLoginProvider.PROVIDER_ID,
+    provider: new FacebookLoginProvider(environment.FB_APPLICATION_ID)
+  },
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider(environment.GOOGLE_APPLICATION_ID)
+  }
+]);
+
+export function provideConfig() {
+  return config;
+}
 
 @NgModule({
   imports: [
@@ -38,6 +52,7 @@ import {LoadingBarRouterModule} from "@ngx-loading-bar/router";
     ShellModule,
     PagesModule,
     AuthModule,
+    SocialLoginModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([AuthEffects, EmailEffects]) // must be imported as the last module as it contains the fallback route
@@ -50,6 +65,10 @@ import {LoadingBarRouterModule} from "@ngx-loading-bar/router";
       useClass: TokenInterceptor,
       multi: true
     },
+    {
+      provide: AuthServiceConfig,
+      useFactory: provideConfig
+    }
   ],
   bootstrap: [AppComponent]
 })

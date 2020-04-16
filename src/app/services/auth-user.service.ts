@@ -1,14 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {environment} from "@env/environment";
-import {User} from "@app/models/user";
-import {BaseService} from "@app/services/base.service";
-import {Router} from "@angular/router";
-import {AuthenticationService} from "@app/core/authentication/authentication.service";
-import {CredentialsService} from "@app/core/authentication/credentials.service";
-import {env} from "@env/.env";
 import {Credentials} from "@app/models/credentials";
-
+import {AuthService} from "angularx-social-login";
 
 @Injectable({
   providedIn: 'root'
@@ -54,8 +47,26 @@ export class AuthUserService {
       }))
   }
 
-  socialConnectFb() {
-    window.location.href = `/iam/socialconnect/facebook/token`;
+  socialConnectFb(fbToken: string) {
+    return this.http
+      .cache()
+      .post<Credentials>(`/iam/social-auth/facebook/`, JSON.stringify({
+        access_token: fbToken
+      }))
+  }
+
+  socialConnectGoogle(googleToken: string) {
+    return this.http
+      .cache()
+      .post<Credentials>(`/iam/social-auth/google-oauth2/`, JSON.stringify({
+        access_token: googleToken
+      }))
+  }
+
+  getSocialLink(){
+    return this.http
+      .cache(true)
+      .get(`/iam/social-auth/`);
   }
 
 }

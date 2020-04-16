@@ -1,5 +1,5 @@
 <div class="error-message-form" *ngIf="errorMessage.length > 0">{{errorMessage}}</div>
-<form [formGroup]="mtForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="mtForm">
   <!--  Email Input-->
   <div class="label-form" [ngClass]="{'has-error': email.invalid && (email.dirty || email.touched)}">
     <label>
@@ -37,9 +37,9 @@
   </div>
   <!--  Button-->
   <div class="auth-btn">
-    <button *ngIf="!isRegisterPage" class="btn-primary btn-login" type="submit" [disabled]="isButtonDisabled">Login</button>
+    <button *ngIf="!isRegisterPage" class="btn-primary btn-login" type="submit" (click)="defaultAuth()" [disabled]="isButtonDisabled">Login</button>
     <button *ngIf="!isRegisterPage" class="btn-outline"><a [routerLink]="['/register']">Daftar</a></button>
-    <button *ngIf="isRegisterPage" class="btn-primary btn-register" type="submit" [disabled]="isButtonDisabled">Daftar
+    <button *ngIf="isRegisterPage" class="btn-primary btn-register" type="submit" (click)="defaultAuth()" [disabled]="isButtonDisabled">Daftar
     </button>
   </div>
   <div class="auth-btn">

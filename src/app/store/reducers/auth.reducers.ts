@@ -4,7 +4,7 @@ import {Notification} from "@app/models/notification";
 
 export interface State {
   credentials: Credentials,
-  notification: Notification
+  notification: Notification,
 }
 
 export const initialState: State = {

@@ -11,7 +11,8 @@ export enum AuthActionTypes {
   FORGOT_PASSWORD = '[Auth] Forgot Password',
   CHANGE_PASSWORD = '[Auth] Change Password',
   CHANGE_PASSWORD_SUCCESS = '[Auth] Change Password Success',
-  AUTH_FACEBOOK = '[Auth] Social Connect Facebook'
+  AUTH_FACEBOOK = '[Auth] Social Connect Facebook',
+  AUTH_GOOGLE = '[Auth] Social Connect Google'
 }
 
 export class Register implements Action {
@@ -78,7 +79,15 @@ export class ChangePasswordSuccess implements Action {
 
 export class AuthFacebook {
   readonly type = AuthActionTypes.AUTH_FACEBOOK;
+
 }
+
+export class AuthGoogle {
+  readonly type = AuthActionTypes.AUTH_GOOGLE;
+}
+
+
+
 
 export type All =
   | Register
@@ -89,4 +98,6 @@ export type All =
   | ChangePassword
   | Login
   | LoginSuccess
+  | AuthFacebook
+
 

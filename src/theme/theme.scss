@@ -20,6 +20,12 @@ body {
   height: 100%;
 }
 
+section {
+  width: 1152px;
+  display: flex;
+  justify-content: center;
+}
+
 .container {
   max-width: 1280px;
   margin: 0 auto;
@@ -120,7 +126,6 @@ form {
     font-size: 16px;
     line-height: 22px;
     height: 40px;
-    border: none;
     border: none;
 
     a {

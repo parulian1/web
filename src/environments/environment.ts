@@ -14,6 +14,8 @@ import {IEnvironment} from "@env/environment.interface";
 export const environment: IEnvironment = {
   production: false,
   BASE_API_URL: "/api",
+  FB_APPLICATION_ID: "657992455041552",
+  GOOGLE_APPLICATION_ID: "62419296650-d2cld4t7a0kfm8cvv2pk8sb51epvos62.apps.googleusercontent.com",
 };
 
 /*

@@ -9,6 +9,7 @@ import {ShellComponent} from '@app/shell/shell.component';
 import {SharedModule} from '@app/shared';
 import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
 import {LoadingBarRouterModule} from "@ngx-loading-bar/router";
+import { SlaComponent } from './sla/sla.component';
 
 
 @NgModule({
@@ -24,12 +25,14 @@ import {LoadingBarRouterModule} from "@ngx-loading-bar/router";
   ],
   declarations: [
     ShellComponent,
-    HeaderComponent
+    HeaderComponent,
+    SlaComponent
   ],
-  exports: [
-    ShellComponent,
-    HeaderComponent
-  ]
+    exports: [
+        ShellComponent,
+        HeaderComponent,
+        SlaComponent
+    ]
 })
 export class ShellModule {
 }
