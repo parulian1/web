@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {Sla} from "@app/models/sla";
-import {Observable} from "rxjs";
+
 
 @Injectable({
   providedIn: 'root'
@@ -16,4 +16,6 @@ export class SlaService {
       .cache(true)
       .get<Sla[]>(`/cms/sla/`)
   }
+
+
 }

@@ -70,7 +70,7 @@ export function provideConfig() {
       useFactory: provideConfig
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
 }

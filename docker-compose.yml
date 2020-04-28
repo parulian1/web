@@ -34,7 +34,7 @@ services:
 
   iam_api:
     container_name: mt-iam
-    image: gramedia/nusantara-iam-api
+    image: gramedia/nusantara-iam-api:latest
     environment:
       NUS_DEBUG: 'true'
       NUS_RABBITMQ_URL: amqp://dev:dev@rabbitmq:5672
@@ -44,7 +44,7 @@ services:
 
   fulfillment_api:
     container_name: mt-fulfillment
-    image: gramedia/nusantara-fulfillment-api:latest
+    image: gramedia/nusantara-fulfillment-api:feature_manage-warehouse
     environment:
       NUS_DEBUG: 'true'
       NUS_RABBITMQ_URL: amqp://dev:dev@rabbitmq:5672

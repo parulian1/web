@@ -23,6 +23,8 @@ export class AuthFormComponent implements OnInit, DoCheck {
 
   user: User = new User();
 
+
+
   @Input()
   public formType: String;
 

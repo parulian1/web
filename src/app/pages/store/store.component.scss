@@ -1,0 +1,34 @@
+@import "src/theme/base";
+
+.store-list {
+  width: calc(100% - 226.84px);
+  form {
+    display: flex;
+    flex-direction: row;
+
+    span {
+      width: 250px;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-start;
+
+      .store-name-address {
+        display: flex;
+        flex-direction: column;
+
+        .title {
+          font-size: 16px;
+          line-height: 22px;
+          margin: 0 0 6px 0;
+          font-weight: bold;
+        }
+
+        .address {
+          font-size: 14px;
+          line-height: 19px;
+        }
+      }
+    }
+  }
+}

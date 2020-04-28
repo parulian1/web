@@ -1,14 +1,48 @@
-<div>
-  <span>
-    <a [routerLink]="['change-password']">Ganti Password</a>
-  </span>
-</div>
-<br>
-
 <div class="profile">
+  <div class="top">
+    <span class="subtitle">Profil</span>
+    <span><a>Edit Profil</a></span>
+  </div>
+  <div class="box-content">
+    <div class="data">
+      <div class="detail">
+        <label>Nama Lengkap</label>
+        <span>Rio Trilaksono Putro</span>
+      </div>
+
+      <div class="detail-email">
+          <div class="row">
+            <label>Email</label>
+            <span>rio.trilaksono@gramedia.digital</span>
+          </div>
+          <span>
+            <button class="btn-profile-verify">Belum terverifikasi</button>
+          </span>
+      </div>
+
+      <div class="detail">
+        <label>No. Handphone</label>
+        <span>081252353137</span>
+      </div>
+
+      <div class="detail">
+        <label>Jenis Kelamin</label>
+        <span>Laki-Laki</span>
+      </div>
+
+      <div class="detail">
+        <label>Tanggal Lahir</label>
+        <span>2 Juli 1993</span>
+      </div>
+      <span>
+        <a [routerLink]="['change-password']">Ganti Password</a>
+      </span>
+    </div>
+  </div>
   <span class="sc-subtitle">Hubungkan dengan Sosial Media</span>
   <div class="social-connect">
-    <button class="btn-fb" ><img src="assets/social/logo-fb.svg" alt="Logo Facebook"/>Hubungkan dengan Facebook</button>
-    <button class="btn-google"><img src="assets/social/logo-google.svg" alt="Logo Google"/>Hubungkan dengan Google</button>
+    <button class="btn-fb"><img src="assets/social/logo-fb.svg" alt="Logo Facebook"/>Sambungkan dengan Facebook</button>
+    <button class="btn-google"><img src="assets/social/logo-google.svg" alt="Logo Google"/>Sambungkan dengan Google
+    </button>
   </div>
 </div>
