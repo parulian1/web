@@ -3,7 +3,7 @@ version: '3'
 services:
   nginx:
     container_name: mt-nginx
-    image: nginx:1.17
+    image: nginx:stable-alpine
     volumes:
       - ./nginx-local.conf:/etc/nginx/nginx.conf:ro
     depends_on:
@@ -14,14 +14,14 @@ services:
       - "8080:80"
   db:
     container_name: mt-db
-    image: postgres:12
+    image: postgres:12-alpine
     environment:
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: dev
 
   rabbitmq:
     container_name: mt-rabbitmq
-    image: rabbitmq:3.8-management
+    image: rabbitmq:3.8-management-alpine
     ports:
       - "15672:15672"
     environment:
@@ -30,7 +30,7 @@ services:
 
   redis:
     container_name: mt-redis
-    image: redis:5
+    image: redis:5-alpine
 
   iam_api:
     container_name: mt-iam
@@ -61,5 +61,3 @@ services:
       NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/cms
       NUS_DB_REPLICA: postgresql://dev:dev@db:5432/cms
       NUS_REDIS_URL: redis://redis:6379/3
-
-

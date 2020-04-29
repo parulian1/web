@@ -22,7 +22,7 @@ RUN ls /root/dist
 
 # ---------- Release Image -----------
 # pull official base image
-FROM nginx:satble-alpine
+FROM nginx:stable-alpine
 
 WORKDIR /usr/share/nginx/html/
 
