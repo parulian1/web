@@ -1,6 +1,6 @@
 # ---------- Builder Image -----------
 # pull official base image
-FROM node:12.16.2-alpine3.11 as Builder
+FROM node:12-alpine as Builder
 
 #Set Argument
 ARG ENV
@@ -22,7 +22,9 @@ RUN ls /root/dist
 
 # ---------- Release Image -----------
 # pull official base image
-FROM nginx:1.17-alpine
+FROM nginx:satble-alpine
+
+WORKDIR /usr/share/nginx/html/
 
 COPY --from=Builder /root/dist/martha-web/browser /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf 
