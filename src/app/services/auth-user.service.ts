@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Credentials} from "@app/models/credentials";
 import {AuthService} from "angularx-social-login";
+import {SocialAuth} from "@app/models/social-auth";
 
 @Injectable({
   providedIn: 'root'
@@ -66,7 +67,7 @@ export class AuthUserService {
   getSocialLink(){
     return this.http
       .cache(true)
-      .get(`/iam/social-auth/`);
+      .get<SocialAuth[]>(`/iam/social-auth/`);
   }
 
 }
