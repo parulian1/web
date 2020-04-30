@@ -19,7 +19,7 @@ export class StoreLocationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getNearbyStore();
+    // this.getNearbyStore();
     navigator.geolocation.getCurrentPosition(position => {
       this.currentLat = position.coords.latitude;
       this.currentLng = position.coords.longitude;
@@ -28,7 +28,7 @@ export class StoreLocationComponent implements OnInit {
 
   getNearbyStore() {
     this.storeService.getStoreLocation().subscribe(res => {
-      this.store = res;
+      // this.store = res;
 
       for (let item of this.store) {
         this.storeList.push({

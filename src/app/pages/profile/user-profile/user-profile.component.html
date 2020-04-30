@@ -11,11 +11,11 @@
       </div>
 
       <div class="detail-email">
-          <div class="row">
-            <label>Email</label>
-            <span>rio.trilaksono@gramedia.digital</span>
-          </div>
-          <span>
+        <div class="row">
+          <label>Email</label>
+          <span>rio.trilaksono@gramedia.digital</span>
+        </div>
+        <span>
             <button class="btn-profile-verify">Belum terverifikasi</button>
           </span>
       </div>
@@ -41,8 +41,19 @@
   </div>
   <span class="sc-subtitle">Hubungkan dengan Sosial Media</span>
   <div class="social-connect">
-    <button class="btn-fb"><img src="assets/social/logo-fb.svg" alt="Logo Facebook"/>Sambungkan dengan Facebook</button>
-    <button class="btn-google"><img src="assets/social/logo-google.svg" alt="Logo Google"/>Sambungkan dengan Google
+    <button class="btn-fb" [disabled]="disabledFb">
+      <span>
+        <img src="assets/social/logo-fb.svg"
+             alt="Logo Facebook"/>{{currentModeFb}} dengan Facebook
+      </span>
+      <mat-icon *ngIf="isCheckFb">check</mat-icon>
+    </button>
+    <button class="btn-google" [disabled]="disabledGoogle">
+      <span>
+        <img [src]="srcGoogle"
+             alt="Logo Google"/>{{currentModeGoogle}} dengan Google
+      </span>
+      <mat-icon *ngIf="isCheckGoogle">check</mat-icon>
     </button>
   </div>
 </div>

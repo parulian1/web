@@ -147,6 +147,7 @@ docker exec mt-cms python manage.py migrate
 docker exec mt-db psql -Udev -c 'CREATE DATABASE "order"'
 
 docker exec mt-db psql -Udev -c 'CREATE DATABASE catalog'
+docker exec mt-catalog python manage.py migrate
 
 dpcker exec mt-db psql -U dev -it
 

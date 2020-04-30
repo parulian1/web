@@ -23,20 +23,20 @@ export class StoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getStoreLocation();
-    this.initStoreForm();
-
-    this.activatedRoute.paramMap.subscribe(params => {
-      this.currentState = params.get('current-state');
-      console.log('params-route', this.currentState);
-
-      this.setContent(this.currentState);
-    })
+    // this.getStoreLocation();
+    // this.initStoreForm();
+    //
+    // this.activatedRoute.paramMap.subscribe(params => {
+    //   this.currentState = params.get('current-state');
+    //   console.log('params-route', this.currentState);
+    //
+    //   this.setContent(this.currentState);
+    // })
   }
 
   getStoreLocation() {
     this.storeService.getStoreLocation().subscribe(res => {
-      this.store = res;
+      // this.store = res;
       for (let item of this.store) {
         this.addresses.push(item.address.state);
       }

@@ -1,5 +1,8 @@
 export interface Sla {
-  title? : string;
-  image? : string;
-  text? : string;
+  title : string;
+  image : string;
+  description? : string;
+  isActive? : boolean;
+  sortPriority?: number;
 }
+

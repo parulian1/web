@@ -1,0 +1,30 @@
+@import "src/theme/base";
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 40px;
+    cursor: pointer;
+
+
+    a {
+      font-size: 16px;
+      line-height: 22px;
+      font-weight: bold;
+      text-decoration: none;
+      color: $color-primary;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
