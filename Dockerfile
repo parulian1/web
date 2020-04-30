@@ -18,7 +18,6 @@ RUN npm install -q
 COPY . /root
 
 RUN ng build --configuration $ENV
-RUN ls /root/dist
 
 # ---------- Release Image -----------
 # pull official base image
