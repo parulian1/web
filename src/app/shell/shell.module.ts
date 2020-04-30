@@ -9,9 +9,14 @@ import {ShellComponent} from '@app/shell/shell.component';
 import {SharedModule} from '@app/shared';
 import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
 import {LoadingBarRouterModule} from "@ngx-loading-bar/router";
-import { SlaComponent } from './sla/sla.component';
-import { BannerComponent } from './banner/banner.component';
-import { TestimonialComponent } from './testimonial/testimonial.component';
+import {SlaComponent} from './sla/sla.component';
+import {BannerComponent} from './banner/banner.component';
+import {TestimonialComponent} from './testimonial/testimonial.component';
+import {BrandsComponent} from './brands/brands.component';
+import {NavbarComponent} from './navbar/navbar.component';
+import {MenuBrandComponent} from './header/menu-brand/menu-brand.component';
+import { HighlightCategoryComponent } from './highlight-category/highlight-category.component';
+import { FooterComponent } from './footer/footer.component';
 
 
 @NgModule({
@@ -30,16 +35,24 @@ import { TestimonialComponent } from './testimonial/testimonial.component';
     HeaderComponent,
     SlaComponent,
     BannerComponent,
-    TestimonialComponent
+    TestimonialComponent,
+    BrandsComponent,
+    NavbarComponent,
+    MenuBrandComponent,
+    HighlightCategoryComponent,
+    FooterComponent,
   ],
-  exports: [
-    ShellComponent,
-    HeaderComponent,
-    SlaComponent,
-    BannerComponent,
-    TestimonialComponent
-  ],
-  providers:[
+    exports: [
+        ShellComponent,
+        HeaderComponent,
+        SlaComponent,
+        BannerComponent,
+        TestimonialComponent,
+        BrandsComponent,
+        HighlightCategoryComponent,
+        FooterComponent
+    ],
+  providers: [
     DatePipe
   ]
 })

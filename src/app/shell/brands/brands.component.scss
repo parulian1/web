@@ -1,0 +1,33 @@
+@import "src/theme/base";
+
+.brands {
+  width: 1152px;
+  padding: 16px 0 16px 0;
+
+  .subtitle {
+    margin: 0 0 16px 0;
+  }
+
+  .list-brands {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .brand {
+      width: 211px;
+      height: 211px;
+      border: solid 1px $color-grey;
+      border-radius: $border-radius;
+      margin: 0 0 24px 0;
+
+      a {
+        display: block;
+
+        img {
+          height: 100%;
+          width: 100%;
+        }
+      }
+    }
+  }
+}

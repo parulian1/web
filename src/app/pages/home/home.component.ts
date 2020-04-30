@@ -6,6 +6,7 @@ import {AuthUserService} from "@app/services/auth-user.service";
 import {CredentialsService} from "@app/core/authentication/credentials.service";
 import {VerifyEmail} from "@app/store/actions/email.actions";
 import {pipe} from "rxjs";
+import {StoreService} from "@app/services/store.service";
 
 
 @Component({
@@ -19,12 +20,19 @@ export class HomeComponent implements OnInit {
   constructor(private localStorage: LocalStorage,
               private store: Store<AppState>,
               private service: AuthUserService,
+              private storeService: StoreService,
               private creds: CredentialsService) {
 
   }
 
   ngOnInit() {
     console.log('isAuthenticated',this.creds.isAuthenticated());
+
+    this.storeService.getStoreLocation().subscribe(res =>{
+      console.log('res', res.headers.keys());
+    })
+
+
 
 
 

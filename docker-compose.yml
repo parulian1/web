@@ -10,6 +10,7 @@ services:
       - iam_api
       - fulfillment_api
       - cms_api
+      - catalog_api
     ports:
       - "8080:80"
   db:
@@ -64,7 +65,7 @@ services:
 
   cms_api:
     container_name: mt-cms
-    image: gramedia/nusantara-cms-api:feature_project-setup
+    image: gramedia/nusantara-cms-api:feature_cms
     environment:
       NUS_DEBUG: 'true'
       NUS_RABBITMQ_URL: amqp://dev:dev@rabbitmq:5672
@@ -74,10 +75,12 @@ services:
 
   catalog_api:
     container_name: mt-catalog
-    image: gramedia/nusantara-catalog-api:latest
+    image: gramedia/nusantara-catalog-api:feature_categories
     environment:
       NUS_DEBUG: 'true'
       NUS_RABBITMQ_URL: amqp://dev:dev@rabbitmq:5672
-      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/cms
-      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/cms
-      NUS_REDIS_URL: redis://redis:6379/3
+      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/catalog
+      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/catalog
+      NUS_REDIS_URL: redis://redis:6379/4
+
+
