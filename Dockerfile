@@ -26,4 +26,4 @@ FROM nginx:stable-alpine
 WORKDIR /usr/share/nginx/html/
 
 COPY --from=Builder /root/dist/martha-web/browser /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/nginx.conf 
+COPY nginx.conf /etc/nginx/nginx.conf

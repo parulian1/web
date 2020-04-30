@@ -31,7 +31,6 @@ services:
   redis:
     container_name: mt-redis
     image: redis:5-alpine
-
   admin:
     container_name: mt-admin
     image: gramedia/nusantara-admin:latest
@@ -41,7 +40,6 @@ services:
       NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/iam
       NUS_DB_REPLICA: postgresql://dev:dev@db:5432/iam
       NUS_REDIS_URL: redis://redis:6379/1
-
   iam_api:
     container_name: mt-iam
     image: gramedia/nusantara-iam-api:latest
@@ -71,7 +69,6 @@ services:
       NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/cms
       NUS_DB_REPLICA: postgresql://dev:dev@db:5432/cms
       NUS_REDIS_URL: redis://redis:6379/3
-
   catalog_api:
     container_name: mt-catalog
     image: gramedia/nusantara-catalog-api:latest
