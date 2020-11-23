@@ -60,6 +60,7 @@ export class PaymentMethodComponent implements OnInit, DoCheck {
   savePaymentMethod() {
     log.debug(this.paymentChosen);
     this.stateService.statePaymentMethod = this.paymentChosen;
+    this.stateService.statePayment = this.payments;
     this.mode = 'default';
   }
 

@@ -10,4 +10,8 @@ export interface PaymentMethodType {
   description: string;
   logo: string;
   name: string;
+  isActive?: boolean;
+  code?: string;
+  accountHoldNumber?: string;
+  accountNumber?: string;
 }

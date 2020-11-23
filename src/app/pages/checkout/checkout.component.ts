@@ -194,11 +194,17 @@ export class CheckoutComponent implements OnInit, DoCheck {
             order_number: this.pipe.transform(res.headers.get('location')),
           };
 
-          this.service.fetchPaymentRequest(orderNumber).subscribe(resp => {
-            if (resp.status === 200) {
-              window.location.href = resp.body.redirectUrl;
-            }
-          });
+          if (this.stateService.getStatePayment.type !== 'manual_transfer') {
+            this.service.fetchPaymentRequest(orderNumber).subscribe(resp => {
+              if (resp.status === 200) {
+                window.location.href = resp.body.redirectUrl;
+              }
+            });
+          } else {
+            this.router.navigate(
+              ['order-summary'], { queryParams: { order_id: orderNumber.order_number } }
+              );
+          }
         }
       }, (error) => {
         this._handleError(error);

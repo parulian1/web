@@ -4,12 +4,14 @@
  */
 import {Addresses} from '@app/models/addresses';
 import {ShippingCost, ShippingMethod} from '@app/models/shipping-method';
+import { PaymentMethodType } from "@app/models/payment-method";
 
 export class StateCheckout {
 
   public stateCheckout = {
     stateAddress: null,
     stateShippingMethod: null,
+    statePayment: null,
     statePaymentMethod: null,
     shippingSelect: null
   };
@@ -33,6 +35,9 @@ export class StateCheckout {
     this.stateCheckout.stateShippingMethod = method;
   }
 
+  set statePayment(payment: PaymentMethodType) {
+    this.stateCheckout.statePayment = payment;
+  }
   set statePaymentMethod(payment: string) {
     this.stateCheckout.statePaymentMethod = payment;
   }
@@ -53,6 +58,10 @@ export class StateCheckout {
     return this.stateCheckout.stateShippingMethod;
   }
 
+
+  get getStatePayment(): PaymentMethodType {
+    return this.stateCheckout.statePayment;
+  }
   get getStatePaymentMethod(): string {
     return this.stateCheckout.statePaymentMethod;
   }
