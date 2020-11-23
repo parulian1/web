@@ -330,6 +330,11 @@ import { getBank, AbstractBank } from "@app/pages/order-summary/utils";
                   *ngIf="order.status === 'unpaid'">
             Batalkan Pesanan
           </button>
+
+          <button class="confirm-order"
+                  *ngIf="canConfirmPayment(order)">
+            Konfirmasi Pembayaran
+          </button>
         </div>
       </div>
     </div>
@@ -473,6 +478,14 @@ export class OrderDetailsComponent implements OnInit {
   isCCPayment(): boolean {
     // todo: need some code or slug (?)
     return this.payment.name === 'Kartu Kredit';
+  }
+
+  /* check can show a button "confirmation" or not */
+  canConfirmPayment(order: Order): boolean {
+    return (
+      order.orderPayment.paymentGateway.type === 'manual_transfer' &&
+      order.status === 'unpaid'
+    );
   }
 
   // Error

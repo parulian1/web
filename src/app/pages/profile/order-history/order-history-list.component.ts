@@ -152,14 +152,33 @@ import {Choice} from "@app/models/drf";
                   <span class="product-qty">QTY {{ data.featuredProduct.quantity }}</span>
                   <span class="product-price">{{ data.featuredProduct.price | currency:'Rp ':'symbol':'1.0' }}</span>
                 </div>
-                <div class="button-div" *ngIf="!mobile">
-                  <button><a style="text-decoration: none; color: #333333" [routerLink]="[data.orderNumber]">Lihat
-                    Detail</a></button>
+                <div class="button-div"
+                     [class.is-flex]="canConfirmPayment(data)"
+                     *ngIf="!mobile">
+                  <button *ngIf="canConfirmPayment(data)">
+                    <a style="text-decoration: none; color: #333333">
+                      Konfirmasi Pembayaran
+                    </a>
+                  </button>&nbsp;
+                  <button>
+                    <a style="text-decoration: none; color: #333333" [routerLink]="[data.orderNumber]">Lihat Detail</a>
+                  </button>
                 </div>
               </div>
-              <div class="button-div" *ngIf="mobile" [routerLink]="[data.orderNumber]">
-                <button><a style="text-decoration: none; color: #333333">Lihat
-                  Detail</a></button>
+              <div class="button-div"
+                   [class.is-flex]="canConfirmPayment(data)"
+                   *ngIf="mobile">
+                <button *ngIf="canConfirmPayment(data)">
+                  <a style="text-decoration: none; color: #333333">
+                    Konfirmasi Pembayaran
+                  </a>
+                </button>&nbsp;
+                <button>
+                  <a style="text-decoration: none; color: #333333"
+                     [routerLink]="[data.orderNumber]">
+                    Lihat Detail
+                  </a>
+                </button>
               </div>
             </div>
           </ng-container>
@@ -217,7 +236,8 @@ export class OrderHistoryListComponent implements OnInit, AfterViewInit {
       this.pageNum = data.page.pageNumber;
       this.status = data.status;
 
-      this.orderData = data.page.entities
+      this.orderData = data.page.entities;
+      console.log('orderData', this.orderData);
     });
   }
 
@@ -463,5 +483,12 @@ export class OrderHistoryListComponent implements OnInit, AfterViewInit {
       queryParams: queryParams,
       queryParamsHandling: 'merge'
     });
+  }
+
+  canConfirmPayment(order: OrderList): boolean {
+    return (
+      order.orderPayment.paymentGateway.type === 'manual_transfer' &&
+      order.status === 'unpaid'
+    );
   }
 }
