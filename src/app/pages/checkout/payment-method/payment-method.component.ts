@@ -1,4 +1,4 @@
-import {Component, DoCheck, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
+import {Component, DoCheck, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PaymentMethod, PaymentMethodType} from '@app/models/payment-method';
 import {MatExpansionPanel} from "@angular/material/expansion";
@@ -18,8 +18,6 @@ const log = new Logger('Payment');
 })
 export class PaymentMethodComponent implements OnInit, DoCheck {
   @ViewChildren('panel') panels: QueryList<ElementRef>;
-
-  @Output() payment: EventEmitter<any> = new EventEmitter<any>();
 
   paymentLists: Array<PaymentMethod> = [];
   paymentMethod: PaymentMethodType;

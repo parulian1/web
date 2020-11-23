@@ -92,11 +92,6 @@ export class CheckoutComponent implements OnInit, DoCheck {
     this.canCheckout = this.stateService.canCheckout;
   }
 
-  getPayment($event: any) {
-    this.stateService.statePaymentMethod = null;
-    this.stateService.statePaymentMethod = $event;
-  }
-
   getAddress($event: Addresses) {
     if ($event) {
       this.address = $event;
