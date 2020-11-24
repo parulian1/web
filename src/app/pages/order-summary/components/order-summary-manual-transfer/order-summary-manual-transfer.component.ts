@@ -118,7 +118,7 @@ export class OrderSummaryManualTransferComponent implements OnInit {
     private paymentMethodService: PaymentMethodService,
   ) {}
   ngOnInit(): void {
-    this.paymentMethodService.fetchList().subscribe(result => {
+    this.paymentMethodService.fetchList(true).subscribe(result => {
       this.manualTransfers = result
         .filter(pList => pList.type === 'manual_transfer')
         .map(payment => payment.paymentMethods)[0];
