@@ -1,5 +1,7 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {OrderSummary, SummaryPayment} from "@app/models/checkout";
+import { PaymentMethodService } from "@app/services/payment-method.service";
+import { PaymentMethodType } from "@app/models/payment-method";
 
 @Component({
   selector: "app-order-manual-transfer",
@@ -75,8 +77,10 @@ import {OrderSummary, SummaryPayment} from "@app/models/checkout";
                 <div class="guide-content">
                   <p>Harap dicatat bahwa pesanan akan dibatalkan secara otomatis setelah 24 jam.</p>
                   <p>Anda dapat membayar dengan melakukan transfer pada rekening berikut:</p>
-                  <ul>
-                    <li>{{ payment.name }} - {{ payment.accountHoldNumber }} - {{ payment.accountNumber }}</li>
+                  <ul *ngIf="manualTransfers?.length > 0">
+                    <li *ngFor="let manualTransfer of manualTransfers">
+                      {{ manualTransfer.name }} - {{ manualTransfer.accountHoldNumber }} - {{ manualTransfer.accountNumber }}
+                    </li>
                   </ul>
                   <p>Setelah anda melakukan transfer bank, harap beritahu kami dengan memasukkan detail transaksi.</p>
                 </div>
@@ -104,12 +108,22 @@ import {OrderSummary, SummaryPayment} from "@app/models/checkout";
 export class OrderSummaryManualTransferComponent implements OnInit {
   @Input() orderSummary: OrderSummary;
 
+  manualTransfers: PaymentMethodType[] = [];
+
   get payment(): SummaryPayment {
     return this.orderSummary.payment;
   }
 
-  constructor() {}
-  ngOnInit(): void {}
+  constructor(
+    private paymentMethodService: PaymentMethodService,
+  ) {}
+  ngOnInit(): void {
+    this.paymentMethodService.fetchList().subscribe(result => {
+      this.manualTransfers = result
+        .filter(pList => pList.type === 'manual_transfer')
+        .map(payment => payment.paymentMethods)[0];
+    });
+  }
 
 
   copyToClipboard(vaNumber: string) {
