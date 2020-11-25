@@ -16,14 +16,11 @@ import { PaymentMethodType } from "@app/models/payment-method";
       <div class="order-progress-content">
         <div class="order-progress--date-and-bank">
           <div class="columns">
-            <div class="column is-4 is-offset-2">
+            <div class="column is-8 is-offset-2">
               <div class="box box-date">
-                <span class="due-date-title">Batas Pembayaran</span>
+                <span class="due-date-title">Batas akhir pembayaran</span>
                 <span class="due-date-content">{{ payment.dateExpired | date: "d/MM/yyyy HH:mm" }}</span>
               </div>
-            </div>
-
-            <div class="column is-4">
             </div>
           </div>
         </div>
@@ -57,9 +54,45 @@ import { PaymentMethodType } from "@app/models/payment-method";
           </div>
         </div>
 
-        <div class="order-progress--actions">
+        <div class="order-progress--bank">
           <div class="columns">
             <div class="column is-8 is-offset-2">
+              <div class="columns is-multiline">
+
+                <div class="column is-6" *ngFor="let manualTransfer of manualTransfers">
+                  <div class="box box-bank">
+                    <div class="bank-image">
+                      <img width="100px;" [src]="manualTransfer.logo" alt="{{ payment.name }}" />
+                    </div>
+                    <div class="transfer">
+                      <div>Transfer ke nomor</div>
+                      <div class="transfer-number">
+                        <span class="number">
+                          {{ manualTransfer.accountNumber }} - {{ manualTransfer.accountHoldNumber }}
+                        </span>
+
+                        <span class="copy" (click)="copyToClipboard(manualTransfer.accountNumber)">Salin</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-progress--actions">
+          <div class="columns is-multiline">
+            <div class="column is-8 is-offset-2">
+              <p style="color: #979797;" class="has-text-centered">
+                Segera lakukan konfirmasi pembayaran agar kami dapat memproses pesanan
+              </p>
+              <div class="box has-text-centered" style="background-color: #F03BB3;">
+                <a style="background-color: inherit; color: white;" class="button-cancel" [routerLink]="['/profile/orders/', orderSummary.orderNumber]">
+                  Konfirmasi Pembayaran
+                </a>
+              </div>&nbsp;
               <div class="box has-text-centered">
                 <a class="button-cancel" [routerLink]="['/profile/orders/', orderSummary.orderNumber]">
                   Batalkan Pesanan
@@ -75,27 +108,12 @@ import { PaymentMethodType } from "@app/models/payment-method";
               <div class="box">
                 <h3 class="title guide-title">Petunjuk Pembayaran</h3>
                 <div class="guide-content">
-                  <p>Harap dicatat bahwa pesanan akan dibatalkan secara otomatis setelah 24 jam.</p>
-                  <p>Anda dapat membayar dengan melakukan transfer pada rekening berikut:</p>
-                  <ul *ngIf="manualTransfers?.length > 0">
-                    <li *ngFor="let manualTransfer of manualTransfers">
-                      {{ manualTransfer.name }} - {{ manualTransfer.accountHoldNumber }} - {{ manualTransfer.accountNumber }}
-                    </li>
-                  </ul>
-                  <p>Setelah anda melakukan transfer bank, harap beritahu kami dengan memasukkan detail transaksi.</p>
+                  <ol>
+                    <li>Transfer melalui ATM, Internet Banking, atau Mobile Banking Anda</li>
+                    <li>Pilih tujuan transfer dari salah satu bank dan nomor rekening yang tertera di bawah</li>
+                    <li>Masukkan jumlah transfer</li>
+                  </ol>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="order-progress--confirmation">
-          <div class="columns">
-            <div class="column is-8 is-offset-2">
-              <div class="has-text-centered">
-                <a class="button-confirmation" [routerLink]="['/profile/orders/', orderSummary.orderNumber]">
-                  Konfirmasi Pembayaran
-                </a>
               </div>
             </div>
           </div>
@@ -108,21 +126,24 @@ import { PaymentMethodType } from "@app/models/payment-method";
 export class OrderSummaryManualTransferComponent implements OnInit {
   @Input() orderSummary: OrderSummary;
 
+  payment: SummaryPayment;
   manualTransfers: PaymentMethodType[] = [];
-
-  get payment(): SummaryPayment {
-    return this.orderSummary.payment;
-  }
 
   constructor(
     private paymentMethodService: PaymentMethodService,
   ) {}
+
   ngOnInit(): void {
     this.paymentMethodService.fetchList(true).subscribe(result => {
       this.manualTransfers = result
         .filter(pList => pList.type === 'manual_transfer')
         .map(payment => payment.paymentMethods)[0];
     });
+
+    this.payment = {
+      ...this.orderSummary.payment,
+      dateExpired: this.dateAddDays(this.orderSummary.created),
+    };
   }
 
 
@@ -135,5 +156,11 @@ export class OrderSummaryManualTransferComponent implements OnInit {
       });
       document.execCommand("copy");
     }
+  }
+
+  dateAddDays(datetime: string, days: number = 1): string {
+    const dateFormatted = new Date(this.orderSummary.created);
+    dateFormatted.setDate(dateFormatted.getDate() + days);
+    return dateFormatted.toISOString();
   }
 }

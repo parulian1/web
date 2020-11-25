@@ -178,8 +178,8 @@ $desktop: 960px + (2 * $gap) !default;
         font-weight: bold;
       }
       .guide-content {
-        ul {
-          margin-left: 30px;
+        ol {
+          margin-left: 15px;
           padding: 0;
         }
       }
@@ -275,7 +275,7 @@ $desktop: 960px + (2 * $gap) !default;
   border: 1px solid rgba(0,0,0,.125);
   border-radius: 8px;
   display: block;
-  padding: 20px;
+  padding: 10px;
 }
 
 
