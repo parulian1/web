@@ -89,7 +89,7 @@ import { PaymentMethodType } from "@app/models/payment-method";
                 Segera lakukan konfirmasi pembayaran agar kami dapat memproses pesanan
               </p>
               <div class="box has-text-centered" style="background-color: #F03BB3;">
-                <a style="background-color: inherit; color: white;" class="button-cancel" [routerLink]="['/profile/orders/', orderSummary.orderNumber]">
+                <a style="background-color: inherit; color: white;" class="button-cancel" [routerLink]="['/order-confirm']">
                   Konfirmasi Pembayaran
                 </a>
               </div>&nbsp;

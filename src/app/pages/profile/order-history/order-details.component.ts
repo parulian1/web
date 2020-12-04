@@ -319,9 +319,14 @@ import { getBank, AbstractBank } from "@app/pages/order-summary/utils";
             </ng-container>
           </div>
 
-          <button class="continue-order"
-                  (click)="onContinueOrder()"
-                  *ngIf="order.status === 'unpaid' && !order.orderPayment.meta">
+          <button
+            class="continue-order"
+            (click)="onContinueOrder()"
+            *ngIf="
+              (order.status === 'unpaid' && !order.orderPayment.meta) ||
+              order.orderPayment.paymentGateway.type === 'manual_transfer'
+            "
+          >
             Lanjutkan Pembayaran
           </button>
 
