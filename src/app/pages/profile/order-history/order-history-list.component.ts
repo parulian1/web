@@ -169,7 +169,8 @@ import {Choice} from "@app/models/drf";
                    [class.is-flex]="canConfirmPayment(data)"
                    *ngIf="mobile">
                 <button *ngIf="canConfirmPayment(data)">
-                  <a style="text-decoration: none; color: #333333">
+                  <a  [routerLink]="['/order-confirm']"
+                      style="text-decoration: none; color: #333333">
                     Konfirmasi Pembayaran
                   </a>
                 </button>&nbsp;

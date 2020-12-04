@@ -76,7 +76,7 @@ export class OrderHistoryService extends AbstractCrudService<order.Order> {
     return this.httpClient.get(`${this.baseUrl}`, { params });
   }
 
-  createOrderConfirm(orderId: number, data: any): Observable<void> {
-    return this.httpClient.post<void>(`${this.baseUrl}/${orderId}/`, data);
+  createOrderPaymentConfirm(orderId: number, data: any): Observable<void> {
+    return this.httpClient.post<void>(`${this.baseUrl}/${orderId}/payment-confirm/`, data);
   }
 }

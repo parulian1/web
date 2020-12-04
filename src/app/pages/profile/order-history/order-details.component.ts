@@ -332,6 +332,7 @@ import { getBank, AbstractBank } from "@app/pages/order-summary/utils";
           </button>
 
           <button class="confirm-order"
+                  (click)="redirectToOrderConfirm()"
                   *ngIf="canConfirmPayment(order)">
             Konfirmasi Pembayaran
           </button>
@@ -507,5 +508,9 @@ export class OrderDetailsComponent implements OnInit {
       queryParamsHandling: "merge",
       relativeTo: this.route,
     });
+  }
+
+  redirectToOrderConfirm(): void {
+    this.router.navigate(['/order-confirm']);
   }
 }

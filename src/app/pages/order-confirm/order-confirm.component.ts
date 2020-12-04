@@ -198,11 +198,9 @@ export class OrderConfirmComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.router.navigate([`/profile/orders/${this.formData.orderNumber}`]);
     if (this.form.valid) {
       const formData = this.formData;
-
-      this.orderHistoryService.createOrderConfirm(formData.orderNumber, formData).subscribe(() => {
+      this.orderHistoryService.createOrderPaymentConfirm(formData.orderNumber, formData).subscribe(() => {
         alert('success to create payment confirmation');
         this.router.navigate([`/profile/orders/${formData.orderNumber}`]);
       }, error => this._handleError(error));
