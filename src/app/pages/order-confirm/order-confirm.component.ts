@@ -44,7 +44,7 @@ import { PaymentMethod, PaymentMethodType } from '@app/models/payment-method';
             <div class="field">
               <label class="label">Tanggal Pesanan</label>
               <div class="control">
-                <input class="input" [formControl]="orderDate" type="date" placeholder="Masukkan Tanggal Pesanan">
+                <input class="input" [formControl]="orderDate" type="date" placeholder="Masukkan Tanggal Pesanan" disabled>
               </div>
             </div>
 
