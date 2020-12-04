@@ -324,7 +324,7 @@ import { getBank, AbstractBank } from "@app/pages/order-summary/utils";
             (click)="onContinueOrder()"
             *ngIf="
               (order.status === 'unpaid' && !order.orderPayment.meta) ||
-              order.orderPayment.paymentGateway.type === 'manual_transfer'
+              order.orderPayment.paymentGateway.type !== 'manual_transfer'
             "
           >
             Lanjutkan Pembayaran
