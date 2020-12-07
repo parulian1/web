@@ -123,6 +123,8 @@ import { getBank, AbstractBank } from "@app/pages/order-summary/utils";
               <div style="flex: 50%">
                 <span *ngIf="order.status === 'unpaid'"
                       class="order-status-text unpaid">{{ getStatusName(order.status) }}</span>
+                <span *ngIf="order.status === 'waiting'"
+                      class="order-status-text waiting">{{ getStatusName(order.status) | slice:0:7 }}</span>
                 <span *ngIf="order.status === 'paid' || order.status === 'ready'"
                       class="order-status-text paid">{{ getStatusName(order.status) }}</span>
                 <span *ngIf="order.status === 'cancelled'"
@@ -490,7 +492,7 @@ export class OrderDetailsComponent implements OnInit {
   canConfirmPayment(order: Order): boolean {
     return (
       order.orderPayment.paymentGateway.type === 'manual_transfer' &&
-      order.status === 'unpaid'
+      (order.status === 'unpaid' || order.status === 'waiting')
     );
   }
 
