@@ -1,0 +1,140 @@
+@import "src/theme/base";
+
+.content {
+  // TODO: This need refactor
+  width: 1195px;
+  margin: 0 auto;
+  display: flex;
+  padding: 0px 16px 0 16px;
+}
+
+.store-list {
+  width: calc(100% - 226.84px);
+  display: flex;
+
+  mat-radio-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 100px;
+
+    mat-radio-button {
+      height: 80px;
+    }
+  }
+
+  .store {
+    margin: 0 24px 0 0;
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      font-size: 16px;
+      line-height: 22px;
+      font-weight: bold;
+    }
+
+    .address {
+      margin: 6px 0 0 0;
+      font-size: 14px;
+      line-height: 19px;
+      white-space: normal;
+      word-break: break-word;
+    }
+
+    .phone {
+      font-size: 14px;
+      line-height: 19px;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: row;
+
+    span {
+      width: 250px;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-start;
+
+      .store-name-address {
+        display: flex;
+        flex-direction: column;
+
+        .title {
+          font-size: 16px;
+          line-height: 22px;
+          margin: 0 0 6px 0;
+          font-weight: bold;
+        }
+
+        .address {
+          font-size: 14px;
+          line-height: 19px;
+        }
+      }
+    }
+  }
+}
+
+.store-list-mobile {
+  display: none;
+}
+
+@media screen and (max-width: $mobile-break) {
+  .content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+
+    .sidebar-menu {
+      width: 100%;
+    }
+  }
+
+  .store-list {
+    display: none;
+  }
+
+  .store-list-mobile {
+    display: flex;
+    margin-top: 16px;
+
+    mat-radio-group {
+      display: flex;
+      flex-direction: column;
+
+      mat-radio-button {
+        margin-bottom: 20px;
+
+        .store {
+          display: flex;
+          flex-direction: column;
+
+          .title {
+            font-size: 14px;
+            line-height: 19px;
+            font-weight: bold;
+          }
+
+          .address {
+            font-size: 12px;
+            line-height: 17px;
+            white-space: normal;
+            word-break: break-word;
+          }
+
+          .phone {
+            font-size: 12px;
+            line-height: 17px;
+          }
+        }
+      }
+
+
+    }
+
+  }
+}

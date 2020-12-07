@@ -1,68 +1,63 @@
-<div class="testimonial">
+<div class="testimonial" *ngIf="!!testimonials && testimonials.length>0">
   <span class="subtitle">Testimoni</span>
   <div class="testi">
-    <div class="testi-cell">
-      <div class="item">
-        <span class="photo">
-          <img src="assets/testimonial-example.png" alt="photo"/>
-        </span>
-        <span class="desc">
-          <span class="title">Tampil Cantik Alami</span>
-          <span class="comment">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book.</span>
-          <span class="name">Purwaningsih | Sariayu Blog</span>
-        </span>
+    <ngx-slick-carousel class="carousel-highlight-category"
+                        [config]="slideConfigDesktop"
+                        (init)="slickInit($event)"
+                        (afterChange)="afterChange($event)"
+                        (beforeChange)="beforeChange($event)">
+      <div ngxSlickItem class="slide" *ngFor="let item of testimonials">
+        <div class="testi-cell">
+          <div class="item">
+            <span class="photo">
+              <img src="{{ item.photo }}" alt="{{ item.title }}"/>
+            </span>
+            <span class="desc">
+              <span class="title">
+                {{ item.name | titlecase }}
+              </span>
+              <span class="comment">
+                {{ item.content | stripHtml | slice:0:245 }}
+                {{ item.content.length > 245 ? '...' : '' }}
+              </span>
+              <span class="name">{{ item.reviewerName }} | {{ item.reviewerJobTitle }}</span>
+            </span>
+          </div>
+        </div>
       </div>
+    </ngx-slick-carousel>
+  </div>
+</div>
 
-    </div>
-    <div class="testi-cell"><div class="item">
-        <span class="photo">
-          <img src="assets/testimonial-example.png" alt="photo"/>
-        </span>
-      <span class="desc">
-          <span class="title">Tampil Cantik Alami</span>
-          <span class="comment">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book.</span>
-          <span class="name">Purwaningsih | Sariayu Blog</span>
-        </span>
-    </div></div>
-    <div class="testi-cell"><div class="item">
-        <span class="photo">
-          <img src="assets/testimonial-example.png" alt="photo"/>
-        </span>
-      <span class="desc">
-          <span class="title">Tampil Cantik Alami</span>
-          <span class="comment">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book.</span>
-          <span class="name">Purwaningsih | Sariayu Blog</span>
-        </span>
-    </div></div>
-    <div class="testi-cell"><div class="item">
-        <span class="photo">
-          <img src="assets/testimonial-example.png" alt="photo"/>
-        </span>
-      <span class="desc">
-          <span class="title">Tampil Cantik Alami</span>
-          <span class="comment">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book.</span>
-          <span class="name">Purwaningsih | Sariayu Blog</span>
-        </span>
-    </div></div>
-    <div class="testi-cell"><div class="item">
-        <span class="photo">
-          <img src="assets/testimonial-example.png" alt="photo"/>
-        </span>
-      <span class="desc">
-          <span class="title">Tampil Cantik Alami</span>
-          <span class="comment">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book.</span>
-          <span class="name">Purwaningsih | Sariayu Blog</span>
-        </span>
-    </div></div>
+<div class="testimonial-mobile" *ngIf="!!testimonials && testimonials.length>0">
+  <span class="subtitle">Testimoni 2</span>
+  <div class="testi">
+    <ngx-slick-carousel class="carousel-highlight-category"
+                        [config]="slideConfig"
+                        (init)="slickInit($event)"
+                        (afterChange)="afterChange($event)"
+                        (beforeChange)="beforeChange($event)">
+      <div ngxSlickItem class="slide" *ngFor="let item of testimonials" style="width: 266px;">
+        <div class="testi-cell">
+          <div class="item">
+            <span class="photo">
+              <img src="assets/testimonial-example.png" alt="photo"/>
+            </span>
+            <span class="desc">
+              <span class="title">{{ item.name | titlecase }}</span>
+              <span class="comment">
+                {{ item.content | stripHtml | slice:0:245 }}
+                {{ item.content.length > 245 ? '...' : '' }}
+              </span>
+            </span>
+
+            <span class="name">
+                {{ item.reviewerName }} | {{ item.reviewerJobTitle }}
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </ngx-slick-carousel>
   </div>
 </div>

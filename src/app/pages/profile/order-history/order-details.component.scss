@@ -1,0 +1,738 @@
+@import "src/theme/base";
+
+.content-title {
+  margin-bottom: 12px;
+
+  .title-big {
+    font-family: $font-secondary;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 28px;
+    line-height: 37px;
+
+    padding-left: 24px;
+  }
+}
+
+
+.order-by-warehouse {
+  padding: 12px 16px;
+  margin-bottom: 12px;
+
+  width: 528px;
+
+  background: $white;
+
+  border: 1px solid #E5E5E5;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  .warehouse-title {
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 18px;
+    font-feature-settings: 'liga' off;
+  }
+
+  .shipping-box {
+    padding: 8px 12px;
+    width: 496px;
+
+    background: $color-google;
+    border-radius: $border-radius;
+
+    margin-top: 12px;
+
+    table {
+      width: 100%;
+      font-family: $font-primary;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      font-feature-settings: 'liga' off;
+
+      text-align: left;
+
+      th {
+        color: #979797;
+        line-height: 19px;
+      }
+
+      td {
+        line-height: 18px;
+        font-weight: bold;
+      }
+    }
+
+    .track-order {
+      font-family: $font-primary;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 18px;
+      font-feature-settings: 'liga' off;
+      color: #F03BB3;
+      text-decoration: none;
+      cursor: pointer;
+
+      margin: 12px 0 0 0;
+    }
+
+    .shipment-history-row {
+      margin-top: 12px;
+
+      td {
+        padding-top: 8px;
+      }
+
+      .shipment-history-date {
+        font-family: $font-primary;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 14px;
+        font-feature-settings: 'liga' off;
+        color: #979797;
+
+        .check_circle {
+          font-size: 16px;
+          vertical-align: middle;
+          margin-right: 6px;
+        }
+      }
+
+      .blue {
+        color: #037EE5;
+      }
+
+      .shipment-history-notes {
+        font-family: $font-primary;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 14px;
+        font-feature-settings: 'liga' off;
+        color: #000000;
+      }
+    }
+
+    .shipment-history-hr {
+      display: block;
+      border: 1px solid #FFFFFF;
+      margin-bottom: 0px;
+    }
+  }
+
+  .product-box {
+    display: flex;
+
+    .product-title {
+      font-family: $color-primary;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 18px;
+
+      font-feature-settings: 'liga' off;
+    }
+
+    .product-qty {
+      font-family: $color-primary;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 19px;
+      font-feature-settings: 'liga' off;
+
+      margin-right: 24px;
+    }
+
+    .product-price {
+      font-family: $color-primary;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 18px;
+      font-feature-settings: 'liga' off;
+    }
+
+    table {
+      img {
+        object-fit: cover;
+      }
+    }
+
+  }
+
+  .bottom-actions {
+    .add-review {
+      display: flex;
+      justify-content: flex-end;
+
+      &-btn {
+        background: none;
+        padding: 9px 0;
+        width: 149px;
+        border: solid 1px $color-primary;
+        border-radius: $border-radius;
+        font-size: 16px;
+        line-height: 22px;
+        font-weight: bold;
+
+        a {
+          text-decoration: none;
+          color: $color-primary;
+        }
+      }
+    }
+  }
+
+  hr {
+    border: 1px solid #E5E5E5;
+  }
+
+  hr:last-child {
+    display: none;
+  }
+
+  .complain {
+    border-bottom: 2px solid #E5E5E5;
+  }
+
+  .info_outline {
+    margin-right: 6px;
+    font-size: 16px;
+    vertical-align: middle;
+  }
+
+  .complain-text {
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+    font-feature-settings: 'liga' off;
+
+    color: $font-primary;
+  }
+
+  .button-bottom-div {
+    padding-top: 12px;
+    float: right;
+
+    button {
+      padding: 9px 30px;
+      border-radius: $border-radius;
+
+      font-family: $font-primary;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 22px;
+      align-items: center;
+      text-align: center;
+      font-feature-settings: 'liga' off;
+      color: $color-primary;
+    }
+
+    .transparent-button {
+      border: 1px solid $color-primary;
+      box-sizing: border-box;
+      background: transparent;
+    }
+
+    .pink-button {
+      background: $color-accent;
+      color: white;
+      border: none;
+    }
+
+    .margin-left-24 {
+      margin-left: 24px;
+    }
+  }
+}
+
+.order-status-box {
+  padding: 16px;
+  width: 368px;
+  height: 51px;
+  margin-left: 21px;
+
+  background: $white;
+  border: 1px solid #E5E5E5;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  .order-status-label {
+    flex: 50%;
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    font-feature-settings: 'liga' off;
+  }
+
+  .order-status-text {
+    padding: 4px 12px;
+    border-radius: 4px;
+
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .unpaid {
+    background: #FFF4EA;
+    color: #F2994A;
+  }
+
+  .paid {
+    background: #E5E5E5;
+    color: #5A5A5A;
+  }
+
+  .done {
+    background: #E6F3FF;
+    color: #037EE5;
+  }
+
+  .cancel {
+    background: pink;
+    color: red;
+  }
+}
+
+.payment-deadline-box {
+  display: flex;
+  padding: 12px;
+  width: 368px;
+  height: 49px;
+  margin: 12px 0 0 21px;
+
+  background: $white;
+  border: 1px solid #E5E5E5;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  .payment-deadline-label {
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    font-feature-settings: 'liga' off;
+
+    margin-right: 36px;
+  }
+
+  .payment-deadline-datetime {
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 25px;
+    font-feature-settings: 'liga' off;
+    color: #D81936;
+  }
+}
+
+.va-cc-box {
+  width: 368px;
+  height: 74px;
+  margin: 12px 0 0 21px;
+  padding-left: 16px;
+  background: $white;
+  border: 1px solid #E5E5E5;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  .va-image {
+    margin-right: 20px;
+    border: 0;
+  }
+
+  .va-cc-label {
+    margin: 13px 0 0 0;
+
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+
+    font-feature-settings: 'liga' off;
+    color: #979797;
+  }
+
+  .va-cc-number {
+    margin: 4px 12px 0 0;
+
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 25px;
+    font-feature-settings: 'liga' off;
+    color: #000000;
+  }
+
+  .va-cc-copy-label {
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 21px;
+    font-feature-settings: 'liga' off;
+    color: #F03BB3;
+
+    text-decoration: underline;
+    background: $white;
+    cursor: pointer;
+    border: none;
+    outline: none;
+  }
+}
+
+.order-detail-box {
+  margin: 12px 0 0 21px;
+  padding: 12px 0 0 16px;
+
+  width: 368px;
+  height: 122px;
+  background: $white;
+  border: 1px solid #E5E5E5;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  .order-detail-label {
+    margin: 0;
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+
+    font-feature-settings: 'liga' off;
+    color: #979797;
+  }
+
+  .order-detail-text {
+    margin: 4px 0 0 0;
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 18px;
+
+    font-feature-settings: 'liga' off;
+  }
+}
+
+.order-transaction-box {
+  margin: 12px 0 0 21px;
+  padding: 12px 16px;
+  width: 368px;
+  height: 188px;
+
+  background: $white;
+  border: 1px solid #E5E5E5;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  table {
+    width: 100%;
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    font-feature-settings: 'liga' off;
+
+    tr {
+      td:first-child {
+        width: 50%;
+        text-align: left;
+        padding-bottom: 8px;
+      }
+
+      td:last-child {
+        width: 50%;
+        text-align: right;
+        padding-bottom: 8px;
+      }
+
+      .total {
+        font-weight: bold;
+      }
+
+      hr {
+        height: 1px;
+        background-color: #E5E5E5;
+        border: none;
+      }
+    }
+  }
+}
+
+.order-address-box {
+  margin: 12px 0 0 21px;
+  padding: 12px 16px;
+  width: 368px;
+  border: 1px solid #E5E5E5;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  p {
+    margin: 0 0 4px 0;
+
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    font-feature-settings: 'liga' off;
+    color: #000000;
+  }
+
+  p.name {
+    font-weight: bold;
+  }
+
+  p:first-child {
+    color: #979797;
+  }
+}
+
+.cancel-order {
+  margin: 12px 0 0 21px;
+  padding: 12px 16px;
+  background: $white;
+
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  border-radius: $border-radius;
+
+  font-family: $font-primary;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 22px;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: 'liga' off;
+  cursor: pointer;
+}
+
+.continue-order {
+  margin: 12px 0 0 21px;
+  padding: 12px 16px;
+  background: $color-accent;
+  color: $white;
+
+  border: 1px solid $color-accent;
+  box-sizing: border-box;
+  border-radius: $border-radius;
+
+  font-family: $font-primary;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 22px;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: 'liga' off;
+  cursor: pointer;
+}
+
+// mobile
+@media screen and (max-width: $mobile-break) {
+  .content-title {
+    margin-top: 20px;
+
+    .title-big {
+      padding-left: 20px;
+      font-size: 18px;
+      line-height: 24px;
+    }
+
+    .content-arrow-left {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  .order-status-parent {
+    width: 100%;
+
+    .order-status-box {
+      margin: 16px 0 0 0;
+      width: 100%;
+
+      .order-status-label {
+        font-size: 12px;
+        line-height: 17px;
+      }
+
+      .order-status-text {
+        font-size: 12px;
+        line-height: 16px;
+      }
+    }
+
+    .order-detail-box {
+      margin-left: 0;
+      width: 100%;
+
+      .order-detail-label {
+        font-size: 12px;
+        line-height: 17px;
+      }
+
+      .order-detail-text {
+        font-size: 12px;
+        line-height: 16px;
+      }
+    }
+
+    .order-transaction-box {
+      margin-left: 0;
+      width: 100%;
+
+      table {
+        font-size: 12px;
+        line-height: 17px;
+      }
+    }
+
+    .order-address-box {
+      width: 100%;
+      margin-left: 0;
+
+      p {
+        font-size: 12px;
+        line-height: 17px;
+      }
+    }
+
+    .va-cc-box {
+      width: 100%;
+      margin-left: 0;
+
+      table {
+        img {
+          object-fit: cover;
+          width: 56px;
+          height: 56px;
+        }
+      }
+
+      .va-cc-label {
+        font-size: 12px;
+        line-height: 17px;
+      }
+
+      .va-cc-number {
+        font-size: 16px;
+        line-height: 22px;
+      }
+
+      .va-cc-copy-label {
+        font-size: 14px;
+        line-height: 19px;
+      }
+    }
+
+    .payment-deadline-box {
+      width: 100%;
+      margin-left: 0;
+
+      .payment-deadline-label {
+        font-size: 12px;
+        line-height: 17px;
+      }
+
+      .payment-deadline-datetime {
+        font-size: 16px;
+        line-height: 22px;
+      }
+
+    }
+
+    .cancel-order {
+      width: 100%;
+      margin-left: 0;
+    }
+
+    .continue-order {
+      width: 100%;
+      margin-left: 0;
+    }
+
+    .order-by-warehouse {
+      margin: 12px 0 0 0;
+      width: 100%;
+
+      .warehouse-title {
+        font-size: 12px;
+        line-height: 16px;
+      }
+
+      .shipping-box {
+        width: 100%;
+
+        table {
+          font-size: 12px;
+          line-height: 17px;
+        }
+
+        .track-order {
+          font-size: 12px;
+          line-height: 16px;
+        }
+
+        .shipment-history-row {
+          font-size: 10px;
+          line-height: 13px;
+
+          .check_circle {
+            font-size: 16px;
+          }
+        }
+      }
+
+      .product-box {
+
+        table {
+          img {
+            object-fit: cover;
+            width: 62px;
+            height: 62px;
+          }
+        }
+
+        .product-title, .product-qty, .product-price {
+          font-size: 12px;
+          line-height: 16px;
+        }
+      }
+
+      .button-bottom-div {
+        width: 100%;
+
+        button {
+          font-size: 14px;
+          line-height: 19px;
+          width: 45%;
+
+          padding: 9px;
+        }
+      }
+    }
+  }
+}

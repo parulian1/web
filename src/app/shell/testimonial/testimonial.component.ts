@@ -1,26 +1,85 @@
-import {AfterViewInit, Component, ElementRef, OnInit} from '@angular/core';
-import Flickity from "flickity";
+import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
+import { Flickity } from 'flickity';
+import { TestimonialService } from '@app/services/testimonial.service';
+import { Testimonial } from '@app/models/testimonial';
 
 @Component({
   selector: 'app-testimonial',
   templateUrl: './testimonial.component.html',
   styleUrls: ['./testimonial.component.scss']
 })
-export class TestimonialComponent implements OnInit, AfterViewInit {
+export class TestimonialComponent implements OnInit {
+  testimonials: Testimonial[];
 
-  constructor(private el: ElementRef) {
+  slideConfig = {
+    'slidesToShow': 1,
+    'slidesToScroll': 1,
+    'mobileFirst': true,
+    'variableWidth': true,
+    'infinite': true,
+    'dots': true,
+    'nextArrow': '<button class="slick-next"><span class="material-icons">\n' +
+      'keyboard_arrow_right\n' +
+      '</span></button>',
+    'prevArrow': '<button class="slick-prev"><span class="material-icons">\n' +
+      'keyboard_arrow_left\n' +
+      '</span></button>',
+  };
+
+  slideConfigDesktop = {
+    'slidesToShow': 1,
+    'slidesToScroll': 1,
+    'variableWidth': true,
+    'dots': true,
+    'infinite': true,
+    'nextArrow': '<button class="slick-next"><span class="material-icons">\n' +
+      'keyboard_arrow_right\n' +
+      '</span></button>',
+    'prevArrow': '<button class="slick-prev"><span class="material-icons">\n' +
+      'keyboard_arrow_left\n' +
+      '</span></button>',
+  };
+
+  constructor(private el: ElementRef,
+              private testimonialService: TestimonialService) {
+  }
+
+  afterChange(e: any) {
+    if (e.slick.$prevArrow[0].classList.contains('slick-disabled')) {
+      e.slick.$prevArrow[0].style.display = 'none';
+    } else {
+      e.slick.$prevArrow[0].style.display = 'block';
+    }
+
+    if (e.slick.$nextArrow[0].classList.contains('slick-disabled')) {
+      e.slick.$nextArrow[0].style.display = 'none';
+    } else {
+      e.slick.$nextArrow[0].style.display = 'block';
+    }
+  }
+
+  beforeChange(e: any) {
+    if (e.slick.$prevArrow[0].classList.contains('slick-disabled')) {
+      e.slick.$prevArrow[0].style.display = 'none';
+    } else {
+      e.slick.$prevArrow[0].style.display = 'block';
+    }
+  }
+
+  slickInit(e: any) {
+    if (e.slick.$prevArrow[0].classList.contains('slick-disabled')) {
+      e.slick.$prevArrow[0].style.display = 'none';
+    }
   }
 
   ngOnInit(): void {
+    this.fetchTestimonial();
   }
 
-  ngAfterViewInit(): void {
-    const el = this.el.nativeElement;
 
-    const elem = el.querySelector('.testi');
-    new Flickity(elem, {
-      groupCells: 2,
-      autoPlay: true
-    })
+  fetchTestimonial() {
+    this.testimonialService.fetchTestimonial({ perPage: 4, page: 1, is_active: true }).subscribe(res => {
+      this.testimonials = res.body;
+    });
   }
 }

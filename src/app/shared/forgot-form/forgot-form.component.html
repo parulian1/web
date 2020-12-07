@@ -8,9 +8,11 @@
   <div class="input-form" [ngClass]="{'has-error': email.invalid && (email.dirty || email.touched)}">
     <input type="email" formControlName="email" placeholder="Masukkan Email Anda" required>
   </div>
+
   <div *ngIf="email.invalid && (email.dirty || email.touched)" class="form-alert">
-    <p>Mohon masukkan email Anda dengan benar</p>
+    <p>Email yang anda masukkan tidak valid</p>
   </div>
+
   <div class="forgot-password-btn">
     <button class="btn-primary" type="submit" [disabled]="isButtonDisabled">Kirim</button>
   </div>

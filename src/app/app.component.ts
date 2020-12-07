@@ -1,25 +1,134 @@
-import {Component, OnInit} from '@angular/core';
-import {AppState} from "@app/store/state/app.state";
-import {Store} from "@ngrx/store";
-import {Title} from "@angular/platform-browser";
+import {DOCUMENT, isPlatformBrowser} from '@angular/common';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2} from '@angular/core';
+import {Title} from '@angular/platform-browser';
+import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
+import {Store} from '@ngrx/store';
+import {SubscriptionLike} from 'rxjs';
+
+import {AuthenticationService, CredentialsService} from '@app/core/authentication';
+import {AppState} from '@app/store/state/app.state';
+import {AuthUserService} from '@app/services';
+import {Logout} from '@app/store/actions';
+import {environment} from '@env/environment.prod';
+import {Logger} from '@app/core';
+
+declare let gtag: Function;
+declare let fbq:Function;
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+
+  private static FIVE_MINUTES = 1000 * 60 * 5;
+
+  isBusy = false;
+  private routerEventsSub: SubscriptionLike;
+  private timer;
 
   constructor(private store: Store<AppState>,
-              private title: Title) {
-    this.store.select(state => state).subscribe(data => {
-      console.log('data', data);
-    });
+              private title: Title,
+              private router: Router,
+              private authService: AuthenticationService,
+              private credentialsService: CredentialsService,
+              private service: AuthUserService,
+              @Inject(PLATFORM_ID) private platformId: any,
+              @Inject(DOCUMENT) private document: Document,
+              private renderer2: Renderer2,) {
   }
 
   ngOnInit() {
-    this.title.setTitle('Martha Tilaar Shop');
+    this.title.setTitle('Martha Tilaar Shop'); // todo: is this necessary?
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.startRefreshTokenCheck();
+      this.startNavigationChangeListener();
+      this.loadZendesk();
+    }
+
+    if (environment.production) {
+      Logger.enableProductionMode();
+    }
   }
 
+  ngOnDestroy() {
+    if (isPlatformBrowser((this.platformId))) {
+      clearInterval(this.timer);
+      this.routerEventsSub.unsubscribe();
+    }
+  }
 
+  /**
+   * Starts a timer that checks every 5 minutes if the user's token is expired,
+   * and refreshes it if necessary.
+   */
+  startRefreshTokenCheck() {
+    this.timer = setInterval(() => {
+      if (this.credentialsService.shouldRefreshToken) {
+        this.service.refreshToken(this.credentialsService.refreshToken).subscribe(
+          resp => resp,
+          error => this.store.dispatch(new Logout()));
+      }
+    }, AppComponent.FIVE_MINUTES);
+  }
+
+  /**
+   * Begins listening for navigation events -- primarily so that the user's
+   * current scroll position can be reset to the top of the page when they
+   * change pages.
+   */
+  startNavigationChangeListener() {
+    this.routerEventsSub = this.router.events.subscribe((e) => {
+      if (e instanceof NavigationStart) {
+        this.onNavigationStarted();
+      } else if (e instanceof NavigationEnd || e instanceof NavigationCancel || e instanceof NavigationError) {
+        this.onNavigationEnded();
+        this.getSlugToAnalytics(e);
+      }
+    });
+  }
+
+  onNavigationStarted() {
+    window.scrollTo(0, 0);
+    this.isBusy = true;
+  }
+
+  onNavigationEnded() {
+    this.isBusy = false;
+  }
+
+  getSlugToAnalytics(e: NavigationEnd | NavigationCancel | NavigationError) {
+    if (e instanceof NavigationEnd) {
+      gtag('config', 'UA-17290976-18', {'page_path': e.urlAfterRedirects});
+      fbq('track', 'PageView');
+    }
+  }
+
+  getZendeskID(): string {
+    return '19e09c8c-543e-4a52-98fd-1ddba548df6c';
+  }
+
+  loadZendesk(): void{
+    this.loadScript(`https://static.zdassets.com/ekr/snippet.js?key=${this.getZendeskID()}`, 'ze-snippet').then(res => {
+    })
+  }
+
+  private loadScript(url: string, id: string = '') {
+    return new Promise((resolve, reject) => {
+      const script = this.renderer2.createElement('script');
+      script.type = 'text/javascript';
+      script.src = url;
+      script.text = ``;
+      script.async = true;
+      script.defer = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      if ( id !== '') {
+        script.id = id;
+      }
+      this.renderer2.appendChild(this.document.body, script);
+    })
+  }
 }

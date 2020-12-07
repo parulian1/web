@@ -1,0 +1,13 @@
+<div class="mt-header-location" (click)="goToStore()">
+  <img src="assets/header/logo-pin.svg" alt="Logo Pin"/>
+  <div class="information" *ngIf="preferredStore; else elseStore">
+    <span class="store">{{preferredStore.name}}</span>
+    <span class="address">{{preferredStore.address.street}}, {{ preferredStore.address.province}}</span>
+  </div>
+  <ng-template #elseStore>
+    <div class="information">
+      <span class="store">---</span>
+      <span class="address">---</span>
+    </div>
+  </ng-template>
+</div>

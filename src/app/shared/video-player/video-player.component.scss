@@ -1,0 +1,54 @@
+@import "src/theme/base";
+
+.video-player {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+
+  &-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &-top {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 100%;
+    }
+
+    .title {
+      color: $white;
+      margin-left: 4px;
+      font-weight: bold;
+    }
+  }
+
+  .play-icon {
+    position: absolute;
+    font-size: 50px;
+    background: #423932;
+    border-radius: 12px;
+    width: 70px;
+    top: 45px;
+    left: 38%;
+    color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.video-player:hover {
+  .play-icon {
+    background: red;
+  }
+}

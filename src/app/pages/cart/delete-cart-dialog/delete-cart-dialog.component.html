@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Anda yakin akan menghapus item ini dari keranjang belanja?</h2>
+<mat-dialog-content class="mat-typography">
+  <div class="dialog-content">
+    <div class="product">
+      <div class="left" *ngIf="data.product.media.length !== 0; else elseImage">
+        <img src="{{data.product.media[0].image}}" alt="{{data.product.name}}"/>
+      </div>
+      <ng-template #elseImage>
+        <div class="left">
+          <img src="assets/default-image.png" alt="default-image" />
+        </div>
+      </ng-template>
+      <div class="right">
+        <span class="title">{{data.product.name}}</span>
+        <span class="vendor">{{data.product.brand.name}}</span>
+        <span class="price">{{data.product.unitPrice.current|currency:'Rp ':'symbol':'1.0-0'}}</span>
+      </div>
+    </div>
+    <div class="detail">
+      <div class="left">
+        {{data.warehouse.name}}
+      </div>
+      <div class="right">
+        <span class="quantity">Qty {{data.quantity}}</span>
+        <span class="total">{{data.lineTotals.price|currency: 'Rp ':'symbol':'1.0-0'}}</span>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close class="btn-continue-shopping">Kembali ke Keranjang</button>
+  <button mat-button [mat-dialog-close]="true" class="btn-continue-cart" (click)="removeItem(data.href)" cdkFocusInitial>Hapus item</button>
+</mat-dialog-actions>

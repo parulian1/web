@@ -1,29 +1,57 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {HomeComponent} from "@app/pages/home/home.component";
-import {ProfileComponent} from "@app/pages/profile/profile.component";
-import {extract} from "@app/core";
-import {AuthenticationGuard} from "@app/core/authentication/authentication.guard";
-import {ChangePasswordComponent} from "@app/pages/profile/change-password/change-password.component";
-import {UserProfileComponent} from "@app/pages/profile/user-profile/user-profile.component";
-import {StoreComponent} from "@app/pages/store/store.component";
 
+import * as store from './store';
+import {FocusedLayoutComponent, MainLayoutComponent} from '@app/layouts';
+import {OrderSummaryComponent} from "@app/pages/order-summary";
 
 const routes: Routes = [
-  {path: '', redirectTo: '/home', pathMatch: 'full'},
-  {path: 'home', component: HomeComponent, data: {title: extract('Martha Tilaar Shop')}},
   {
-    path: 'profile',
-    component: ProfileComponent,
-    data: {title: extract('Martha Tilaar Shop')},
-    canActivate: [AuthenticationGuard],
+    path: '',
+    component: MainLayoutComponent,
+    runGuardsAndResolvers: 'always',
     children: [
-      {path: '', component: UserProfileComponent},
-      {path: 'change-password', component: ChangePasswordComponent}
+      {path: '', loadChildren: () => import('./home/home.module').then(m => m.HomeModule)},
+      {path: 'profile', loadChildren: () => import('./profile').then(m => m.ProfileModule)},
+      {
+        path: 'store',
+        runGuardsAndResolvers: 'always',
+        children: [
+          {
+            path: '',
+            component: store.ChangeStoreComponent,
+            resolve: {stores: store.AllStoresResolver},
+            runGuardsAndResolvers: 'always',
+          },
+          {
+            path: ':current-state',
+            component: store.ChangeStoreComponent,
+            resolve: {stores: store.AllStoresResolver},
+            runGuardsAndResolvers: 'always',
+          },
+        ]
+      },
+      {path: 'products', loadChildren: () => import('./product/product.module').then(m => m.ProductModule)},
+      {path: 'brand', loadChildren: () => import('./brand-detail/brand-detail.module').then(m => m.BrandDetailModule)},
+      {path: 'cart', loadChildren: () => import('./cart/cart.module').then(m => m.CartModule)},
+      {path: 'errors', loadChildren: () => import('./errors').then(m => m.ErrorsModule)},
+      {path: 'page', loadChildren: () => import('./page/page.module').then(m => m.PageModule)},
+      {path: 'promo', loadChildren: () => import('./promotion/promotion.module').then(m => m.PromotionModule)},
+      {
+        path: 'auth-confirm',
+        loadChildren: () => import('./auth-confirm/auth-confirm.module').then(m => m.AuthConfirmModule)
+      },
     ]
   },
-  {path: 'store', component: StoreComponent},
-  {path:'store/:current-state', component: StoreComponent},
+  {
+    path: '',
+    component: FocusedLayoutComponent,
+    runGuardsAndResolvers: 'always',
+    children: [
+      {path: 'checkout', loadChildren: () => import('./checkout/checkout.module').then(m => m.CheckoutModule)},
+      {path: 'order-summary',  loadChildren: () => import('./order-summary/order-summary.module').then(m => m.OrderSummaryModule)}
+    ]
+  }
 
 ];
 

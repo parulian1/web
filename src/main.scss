@@ -25,3 +25,71 @@
 
 // Theme customization
 @import "theme/theme";
+
+.navbar-content {
+  a.link {
+    display: block;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: bold;
+    text-decoration: none;
+    color: $color-primary;
+
+  }
+}
+
+.static-page {
+  width: 50%;
+  justify-content: space-around;
+
+  a.link {
+    display: block;
+    font-size: 14px;
+    line-height: 18px;
+    text-decoration: none;
+    color: $color-secondary;
+    font-weight: normal;
+    border: solid 1px $white;
+    padding: 0;
+    margin: 12px 0 0 0;
+
+    &:hover {
+      border: solid 1px $white;
+    }
+  }
+}
+
+
+// alert
+.mt-alert---is-danger {
+  background: hsl(10, 86%, 59%);
+  color: hsl(0, 0%, 100%);
+}
+.mt-alert--is-primary {
+  background: hsl(320, 86%, 59%);
+  color: hsl(0, 0%, 100%);
+}
+.mt-alert--is-warning {
+  background: hsl(80, 86%, 59%);
+  color: hsl(0, 0%, 100%);
+}
+.mt-alert--is-info {
+  background: hsl(160, 86%, 59%);
+  color: hsl(0, 0%, 100%);
+}
+
+.mt-alert--has-text-centered {
+  text-align: center;
+}
+
+/* Title and Subtitle */
+.mt-alert--title {
+  font-size: 1rem;
+  line-height: 1.125;
+}
+
+.mt-alert--subtitle {
+  font-size: 12px;
+  line-height: 14px;
+  font-style: italic;
+}

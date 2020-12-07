@@ -1,0 +1,11 @@
+<div id="overlayBackground">
+  <div id="sidenavOverlay" class="sidenav-overlay">
+    <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">&times;</a>
+    <app-filter-product
+      [categoryList]=categoryList
+      [brandList]=brandList
+      [priceRangeList]="priceRangeList"
+      (filter)="onFiltered($event)">
+    </app-filter-product>
+  </div>
+</div>

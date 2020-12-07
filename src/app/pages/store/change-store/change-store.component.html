@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="content">
+    <div class="sidebar-menu">
+      <app-store-province-selector></app-store-province-selector>
+    </div>
+    <div class="store-list">
+      <mat-radio-group aria-label="Select an option">
+        <ng-container *ngFor="let store of availableStores">
+          <mat-radio-button value="{{store.name}}" (click)="setPreferredStore(store)">
+            <div class="store">
+              <span class="title">{{store.name | titlecase}}</span>
+              <span class="address">{{(store.address.street | slice:0:50) + '...'}}</span>
+              <span class="phone">{{store.address.province | titlecase}}</span>
+            </div>
+          </mat-radio-button>
+        </ng-container>
+      </mat-radio-group>
+    </div>
+    <div class="store-list-mobile">
+      <mat-radio-group aria-label="Select an option">
+        <ng-container *ngFor="let store of availableStores">
+          <mat-radio-button value="{{store.name}}" (click)="setPreferredStore(store)">
+            <div class="store">
+              <span class="title">{{store.name | titlecase}}</span>
+              <span class="address">{{store.address.street}}</span>
+              <span class="phone">{{store.address.province | titlecase}}</span>
+            </div>
+          </mat-radio-button>
+        </ng-container>
+      </mat-radio-group>
+    </div>
+  </div>
+</div>

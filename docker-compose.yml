@@ -1,83 +1,231 @@
 ---
 version: '3'
 services:
-  nginx:
-    container_name: mt-nginx
-    image: nginx:stable-alpine
+  mt-web:
+    container_name: mt-web
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - ./nginx-local.conf:/etc/nginx/nginx.conf:ro
+      - ./uploads:/usr/share/nginx/uploads
     depends_on:
       - iam_api
       - fulfillment_api
       - cms_api
       - catalog_api
+      - order_api
     ports:
-      - "8080:80"
+      - "8080:8080"
   db:
     container_name: mt-db
     image: postgres:12-alpine
     environment:
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: dev
-
+    ports:
+      - 5432:5432
   rabbitmq:
     container_name: mt-rabbitmq
     image: rabbitmq:3.8-management-alpine
     ports:
+      - "5672:5672"
       - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: dev
       RABBITMQ_DEFAULT_PASS: dev
 
+  zoo:
+    image: zookeeper:3.5.6
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=zoo:2888:3888:participant;2181
+      ZOO_4LW_COMMANDS_WHITELIST: mntr,conf,ruok
+
+  solr:
+    image: solr:8.4.1
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr
+      - start
+      - -f
+      - -c
+      - -z
+      - zoo:2181
+      - -a
+      - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
+    depends_on:
+      - zoo
+    ports:
+      - 8983:8983
+
   redis:
     container_name: mt-redis
     image: redis:5-alpine
-  admin:
-    container_name: mt-admin
-    image: gramedia/nusantara-admin:latest
-    environment:
-      NUS_DEBUG: 'true'
-      NUS_RABBITMQ_URL: amqp://dev:dev@rabbitmq:5672
-      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/iam
-      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/iam
-      NUS_REDIS_URL: redis://redis:6379/1
+    ports:
+      - "6379:6379"
+
   iam_api:
     container_name: mt-iam
-    image: gramedia/nusantara-iam-api:latest
+    image: gramedia/nusantara-iam-api:dev
     environment:
       NUS_DEBUG: 'true'
-      NUS_RABBITMQ_URL: amqp://dev:dev@rabbitmq:5672
+      NUS_BROKER_URL: amqp://dev:dev@rabbitmq:5672
       NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/iam
       NUS_DB_REPLICA: postgresql://dev:dev@db:5432/iam
       NUS_REDIS_URL: redis://redis:6379/1
+    volumes:
+      - ./uploads:/srv/app/iam/uploads
+    ports:
+      - 8001:8000
+
+  iam_celery:
+    container_name: mt-iam-celery
+    image: gramedia/nusantara-iam-api:dev
+    environment:
+      NUS_DEBUG: 'true'
+      NUS_BROKER_URL: amqp://dev:dev@rabbitmq:5672
+      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/iam
+      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/iam
+      NUS_REDIS_URL: redis://redis:6379/1
+    command: celery -A iam.celery_app.app worker
+    volumes:
+      - ./uploads:/srv/app/iam/uploads
 
   fulfillment_api:
     container_name: mt-fulfillment
-    image: gramedia/nusantara-fulfillment-api:feature_manage-warehouse
+    image: gramedia/nusantara-fulfillment-api:dev
     environment:
       NUS_DEBUG: 'true'
-      NUS_RABBITMQ_URL: amqp://dev:dev@rabbitmq:5672
+      NUS_BROKER_URL: amqp://dev:dev@rabbitmq:5672
       NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/fulfillment
       NUS_DB_REPLICA: postgresql://dev:dev@db:5432/fulfillment
       NUS_REDIS_URL: redis://redis:6379/2
+    volumes:
+      - ./uploads:/srv/app/fulfillment/uploads
+    ports:
+      - 8002:8000
+  fulfillment_api_consume:
+    container_name: mt-fulfillment-consumer
+    image: gramedia/nusantara-fulfillment-api:dev
+    environment:
+      NUS_DEBUG: 'true'
+      NUS_BROKER_URL: amqp://dev:dev@rabbitmq:5672
+      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/fulfillment
+      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/fulfillment
+      NUS_REDIS_URL: redis://redis:6379/2
+    command: python manage.py consume
+    volumes:
+      - ./uploads:/srv/app/fulfillment/uploads
+
 
   cms_api:
     container_name: mt-cms
-    image: gramedia/nusantara-cms-api:feature_cms
+    image: gramedia/nusantara-cms-api:dev
     environment:
       NUS_DEBUG: 'true'
-      NUS_RABBITMQ_URL: amqp://dev:dev@rabbitmq:5672
+      NUS_BROKER_URL: amqp://dev:dev@rabbitmq:5672
       NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/cms
       NUS_DB_REPLICA: postgresql://dev:dev@db:5432/cms
       NUS_REDIS_URL: redis://redis:6379/3
+    volumes:
+      - ./uploads:/srv/app/cms/uploads
+    ports:
+      - 8003:8000
+
+  cms_consume:
+    container_name: mt-cms-consumer
+    image: gramedia/nusantara-cms-api:dev
+    environment:
+      NUS_DEBUG: 'true'
+      NUS_BROKER_URL: amqp://dev:dev@rabbitmq:5672
+      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/cms
+      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/cms
+      NUS_REDIS_URL: redis://redis:6379/3
+    command: python manage.py consume
+    volumes:
+      - ./uploads:/srv/app/cms/uploads
+
   catalog_api:
     container_name: mt-catalog
-    image: gramedia/nusantara-catalog-api:feature_categories
+    image: gramedia/nusantara-catalog-api:dev
     environment:
       NUS_DEBUG: 'true'
-      NUS_RABBITMQ_URL: amqp://dev:dev@rabbitmq:5672
-      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/cms
-      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/cms
-      NUS_REDIS_URL: redis://redis:6379/3
+      NUS_BROKER_URL: amqp://dev:dev@rabbitmq:5672
+      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/catalog
+      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/catalog
+      NUS_REDIS_URL: redis://redis:6379/5
+      NUS_SOLR_URL: http://solr:8983/
+    volumes:
+      - ./uploads:/srv/app/catalog/uploads
+    ports:
+      - 8005:8000
 
+  catalog_consume:
+    container_name: mt-catalog-consumer
+    image: gramedia/nusantara-catalog-api:dev
+    environment:
+      NUS_DEBUG: 'true'
+      NUS_BROKER_URL: amqp://dev:dev@rabbitmq:5672
+      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/catalog
+      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/catalog
+      NUS_REDIS_URL: redis://redis:6379/5
+      NUS_SOLR_URL: http://solr:8983/
+    command: python manage.py consume
+    volumes:
+      - ./uploads:/srv/app/catalog/uploads
+
+  order_api:
+    container_name: mt-order
+    image: gramedia/nusantara-order-api:dev
+    environment:
+      NUS_DEBUG: 'true'
+      NUS_BROKER_URL: amqp://dev:dev@rabbitmq:5672
+      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/order
+      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/order
+      NUS_REDIS_URL: redis://redis:6379/4
+    volumes:
+      - ./uploads:/srv/app/order/uploads
+    ports:
+      - 8004:8000
+
+  order_consume:
+    container_name: mt-order-consumer
+    image: gramedia/nusantara-order-api:dev
+    environment:
+      NUS_DEBUG: 'true'
+      NUS_BROKER_URL: amqp://dev:dev@rabbitmq:5672
+      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/order
+      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/order
+      NUS_REDIS_URL: redis://redis:6379/4
+    command: python manage.py consume
+    volumes:
+      - ./uploads:/srv/app/order/uploads
+
+  marketplace_api:
+    container_name: mt-marketplace
+    image: gramedia/nusantara-marketplace-api:dev
+    environment:
+      NUS_DEBUG: 'true'
+      NUS_BROKER_URL: amqp://dev:dev@rabbitmq:5672
+      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/marketplace
+      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/marketplace
+      NUS_REDIS_URL: redis://redis:6379/5
+    volumes:
+      - ./uploads:/srv/app/marketplace/uploads
+    ports:
+      - 8006:8000
+
+  marketplace_consume:
+    container_name: mt-marketplace-consumer
+    image: gramedia/nusantara-marketplace-api:dev
+    environment:
+      NUS_DEBUG: 'true'
+      NUS_BROKER_URL: amqp://dev:dev@rabbitmq:5672
+      NUS_DB_PRIMARY: postgresql://dev:dev@db:5432/marketplace
+      NUS_DB_REPLICA: postgresql://dev:dev@db:5432/marketplace
+      NUS_REDIS_URL: redis://redis:6379/4
+    command: python manage.py consume
+    volumes:
+      - ./uploads:/srv/app/order/uploads
 

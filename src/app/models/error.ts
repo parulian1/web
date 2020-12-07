@@ -1,4 +1,4 @@
 export interface MtError {
-  status? : string;
-  message? : string;
+  status?: string;
+  message?: string;
 }

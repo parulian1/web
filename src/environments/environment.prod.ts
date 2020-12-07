@@ -8,12 +8,9 @@ import { env } from './.env';
 
 export const environment = {
   production: true,
-  hmr: false,
-  version: env.npm_package_version,
-  serverUrl: 'https://api.chucknorris.io',
-  defaultLanguage: 'en-US',
-  supportedLanguages: [
-    'en-US',
-    'fr-FR'
-  ]
+  BASE_API_URL: '/api',
+  FB_APPLICATION_ID: '700626284166786',
+  GOOGLE_APPLICATION_ID: '50988981071-qebioumemg77jogdg54oe98be1qifaum.apps.googleusercontent.com',
+  SHIPPING_COUNTRY_CODE: 'IDN',
+  YOUTUBE_API_KEY: 'AIzaSyB7m0r7paaV5I5U6vjf0pDmocvD8-K-D-w',
 };

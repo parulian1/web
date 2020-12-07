@@ -1,18 +1,14 @@
-<div class="main-carousel">
-  <div class="carousel-cell"><img src="assets/banner-example.png" alt="banner-1"/></div>
-  <div class="carousel-cell"><img src="assets/banner-example.png" alt="banner-1"/></div>
-  <div class="carousel-cell"><img src="assets/banner-example.png" alt="banner-1"/></div>
-  <div class="carousel-cell"><img src="assets/banner-example.png" alt="banner-1"/></div>
-  <div class="carousel-cell"><img src="assets/banner-example.png" alt="banner-1"/></div>
-</div>
-
-
-<!--<div class="main-carousel" *ngIf="banner">-->
-<!--  <div class="carousel-cell" *ngFor="let item of banner">-->
-<!--    <a href="{{item.clickUrl}}" *ngIf="(item.bannerType === 'web') && (isShown)">-->
-<!--      <img-->
-<!--        src="{{item.href}}"-->
-<!--        alt="{{item.slug}}"/>-->
-<!--    </a>-->
-<!--  </div>-->
-<!--</div>-->
+<ngx-slick-carousel
+  class="main-carousel"
+  [config]="slidesConfig">
+  <div ngxSlickItem *ngFor="let item of banners">
+    <div class="carousel-cell">
+      <a href="{{item.clickUrl}}">
+        <img
+          appResponsiveImgChooser
+          [source]="{ defaultImg: item.image, mobileImg: item.phoneImage, tabletImg: item.tabletImage }"
+          alt="{{item.name}}"/>
+      </a>
+    </div>
+  </div>
+</ngx-slick-carousel>

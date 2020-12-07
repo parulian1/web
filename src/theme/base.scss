@@ -6,17 +6,42 @@ $color-fb: #4267B2;
 $color-google: #F5F5F5;
 $color-alert: #FAA61A;
 $color-grey: #B9B9B9;
-$white: #FFFFFF;
+$white: #ffffff;
+$color-grey-2: #E5E5E5;
+
+$color-background-alt: #F5F5F5;
 
 //fonts
 $font-primary: 'Lato', sans-serif;
-$font-secondary: 'Noto', serif;
+$font-secondary: Noto serif;
 
 //border
 $border-radius: 4px;
+$border-radius-double: 8px;
 
 //breakpoints
 $mobile-break: 500px;
 $tablet-break: 979px;
 $desktop-break: 980px;
 
+$color-error: #D81936;
+
+
+
+:root {
+  --color-white: #FFF;
+
+  --border-radius: 4px;
+
+  --color-primary: #000000;
+  --color-secondary: #5A5A5A;
+  --color-accent: #F03BB3;
+
+  --color-background-alt: #F5F5F5;
+
+  --font-primary: 'Lato', sans-serif;
+  --font-secondary: Noto serif;
+
+  --mobile-break: 500px;
+  --desktop-break: 980px;
+}

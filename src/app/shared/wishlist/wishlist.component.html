@@ -1,0 +1,16 @@
+<button
+  class="button"
+  [ngClass]="richButtonStyle"
+  (click)="toggleWishList()"
+  [title]="title">
+
+  <span class="icon" [class]="iconOnly ? 'button__icon-only': 'button__icon'">
+    <mat-icon [class]="isWishListed ? 'icon--primary': ''">
+      {{ isWishListed ? 'favorite' : 'favorite_border' }}
+    </mat-icon>
+  </span>
+
+  <span *ngIf="!iconOnly" class="button__text">
+    {{ !!text.activated ? isWishListed ? text.deactivated : text.activated : text }}
+  </span>
+</button>

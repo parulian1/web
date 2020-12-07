@@ -1,0 +1,440 @@
+@import "src/theme/base";
+
+:host {
+  width: 100%;
+
+  .payment-wrapper {
+    width: 100%;
+    padding-left: 24px;
+
+    font-family: $font-secondary;
+    font-style: normal;
+    font-weight: normal;
+
+    h3 {
+      font-family: $font-secondary;
+      font-size: 28px;
+      font-weight: normal;
+      line-height: 37px;
+      margin: 0;
+    }
+
+    .no-payment-wrapper {
+      text-align: center;
+      margin-top: 39px;
+      margin-bottom: 100px;
+      font-family: $font-primary;
+
+      .no-payment-img {
+      }
+
+      .no-payment-label {
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 22px;
+      }
+    }
+
+    .card-wrapper {
+      margin-top: 27px;
+      display: flex;
+
+      .card-list-wrapper {
+        flex: 1;
+
+        .card-list {
+          .card-number-masked {
+            display: flex;
+            justify-content: space-around;
+
+            margin: 0 24px 16px 0;
+            padding: 18px 1px;
+
+            border: 1px solid #E5E5E5;
+            box-sizing: border-box;
+            border-radius: 8px;
+
+            font-family: $font-primary;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 22px;
+
+            cursor: pointer;
+
+            .cc-detail {
+              display: flex;
+              .cc-number {}
+              .cc-logo-small {
+                margin-left: 10px;
+                vertical-align: text-bottom;
+
+                object-fit: contain;
+                width: 35px;
+                height: 21px;
+              }
+            }
+
+            .cc-action {
+              color: #5A5A5A;
+            }
+          }
+
+          .active {
+            border: 2px solid #000000;
+          }
+        }
+      }
+
+      .card-detail {
+        background: #F5F5F5;
+        border-radius: 8px;
+        flex: 1;
+        text-align: center;
+
+        .card-img-wrapper {
+          font-family: $font-primary;
+          margin: 32px 48px;
+          position: relative;
+          color: $white;
+
+          .card-background {
+            position: relative;
+            width: 100%;
+          }
+
+          .card-sim {
+            position: absolute;
+            z-index: 2;
+            top: 20px;
+            left: 20px;
+          }
+
+          .card-logo {
+            object-fit: contain;
+            width: 54px;
+            height: 32px;
+            position: absolute;
+            z-index: 2;
+            top: 20px;
+            right: 20px;
+          }
+
+          .num-masked {
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 25px;
+            font-feature-settings: 'liga' off;
+            position: absolute;
+            z-index: 2;
+            top: 90px;
+            left: 20px;
+          }
+
+          .card-expired-label {
+            position: absolute;
+            z-index: 2;
+            bottom: 35px;
+            left: 20px;
+            font-size: 14px;
+            line-height: 19px;
+          }
+
+          .card-expired-value {
+            position: absolute;
+            z-index: 2;
+            bottom: 10px;
+            left: 20px;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 22px;
+          }
+        }
+
+        .card-detail-text {
+          font-family: $font-primary;
+          font-size: 14px;
+          line-height: 19px;
+          margin: 36px 32px 0 32px;
+        }
+
+
+        button {
+          padding: 9px 50px;
+          margin: 24px auto;
+
+          font-family: $font-primary;
+          font-weight: bold;
+          font-size: 16px;
+          line-height: 22px;
+
+          cursor: pointer;
+        }
+      }
+    }
+
+    .delete-modal-wrapper {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 100; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0, 0, 0); /* Fallback color */
+      background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+
+      .delete-modal-content {
+        background-color: #fefefe;
+        margin: 300px auto;
+        padding: 16px 24px;
+        border: 1px solid #888;
+        width: 30%;
+        border-radius: $border-radius;
+
+        .delete-modal-close {
+          color: #aaaaaa;
+          float: right;
+          font-weight: bold;
+        }
+
+        .delete-modal-title {
+          margin: 0;
+          font-family: $font-secondary;
+          font-weight: normal;
+          font-size: 25px;
+          line-height: 37px;
+        }
+
+        .delete-modal-subtitle {
+          margin: 24px 0;
+          font-size: 16px;
+          line-height: 22px;
+        }
+
+        .button-delete-wrapper {
+          display: flex;
+
+          button {
+            flex: 1;
+
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 22px;
+            border: 1px solid #F03BB3;
+            box-sizing: border-box;
+            border-radius: 4px;
+            background: transparent;
+
+            padding: 9px 0;
+            cursor: pointer;
+          }
+
+          .left {
+            margin-right: 16px;
+            color: #F03BB3;
+          }
+
+          .delete {
+            background: #F03BB3;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+// mobile
+@media screen and (max-width: $mobile-break) {
+
+  :host {
+    .payment-wrapper {
+      margin: 20px 0 50px 0;
+      padding: 0;
+
+      h3 {
+        font-size: 18px;
+        line-height: 24px;
+      }
+
+      .card-wrapper {
+        flex-direction: column;
+        margin-top: 16px;
+
+        .card-list-wrapper {
+          .card-list {
+            .card-number-masked {
+              display: flex;
+              margin: 0 0 20px 0;
+              padding: 19px 12px;
+
+              font-size: 14px;
+              line-height: 19px;
+            }
+          }
+        }
+      }
+
+      .card-detail-modal-wrapper {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 100; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0); /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+
+        .card-detail-modal-content {
+          background-color: #fefefe;
+          margin: 200px auto;
+          padding: 12px;
+          border: 1px solid #888;
+          width: 80%;
+          border-radius: $border-radius;
+
+          .card-detail-modal-close {
+            color: black;
+            float: right;
+            font-size: 25px;
+          }
+
+          .card-detail-modal-title {
+            margin: 0;
+            font-family: $font-secondary;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 20px;
+          }
+
+          .card-detail {
+            background: transparent;
+            border-radius: 8px;
+            flex: 1;
+            text-align: center;
+
+            .card-img-wrapper {
+              font-family: $font-primary;
+              margin: 24px 12px;
+              position: relative;
+              color: $white;
+
+              .card-background {
+                position: relative;
+                width: 100%;
+              }
+
+              .card-sim {
+                object-fit: contain;
+                width: 36px;
+                height: 29px;
+                position: absolute;
+                z-index: 2;
+                top: 20px;
+                left: 20px;
+              }
+
+              .card-logo {
+                object-fit: contain;
+                width: 47px;
+                height: 28px;
+                position: absolute;
+                z-index: 2;
+                top: 20px;
+                right: 20px;
+              }
+
+              .num-masked {
+                font-weight: bold;
+                font-size: 16px;
+                line-height: 22px;
+                font-feature-settings: 'liga' off;
+                position: absolute;
+                z-index: 2;
+                top: 50px;
+                left: 20px;
+              }
+
+              .card-expired-label {
+                position: absolute;
+                z-index: 2;
+                bottom: 25px;
+                left: 20px;
+                font-size: 12px;
+                line-height: 17px;
+              }
+
+              .card-expired-value {
+                position: absolute;
+                z-index: 2;
+                bottom: 5px;
+                left: 20px;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 19px;
+              }
+            }
+
+            .card-detail-text {
+              font-family: $font-primary;
+              font-size: 12px;
+              line-height: 17px;
+              margin: 36px 32px 0 32px;
+            }
+
+
+            button {
+              padding: 9px 50px;
+              margin: 24px auto;
+
+              font-family: $font-primary;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 19px;
+
+              cursor: pointer;
+              border-radius: $border-radius;
+              background: white;
+            }
+          }
+        }
+      }
+
+      .delete-modal-wrapper {
+        .delete-modal-content {
+          margin: 200px auto;
+          width: 80%;
+          padding: 12px 16px;
+
+          .delete-modal-title {
+            font-size: 18px;
+            line-height: 24px;
+          }
+
+          .delete-modal-subtitle {
+            font-size: 14px;
+            line-height: 18px;
+          }
+
+          .button-delete-wrapper {
+            flex-direction: column;
+
+            button {
+              font-size: 16px;
+              line-height: 22px;
+            }
+
+            .left {
+              margin: 0 0 16px 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

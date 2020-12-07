@@ -1,0 +1,160 @@
+<div class="add-address">
+  <h2 *ngIf="mode !== 'maps' ">{{title}}</h2>
+  <h2 *ngIf="mode === 'maps' ">Pin Alamat</h2>
+  <span (click)="closeDialog()">X</span>
+</div>
+<mat-dialog-content>
+  <div class="address-form" *ngIf="mode === 'form'">
+    <form (submit)="submitAddress()" [formGroup]="form">
+
+      <label class="address-input">
+        <span class="label">Label Alamat* (Contoh: Rumah, Kantor, Kosan)</span>
+        <input type="text"
+               placeholder="Masukkan label alamat"
+               formControlName="name"
+               name="label">
+        <small *ngIf="name.invalid && (name.dirty || name.touched)">
+          <span *ngIf="name.errors['required']">Label alamat harus diisi</span>
+        </small>
+      </label>
+
+      <div class="side-form">
+        <div class="left">
+
+          <label class="address-input">
+            <span class="label">Nama Penerima*</span>
+            <input type="text"
+                   placeholder="Masukkan nama penerima"
+                   formControlName="shipToName"
+                   name="shipToName">
+            <small *ngIf="shipToName.invalid && (shipToName.dirty || shipToName.touched)">
+              <span *ngIf="shipToName.errors['required']">Nama penerima harus diisi</span>
+            </small>
+          </label>
+
+          <label class="address-input">
+            <span class="label">Provinsi*</span>
+            <mat-select placeholder="Cari Provinsi"
+                        (selectionChange)="selectedProvince($event)"
+                        formControlName="state">
+              <mat-option *ngFor="let province of data.provinces"
+                          [value]="province.name"
+              >{{province.name|titlecase}}</mat-option>
+            </mat-select>
+            <small *ngIf="state.invalid && (state.dirty || state.touched)">
+              <span *ngIf="state.errors['required']">Provinsi harus diisi</span>
+            </small>
+          </label>
+
+          <label class="address-input">
+            <span class="label">Kecamatan*</span>
+            <mat-select placeholder="Cari Kecamatan"
+                        (selectionChange)="selectedDistrict($event)"
+                        formControlName="district">
+              <mat-option *ngFor="let district of subDistricts"
+                          [value]="district"
+              >{{district|titlecase}}</mat-option>
+            </mat-select>
+            <small *ngIf="district.invalid && (district.dirty || district.touched)">
+              <span *ngIf="district.errors['required']">Kecamatan harus diisi</span>
+            </small>
+          </label>
+
+        </div>
+        <div class="right">
+
+          <label class="address-input">
+            <span class="label">No. Handphone*</span>
+            <input type="text"
+                   placeholder="Masukkan no. handphone"
+                   formControlName="phoneNumber"
+                   name="phoneNumber">
+            <small *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)">
+              <span *ngIf="phoneNumber.errors['required']">No. handphone harus diisi</span>
+            </small>
+          </label>
+
+          <label class="address-input">
+            <span class="label">Kota/Kabupaten*</span>
+            <mat-select placeholder="Cari Kota"
+                        (selectionChange)="selectedCity($event)"
+                        formControlName="city">
+              <mat-option *ngFor="let city of cities"
+                          [value]="city.name"
+              >{{city.name|titlecase}}</mat-option>
+            </mat-select>
+            <small *ngIf="city.invalid && (city.dirty || city.touched)">
+              <span *ngIf="city.errors['required']">Kota harus diisi</span>
+            </small>
+          </label>
+
+          <label class="address-input">
+            <span class="label">Kode Pos*</span>
+            <mat-select placeholder="Masukkan kode pos"
+                        formControlName="zipcode">
+              <mat-option *ngFor="let code of zipCode"
+                          [value]="code.postalCode"
+              >{{code.district|titlecase}} - {{code.postalCode}}</mat-option>
+            </mat-select>
+            <small *ngIf="zipcode.invalid && (zipcode.dirty || zipcode.touched)">
+              <span *ngIf="zipcode.errors['required']">Kode pos harus diisi</span>
+            </small>
+          </label>
+
+        </div>
+      </div>
+
+      <label class="address-input">
+        <span class="label">Alamat Lengkap*</span>
+        <input type="text"
+               placeholder="Masukkan alamat lengkap"
+               formControlName="street"
+               name="street">
+        <small *ngIf="street.invalid && (street.dirty || street.touched)">
+          <span *ngIf="street.errors['required']">Alamat lengkap harus diisi</span>
+        </small>
+      </label>
+
+      <label class="map">
+        <span class="label">Pin Alamat</span>
+        <a (click)="mapSelector()" *ngIf="(currLat === 0 && currLng === 0); else elseLoc">Pilih koordinat alamat</a>
+        <ng-template #elseLoc>
+          <div class="addr-by-loc">
+            <span class="addr">{{(mapInfo.length > 10) ? (mapInfo | slice:0:25) + '...' : (mapInfo)}}</span>
+            <a (click)="mapSelector()">Ubah</a>
+          </div>
+        </ng-template>
+      </label>
+
+      <button class="btn-save"
+              type="submit"
+              *ngIf="mode === 'form'"
+              [disabled]="isButtonDisabled">Simpan Alamat
+      </button>
+
+    </form>
+
+  </div>
+  <div class="map-selector" *ngIf="mode === 'maps'">
+    <span>Tandai koordinat lokasi yang sesuai dengan alamat yang diisi</span>
+    <div class="map">
+      <google-map
+        #googleMap
+        width="100%"
+        height="260px"
+        [zoom]="zoom"
+        [options]="options"
+        [center]="center"
+        (mapDrag)="mapDrag($event)"
+        (mapDragstart)="mapDragStart($event)"
+        (mapDragend)="mapDragEnd($event)">
+        <div class="map-marker">
+          <div class="map-info">{{(mapInfo.length > 10) ? (mapInfo | slice:0:25) + '...' : (mapInfo)}}</div>
+        </div>
+      </google-map>
+    </div>
+    <button class="btn-map-save" (click)="saveLoc()">Pilih lokasi ini</button>
+  </div>
+
+</mat-dialog-content>
+

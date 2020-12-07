@@ -1,59 +1,116 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthUserService} from "@app/services/auth-user.service";
-import {AppState} from "@app/store/state/app.state";
-import {Store} from "@ngrx/store";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {ChangePassword} from "@app/store/actions/auth.actions";
+import { Router } from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { AlertDialogComponent } from "@app/shared/alert-dialog";
+
+import { AuthUserService } from "@app/services/auth-user.service";
 
 @Component({
-  selector: 'app-change-password',
-  templateUrl: './change-password.component.html',
-  styleUrls: ['./change-password.component.scss']
+  selector: "app-change-password",
+  templateUrl: "./change-password.component.html",
+  styleUrls: ["./change-password.component.scss"],
 })
 export class ChangePasswordComponent implements OnInit {
-  public changePassForm: FormGroup;
+  form: FormGroup;
+  submitted: boolean = false;
 
-  constructor(private service: AuthUserService,
-              private store: Store<AppState>) {
-  }
+  constructor(private service: AuthUserService, private router: Router, private snackbar: MatSnackBar) {}
 
   ngOnInit(): void {
-    this.initForm()
+    this.initForm();
   }
 
-  get oldPassword() {
-    return this.changePassForm.get('oldPassword');
+  initForm(): void {
+    this.form = new FormGroup({
+      oldPassword: new FormControl("", [Validators.required]),
+      password: new FormControl("", [Validators.required]),
+      passwordConfirm: new FormControl("", [Validators.required]),
+    });
+  }
+  cleanForm(): void {
+    this.form.reset();
+    this.submitted = false;
   }
 
-  get newPassword() {
-    return this.changePassForm.get('newPassword');
+  get oldPassword(): FormControl {
+    return this.form.get("oldPassword") as FormControl;
   }
-
-  get repeatNewPassword() {
-    return this.changePassForm.get('repeatNewPassword');
+  get password(): FormControl {
+    return this.form.get("password") as FormControl;
   }
-
-  initForm() {
-    this.changePassForm = new FormGroup({
-      oldPassword: new FormControl('', Validators.required),
-      newPassword: new FormControl('', Validators.required),
-      repeatNewPassword: new FormControl('', Validators.required),
-    })
+  get passwordConfirm(): FormControl {
+    return this.form.get("passwordConfirm") as FormControl;
   }
 
   onSubmit() {
-
-    if (this.newPassword.value == this.repeatNewPassword.value) {
-      const payload = {
-        password: this.newPassword.value,
-        password_confirm: this.repeatNewPassword.value,
-        old_password: this.oldPassword.value
-      };
-
-      this.store.dispatch(new ChangePassword(payload));
-    } else {
-      alert('Your new password isn\'t match');
+    this.submitted = true;
+    if (this.form.valid) {
+      if (this.form.get("password").value == this.form.get("passwordConfirm").value) {
+        const { oldPassword, password, passwordConfirm } = this.form.value;
+        this.service
+          .changePassword({
+            oldPassword,
+            password,
+            passwordConfirm,
+          })
+          .subscribe(
+            () => {
+              this.cleanForm();
+              this.showSuccessMessage();
+            },
+            (err) => this._handleError(err)
+          );
+      } else {
+        this._setErrorPasswordDoesntMatch();
+      }
     }
   }
 
+  goBack(): void {
+    // todo: if form data is dirty, best to prompt the user first
+    this.router.navigate(["/profile"]);
+  }
+
+  // Messages
+  showSuccessMessage(msg: string = "") {
+    const message = msg ? msg : "Berhasil Mengubah Password Anda.";
+    const status = 201;
+
+    this.snackbar.openFromComponent(AlertDialogComponent, {
+      data: { message, status },
+      duration: 3 * 1000, // 3 seconds
+      verticalPosition: "top",
+      panelClass: ["mt-alert--is-primary", "mt-alert--has-text-centered"],
+    });
+  }
+  showErrorMessage(msg: string = "") {
+    const message = msg ? msg : "Terjadi kesalahan, silahkan periksa kembali inputan anda.";
+    const status = 400;
+
+    this.snackbar.openFromComponent(AlertDialogComponent, {
+      data: { message, status },
+      duration: 3 * 1000, // 3 seconds
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
+  }
+
+  // Error Handling
+  _handleError(err: any): void {
+    if (err.status === 400) {
+      this._setErrors(err.error);
+    } else {
+      this.showErrorMessage();
+    }
+  }
+  _setErrors(error: any) {
+    Object.values(error.details).forEach((field: any) => {
+      this.form.controls[field.field].setErrors({ fromServer: field.message });
+    });
+  }
+  _setErrorPasswordDoesntMatch(): void {
+    this.form.get("passwordConfirm").setErrors({ doesntMatch: true });
+  }
 }

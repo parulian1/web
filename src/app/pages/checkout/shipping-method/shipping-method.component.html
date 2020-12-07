@@ -1,0 +1,42 @@
+<div class="shipping-method" [class.active]="(!!stateService.getStateAddress && mode !== 'default' && mode !== 'idle' && this.address)">
+  <div class="top">
+    <div class="bar">
+      <span class="title">Metode Pengiriman</span>
+      <span class="sla" *ngIf="stateService.getStateAddress && mode !== 'default' && mode !== 'idle' && this.address">Perkiraan tiba dihitung sejak pesanan dikirim.</span>
+    </div>
+    <span class="change" *ngIf="mode === 'default'" (click)="changeMode()">Ubah</span>
+  </div>
+  <div class="middle" *ngIf="stateService.getStateAddress && mode !== 'default' && mode !== 'idle' && this.address ">
+    <ng-container *ngFor="let item of this.cart.weight">
+      <div class="shipping-options">
+        <span class="title">{{item.name}}</span>
+      </div>
+      <app-select-price
+        [shippingMethod]="shippingMethod"
+        [item]="item"
+        [shippingSelect]="shippingSelect"
+        (shippingChosen)="getShippingChosen($event)"></app-select-price>
+    </ng-container>
+
+    <button class="chose-shipping"
+            *ngIf="this.address"
+            [disabled]="isButtonDisabled()"
+            (click)="saveShippingMethod()">Pilih
+    </button>
+  </div>
+  <div class="middle" *ngIf="mode === 'default'">
+    <ng-container *ngFor="let item of this.cart.weight">
+      <div class="shipping-options">
+        <span class="title">{{item.name}}</span>
+      </div>
+      <div *ngFor="let ship of shippingSelect">
+        <span *ngIf="ship.warehouse === (item.href|entityToSlug)">
+          {{ship.method.method}} | {{ship.method.cost|currency:'Rp ':'symbol':'1.0'}} {{'(' + ship.method.sla + ')'}}
+        </span>
+      </div>
+    </ng-container>
+  </div>
+  <!--  <ng-template #emptyShipping>-->
+
+  <!--  </ng-template>-->
+</div>

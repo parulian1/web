@@ -1,0 +1,48 @@
+<div class="inner-container" *ngIf="cart.cartItems.length !== 0">
+  <mat-toolbar class="checkout-navbar" color="white">
+    <mat-toolbar-row>
+      <div class="mt-header-logo">
+        <a [routerLink]="['']"><img src="assets/header/logo-mt.svg" alt="Martha Tilaar Logo"></a>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <span class="title">Checkout</span>
+  <div class="main">
+    <div class="main-checkout">
+      <app-checkout-address
+        (addressChosen)="getAddress($event)"></app-checkout-address>
+      <app-shipping-method
+        [cart]="cart"
+        [warehouse]="warehouse"
+        [address]="address"
+        [shippingMethod]="shippingMethod$"
+        [mode]="shippingMethodMode"
+        (shipping)="getShipping($event)"
+        (totalShipping)="getTotalShipping($event)"></app-shipping-method>
+      <app-payment-method
+        (payment)="getPayment($event)"></app-payment-method>
+    </div>
+    <div class="side-cart">
+      <div class="side-cart-totals">
+        <app-total-summary
+          [cart]="cart"
+          [cartTotals]="cartTotals"
+          [checkoutParams]="checkoutParams"></app-total-summary>
+        <div class="continue-payment">
+          <button class="btn-continue" [disabled]="!canCheckout" (click)="createOrder()">Lanjutkan Pembayaran</button>
+          <ng-container *ngFor="let item of errorMessages | keyvalue">
+            <span class="has-error">
+              {{ item.value }}
+            </span>
+          </ng-container>
+        </div>
+      </div>
+      <div class="side-cart-voucher">
+        <app-voucher-card></app-voucher-card>
+      </div>
+      <div class="side-cart-summary" *ngIf="cart">
+        <app-cart-summary [cart]="cart"></app-cart-summary>
+      </div>
+    </div>
+  </div>
+</div>

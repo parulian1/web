@@ -1,0 +1,18 @@
+<div class="totals">
+  <div class="subtotal">
+    <span class="title">Subtotal</span>
+    <span class="value">{{cartTotals.subTotal|currency: 'Rp. ' : 'symbol' : '1.0-0'}}</span>
+  </div>
+  <div class="shipping-box">
+    <span class="title">Pengiriman</span>
+    <span class="value">{{cartTotals.shippingTotal|currency: 'Rp. ' : 'symbol' : '1.0-0'}}</span>
+  </div>
+  <div class="discount">
+    <span class="title">Hemat</span>
+    <span class="value">- {{cartTotals.discountTotal|currency: 'Rp. ' : 'symbol' : '1.0-0'}}</span>
+  </div>
+  <div class="grand-total">
+    <span class="title">Total</span>
+    <span class="grand-value">{{cartTotals.grandTotal|currency: 'Rp. ' : 'symbol' : '1.0-0'}}</span>
+  </div>
+</div>

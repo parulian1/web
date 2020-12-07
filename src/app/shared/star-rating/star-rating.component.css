@@ -1,0 +1,15 @@
+button {
+  height: 20px;
+  width: 25px;
+  line-height: 20px;
+}
+
+@media screen and (max-width: 500px) {
+  button {
+    width: 16px;
+    height: 16px;
+    margin: 0 2px;
+    line-height: 12px;
+
+  }
+}

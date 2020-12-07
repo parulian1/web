@@ -1,0 +1,31 @@
+@import "src/theme/base";
+
+.cart-qty {
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    background: none;
+    border: solid 1px $white;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  .value {
+    font-size: 16px;
+    line-weight: 22px;
+    font-weight: bold;
+  }
+
+  input {
+    width: 50px;
+    border: none;
+    text-align: center;
+  }
+}
+

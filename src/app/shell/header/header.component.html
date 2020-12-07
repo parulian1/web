@@ -2,19 +2,19 @@
   <mat-toolbar class="navbar-desktop" color="white">
     <mat-toolbar-row class="first-row">
       <div class="mt-header-logo">
-        <a [routerLink]="['/home']"><img src="assets/header/logo-mt.svg" alt="Martha Tilaar Logo"></a>
+        <a [routerLink]="['/home']" ><img alt="Martha Tilaar Logo" src="assets/header/logo-mt.svg"></a>
       </div>
-      <app-store-location></app-store-location>
-      <app-search-bar></app-search-bar>
+      <app-current-store></app-current-store>
+      <app-search-bar (search)="searchEvent($event)"></app-search-bar>
       <div class="mt-header-account">
-        <a [routerLink]="['/profile']"><img src="assets/header/logo-account.svg" alt="Account Logo"></a>
         <app-auth-button></app-auth-button>
       </div>
-      <div class="mt-header-notification">
-        <mat-icon matBadge="3" matBadgeColor="accent">notifications_none</mat-icon>
-      </div>
       <div class="mt-header-cart">
-        <mat-icon matBadge="2" matBadgeColor="accent">shopping_cart</mat-icon>
+        <a [routerLink]="['/cart']">
+          <mat-icon [matBadgeHidden]="matVisibility" [matBadge]="matBadge" matBadgeColor="accent" matBadgeSize="medium">
+            <img src="assets/cart-new.png">
+          </mat-icon>
+        </a>
       </div>
     </mat-toolbar-row>
     <mat-toolbar-row class="second-row">
@@ -26,32 +26,87 @@
   <mat-toolbar class="navbar-mobile" color="white">
     <div class="mobile-container">
       <div class="mobile-left">
-        <button mat-icon-button>
+        <button (click)="showSideMenu()" mat-icon-button>
           <mat-icon>menu</mat-icon>
         </button>
       </div>
       <div class="mobile-middle">
         <div class="mt-header-logo">
-          <a [routerLink]="['/home']"><img src="assets/header/logo-mt.svg" alt="Martha Tilaar Logo"></a>
+          <a [routerLink]="['/home']" (click)="backButton()"><img alt="Martha Tilaar Logo" src="assets/header/logo-mt.svg"></a>
         </div>
       </div>
       <div class="mobile-right">
-        <div class="mt-header-notification">
-          <mat-icon matBadge="3" matBadgeColor="accent" matBadgeSize="small">notifications_none</mat-icon>
-        </div>
         <div class="mt-header-cart">
-          <mat-icon matBadge="2" matBadgeColor="accent" matBadgeSize="small">shopping_cart</mat-icon>
+          <a [routerLink]="['/cart']" (click)="backButton()">
+            <mat-icon [matBadgeHidden]="matVisibility" [matBadge]="matBadge" matBadgeColor="accent"
+                      matBadgeSize="small">shopping_cart
+            </mat-icon>
+          </a>
         </div>
       </div>
     </div>
     <div class="mobile-container-second">
       <div class="bottom-row">
-        <app-store-location></app-store-location>
-        <app-search-bar></app-search-bar>
+        <app-current-store [hidden]="isMobileSearch"></app-current-store>
+        <app-search-bar (click)="setMobileSearch()" [hidden]="isMobileSearch"></app-search-bar>
       </div>
     </div>
   </mat-toolbar>
 </div>
-<app-reminder-bar></app-reminder-bar>
+
+<div [hidden]="!isMobileSearch" class="mobile-search">
+  <div class="mt-header-search">
+    <div class="mobile-top-search">
+      <div class="back">
+        <img src="assets/header/back-mobile.svg" (click)="backButton()"/>
+      </div>
+      <span class="search-input">
+    <form (appClickOutsideSearch)="clickedInside()"
+          (submit)="onPressEnter()"
+          action="#"
+          class="mt-search-form">
+            <input (click)="clickedInsideData($event)"
+                   (keydown)="changeTextInput($event)"
+                   [(ngModel)]="queryText"
+                   [appFocusInputMobile]="true"
+                   autocomplete="off"
+                   name="search-form-mobile"
+                   placeholder="Cari Produk"
+                   type="search"/>
+      <i class="material-icons icon-search">search</i>
+      <img (click)="queryText = ''" [hidden]="(queryText === '')"
+           class="clear-search"
+           src="assets/header/close-header-desktop.svg"/>
+    </form>
+  </span>
+    </div>
+    <div class="search-box-suggestion">
+      <div *ngIf="!!productSuggestion" class="search-box-products">
+        <ul>
+          <li *ngFor="let item of productSuggestion">
+            <a (click)="onCloseSuggestion(false)"
+               [innerHTML]="highlight(item.name)"
+               [routerLink]="['/products', item.href | entityToSlug]"></a>
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="!!showHistory && showHistory.length > 0" class="search-box-history">
+        <div class="history-top">
+          <div class="history-title">Riwayat Pencarian</div>
+          <div (click)="removeHistorySearch()" class="history-remove">Hapus Semua</div>
+        </div>
+        <div class="history-list">
+          <ul>
+            <li *ngFor="let history of showHistory">
+              <a (click)="onCloseSuggestion(true, history.key)" [queryParams]="{q: history.key}"
+                 [routerLink]="['/products']"> <img src="assets/header/history-search.svg"/>
+                {{history.key}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 

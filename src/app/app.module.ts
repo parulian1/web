@@ -1,42 +1,34 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import '@angular/common/locales/global/id';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {FormsModule} from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {TranslateModule} from '@ngx-translate/core';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MaterialModule} from './material.module';
 import {environment} from '@env/environment';
-import {CoreModule, ErrorHandlerInterceptor} from '@app/core';
-import {SharedModule} from '@app/shared';
-import {ShellModule} from './shell/shell.module';
-import {AppComponent} from './app.component';
-import {AppRoutingModule} from './app-routing.module';
-import {AuthModule} from '@app/auth/auth.module';
-import {PagesModule} from "@app/pages/pages.module";
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
-import {AuthUserService} from "@app/services/auth-user.service";
-import {AuthEffects} from "@app/store/effects/auth.effects";
-import {reducers} from "@app/store/state/app.state";
-import {EmailEffects} from "@app/store/effects/email.effects";
-import {TokenInterceptor} from "@app/core/http/token.interceptor";
-import {AuthServiceConfig, FacebookLoginProvider, GoogleLoginProvider, SocialLoginModule} from "angularx-social-login";
+import {
+  FacebookLoginProvider,
+  GoogleLoginProvider,
+  SocialAuthServiceConfig,
+  SocialLoginModule
+} from 'angularx-social-login';
+import {SlickCarouselModule} from 'ngx-slick-carousel';
+import {GoogleMapsModule} from '@angular/google-maps';
 
-let config = new AuthServiceConfig([
-  {
-    id: FacebookLoginProvider.PROVIDER_ID,
-    provider: new FacebookLoginProvider(environment.FB_APPLICATION_ID)
-  },
-  {
-    id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider(environment.GOOGLE_APPLICATION_ID)
-  }
-]);
-
-export function provideConfig() {
-  return config;
-}
+import {AuthModule} from '@app/auth/auth.module';
+import {CoreModule, TokenInterceptor} from '@app/core';
+import {ShellModule} from '@app/shell';
+import {AuthUserService} from '@app/services';
+import {SharedModule} from '@app/shared';
+import {effects} from '@app/store';
+import {reducers} from '@app/store/state/app.state';
+import {AppComponent} from './app.component';
+import {AppRoutingModule} from './app-routing.module';
+import {MaterialModule} from './material.module';
+import {FocusedLayoutComponent, MainLayoutComponent} from '@app/layouts';
 
 @NgModule({
   imports: [
@@ -50,14 +42,20 @@ export function provideConfig() {
     CoreModule,
     SharedModule,
     ShellModule,
-    PagesModule,
+    // PagesModule,
     AuthModule,
+    SlickCarouselModule,
     SocialLoginModule,
     AppRoutingModule,
+    GoogleMapsModule,
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([AuthEffects, EmailEffects]) // must be imported as the last module as it contains the fallback route
+    EffectsModule.forRoot([effects.AuthEffects, effects.EmailEffects, effects.CartEffects])
   ],
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    MainLayoutComponent,
+    FocusedLayoutComponent,
+  ],
   providers: [
     AuthUserService,
     {
@@ -66,9 +64,22 @@ export function provideConfig() {
       multi: true
     },
     {
-      provide: AuthServiceConfig,
-      useFactory: provideConfig
-    }
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(environment.GOOGLE_APPLICATION_ID)
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider(environment.FB_APPLICATION_ID)
+          }
+        ]
+      } as SocialAuthServiceConfig,
+    },
+    {provide: LOCALE_ID, useValue: 'id'}
   ],
   bootstrap: [AppComponent],
 })

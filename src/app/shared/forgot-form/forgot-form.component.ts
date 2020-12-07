@@ -2,7 +2,8 @@ import {Component, DoCheck, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Store} from "@ngrx/store";
 import {AppState} from "@app/store/state/app.state";
-import {ForgotPassword} from "@app/store/actions/auth.actions";
+import {AuthUserService} from "@app/services";
+
 
 @Component({
   selector: 'app-forgot-form',
@@ -15,7 +16,13 @@ export class ForgotFormComponent implements OnInit, DoCheck {
   public isButtonDisabled: boolean;
 
 
-  constructor(private store: Store<AppState>) {
+  public isErrorFromInvalidEmail: boolean = false;
+
+
+  constructor(
+    private store: Store<AppState>,
+    private service: AuthUserService,
+  ) {
   }
 
   ngOnInit(): void {
@@ -23,7 +30,7 @@ export class ForgotFormComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck(): void {
-    this.isButtonDisabled = !this.mtForgotPasswordForm.valid;
+    this.isButtonDisabled = !this.mtForgotPasswordForm.valid && !this.isErrorFromInvalidEmail;
   }
 
   get email() {
@@ -40,7 +47,24 @@ export class ForgotFormComponent implements OnInit, DoCheck {
 
   onSubmit() {
     this.isLoading = true;
-    let email = this.email.value;
-    this.store.dispatch(new ForgotPassword(email));
+    if (this.mtForgotPasswordForm.valid) {
+      this.isLoading = false;
+      this.service.forgotPassword(this.email.value).subscribe(result => {
+        alert('Berhasil Melakukan Reset Password, Silahkan Periksa Email Anda.');
+        this.mtForgotPasswordForm.reset();
+        this.isErrorFromInvalidEmail = false;
+      }, error => this._handlingError(error));
+    } else {
+      this.isLoading = false;
+      // more actions...
+    }
+  }
+
+  _handlingError(error: any): void {
+    if (error.status === 400) {
+      // status with 400 ensure that from user doesnt found
+      this.isErrorFromInvalidEmail = true;
+      this.mtForgotPasswordForm.controls.email.setErrors({invalid: true});
+    }
   }
 }

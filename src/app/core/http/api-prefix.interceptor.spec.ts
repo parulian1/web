@@ -33,7 +33,7 @@ describe('ApiPrefixInterceptor', () => {
     http.get('/toto').subscribe();
 
     // Assert
-    httpMock.expectOne({ url: environment.serverUrl + '/toto' });
+    httpMock.expectOne({ url: environment.BASE_API_URL+ '/toto' });
   });
 
   it('should not prepend environment.serverUrl to request url', () => {

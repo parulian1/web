@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {Store} from "@ngrx/store";
-import {AppState} from "@app/store/state/app.state";
+import {Component, OnInit} from '@angular/core';
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-profile',
@@ -10,10 +9,12 @@ import {AppState} from "@app/store/state/app.state";
 export class ProfileComponent implements OnInit {
   public currentMode: string;
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private title: Title) {
+  }
 
   ngOnInit(): void {
     this.currentMode = 'Sambungkan';
+    this.title.setTitle('Profile ' + ' - Martha Tilaar Shop')
 
   }
 

@@ -1,16 +1,30 @@
-export interface HighlightCategory {
+export interface Category {
   name: string;
-  fullSlug?: string;
-  parent?: string;
-  href?: string;
-  image: string;
-  sort_priority?: number;
-  site?: string;
-  children?: HighlightCategoryChild;
+  pathName: string;
+  productCount: number;
+  depth: number;
+  sourceMappings: Array<SourceMappings>;
+  href: string;
+  image: null;
+  parent: null;
 }
 
-export interface HighlightCategoryChild {
-  title: string;
+// default schema, nothing returned yet from API
+export interface SourceMappings {
   href: string;
+  name: string;
+}
+
+export interface CategoryFilter {
+  name: string;
+  href?: string;
+  total: number;
+  subCategory?: Array<CategoryFilter>;
+}
+
+export interface SubCategoryFilter {
+  name: string;
+  href?: string,
+  fullSlug: string,
 }
 

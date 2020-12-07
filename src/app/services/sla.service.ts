@@ -1,21 +1,16 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpResponse} from "@angular/common/http";
-import {Sla} from "@app/models/sla";
-
+import {HttpClient} from '@angular/common/http';
+import {Sla} from '@app/models/sla';
+import {BaseApiService} from '@app/core/http/base-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SlaService {
+export class SlaService extends BaseApiService<Sla> {
 
-  constructor(private http: HttpClient) {
+  baseUrl = '/cms/sla/';
+
+  constructor(protected httpClient: HttpClient) {
+    super();
   }
-
-  getSla(){
-    return this.http
-      .cache(true)
-      .get<Sla[]>(`/cms/sla/`)
-  }
-
-
 }

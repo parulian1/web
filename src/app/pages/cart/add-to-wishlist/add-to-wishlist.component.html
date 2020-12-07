@@ -1,0 +1,11 @@
+<span
+  class="add-to-wishlist"
+  (click)="addToWishlist()"
+  *ngIf="status === false;else elseWishlist">Simpan ke wishlist</span>
+<ng-template #elseWishlist>
+  <span
+    class="add-to-wishlist"
+    (click)="removeFromWishlist()">
+    Hapus dari wishlist
+  </span>
+</ng-template>

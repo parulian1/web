@@ -1,0 +1,144 @@
+@import "src/theme/base";
+
+.container {
+  //display: flex;
+  //flex-direction: column;
+  //margin: 16px 0;
+  //height: 100%;
+  max-width: 1200px;
+
+  .promotion {
+    &-banner {
+      height: 360px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+    }
+
+    &-desc {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding-bottom: 16px;
+    }
+
+    &-time {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    &-products {
+      display: flex;
+      width: 100%;
+      padding: 36px 0;
+
+      &-side {
+        flex: 20%;
+      }
+
+      &-list {
+        flex: 80%;
+        flex-direction: column;
+        justify-content: start;
+      }
+    }
+  }
+}
+
+.banner {
+  border: solid 1px $color-grey-2;
+  border-radius: 4px;
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+  app-product-card {
+    margin: 8px;
+    width: 211px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .container {
+    .promotion {
+      &-products {
+        padding: 36px 20px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    .promotion {
+      &-banner {
+        height: 250px;
+      }
+
+      &-desc {
+        padding-bottom: 12px;
+      }
+
+      &-time {
+        font-size: 14px;
+      }
+
+      &-products {
+        padding: 36px 12px;
+      }
+    }
+  }
+
+  .flex-container {
+    justify-content: space-between;
+
+    app-product-card {
+      width: 44%;
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-break) {
+  .container {
+    .promotion {
+      &-banner {
+        height: 105px;
+      }
+
+      &-products {
+        padding: 24px 4px;
+
+        &-side {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .banner {
+    margin: 0 12px;
+  }
+
+  app-product-card {
+    width: 45%;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+}

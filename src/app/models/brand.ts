@@ -1,7 +1,8 @@
 export interface Brand {
+  href: string;
   name: string;
   iconImage: string;
-  brandImage: string;
+  bannerImage: string;
   description: string;
   picName: string;
   picIdentityNumber: number;

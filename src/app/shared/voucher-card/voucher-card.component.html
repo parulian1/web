@@ -1,0 +1,21 @@
+<div class="voucher">
+  <div class="voucher-top">
+    <div class="voucher-top-title">
+      <span>Kode Promo</span>
+    </div>
+    <div class="voucher-top-link">
+      <a href="#">Lihat Promo</a>
+    </div>
+  </div>
+  <div class="voucher-bottom">
+    <form [formGroup]="voucherForm" (submit)="submitVoucher()">
+      <div class="voucher-bottom-input">
+        <input type="text" formControlName="voucher" placeholder="Masukkan kode promo"/>
+      </div>
+      <div class="voucher-bottom-button">
+        <button type="submit" class="btn-voucher"
+                [disabled]="isButtonDisabled">Gunakan</button>
+      </div>
+    </form>
+  </div>
+</div>

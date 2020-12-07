@@ -1,0 +1,302 @@
+import {Component, DoCheck, Inject, OnInit} from '@angular/core';
+import {AddressEntity} from '@app/pages/profile/list-address/entities/address.entity';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Area, District} from '@app/models';
+import {AddressService, AreaService} from '@app/services';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Addresses} from '@app/models/addresses';
+import {Logger} from '@app/core';
+
+const logger = new Logger('checkout-address-from-dialog');
+
+@Component({
+  selector: 'app-checkout-address-form-dialog',
+  templateUrl: './checkout-address-form-dialog.component.html',
+  styleUrls: ['./checkout-address-form-dialog.component.scss']
+})
+export class CheckoutAddressFormDialogComponent implements OnInit, DoCheck {
+  public address: AddressEntity;
+  public form: FormGroup;
+  public showMap = false;
+
+  // select choices
+  stateChoices: Area[] = [];
+  cityChoices: any = [];
+  districtChoices: District[] = [];
+  subDistrictChoices: any[];
+
+  // default
+  defaultName = 'My Home';
+  mode = 'address';
+  statusMessage = 'Pilih koordinat alamat';
+  statusLocation: string;
+
+  constructor(
+    private fb: FormBuilder,
+    private areaService: AreaService,
+    private addressService: AddressService,
+    public dialogRef: MatDialogRef<CheckoutAddressFormDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { address: Addresses; isUpdated: boolean }
+  ) {
+  }
+
+  ngOnInit() {
+    this.initialForm();
+    this.fetchStates(); // provinces
+  }
+
+  initialForm(): void {
+    this.form = this.fb.group({
+      name: [this.data.address.name || this.defaultName, [Validators.required]],
+      shipToName: [this.data.address.shipToName || null, [Validators.required]],
+      phoneNumber: [this.data.address.phoneNumber || null, [Validators.required]],
+
+      // fill when selected method triggered
+      state: [this.data.address.state ||null, [Validators.required]],
+      city: [this.data.address.city ||null, [Validators.required]],
+      subDistrict: [null, [Validators.required]],
+      district: [this.data.address.district ||null, [Validators.required]],
+
+      street: [this.data.address.street || null, [Validators.required, Validators.minLength(10)]],
+      lat: [this.data.address?.latitude || null, [Validators.required]],
+      lng: [this.data.address?.longitude || null, [Validators.required]],
+    });
+
+    this.setInfo(this.form);
+  }
+
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
+
+  get shipToName(): FormControl {
+    return this.form.get('shipToName') as FormControl;
+  }
+
+  get phoneNumber(): FormControl {
+    return this.form.get('phoneNumber') as FormControl;
+  }
+
+  get state(): FormControl {
+    return this.form.get('state') as FormControl;
+  }
+
+  get city(): FormControl {
+    return this.form.get('city') as FormControl;
+  }
+
+  get subDistrict(): FormControl {
+    return this.form.get('subDistrict') as FormControl;
+  }
+
+  get district(): FormControl {
+    return this.form.get('district') as FormControl;
+  }
+
+  get street(): FormControl {
+    return this.form.get('street') as FormControl;
+  }
+
+  get lat(): FormControl {
+    return this.form.get('lat') as FormControl;
+  }
+
+  get lng(): FormControl {
+    return this.form.get('lng') as FormControl;
+  }
+
+  onSubmit(): void {
+    if (this.form.valid) {
+      const {name, shipToName, phoneNumber, state, city, district, street, lat, lng} = Object.assign(
+        {},
+        this.form.value
+      );
+
+      const address = new AddressEntity(
+        name,
+        shipToName,
+        phoneNumber,
+        state.name,
+        city.name,
+        district.district,
+        district.postalCode,
+        street,
+        lat,
+        lng
+      );
+
+      if (this.data.isUpdated) {
+        // todo: on future, update method in AddressService
+        //    maybe only use `href` as url parameter
+        //    ex: this.addressService.update(`${address.href}`, address)
+        this.addressService.update(this.data.address, address).subscribe(
+          () => {
+            this.dialogRef.close({address, isCreated: false, isSuccess: true, href: this.data.address.href});
+          },
+          (err) => this._handleError(err)
+        );
+      } else {
+        this.addressService.create(address).subscribe(
+          (result) => {
+            this.dialogRef.close({address, isCreated: true, isSuccess: true, href: result.headers.get('location')});
+          },
+          (err) => this._handleError(err)
+        );
+      }
+    }
+  }
+
+  onClose(): void {
+    this.dialogRef.close();
+  }
+
+  toggleShowMap(): void {
+    this.showMap = !this.showMap;
+  }
+
+  _handleError(err: any) {
+    if (err.status === 400) {
+      this._setErrors(err.error);
+    } else {
+      logger.error('unexpected error:', err);
+    }
+  }
+
+  _setErrors(error: any) {
+    Object.values(error).forEach((field: any) => {
+      this.form.controls[field].setErrors({fromServer: error[field][0]});
+    });
+  }
+
+  // handle province, district, and zipCode
+  fetchStates(params: {} = {}) {
+    this.areaService.fetchProvinces().subscribe((result) => {
+      this.stateChoices = result.body;
+
+      // when updated
+      if (this.data.isUpdated) {
+        const index = this.stateChoices.findIndex((state) => state.name === this.data.address.state);
+        if (index !== -1) {
+          this.form.get('state').setValue(this.stateChoices[index]);
+        }
+      }
+    });
+  }
+
+  /* From Here, all methods processes to get state, city and subDistrict */
+
+  /* `These code didn't bite you, just make you Fright` */
+  selectedState(state: Area) {
+    // fetch cityChoices
+    this.areaService.fetchArea(state.href).subscribe((result) => {
+      this.cityChoices = result.body;
+
+      this.form.get('city').setValue(null);
+      this.form.get('subDistrict').setValue(null);
+      this.form.get('district').setValue(null);
+
+      // when updated
+      if (this.data.isUpdated) {
+        const index = this.cityChoices.findIndex((city) => city.name === this.data.address.city);
+        if (index !== -1) {
+          this.form.get('city').setValue(this.cityChoices[index]);
+        }
+      }
+    });
+  }
+
+  selectedCity(city: Area) {
+    if (city?.href) {
+      this.areaService.fetchSubDistrict(city?.href).subscribe((result) => {
+        this.subDistrictChoices = [...new Map(result.map((item) => [JSON.stringify(item), item])).values()]; // remove duplicate
+
+        this.form.get('subDistrict').setValue(null);
+        this.form.get('district').setValue(null);
+
+        // when updated
+        if (this.data.isUpdated) {
+          // set value
+          this.areaService.fetchDistrict(city.href).subscribe((result) => {
+            const index = result.body.findIndex((district) => district.district === this.data.address.district);
+            if (index !== -1) {
+              this.districtChoices = result.body.filter(
+                (district) => district.subDistrict === result.body[index].subDistrict
+              );
+              const iDistrict = this.districtChoices.findIndex(
+                (district) => district.district === this.data.address.district
+              );
+              if (iDistrict !== -1) {
+                const iSubDistrict = this.subDistrictChoices.findIndex(
+                  (subDistrict) => subDistrict.name === this.districtChoices[iDistrict].subDistrict
+                );
+                if (iSubDistrict !== -1) {
+                  this.form.get('subDistrict').setValue(this.subDistrictChoices[iSubDistrict]);
+                }
+              }
+            }
+          });
+        }
+      });
+    }
+  }
+
+  selectedSubDistrict(subDistrict: { name: string; cityHref?: string }) {
+    if (subDistrict?.cityHref) {
+      this.areaService.fetchDistrict(subDistrict.cityHref).subscribe((result) => {
+        this.districtChoices = result.body.filter((district) => district.subDistrict === subDistrict.name);
+
+        this.form.get('district').setValue(null);
+
+        if (this.data.isUpdated) {
+          const index = this.districtChoices.findIndex((district) => district.district === this.data.address.district);
+          if (index !== -1) {
+            this.form.get('district').setValue(this.districtChoices[index]);
+          }
+        }
+      });
+    }
+  }
+
+  setLatitude(val: number) {
+    this.form.patchValue({
+      lat: Number(Math.round(Number(val + 'e' + 6)) + 'e-' + 6)
+    });
+  }
+
+  setLongitude(val: number) {
+    this.form.patchValue({
+      lng:Number(Math.round(Number(val + 'e' + 6)) + 'e-' + 6)
+    });
+  }
+
+  setStatusLocation(msg: string) {
+    this.statusLocation = msg;
+  }
+
+  ngDoCheck(): void {
+
+  }
+
+  setInfoMap(infoMap: string) {
+    if(infoMap) {
+      this.statusMessage = infoMap;
+    } else {
+      this.statusMessage = '';
+    }
+  }
+
+  setInfo(form: FormGroup) {
+    let address;
+    if (form.value.lat && form.value.lng) {
+      address = form.value.lat + ',' + form.value.lng;
+      this.areaService.getLngLat(address).subscribe((res: any) => {
+        if (res.results.length === 0) {
+          this.statusMessage = '';
+          return;
+        }
+        const data = res.results[0];
+        this.statusMessage = data.formatted_address;
+      });
+    }
+  }
+}

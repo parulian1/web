@@ -1,0 +1,69 @@
+@import "src/theme/base";
+
+.pagination {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .left {
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: bold;
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+
+    span {
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      cursor: pointer;
+
+      &.active {
+        background: $color-primary;
+        color: $white;
+        border-radius: 50%;
+      }
+    }
+
+    button {
+      border: none;
+      background: none;
+      height: 10px;
+      outline: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+
+      i {
+        font-size: 14px;
+      }
+
+      &[disabled] {
+        i {
+          color: $color-grey;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-break) {
+  .pagination {
+    padding: 12px;
+    justify-content: flex-end;
+
+    .left {
+      width: 50%;
+    }
+
+    .right {
+      width: 50%;
+      justify-content: flex-end;
+    }
+  }
+}
+

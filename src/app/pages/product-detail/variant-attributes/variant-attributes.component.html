@@ -1,0 +1,21 @@
+<div class="list-variants">
+  <div class="variant">
+    <span class="title">{{attributeDefinition.name}}</span>
+    <div class="items">
+      <ng-container *ngFor="let val of possibleValues">
+        <div class="item" [class.active]="((product.href|entityToSlug) === (getLink(val)|entityToSlug))">
+          <a [routerLink]="['/products', getLink(val)|entityToSlug]"
+             [class.disabled]="!getLink(val)">
+            <ng-container *ngIf="attributeDefinition.type === 'color'; else elseVariant">
+            <span style="background:{{val}}"></span>
+            </ng-container>
+            <ng-template #elseVariant>
+              <span>{{val}}</span>
+            </ng-template>
+          </a>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+</div>

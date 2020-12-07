@@ -1,0 +1,49 @@
+<div class="select-warehouse-wrapper">
+  <!-- Header -->
+  <div class="dialog-header">
+    <div class="row">
+      <div class="col-10-sm">
+        <h2 class="title">Cari Toko Pengiriman</h2>
+      </div>
+      <div class="col-2-sm">
+        <span class="close"
+              (click)="closeDialog()">X</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="dialog-content">
+    <div class="row" *ngFor="let warehouse of data; index as i">
+      <div class="col-1-sm">
+        <input type="radio"
+               name="warehouse"
+               [value]="i"
+               [disabled]="warehouse.quantity <= 0"
+               [(ngModel)]="selectedWarehouseIndex">
+      </div>
+      <div class="col-8-sm">
+        <div>
+          <h4 class="title">{{ warehouse.name }}</h4>
+          <p class="warehouse-address">
+            {{ warehouse.address.street }}, {{ warehouse.address.postalCode }}<br />
+            {{ warehouse.address.province }}, {{ warehouse.address.city }}<br />
+            {{ warehouse.address.distinct }}
+        </div>
+      </div>
+      <div class="col-3-sm">
+        <div class="warehouse-quantity">
+          Stock {{ warehouse.quantity }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="dialog-footer">
+    <button class="button button--is-primary button--expand-full"
+            (click)="completeSelect()">
+      Pilih
+    </button>
+  </div>
+</div>

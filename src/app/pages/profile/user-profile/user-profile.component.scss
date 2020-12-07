@@ -1,85 +1,241 @@
+/*--------------------
+// Helpers
+// Components
+// Core
+----------------------
+*/
+
+
 @import "src/theme/base";
+:host {
+  width: 100%;
+}
 
-.profile {
-  margin: 0 0 0 25px;
-  min-width: 450px;
 
-  .top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+// Helpers
 
-    a {
-      color: $color-accent;
-      text-decoration: none;
+/* 1. Variables */
+$font-family: Noto Sherif;
+$size-1: 3rem !default;
+$size-2: 2.5rem !default;
+$size-3: 2rem !default;
+$size-4: 1.5rem !default;
+$size-5: 1.25rem !default;
+$size-6: 1rem !default;
+$size-7: 0.85rem !default;
+
+
+/* 2. Mixes */
+.has-text-right {
+  text-align: right;
+}
+.has-text-left {
+  text-align: left;
+}
+.has-text-centered {
+  text-align: center;
+}
+
+
+/* 3. Responsiveness */
+$gap: 32px !default;
+$tablet: 769px !default;
+$desktop: 960px + (2 * $gap) !default;
+
+@mixin desktop {
+  @media screen and (min-width: $desktop) {
+    @content
+  }
+}
+@mixin tablet {
+  @media screen and (min-width: $tablet), print {
+    @content
+  }
+}
+@mixin mobile {
+  @media screen and (max-width: $tablet - 1px) {
+    @content
+  }
+}
+
+
+
+// Components
+
+/* 1. Title */
+.title {
+  font-size: $size-4;
+  line-height: 1.125;
+}
+
+.title--size-s {
+  font-weight: bold;
+  font-size: $size-6;
+}
+
+/* 2. box */
+.box {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: 8px;
+  display: block;
+  padding: 20px;
+}
+
+
+// Core
+
+.profile-wrapper {
+  margin-top: -10px;
+  width: 45%;
+
+  .profile-header {
+    margin-bottom: 10px;
+
+    .edit-profile {
+      margin-top: 22px;
+      a {
+        color: $color-accent;
+        text-decoration: none;
+      }
     }
   }
 
-  .sc-subtitle {
-    font-weight: bold;
-    padding-bottom: 16px;
-  }
-
-  .social-connect {
-    margin: 16px 0 0 0;
-
-    button {
-      cursor: pointer;
-      justify-content: space-between;
-
-      &[disabled] {
-        background: $color-grey;
-        color: $white;
-      }
-
-      span {
-        display: flex;
-        align-items: center;
-        margin: 0 0 0 85px;
-      }
-    }
-  }
-
-  .box-content {
-    margin: 0 0 36px 0;
-    padding: 12px 16px;
-
-    .data {
-      display: flex;
-      flex-direction: column;
-
-      label {
-        color: $color-secondary;
-        font-size: 14px;
-        line-height: 19px;
-      }
-
-      .detail {
+  .profile-content {
+    margin-top: -10px;
+    .box {
+      .data {
         display: flex;
         flex-direction: column;
-        margin: 0 0 24px 0;
 
-        &-email {
+        label {
+          color: $color-secondary;
+          font-size: 14px;
+          line-height: 19px;
+        }
+
+        .detail {
           display: flex;
-          justify-content: space-between;
-          align-items: center;
+          flex-direction: column;
           margin: 0 0 24px 0;
 
-          .row {
+          &-email {
             display: flex;
-            flex-direction: column;
-          }
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 0 24px 0;
 
-          .btn-profile-verify {
-            background-color: $color-alert;
-            color: $white;
-            font-size: 16px;
-            line-height: 22px;
-            border: none;
-            border-radius: $border-radius;
+            .row {
+              display: flex;
+              flex-direction: column;
+            }
+
+            .btn-profile-verify {
+              background-color: $color-alert;
+              color: $white;
+              font-size: 14px;
+              line-height: 22px;
+              border: none;
+              border-radius: $border-radius;
+              cursor: pointer;
+              margin-left: 16px;
+            }
+
+            .btn-profile-verify-disabled {
+              cursor: not-allowed;
+              background-color: #979797;
+              color: #FFFFFF;
+              border-color: #979797
+            }
           }
         }
       }
     }
+
+    .social-media-box {
+      margin-top: 20px;
+
+      .social-connect {
+        margin: 16px 0 0 0;
+
+        .btn-fb {
+          font-size: 1rem;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+
+          &[disabled] {
+            background: $color-grey;
+            color: $white;
+          }
+
+          .btn-fb__icon {
+            align-items: center;
+          }
+          .btn-fb__content {
+            align-items: center;
+          }
+          .btn-fb__check {
+            margin-left: 15px;
+            align-items: center;
+          }
+
+          @include mobile {
+            font-size: 0.8rem;
+
+            .btn-fb__content {
+              text-align: center;
+              width: 100%;
+            }
+
+            .btn-fb__check {
+              margin-left: auto;
+            }
+          }
+        }
+
+        .btn-google {
+          font-size: 1rem;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+
+          &[disabled] {
+            background: $color-grey;
+            color: $white;
+          }
+
+          .btn-google__icon {
+            align-items: center;
+          }
+          .btn-google__content {
+            align-items: center;
+          }
+          .btn-google__check {
+            margin-left: 15px;
+            align-items: center;
+          }
+
+          @include mobile {
+            font-size: 0.8rem;
+
+            .btn-google__content {
+              text-align: center;
+              width: 100%;
+            }
+
+            .btn-google__check {
+              margin-left: auto;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @include mobile {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 40px;
   }
 }

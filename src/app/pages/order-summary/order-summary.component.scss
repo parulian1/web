@@ -1,0 +1,13 @@
+@import "src/theme/base";
+
+.inner-container {
+  .order-summary-navbar {
+    background-color: $white;
+
+    .mat-toolbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

@@ -1,0 +1,39 @@
+@import "src/theme/base";
+
+.pagination {
+  margin-top: 8px;
+  float: right
+}
+
+.pagination p {
+  cursor: pointer;
+  float: left;
+  padding: 5px 11px;
+  text-decoration: none;
+  font-family: $font-primary;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 22px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.pagination p.active {
+  background-color: $color-primary;
+  color: white;
+  border-radius: 50%;
+}
+
+.disabled {
+  color: #B9B9B9;
+  pointer-events: none;
+  cursor: default;
+}
+
+.dot {
+  pointer-events: none;
+  cursor: default;
+}
+
+

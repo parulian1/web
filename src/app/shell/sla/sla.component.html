@@ -1,6 +1,6 @@
 <div class="sla">
   <div class="items" *ngFor="let item of sla">
-    <img src="{{item.image}}"/>
+    <img [src]="item.image"/>
     <span>{{item.title}}</span>
   </div>
 </div>

@@ -1,34 +1,26 @@
 <div class="highlight-category">
   <div class="list-highlight">
-    <div class="highlight">
-      <a href="https://gramedia.com">
-        <img src="assets/body-care-example.png">
-        <span>Skin Care</span>
-      </a>
-    </div>
-    <div class="highlight">
-      <a href="https://gramedia.com">
-        <img src="assets/body-care-example.png">
-        <span>Skin Care</span>
-      </a>
-    </div>
-    <div class="highlight">
-      <a href="https://gramedia.com">
-        <img src="assets/body-care-example.png">
-        <span>Skin Care</span>
-      </a>
-    </div>
-    <div class="highlight">
-      <a href="https://gramedia.com">
-        <img src="assets/body-care-example.png">
-        <span>Skin Care</span>
-      </a>
-    </div>
-    <div class="highlight">
-      <a href="https://gramedia.com">
-        <img src="assets/body-care-example.png">
-        <span>Skin Care</span>
+    <div class="highlight" *ngFor="let item of categories">
+      <a [routerLink]="['/products']"[queryParams]="{category: pipe.transform(item.href)}">
+        <img [src]="item.image">
+        <span>{{item.name}}</span>
       </a>
     </div>
   </div>
+</div>
+<div class="highlight-category-mobile">
+  <ngx-slick-carousel class="carousel-highlight-category"
+                      [config]="slideConfig"
+                      (init)="slickInit($event)"
+                      (afterChange)="afterChange($event)"
+                      (beforeChange)="beforeChange($event)">
+    <div ngxSlickItem class="slide" style="width: 90px;" *ngFor="let item of categories">
+      <div class="highlight">
+        <a [routerLink]="['/products']"[queryParams]="{category: pipe.transform(item.href)}">
+          <img [src]="item.image">
+          <span>{{item.name}}</span>
+        </a>
+      </div>
+    </div>
+  </ngx-slick-carousel>
 </div>

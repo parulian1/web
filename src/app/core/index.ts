@@ -8,3 +8,8 @@ export * from './http/error-handler.interceptor';
 export * from './route-reusable-strategy';
 export * from './logger.service';
 export * from './until-destroyed';
+export * from './http/token.interceptor';
+export * from './types';
+
+import * as authentication from './authentication';
+export {authentication};

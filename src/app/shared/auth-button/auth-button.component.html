@@ -1,4 +1,8 @@
-<button class="auth-btn">
-  <a [routerLink]="['/login']" *ngIf="!token">Masuk / Daftar</a>
-  <span *ngIf="token">Hai, Teman</span>
+<button class="auth-btn" [routerLink]="token ? '/profile' : '/login'">
+  <img src="assets/header/logo-account.svg" alt="Account Logo">
+  <a *ngIf="!token">Masuk / Daftar</a>
+  <span *ngIf="token" class="auth-user">Hai,
+    <span *ngIf="displayName">{{displayName}}</span>
+    <span *ngIf="!displayName">Teman</span>
+  </span>
 </button>

@@ -1,59 +1,76 @@
-<div class="profile">
-  <div class="top">
-    <span class="subtitle">Profil</span>
-    <span><a>Edit Profil</a></span>
-  </div>
-  <div class="box-content">
-    <div class="data">
-      <div class="detail">
-        <label>Nama Lengkap</label>
-        <span>Rio Trilaksono Putro</span>
-      </div>
+<div class="profile-wrapper">
+  <div class="profile-header">
+    <h1 class="title"
+         style="float: left">
+      Profil
+    </h1>
 
-      <div class="detail-email">
-        <div class="row">
-          <label>Email</label>
-          <span>rio.trilaksono@gramedia.digital</span>
+    <div style="float: right"
+         class="edit-profile">
+      <a [routerLink]="['edit']">
+        Edit Profile
+      </a>
+    </div>
+    <div style="clear: both;"></div>
+  </div>
+
+  <div class="profile-content">
+    <div class="box">
+      <div class="data">
+        <div class="detail">
+          <label>Nama Lengkap</label>
+          <span>{{ customer.firstName }} {{ customer.lastName }}</span>
+        </div>
+
+        <div class="detail-email">
+          <div class="row">
+            <label>Email</label>
+            <span>{{ customer.email }}</span>
+          </div>
+          <span *ngIf="!verifyUser.isVerified">
+            <button class="btn-profile-verify"
+                    [class.btn-profile-verify-disabled]="disableVerify"
+                    (click)="resendVerifyEmail()">
+              {{ verifyUser.message }}
+            </button>
+          </span>
+        </div>
+
+        <div class="detail">
+          <label>No. Handphone</label>
+          <span>{{ customer.phoneNumber }}</span>
+        </div>
+
+        <div class="detail">
+          <label>Jenis Kelamin</label>
+          <span>{{ customer?.profile?.gender || 'Prefer Not to Say' }}</span>
+        </div>
+
+        <div class="detail">
+          <label>Tanggal Lahir</label>
+          <span>{{ customer?.profile?.birthDate || '-' }}</span>
         </div>
         <span>
-            <button class="btn-profile-verify">Belum terverifikasi</button>
-          </span>
-      </div>
-
-      <div class="detail">
-        <label>No. Handphone</label>
-        <span>081252353137</span>
-      </div>
-
-      <div class="detail">
-        <label>Jenis Kelamin</label>
-        <span>Laki-Laki</span>
-      </div>
-
-      <div class="detail">
-        <label>Tanggal Lahir</label>
-        <span>2 Juli 1993</span>
-      </div>
-      <span>
         <a [routerLink]="['change-password']">Ganti Password</a>
       </span>
+      </div>
     </div>
-  </div>
-  <span class="sc-subtitle">Hubungkan dengan Sosial Media</span>
-  <div class="social-connect">
-    <button class="btn-fb" [disabled]="disabledFb">
-      <span>
-        <img src="assets/social/logo-fb.svg"
-             alt="Logo Facebook"/>{{currentModeFb}} dengan Facebook
-      </span>
-      <mat-icon *ngIf="isCheckFb">check</mat-icon>
-    </button>
-    <button class="btn-google" [disabled]="disabledGoogle">
-      <span>
-        <img [src]="srcGoogle"
-             alt="Logo Google"/>{{currentModeGoogle}} dengan Google
-      </span>
-      <mat-icon *ngIf="isCheckGoogle">check</mat-icon>
-    </button>
+
+    <div class="social-media-box">
+      <h2 class="title title--size-s">Hubungkan dengan Sosial Media</h2>
+      <div class="social-connect">
+        <button class="btn-fb" (click)="connectWithFacebook()" [disabled]="disabledFb">
+          <img class="btn-fb__icon" src="assets/social/logo-fb.svg" alt="Logo Facebook"/>
+          <div class="btn-fb__content">{{currentModeFb}} dengan Facebook</div>
+          <mat-icon class="btn-fb__check" *ngIf="isCheckFb">check</mat-icon>
+        </button>
+
+        <button class="btn-google" (click)="connectWithGoogle()" [disabled]="disabledGoogle">
+          <img class="btn-google__icon" [src]="srcGoogle" alt="Logo Google"/>
+          <div class="btn-google__content">{{currentModeGoogle}} dengan Google</div>
+          <mat-icon class="btn-google__check" *ngIf="isCheckGoogle">check</mat-icon>
+        </button>
+      </div>
+    </div>
   </div>
 </div>

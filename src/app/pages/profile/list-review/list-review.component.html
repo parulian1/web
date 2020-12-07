@@ -1,0 +1,8 @@
+<div class="review">
+  <div class="review-title">Ulasan</div>
+  <div class="review-list">
+    <app-review-card
+    *ngFor="let orderReview of this.orderReviews"
+    [orderReview]="orderReview"></app-review-card>
+  </div>
+</div>

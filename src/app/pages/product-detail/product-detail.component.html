@@ -1,0 +1,261 @@
+<div class="main" fxFlex>
+  <div class="container">
+    <div class="product-detail">
+      <div class="breadcrumbs">
+        <!--        Home > Kategori > Makeup > Foundation-->
+      </div>
+      <div class="inner-container">
+        <div class="main-product">
+          <div class="top">
+            <div class="gallery">
+              <div class="featured-image">
+                <div *ngIf="slideProductImg2.length !== 0; else elseImage" class="feature-cell" id="1">
+                  <ngx-slick-carousel [config]="slideConfig"
+                                      class="carousel-top">
+                    <div *ngFor="let slide of slideProductImg2" class="slide" ngxSlickItem>
+                      <img alt="{{ slide.type }}" src="{{ slide.image }}">
+                    </div>
+                  </ngx-slick-carousel>
+                </div>
+                <ng-template #elseImage>
+                  <div class="feature-cell">
+                    <ngx-slick-carousel [config]="slideConfig" class="carousel-top">
+                      <div class="slide" ngxSlickItem>
+                        <img alt="default-img" src="assets/default-image.png">
+                      </div>
+                    </ngx-slick-carousel>
+                  </div>
+                </ng-template>
+              </div>
+              <div *ngIf="slideProductImg2.length !== 0" class="list-image">
+                <ngx-slick-carousel [config]="slideConfig2"
+                                    class="carousel-bottom">
+                  <div *ngFor="let slide of slideProductImg2" class="slide-nav" ngxSlickItem style="width: 88px;">
+                    <img alt="{{ slide.type }}" src="{{ slide.image }}" width="88">
+                  </div>
+                </ngx-slick-carousel>
+              </div>
+            </div>
+            <div class="information">
+              <div class="title">
+                <span>{{ productDetail.name }}</span>
+              </div>
+              <div class="brand">
+                <a href="{{ productDetail.vendor.href }}">{{ productDetail.vendor.name }}</a>
+              </div>
+              <div class="review">
+                <mat-star-rating
+                  [rating]="ratingSummary.rating"
+                  [size]="16"
+                  [starCount]="5"
+                  style="margin-left: -5px;"></mat-star-rating>
+                <span class="review-score">({{ ratingSummary.rating }})</span>
+                <span class="review-total">({{ ratingSummary.totalReview }}) Review</span>
+              </div>
+              <div class="description">
+                <span [innerHTML]="productDetail.description"></span>
+              </div>
+              <div class="price">
+                <div class="price-top">
+                  <span *ngIf="priceBase" class="regular">{{ priceBase|currency:'Rp ' : 'symbol' : '1.0' }}</span>
+                  <span *ngIf="displayedPromo" class="promo-pct">{{ displayedPromo }}%</span>
+                </div>
+                <span class="current">{{ priceSelected|currency:'Rp ' : 'symbol' : '1.0' }}</span>
+              </div>
+
+              <div class="tags">
+                <div *ngFor="let t of productDetail.tags" class="tags-content" style="display: inline-flex">
+                  <img *ngIf="t === 'Halal'" src="/assets/tag-imgs/halal.svg">
+                  <img *ngIf="t === 'Non-Toxic'" src="/assets/tag-imgs/non-toxic.svg">
+                  <img *ngIf="t === 'Bebas Paraben'" src="/assets/tag-imgs/bebas-paraben.svg">
+                  <span>{{ t }}</span>
+                </div>
+              </div>
+
+              <div class="mobile-variant">
+                <button (click)="toogleSideMobile()" class="mobile-variant-btn">Pilih Variant</button>
+              </div>
+
+            </div>
+          </div>
+          <div *ngIf="video" class="list-video">
+            <div *ngFor="let item of video" class="video">
+              <app-video-player [videoId]="item.youtubeVideoId" [product]="productDetail.name">
+              </app-video-player>
+            </div>
+          </div>
+          <div *ngIf="productDetail.related.length !== 0" class="related">
+            <span class="title">Gunakan Produk ini dengan</span>
+            <div class="list">
+              <div *ngFor="let related of productDetail.related" class="product">
+                <app-product-card [page]="page" [productHref]="related.href"></app-product-card>
+              </div>
+            </div>
+          </div>
+
+          <app-rich-text-attribute
+            *ngFor="let rtAttr of richTextAttributes"
+            [attributeMeta]="rtAttr.meta"
+            [attributeValue]="rtAttr.value">
+          </app-rich-text-attribute>
+
+          <app-rating-review
+            [product]="productDetail"
+            [ratingSummary]="ratingSummary"
+            [review]="review"></app-rating-review>
+
+        </div>
+
+        <div class="side">
+          <div class="side-product">
+            <div class="list-warehouse">
+              <span class="title">Toko Pengiriman</span>
+              <span (click)="selectWarehouse()" class="items" *ngIf="!!currentWarehouse">
+                {{ currentWarehouse.name }}
+              </span>
+              <span class="items" *ngIf="!currentWarehouse">Tidak Tersedia</span>
+            </div>
+
+            <app-variant-attributes
+              *ngFor="let attr of productAttribute"
+              [attributeDefinition]="attr"
+              [currentUrl]="router.url"
+              [product]="productDetail"
+            >
+
+            </app-variant-attributes>
+
+            <div class="quantity">
+
+              <div class="operation">
+                <button (click)="decrease()" class="min">-</button>
+                <span #quantity class="value">{{ defaultQty }}</span>
+                <button (click)="increase()" class="add">+</button>
+              </div>
+
+              <div *ngIf="(priceLists && priceLists.length > 1)" class="price-information">
+                <span class="text">Belanja banyak, lebih murah! <mat-icon>error_outline</mat-icon></span>
+                <div class="price-info-list">
+                  <table>
+                    <tr>
+                      <td><b>Qty</b></td>
+                      <td><b>Harga</b></td>
+                    </tr>
+                    <tr *ngFor="let price of priceInfo">
+                      <td>{{ price.minQty }}-{{ price.maxQty }}</td>
+                      <td *ngIf="price.priceDiscount">
+                        {{ price.priceDiscount|currency:'Rp ': 'symbol' : '1.0-0' }}
+                        <span style="text-decoration-line: line-through">
+                        {{ price.priceBase|currency:'Rp ': 'symbol' : '1.0-0' }}
+                      </span>
+                      </td>
+                      <td *ngIf="!price.priceDiscount">
+                        {{ price.priceBase|currency:'Rp ': 'symbol' : '1.0-0' }}
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          <div class="actions">
+            <button (click)="addToCart(productDetail.href, productDetail)"
+                    [disabled]="disabled"
+                    class="btn-cart" *ngIf="!!currentWarehouse">Tambah ke Keranjang
+            </button>
+            <app-wishlist
+              [fullWidth]="true"
+              [product]="productDetail"
+              [text]="'Simpan ke Wishlist'"
+              class="btn-wishlist">
+            </app-wishlist>
+          </div>
+          <div class="actions-mobile">
+            <button (click)="toogleSideMobile()" [disabled]="disabled" class="btn-cart" *ngIf="!!currentWarehouse">
+              Tambah ke Keranjang
+            </button>
+            <app-wishlist
+              [fullWidth]="true"
+              [product]="productDetail"
+              [text]="'Simpan ke Wishlist'"
+              class="btn-wishlist">
+            </app-wishlist>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div [@openClose]="isOpen ? 'open' : 'closed'" class="side-product-mobile">
+      <div class="side-product-mobile-content">
+        <div class="top">
+          <span class="top-title">{{ productDetail.name }}</span>
+          <span (click)="toogleSideMobile()" class="top-close"><i class="material-icons">close</i></span>
+        </div>
+
+        <div class="list-warehouse">
+          <span class="title">Toko Pengiriman</span>
+          <span (click)="selectWarehouse()" class="items" *ngIf="!!currentWarehouse">{{ currentWarehouse.name }}</span>
+          <span class="items" *ngIf="!currentWarehouse">Tidak Tersedia</span>
+        </div>
+
+        <app-variant-attributes
+          *ngFor="let attr of productAttribute"
+          [attributeDefinition]="attr"
+          [currentUrl]="router.url"
+          [product]="productDetail"
+        >
+
+        </app-variant-attributes>
+
+        <div class="quantity">
+
+          <div class="operation">
+            <button (click)="decrease()" class="min">-</button>
+            <span #quantity class="value">{{ defaultQty }}</span>
+            <button (click)="increase()" class="add">+</button>
+          </div>
+
+          <div *ngIf="(priceLists && priceLists.length > 1)" class="price-information">
+            <span class="text">Belanja banyak, lebih murah! <mat-icon>error_outline</mat-icon></span>
+            <div class="price-info-list">
+              <table>
+                <tr>
+                  <td><b>Qty</b></td>
+                  <td><b>Harga</b></td>
+                </tr>
+                <tr *ngFor="let price of priceInfo">
+                  <td>{{ price.minQty }}-{{ price.maxQty }}</td>
+                  <td *ngIf="price.priceDiscount">
+                    {{ price.priceDiscount|currency:'Rp ': 'symbol' : '1.0-0' }}
+                    <span style="text-decoration-line: line-through">
+                      {{ price.priceBase|currency:'Rp ': 'symbol' : '1.0-0' }}
+                    </span>
+                  </td>
+                  <td *ngIf="!price.priceDiscount">
+                    {{ price.priceBase|currency:'Rp ': 'symbol' : '1.0-0' }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="actions">
+          <button (click)="addToCart(productDetail.href, productDetail)" [disabled]="disabled" class="btn-cart"
+                  *ngIf="!!currentWarehouse">
+            Tambah ke Keranjang
+          </button>
+          <app-wishlist
+            [fullWidth]="true"
+            [product]="productDetail"
+            [text]="'Simpan ke Wishlist'"
+            class="btn-wishlist">
+          </app-wishlist>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

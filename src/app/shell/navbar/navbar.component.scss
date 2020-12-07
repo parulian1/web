@@ -28,3 +28,80 @@
     }
   }
 }
+
+.menu-navbar {
+  display: block;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  overflow: hidden;
+  position: relative;
+
+  span {
+    &:hover + .navbar-content, .navbar-content:hover {
+      display: flex;
+    }
+  }
+
+  .navbar-content {
+    display: none;
+    width: auto;
+    padding: 24px;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.12);
+    background-color: $white;
+    position: fixed;
+    z-index: 1;
+    border-radius: $border-radius;
+    margin: 0 0 0 10px;
+
+    .side {
+      width: 259px;
+      height: 460px;
+
+      app-nus-link {
+        width: 100%;
+        display: flex;
+      }
+    }
+  }
+
+  .side-content {
+    display: flex;
+    flex-direction: row;
+    border-left: solid 1px #E5E5E5;
+    padding: 0 24px;
+    height: auto;
+    overflow: hidden;
+    flex-wrap: wrap;
+    place-content: flex-start;
+    background: $white;
+
+    &-items {
+      ::ng-deep app-nus-link.item {
+        a.link {
+          margin: 0;
+        }
+      }
+
+      &-children {
+        padding: 0 0 0 24px;
+        width: fit-content;
+        display: contents;
+        flex-direction: column;
+        overflow: hidden;
+        flex-wrap: wrap;
+        margin: 0 0 0 24px;
+
+        app-nus-link {
+          a {
+            font-size: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  &:hover + .navbar-content, .navbar-content:hover {
+    display: flex;
+  }
+}

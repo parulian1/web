@@ -1,0 +1,113 @@
+@import "src/theme/base";
+
+.cart-summary {
+  display: flex;
+  flex-direction: column;
+
+  &-title {
+    font-family: Noto serif;
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+    max-height: 382px;
+    overflow: hidden;
+    overflow-y: scroll;
+
+    .items {
+      .title {
+        font-family: $font-primary;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 22px;
+        padding: 7px;
+        box-shadow: 0px 1px 0px #E5E5E5;
+      }
+
+      .line-items {
+        margin: 12px 0;
+
+        .line {
+          display: flex;
+
+          .left {
+            .image {
+              width: 78px;
+              height: 78px;
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+
+                &.empty {
+                  filter: grayscale(100%);
+                }
+              }
+
+              .empty-stock {
+                color: #D81936;
+                font-size: 12px;
+                line-height: 14px;
+              }
+            }
+          }
+
+          .right {
+            display: flex;
+            flex-direction: column;
+            margin-left: 12px;
+            box-shadow: 0px 1px 0px #E5E5E5;
+            padding-bottom: 12px;
+            width: 100%;
+
+            .desc {
+              display: flex;
+              flex-direction: column;
+
+              .name {
+                a {
+                  text-decoration: none;
+                  font-family: $font-primary;
+                  font-size: 14px;
+                  line-height: 18px;
+                  font-weight: bold;
+                  color: $color-primary;
+                }
+              }
+
+              .vendor {
+                font-size: 12px;
+                line-height: 14px;
+                color: $color-secondary;
+                margin-top: 4px;
+              }
+
+              &-price {
+                display: flex;
+                align-items: center;
+                margin-top: 8px;
+
+                .qty {
+                  font-size: 14px;
+                  line-height: 19px;
+                }
+
+                .price {
+                  font-size: 14px;
+                  line-height: 18px;
+                  font-weight: bold;
+                  margin-left: 24px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

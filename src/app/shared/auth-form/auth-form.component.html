@@ -1,49 +1,80 @@
-<div class="error-message-form" *ngIf="errorMessage.length > 0">{{errorMessage}}</div>
 <form [formGroup]="mtForm">
-  <!--  Email Input-->
-  <div class="label-form" [ngClass]="{'has-error': email.invalid && (email.dirty || email.touched)}">
-    <label>
-      {{ label }}
-    </label>
+  <!-- Email -->
+  <div class="field">
+    <label class="label">Email</label>
+    <div class="control">
+      <input
+        class="input"
+        [formControl]="email"
+        [class.is-danger]="isValidFormControl(email)"
+        type="text"
+        id="input-email"
+        name="input-email"
+        placeholder="Masukkan Email"
+      />
+    </div>
+
+    <p *ngIf="isValidFormControl(email)" class="help is-danger" id="email-alert" name="email-alert">
+      Mohon masukkan email Anda dengan benar
+    </p>
   </div>
-  <div class="input-form" [ngClass]="{'has-error': email.invalid && (email.dirty || email.touched)}">
-    <input [(ngModel)]="user.email" type="email" formControlName="email" required>
+
+  <!-- Password -->
+  <div class="field">
+    <label class="label">Password</label>
+    <div class="control has-icons-right" appPasswordToggleIcon>
+      <input
+        class="input"
+        [formControl]="password"
+        [class.is-danger]="isValidFormControl(password)"
+        type="password"
+        id="input-password"
+        name="input-password"
+        placeholder="Masukkan Password"/>
+
+      <span class="icon icon-password is-right">
+        <i class="material-icons">visibility</i>
+      </span>
+    </div>
+
+    <p *ngIf="isValidFormControl(password)" class="help is-danger" id="password-alert" name="password-alert">
+      Mohon masukkan password Anda
+    </p>
   </div>
-  <div *ngIf="email.invalid && (email.dirty || email.touched)" class="form-alert">
-    <p>Mohon masukkan email Anda dengan benar</p>
-  </div>
-  <!--  Password Input-->
-  <div class="label-form" [ngClass]="{'has-error': password.invalid && (password.dirty || password.touched)}">
-    <label>
-      Password
-    </label>
-  </div>
-  <div class="input-form" [ngClass]="{'has-error': password.invalid && (password.dirty || password.touched)}">
-    <input [(ngModel)]="user.password" type="password" formControlName="password" required>
-  </div>
-  <div *ngIf="password.invalid && (password.dirty || password.touched)" class="form-alert">
-    <p>Mohon masukkan password Anda</p>
-  </div>
-  <!--  Lupa Password-->
+
+  <!-- Forgot Password -->
   <div *ngIf="!isRegisterPage" class="forgot-password">
-    <a [routerLink]="['/forgot-password']">Lupa Password</a>
+    <a [routerLink]="['/forgot-password']"
+       id="forgot-password"
+       name="forgot-password">Lupa Password</a>
   </div>
-  <!--  Terms and Condition-->
+
+  <!--  Terms and Condition (T&C) -->
   <div *ngIf="isRegisterPage" class="terms-and-condition">
-    <mat-checkbox formControlName="tnc" required>Dengan pembuatan akun, Anda menyetujui <a [routerLink]="['/register']"
-                                                                                           class="tnc-text">Syarat &
-      Ketentuan</a> serta <a [routerLink]="['/register']" class="tnc-text">Kebijakan Privasi</a> Martha Tilaar
+    <mat-checkbox formControlName="tnc" id="input-tnc" name="input-tnc" required>
+      Dengan pembuatan akun, Anda menyetujui
+      <!-- todo: ensure tnc and privacy / policy have same `slug` format -->
+      <a [routerLink]="['/page/syarat-dan-ketentuan']" class="tnc-text" id="syarat-tnc" name="syarat-tnc"> Syarat & Ketentuan </a> serta
+      <a [routerLink]="['/page/kebijakan-privasi']" class="tnc-text" id="kebijakan-tnc" name="kebijakan-tnc">Kebijakan Privasi</a> Martha Tilaar
     </mat-checkbox>
+
+    <div *ngIf="tnc.errors && submitted" class="form-alert" id="tnc-alert" name="tnc-alert">
+      <p style="font-size: 0.75rem;">Setujui ketentuan dan kebijakan di atas, terlebih dahulu.</p>
+    </div>
   </div>
-  <!--  Button-->
+
+  <!-- Button Groups -->
   <div class="auth-btn">
-    <button *ngIf="!isRegisterPage" class="btn-primary btn-login" type="submit" (click)="defaultAuth()" [disabled]="isButtonDisabled">Login</button>
-    <button *ngIf="!isRegisterPage" class="btn-outline"><a [routerLink]="['/register']">Daftar</a></button>
-    <button *ngIf="isRegisterPage" class="btn-primary btn-register" type="submit" (click)="defaultAuth()" [disabled]="isButtonDisabled">Daftar
+    <button *ngIf="!isRegisterPage" class="btn-primary btn-login" type="submit" id="login-button" name="login-button" (click)="defaultAuth()">Login</button>
+    <button *ngIf="!isRegisterPage" class="btn-outline" id="register-button" name="register-button"><a [routerLink]="['/register']" id="register-link" name="register-link">Daftar</a></button>
+    <button *ngIf="isRegisterPage" class="btn-primary btn-register" type="submit" id="default-register-button" name="default-register-button" (click)="defaultAuth()">
+      Daftar
     </button>
   </div>
   <div class="auth-btn">
     <app-social-button [currentMode]="currentMode"></app-social-button>
   </div>
-  <div *ngIf="isRegisterPage" class="already-register">Sudah mendaftar? <a [routerLink]="['/login']">Masuk</a></div>
+  <div *ngIf="isRegisterPage" class="already-register" style="margin-bottom: 50px">
+    Sudah mendaftar? <a [routerLink]="['/login']" id="registered-login-button" name="registered-login-button">Masuk</a>
+  </div>
 </form>

@@ -1,43 +1,62 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {PagesRoutingModule} from './pages-routing.module';
-import {TranslateModule} from "@ngx-translate/core";
-import {CoreModule} from "@app/core";
-import {SharedModule} from "@app/shared";
-import {FlexLayoutModule} from "@angular/flex-layout";
-import {MaterialModule} from "@app/material.module";
-import {HomeComponent} from "@app/pages/home/home.component";
-import {ProfileComponent} from "@app/pages/profile/profile.component";
-import {ShellModule} from "@app/shell/shell.module";
-import {AuthenticationService} from "@app/core/authentication/authentication.service";
-import { ChangePasswordComponent } from './profile/change-password/change-password.component';
-import { UserProfileComponent } from './profile/user-profile/user-profile.component';
-import {ReactiveFormsModule} from "@angular/forms";
-import { StoreComponent } from './store/store.component';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+import { NgxYoutubePlayerModule } from 'ngx-youtube-player';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 
+import { MaterialModule } from '@app/material.module';
+import { SharedModule } from '@app/shared';
+import { ShellModule } from '@app/shell/shell.module';
+import { StateCheckout } from '@app/services';
+import { PagesRoutingModule } from './pages-routing.module';
+import {
+  ProductDetailComponent,
+  RichTextAttributeComponent,
+  VariantAttributesComponent,
+  WarehouseDialogComponent
+} from './product-detail';
+import { StoreProvinceSelectorComponent, ChangeStoreComponent } from './store';
+import { RatingReviewComponent } from '@app/pages/product-detail/rating-review';
+import { RatingReviewStarsComponent } from '@app/pages/product-detail/rating-review/rating-review-stars';
+import { RatingReviewBarComponent } from '@app/pages/product-detail/rating-review/rating-review-bar';
+import { RatingReviewPercentageComponent } from '@app/pages/product-detail/rating-review/rating-review-percentage';
+import { RatingReviewCommentsComponent } from '@app/pages/product-detail/rating-review/rating-review-comments';
+import {EntityToSlugPipe} from "@app/shared/utils";
+import { ProvinceDialogComponent } from './store/province-dialog/province-dialog.component';
+import { VideoDialogComponent } from './product-detail/video-dialog/video-dialog.component';
 
 @NgModule({
   declarations: [
-    HomeComponent,
-    ProfileComponent,
-    ChangePasswordComponent,
-    UserProfileComponent,
-    StoreComponent
+    ChangeStoreComponent,
+    StoreProvinceSelectorComponent,
+    ProductDetailComponent,
+    WarehouseDialogComponent,
+    VariantAttributesComponent,
+    RichTextAttributeComponent,
+    RatingReviewComponent,
+    RatingReviewStarsComponent,
+    RatingReviewBarComponent,
+    RatingReviewPercentageComponent,
+    RatingReviewCommentsComponent,
+    ProvinceDialogComponent,
+    VideoDialogComponent,
   ],
     imports: [
         CommonModule,
         TranslateModule,
-        CoreModule,
         SharedModule,
         FlexLayoutModule,
         MaterialModule,
         ShellModule,
         PagesRoutingModule,
         ReactiveFormsModule,
+        SlickCarouselModule,
+        FormsModule,
+        NgxYoutubePlayerModule.forRoot(),
     ],
-  providers: [
-    AuthenticationService
-  ]
+  providers: [EntityToSlugPipe, StateCheckout]
 })
 export class PagesModule {
 }

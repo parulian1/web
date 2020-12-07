@@ -1,0 +1,279 @@
+@import "src/theme/base";
+
+// *--------------------------------------------------------
+// 1. Main Design (Blog)
+// 2. Carousel
+// 3. Card (Blog)
+// 4. Package
+// 5. Media Screen
+// *--------------------------------------------------------
+
+//* 1. Main Design (Blog)
+.blog-wrapper {
+  font-family: Lato;
+  width: 1152px;
+  background-color: #fff;
+}
+
+.blog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.blog-title {
+  display: inline-block;
+  font-family: $font-secondary;
+  font-size: 28px;
+  line-height: 37px;
+}
+
+.blog-readmore {
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: bold;
+  color: $color-accent;
+}
+
+.blog-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.blog-footer {
+  margin-top: 50px;
+  display: inline-block;
+}
+
+
+//* 2. Carousel
+.carousel {
+  width: 100%;
+
+  &:focus {
+    outline-color: $white;
+  }
+}
+
+.carousel-item {
+  margin: 0 5px;
+}
+
+// slick design
+::ng-deep .slick-next {
+  top: 40%;
+  right: 4%;
+  z-index: 10;
+}
+
+::ng-deep .slick-next::before {
+  //margin-top: 100px;
+  font-size: 50px;
+}
+
+::ng-deep .slick-prev {
+  top: 40%;
+  left: 1%;
+  z-index: 10;
+}
+
+::ng-deep .slick-prev::before {
+  font-size: 50px;
+}
+
+
+//* 3. Card (Blog)
+.blog-card-linked {
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+  outline-color: $white;
+}
+
+.blog-card {
+  max-width: 329px;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-card__image {
+  img {
+    border-radius: $border-radius;
+    max-width: 100%;
+    height: 184px;
+    object-fit: cover;
+  }
+}
+
+.blog-card__content {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-card__title {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 25px;
+  margin: 12px 0 5px 0;
+}
+
+.blog-card__date {
+  margin-top: 30px;
+  font-size: 12px;
+  line-height: 14px;
+  color: $color-secondary;
+}
+
+
+//* 4. Package
+
+
+//* 5. Media Screen
+@media screen and (max-width: $mobile-break) {
+  .blog {
+    &-wrapper {
+      width: 100%;
+      padding: 0 12px;
+    }
+
+    &-title {
+      font-family: $font-secondary;
+      font-size: 18px;
+      line-height: 25px;
+    }
+
+    &-header {
+      margin: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &-readmore {
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 19px;
+      font-weight: bold;
+      color: $color-accent;
+    }
+
+    &-card {
+      max-width: 197px;
+
+      &__image {
+        img {
+          border-radius: $border-radius;
+          object-fit: cover;
+          height: 110px;
+          width: 100%;
+        }
+      }
+
+      &__content {
+        margin: 12px 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      &__title {
+        font-size: 16px;
+        line-height: 22px;
+        font-weight: bold;
+      }
+
+      &__date {
+        font-size: 10px;
+        line-height: 13px;
+        color: $color-secondary;
+        margin: 8px 0 0 0;
+      }
+
+      &__desc {
+        font-size: 12px;
+        line-height: 17px;
+      }
+    }
+  }
+  .carousel {
+    width: 100%;
+  }
+
+  .blog-card__content {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+  }
+
+  ::ng-deep button.slick-next.slick-arrow {
+    width: 36px;
+    height: 36px;
+    z-index: 90;
+    right: 10px;
+    top: 70px;
+
+    span {
+      color: $color-primary;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 100%;
+      width: 100%;
+      height: 100%;
+      font-size: 36px;
+    }
+  }
+
+  ::ng-deep button.slick-prev.slick-arrow {
+    width: 36px;
+    height: 36px;
+    z-index: 90;
+    left: 10px;
+    top: 70px;
+
+    span {
+      color: $color-primary;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 100%;
+      width: 100%;
+      height: 100%;
+      font-size: 36px;
+    }
+  }
+
+  ::ng-deep button.slick-next.slick-arrow::before {
+    display: none;
+  }
+
+  ::ng-deep button.slick-prev.slick-arrow::before {
+    display: none;
+  }
+}
+
+@media all and (min-width: 1024px) and (max-width: 1280px) {
+  .blog-wrapper {
+    width: 1024px;
+    margin: 20px auto;
+  }
+}
+
+@media all and (min-width: 768px) and (max-width: 1024px) {
+  .blog-wrapper {
+    width: 768px;
+    margin: 20px auto;
+  }
+}
+
+@media all and (min-width: $mobile-break) and (max-width: 767px) {
+  .blog-wrapper {
+    width: 100%;
+    padding: 0 12px;
+  }
+}

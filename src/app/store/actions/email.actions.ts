@@ -1,12 +1,4 @@
-import {Action} from "@ngrx/store";
-import {
-  ForgotPassword,
-  Login, LoginSuccess,
-  Logout,
-  Register,
-  RegisterFailed,
-  RegisterSuccess
-} from "@app/store/actions/auth.actions";
+import {Action} from '@ngrx/store';
 
 export enum EmailActionTypes {
   VERIFY_EMAIL = '[Email] Verify Email',
@@ -29,5 +21,5 @@ export class VerifySent implements Action {
 
 export type AllEmail =
   | VerifySent
-  | VerifyEmail
+  | VerifyEmail;
 

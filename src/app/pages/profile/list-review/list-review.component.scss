@@ -1,0 +1,17 @@
+@import "src/theme/base";
+
+.review {
+  display: flex;
+  flex-direction: column;
+  width: 918px;
+
+  &-title {
+    font-family: $font-secondary;
+    font-size: 28px;
+    line-height: 37px;
+  }
+
+  &-list {
+    margin-top: 16px;
+  }
+}

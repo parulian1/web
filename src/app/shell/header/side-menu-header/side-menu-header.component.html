@@ -1,0 +1,76 @@
+<div class="side-content" *ngIf="mode === 'default'">
+  <span class="close" (click)="closeSideMenu('')">X</span>
+  <div class="auth">
+    <a [routerLink]="['/profile']" (click)="closeSideMenu('/profile')"><img src="assets/header/logo-account.svg"
+                                                                            alt="Account Logo"></a>
+    <button class="auth-btn">
+      <a [routerLink]="['/login']" (click)="closeSideMenu('/login')" *ngIf="!token">Masuk / Daftar</a>
+      <span *ngIf="token">Hai, Teman</span>
+    </button>
+  </div>
+  <div class="menus">
+    <a (click)="showMenu('brands')">Brands</a>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+  <div class="menu-navbar">
+    <ng-container *ngFor="let nav of navigation$|async">
+      <div class="nav" >
+        <a (click)="showMenu(nav.title, level, '')">{{nav.title}}</a>
+        <mat-icon *ngIf="nav.children.length !== 0" (click)="showMenu(nav.title, level, '')">keyboard_arrow_right</mat-icon>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<div class="brands" *ngIf="mode === 'brands'">
+  <span class="top">
+    <mat-icon (click)="backMenu()">keyboard_arrow_left</mat-icon>
+    <span class="title" (click)="backMenu()">Brands</span>
+    <span class="close" (click)="closeSideMenu('')">X</span>
+  </span>
+  <div class="brands-list">
+    <div class="brands-item" *ngFor="let brandData of brands$|async; index as i; first as isFirst">
+      <a [routerLink]="['/brand', brandData.href|entityToSlug]" [mat-dialog-close]="true"><img [src]="brandData.iconImage"
+                                                                     (error)="getDefaultImage($event)"/></a>
+    </div>
+  </div>
+</div>
+
+<div class="category" *ngIf="mode !== 'brands' && mode !== 'default'">
+  <span class="top">
+    <mat-icon (click)="backMenu()">keyboard_arrow_left</mat-icon>
+    <span class="title" (click)="backMenu()">{{menuTitle}}</span>
+    <span class="close" (click)="closeSideMenu('')">X</span>
+  </span>
+  <div class="list-menu">
+    <ng-container *ngFor="let menu of listNav$|async">
+      <div class="menu">
+        <a (click)="showMenu(menu.title, level=level+1, menuTitle)"
+           *ngIf="menu.children.length !== 0; else elseAnchor">{{menu.title}}</a>
+        <ng-template #elseAnchor>
+          <a [routerLink]="['/products']"
+             [queryParams]="{category: menu.url|entityToSlug}"
+             (click)="closeSideMenu('/products', menu.url)">{{menu.title}}</a>
+        </ng-template>
+        <mat-icon *ngIf="menu.children.length !== 0 && level !== 2">keyboard_arrow_right</mat-icon>
+      </div>
+      <ng-container *ngIf="level === 2">
+        <ng-container *ngFor="let child of menu.children">
+          <div class="last-child">
+            <a [routerLink]="['/products']"
+               [queryParams]="{category: child.url|entityToSlug}"
+               (click)="closeSideMenu('/products', child.url)">{{child.title}}</a>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<div class="logout" *ngIf="token">
+  <button class="btn-logout" (click)="logout()" [mat-dialog-close]="true">Keluar</button>
+</div>
+
+
+
+

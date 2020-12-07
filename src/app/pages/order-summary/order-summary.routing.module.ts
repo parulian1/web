@@ -1,0 +1,18 @@
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+
+import { OrderSummaryComponent } from "./order-summary.component";
+
+const routes: Routes = [
+  {
+    path: "",
+    component: OrderSummaryComponent,
+    runGuardsAndResolvers: "always",
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class OrderSummaryRoutingModule {}

@@ -1,0 +1,119 @@
+@import "src/theme/base";
+
+.title {
+  font-family: $font-secondary;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+  margin-bottom: 6px;
+}
+
+.sort {
+  min-width: 211px;
+  padding: 12px;
+  background: $white;
+  border: 1px solid #E5E5E5;
+  box-sizing: border-box;
+  border-radius: $border-radius;
+  margin-bottom: 36px;
+}
+
+.collapsible {
+  background: #FFFFFF;
+  border: 1px solid #E5E5E5;
+  box-sizing: border-box;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 11px 9px 13px 12px;
+  width: 90%;
+  text-align: left;
+  font-family: $font-primary;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.collapsible:hover {
+  background-color: #f1f1f1;
+}
+
+.collapsible:active {
+  outline: none;
+}
+
+.active {
+  border-bottom: none;
+}
+
+.body-collapse {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  width: 90%;
+  background: #FFFFFF;
+  border-top: none;
+  border-bottom: 1px solid #E5E5E5;
+  border-left: 1px solid #E5E5E5;
+  border-right: 1px solid #E5E5E5;
+  box-sizing: border-box;
+  margin-bottom: 40px;
+}
+
+.sort-label {
+  cursor: pointer;
+  font-family: $font-primary;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+  padding: 6px 0 7px 30px;
+  margin: 8px 0 10px 0;
+}
+
+.sort-label.active {
+  background: #F5F5F5 url("~src/assets/checklist_bold.png") no-repeat right;
+  background-origin: content-box;
+  padding-right: 10px;
+}
+
+//arrow
+.arrow {
+  border: solid $color-primary;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 4px;
+  float: right;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.arrow-up {
+  margin-top: 6px;
+  transform: rotate(-135deg);
+  transform-origin: 50% 40%;
+}
+
+//checklist
+.custom_checked {
+  background-image: url('~src/assets/checklist_bold.png');
+}

@@ -1,0 +1,31 @@
+<div class="warehouse-dialog">
+  <span class="title">Cari Toko Pengiriman</span>
+  <div class="province-option">
+    <mat-select
+      [(ngModel)]="selectedWarehouse"
+      (selectionChange)="currentProvince($event)">
+      <mat-option
+        *ngFor="let province of listProvinces"
+        [value]="province">{{province|titlecase}}</mat-option>
+    </mat-select>
+  </div>
+  <div class="list">
+    <mat-radio-group aria-label="Select an option">
+      <ng-container *ngFor="let store of listWarehouse">
+        <mat-radio-button
+          value="{{store.name}}"
+          [checked]="isChecked"
+          (change)="chosenWarehouse(store)">
+          <div class="store">
+            <span class="title">{{store.name}}</span>
+            <span class="address">{{store.address.street}}</span>
+            <span class="phone">{{store.address.province}}</span>
+          </div>
+        </mat-radio-button>
+      </ng-container>
+    </mat-radio-group>
+  </div>
+  <div class="button">
+    <button class="btn-choose" [disabled]="isDisabled" (click)="updatePreferredWarehouse()" [mat-dialog-close]="updatedPreferredWarehouse">Pilih</button>
+  </div>
+</div>

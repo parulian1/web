@@ -1,0 +1,20 @@
+@import "src/theme/base";
+
+.video-dialog {
+  padding: 24px;
+
+  .top-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+
+    &-title {
+      margin: 0;
+    }
+
+    &-close {
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,9 @@
+<h1 class="title">Sort</h1>
+<button id="sort" class="collapsible" (click)="expand($event)">{{sort_title}}<i class="arrow down"></i></button>
+<div class="body-collapse">
+  <p id="-price" (click)="sortSelected($event)" [ngClass]="'sort-label'">
+    Harga Tertinggi</p> <div class="custom_checked"></div>
+  <p id="price" (click)="sortSelected($event)" [ngClass]="'sort-label'">
+    Harga Terendah</p>
+</div>
+

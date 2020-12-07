@@ -1,5 +1,6 @@
 export interface Credentials {
-  email?: string,
-  token?: string,
-  isEmailVerified?: boolean
+  email?: string;
+  access?: string;
+  refresh?: string;
+  isEmailVerified?: boolean;
 }

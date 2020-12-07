@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {CredentialsService} from "@app/core/authentication/credentials.service";
-import {Router} from "@angular/router";
+import {CredentialsService} from '@app/core/authentication/credentials.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-shell',

@@ -1,7 +1,7 @@
 import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
-import {Sla} from "@app/models/sla";
-import {SlaService} from "@app/services/sla.service";
-import {DatePipe, formatDate} from "@angular/common";
+import {Sla} from '@app/models/sla';
+import {SlaService} from '@app/services/sla.service';
+import {DatePipe} from '@angular/common';
 
 
 @Component({
@@ -12,19 +12,19 @@ import {DatePipe, formatDate} from "@angular/common";
 export class SlaComponent implements OnInit {
   public sla: Array<Sla> = [];
 
-  constructor(private slaService: SlaService,
+  constructor(private service: SlaService,
               private datePipe: DatePipe,
               @Inject(LOCALE_ID) private locale: string) {
   }
 
   ngOnInit(): void {
-    this.slaService.getSla()
-      .subscribe(sla => {
-        this.sla = sla;
-      })
-
-
+    this.fetchSla();
   }
 
-
+  fetchSla() {
+    this.service.fetchList(true).subscribe(resp => {
+      this.sla = resp.filter(m => m.isActive === true);
+      this.sla = this.sla.slice(0, 3);
+    });
+  }
 }

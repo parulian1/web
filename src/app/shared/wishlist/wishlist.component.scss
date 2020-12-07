@@ -1,0 +1,110 @@
+@import "src/theme/base";
+
+$primary: #F03BB3 !default;
+
+$size-small: 0.75rem !default;
+$size-normal: 1rem !default;
+$size-medium: 1.25rem !default;
+$size-large: 1.5rem !default;
+
+
+
+/* ==========================================================================
+1. Button
+========================================================================== */
+.button {
+  background-color: transparent;
+  border-color: black;
+  border-width: 1px;
+  border-radius: 4px;
+  cursor: pointer;
+  justify-content: center;
+  padding: calc(0.375em - 1px) 0.75em;
+  text-align: center;
+  white-space: nowrap;
+  font-size: $size-normal;
+  font-weight: bold;
+}
+
+// size
+.button--size-normal {
+  font-size: $size-normal;
+}
+.button--size-medium {
+  font-size: $size-medium;
+}
+.button--size-large {
+  font-size: $size-large;
+}
+
+.button--display-fullwidth {
+  display: flex;
+  width: 100%;
+}
+
+// shape
+.button--shape-round {
+  padding: 0.3em;
+  border-radius: 50%;
+  border-color: transparent; // sure about that ?
+}
+
+.button--shape-round:focus {
+  outline: none;
+}
+
+/* handle inner class */
+// icon
+.button__icon {
+  height: 1.5em;
+  width: 1.5em;
+  margin-left: calc(-0.375em - 1px);
+  margin-right: 0.1875em;
+  vertical-align: center;
+}
+
+.button__icon-only {
+  height: 2em;
+  width: 2em;
+  vertical-align: center;
+}
+
+// text
+.button__text {
+  margin-top: 0.2rem;
+  vertical-align: center;
+}
+
+
+/* ==========================================================================
+1. Icon
+========================================================================== */
+.icon {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+}
+
+// not working
+//.icon--size-normal {}
+//.icon--size-medium {}
+//.icon--size-large {}
+
+.icon--primary {
+  color: $primary;
+}
+
+@media screen and (max-width: $mobile-break) {
+  .button {
+    font-size: 14px;
+    line-height: 19px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+  }
+
+  .button__text {
+    vertical-align: center;
+    margin: 0;
+  }
+}

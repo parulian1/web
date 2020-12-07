@@ -1,0 +1,48 @@
+<h1 class="title">Filter</h1>
+<h1 class="subtitle">Kategori</h1>
+<button (click)="expand($event)" [class.active]="!!paramsCategory" class="collapsible"
+        id="filterCategory">{{filter_category_title}}
+  <i class="arrow down" disabled></i></button>
+<div [style]="paramsCategory ? 'max-height: 546px' : '' " class="body-collapse">
+  <p (click)="filterSelected($event)" [ngClass]="(activeFilterCategoryId === 'allCategory') ? 'filter-label active' : 'filter-label'"
+     id="allCategory">Semua Kategori</p>
+  <div *ngFor="let category of categoryList"
+       [class.parent-down]="(category.subCategory.length !== 0)">
+
+    <p (click)="filterSelected($event)" *ngIf="category.subCategory.length === 0"
+       [ngClass]="(activeFilterCategoryId === (category.href|entityToSlugFilter|getParamValue: 'category')) ?
+          'filter-label active' : 'filter-label'"
+       id="{{category.href|entityToSlugFilter}}">{{category.name}}
+    </p>
+
+    <p (click)="subfilterExpand($event)" *ngIf="category.subCategory.length !== 0"
+       [ngClass]="(category.subCategory.length !== 0 ? 'filter-label-parent' : 'filter-label')"
+       id="{{category.href|entityToSlugFilter}}">{{category.name}}
+    </p>
+
+    <div class="subfilter-collapse">
+      <p (click)="subfilterSelected($event)" *ngFor="let subcategory of category.subCategory"
+         [ngClass]="(activeFilterCategoryId === (subcategory.href|entityToSlugFilter|getParamValue: 'category')) ?
+            'subfilter-label active' : 'subfilter-label'"
+         id="{{subcategory.href|entityToSlugFilter}}">{{subcategory.name}}</p>
+    </div>
+  </div>
+</div>
+
+<h1 class="subtitle">Harga</h1>
+<div class="price-box">
+  <p (click)="filterPrice($event)" *ngFor="let price of priceRangeList" [ngClass]="(active_price_id === (price.href|entityToSlugPrice)) ? 'price-label active' : 'price-label'"
+     id="{{price.href|entityToSlugPrice}}">{{price.name}}</p>
+</div>
+
+<h1 class="subtitle">Brands</h1>
+<button (click)="expand($event)" class="collapsible" id="filterBrand">{{filter_brand_title}}<i
+  class="arrow down"></i></button>
+<div class="body-collapse">
+  <p (click)="filterSelected($event)" [ngClass]="(activeFilterBrandId === 'allBrand') ? 'filter-label active' : 'filter-label'"
+     id="allBrand">Semua Brand</p>
+  <p (click)="filterSelected($event)" *ngFor="let brand of brandList" [ngClass]="(activeFilterBrandId === (brand.href|entityToSlugFilter)) ? 'filter-label active' : 'filter-label'"
+     id="{{brand.href|entityToSlugFilter}}">{{brand.name}}</p>
+</div>
+
+

@@ -1,0 +1,46 @@
+<div class="payment-method"
+     [class.active]="mode === 'edit' && stateService.getStateAddress && stateService.getStateShippingMethod">
+  <div class="top">
+    <span class="title">Metode Pembayaran</span>
+    <span class="change" *ngIf="mode === 'default' " (click)="changeMode()">Ubah</span>
+  </div>
+  <div class="middle" *ngIf="mode === 'edit' && stateService.getStateAddress && stateService.getStateShippingMethod">
+    <mat-accordion class="fix-radio-position" hideToggle="true">
+      <mat-expansion-panel #panel disabled
+                           *ngFor="let item of paymentLists; let i = index"
+                           class="mat-elevation-z0">
+        <mat-expansion-panel-header style="align-items: center">
+          <mat-panel-description>
+            <mat-radio-button style="margin: 16px 0;padding:16px 0" (change)="onChange($event, panel)">
+              {{item.paymentTypeTitle}}
+            </mat-radio-button>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-radio-group
+          [(ngModel)]="paymentMethod">
+          <mat-radio-button
+            style="padding: 0 8px 0 0"
+            *ngFor="let payment of item.paymentMethods"
+            [value]="payment"
+            (change)="paymentChange($event)">{{payment.name}}</mat-radio-button>
+        </mat-radio-group>
+
+        <!-- Select and Use CC has been saved -->
+        <div *ngIf="item.type === 'credit_card'" style="margin-top: 15px;">
+          <a class="button"
+             style="cursor: pointer; border-bottom: 1px solid hsl(0, 0%, 2%);"
+             (click)="openCreditCardChoiceDialog(item)">
+            Lihat semua Kartu Kredit
+          </a>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <button class="chose-payment"
+            [disabled]="isDisabled"
+            (click)="savePaymentMethod()">Pilih
+    </button>
+  </div>
+  <div class="middle" *ngIf="mode === 'default' ">
+    <span>{{payments.name}}</span>
+  </div>
+</div>

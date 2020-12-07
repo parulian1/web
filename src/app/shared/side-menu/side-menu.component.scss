@@ -1,5 +1,36 @@
 @import "src/theme/base";
 
+.side-nav {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 25px 0 0;
+
+  .nav-item {
+    cursor: pointer;
+    border: none;
+    padding: 11px 0 13px 12px;
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 18px;
+    color: $color-primary;
+    width: 100%;
+    height: 42px;
+    display: flex;
+    align-self: start;
+    background-color: $white;
+    margin: 0 0 16px 0;
+    border-radius: $border-radius;
+  }
+
+  .nav-item.active {
+    border-radius: $border-radius;
+    border: solid 1px $color-primary;
+  }
+
+}
+
 .side-profile-nav {
   display: flex;
   flex-direction: column;
@@ -29,4 +60,123 @@
     border: solid 1px $color-primary;
   }
 
+}
+
+.mobile-side-div {
+  display: none;
+
+  .mobile-side-button {
+    display: none;
+  }
+}
+
+.menu-modal-content {
+  display: none;
+}
+
+
+// mobile
+@media screen and (max-width: $mobile-break) {
+  .side-profile-nav {
+    display: none;
+  }
+  .overlaySortBackground {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    transition: 0.5s;
+  }
+
+  .mobile-side-div {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 9px 12px;
+
+    background: $white;
+    border: 1px solid $color-primary;
+    box-sizing: border-box;
+    border-radius: $border-radius;
+
+    .mobile-side-button {
+      display: contents;
+      margin: 0;
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    //arrow
+    .arrow {
+      border: solid $color-primary;
+      border-width: 0 2px 2px 0;
+      display: inline-block;
+      padding: 3px;
+      float: right;
+    }
+
+    .down {
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+    }
+
+  }
+
+
+  /* Modal */
+  .menu-modal-content {
+    position: relative;
+    display: block;
+    background: #FFFFFF;
+    border-radius: $border-radius;
+    padding: 12px;
+    border: 1px solid #888;
+    width: 100%;
+    transition: 0.5s;
+
+    .nav-item {
+      cursor: pointer;
+      border: none;
+      padding: 9px 12px;
+      font-family: $font-primary;
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 16px;
+      color: $color-primary;
+      width: 100%;
+      background-color: $white;
+      margin: 0 0 12px 0;
+      border-radius: $border-radius;
+      text-align: left;
+    }
+
+    .nav-item:last-child {
+      margin-top: 30px;
+    }
+
+    .nav-item.active {
+      border-radius: $border-radius;
+      border: solid 1px $color-primary;
+    }
+  }
+
+  /* The Close Button */
+  .close-modal {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close-modal:hover,
+  .close-modal:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
 }

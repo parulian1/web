@@ -1,23 +1,12 @@
 <div class="menu-brand">
   <span>
-    <a href="http://gramedia.com">Brands</a>
+    <a href="#">Brands</a>
+    <span class="arrow"> > </span>
   </span>
   <div class="brand-content">
-    <div class="list-brands">
-      <div class="brand">
-        <a href="http://gramedia.com"><img src="assets/brand-example.png"/></a>
-      </div>
-      <div class="brand">
-        <a href="http://gramedia.com"><img src="assets/brand-example.png"/></a>
-      </div>
-      <div class="brand">
-        <a href="http://gramedia.com"><img src="assets/brand-example.png"/></a>
-      </div>
-      <div class="brand">
-        <a href="http://gramedia.com"><img src="assets/brand-example.png"/></a>
-      </div>
-      <div class="brand">
-        <a href="http://gramedia.com"><img src="assets/brand-example.png"/></a>
+    <div class="list-brands" *ngIf="!!brands">
+      <div class="brand"  *ngFor="let brandData of brands; index as i; first as isFirst">
+        <a [routerLink]="['/brand', brandData.href|entityToSlug]"><img [src]="brandData.iconImage" (error)="getDefaultImage($event)"/></a>
       </div>
     </div>
   </div>

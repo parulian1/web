@@ -1,0 +1,101 @@
+@import "src/theme/base";
+
+.shipping-method {
+  width: 100%;
+  border: solid 1px #E5E5E5;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0 0 0;
+
+  &.active {
+    border: solid 2px $color-primary;
+  }
+
+  .top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .bar {
+      .title {
+        font-size: 20px;
+        line-height: 24px;
+        margin: 0;
+        padding: 0;
+      }
+
+      .sla {
+        font-size: 12px;
+        line-height: 14px;
+        background-color: #F5F5F5;
+        border-radius: $border-radius;
+        padding: 4px;
+      }
+    }
+
+    .change {
+      font-size: 16px;
+      line-height: 22px;
+      color: $color-accent;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
+
+  .middle {
+    display: flex;
+    flex-direction: column;
+
+    .shipping-options {
+      margin: 24px 0 0 0;
+      display: flex;
+      flex-direction: column;
+
+      .title {
+        font-size: 16px;
+        line-height: 22px;
+        font-weight: bold;
+      }
+
+      .list-shipping {
+        margin: 4px 0 0 0;
+        width: 40%;
+        padding: 8px;
+      }
+    }
+
+    mat-select {
+      width: 40%;
+      box-sizing: border-box;
+      border-radius: $border-radius;
+      border: solid 1px $color-primary;
+      height: 42px;
+      margin: 6px 0 0 0;
+      padding: 10px 12px;
+      font-family: $font-primary;
+      font-size: 16px;
+      line-height: 22px;
+    }
+
+    .chose-shipping {
+      display: flex;
+      align-self: flex-end;
+      width: 150px;
+      color: $white;
+      font-size: 16px;
+      line-height: 22px;
+      border: none;
+      background: $color-accent;
+      padding: 9px 58px;
+      border-radius: $border-radius;
+      cursor: pointer;
+
+      &[disabled] {
+        background-color: $color-grey;
+      }
+    }
+
+  }
+
+
+}

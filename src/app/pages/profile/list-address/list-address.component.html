@@ -1,0 +1,66 @@
+<div class="list-address-wrapper">
+  <div class="address-header">
+    <h1 class="title" style="float: left">Daftar Alamat</h1>
+
+    <div style="float: right" class="add-address-button">
+      <button class="button" (click)="showFormDialog()">Tambah Alamat</button>
+    </div>
+    <div style="clear: both"></div>
+  </div>
+
+  <div class="address-content">
+    <div *ngIf="entities?.length > 0" class="columns is-multiline">
+      <div class="column is-12" *ngFor="let address of entities">
+        <div class="box">
+          <div class="address-content-header">
+            <div>
+              <span class="title title--size-s">{{ address.name }}</span> |
+              <span class="address-title-ship">{{ address.shipToName }}</span
+              >&nbsp;
+              <!-- Tag -->
+              <span *ngIf="address.isDefaultShipping" class="tag">Alamat Utama</span>
+            </div>
+          </div>
+
+          <div class="address-content-main">
+            <div class="columns is-multiline" style="align-items: flex-end">
+              <div class="column is-7">
+                <div class="street has-text-left">
+                  <p class="address-street">{{ address.street | titlecase }}</p>
+                  <br />
+                  {{ address.district | titlecase }} - {{ address.city | titlecase }}<br />
+                  {{ address.state | titlecase }} - {{ address.zipcode }}<br />
+                  {{ address.phoneNumber }}
+                </div>
+              </div>
+
+              <div class="column is-5">
+                <div class="address-actions has-text-right">
+                  <a (click)="showFormDialog(address)"> Ubah Alamat </a>
+
+                  <a *ngIf="!address.isDefaultShipping" (click)="setAsDefaultShipping(address)">
+                    Jadikan Alamat Utama
+                  </a>
+
+                  <a *ngIf="entities.length !== 1 && !address.isDefaultShipping" (click)="showDeleteDialog(address)">
+                    Hapus
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="entities?.length <= 0" class="columns is-multiline">
+      <div class="column is-12 has-text-centered">
+        <figure>
+          <img class="address-empty-img" src="assets/address/address-empty.png" alt="" />
+        </figure>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-address-pagination [page]="page" pageSize="4"></app-address-pagination>

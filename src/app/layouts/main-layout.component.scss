@@ -1,0 +1,21 @@
+@import "src/theme/base";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+header {
+  height: 120px;
+}
+
+
+@media all and (max-width: 768px) {
+  header {
+    height: 96px;
+    position: sticky;
+    top: 0px;
+    z-index: 99;
+  }
+}

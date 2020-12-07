@@ -1,0 +1,75 @@
+@import "src/theme/base";
+
+.main-content {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.full-banner {
+  height: 360px;
+
+  app-single-banner {
+    width: 100%;
+  }
+}
+
+.product-lines {
+  position: relative;
+  justify-content: normal;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.social-media {
+  margin-top: 106px;
+  width: 100%;
+  background-color: #F5F5F5;
+}
+
+// mobile
+@media screen and (max-width: $mobile-break) {
+  .container {
+    .main-content {
+      margin-top: 0px;
+      width: 100%;
+
+      .full-banner {
+        width: 100%;
+        height: 168px;
+        padding: 0 12px;
+      }
+
+      .product-lines {
+        padding: 0 12px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $tablet-break) {
+  app-single-banner {
+    max-width: 768px;
+  }
+
+  .product-lines {
+    margin: 0 auto;
+
+    app-product-line {
+      margin: 0 auto;
+    }
+  }
+}
+
+@media all and (min-width: 480px) and (max-width: 768px) {
+  app-single-banner {
+    max-width: 768px;
+  }
+
+  .product-lines {
+    margin: 0 auto;
+
+    app-product-line {
+      margin: 0 auto;
+    }
+  }
+}

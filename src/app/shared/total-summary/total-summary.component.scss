@@ -1,0 +1,69 @@
+@import "src/theme/base";
+
+.totals {
+
+  .subtotal {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 16px 0;
+  }
+
+  .shipping-box {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 16px 0;
+  }
+
+  .tax {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 16px 0;
+  }
+
+  .discount {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 16px 0;
+    border-bottom: solid 1px #E5E5E5;
+    padding: 0 0 12px 0;
+  }
+
+  .grand-total {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 16px 0;
+  }
+
+  .continue-payment {
+    .btn-continue {
+      background-color: $color-accent;
+      border: solid 1px $white;
+      color: $white;
+      font-size: 16px;
+      line-height: 22px;
+      font-style: normal;
+      cursor: pointer;
+      width: 100%;
+      border-radius: $border-radius;
+      padding: 8px;
+    }
+  }
+
+  .title {
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .value {
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: bold;
+  }
+
+  .grand-value {
+    font-size: 18px;
+    line-height: 25px;
+    font-weight: bold;
+    color: $color-accent;
+  }
+}

@@ -1,0 +1,44 @@
+@import "src/theme/base";
+
+:host {
+  text-align: center;
+  display: block;
+  line-height: 100px;
+  height: 100px;
+  background: var(--color-background-alt);
+}
+
+p {
+  display: inline-block;
+  margin: 0;
+}
+
+a {
+  display: inline-block;
+  margin: 0 12px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  p {
+    display: block;
+    margin: 0 12px 12px 12px;
+  }
+
+  :host {
+    height: auto;
+    line-height: initial;
+    padding: 12px 0;
+  }
+}
+
+@media screen and (max-width: $mobile-break) {
+
+  :host {
+    text-align: left;
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+  }
+}

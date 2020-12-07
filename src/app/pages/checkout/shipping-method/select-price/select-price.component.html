@@ -1,0 +1,25 @@
+<mat-select
+  placeholder="Pilih Pengiriman"
+  (selectionChange)="selectChange($event, item.href)">
+  <ng-container *ngFor="let method of shippingMethod">
+    <ng-container *ngIf="method.warehouse === (item.href|entityToSlug)">
+      <ng-container *ngFor="let cost of method.shippingCost">
+        <mat-option
+          [value]="cost"
+        ><b>{{cost.method}}</b>
+          | {{cost.cost|currency:'Rp. ': 'symbol' : '1.0'}} ({{cost.sla}})
+        </mat-option>
+
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</mat-select>
+<div class="shipping-err" *ngIf="stateService.err.length !== 0">
+  <ng-container *ngFor="let err of stateService.err">
+    <span *ngIf="(err.match(item.href|entityToSlug))">Cannot get the shipping cost. Please check/change your address</span>
+  </ng-container>
+</div>
+
+
+
+

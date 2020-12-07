@@ -1,0 +1,108 @@
+<div class="list-wishlist-wrapper">
+  <!-- Header -->
+  <div class="wishlist-header">
+    <div class="wishlist-header__title">
+      <h1 class="title">Wishlist</h1>
+    </div>
+    <div class="wishlist-header__search">
+      <app-wishlist-search></app-wishlist-search>
+    </div>
+  </div>
+
+  <div class="wishlist-content">
+    <!-- When Wishlists are exists -->
+    <div *ngIf="entities?.length > 0" class="columns">
+      <div class="column is-12">
+        <div class="box" *ngFor="let wishlist of entities">
+          <div class="columns">
+            <div class="column is-5">
+              <div class="media">
+                <div class="media-left">
+                  <figure class="image image--dimension-96">
+                    <!-- todo: how to get only media type image  -->
+                    <img
+                      src="{{
+                        wishlist.product.media.length === 0
+                          ? '/assets/wishlist/product-not-found.png'
+                          : wishlist.product.media[0].image
+                      }}"
+                      (error)="defaultImage()"
+                      style="height: 100%"
+                    />
+                    <p
+                      *ngIf="wishlist.warehouses.length === 0 || wishlist.warehouses[0].quantity === 0"
+                      class="empty-stock has-text-centered"
+                    >
+                      stock habis
+                    </p>
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <!-- Product Name and PAC -->
+                  <h3 class="title title--size-s">{{ wishlist.product.name }}</h3>
+                  <p class="subtitle subtitle--size-s pac">{{ wishlist.product.brand.name }}</p>
+
+                  <!-- Pricing -->
+                  <p class="subtitle" *ngIf="wishlist.product.unitPrice">
+                    {{
+                      wishlist.product.unitPrice.regular || wishlist.product.unitPrice.current
+                        | currency: "IDR":"symbol"
+                    }}
+                  </p>
+                  <p class="subtitle" *ngIf="!wishlist.product.unitPrice">
+                    {{ 0 | currency: "IDR":"symbol" }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="column is-4">
+              <p class="select-warehouse-title has-text-left">Pilih Toko</p>
+              <div class="select-warehouse" *ngIf="wishlist.selectedWarehouse" (click)="selectWarehouse(wishlist)">
+                <span style="float: left" class="warehouse-text">{{ wishlist.selectedWarehouse.name }}</span>
+                <span style="float: right" class="warehouse-stock"
+                  >Stock {{ wishlist.selectedWarehouse.quantity }}</span
+                >
+                <div style="clear: both"></div>
+              </div>
+              <div class="select-warehouse" *ngIf="!wishlist.selectedWarehouse">
+                <span style="float: left" class="warehouse-text">Stock Semua Toko Habis</span>
+                <div style="clear: both"></div>
+              </div>
+            </div>
+
+            <div class="column is-3">
+              <!-- Actions -->
+              <div class="wishlist-actions">
+                <div class="wishlist-actions__delete has-text-right">
+                  <a (click)="removeProduct(wishlist.product)">Hapus</a>
+                </div>
+
+                <div class="wishlist-actions__add-cart">
+                  <button
+                    class="button button--is-primary button--expand-full"
+                    (click)="addToCart(wishlist)"
+                    [disabled]="wishlist.warehouses.length <= 0"
+                  >
+                    Tambah ke Keranjang
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="wishlists?.length <= 0" class="columns">
+      <div class="column is-12">
+        <figure class="has-text-centered">
+          <img class="wishlist-empty-img" src="assets/wishlist/wishlist-empty.png" alt="" />
+        </figure>
+      </div>
+    </div>
+  </div>
+
+  <app-wishlist-pagination [page]="page" [pageSize]="5"></app-wishlist-pagination>
+</div>

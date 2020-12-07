@@ -1,0 +1,9 @@
+<div class="pagination">
+  <p [ngClass]="{disabled:pager.currentPage === 1}" (click)="setPage(pager.currentPage - 1)">❮</p>
+  <p *ngFor="let page of pages" [ngClass]="{active:pager.currentPage === page}" (click)="setPage(page)">{{page}}</p>
+  <p *ngIf="!pager.showAll && !pager.showLastOne" class="dot">....</p>
+  <p *ngIf="pager.showLastOne" [ngClass]="{active:pager.currentPage === lastOne}"
+     (click)="setPage(lastOne)">{{lastOne}}</p>
+  <p *ngIf="!pager.showAll" [ngClass]="{active:pager.currentPage === last}" (click)="setPage(last)">{{last}}</p>
+  <p [ngClass]="{disabled:pager.currentPage === pager.totalPages}" (click)="setPage(pager.currentPage + 1)">❯</p>
+</div>

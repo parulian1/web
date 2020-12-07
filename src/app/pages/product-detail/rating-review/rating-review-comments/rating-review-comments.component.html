@@ -1,0 +1,27 @@
+<div class="review-comments" *ngFor="let comment of review">
+  <div class="review-comments-name" *ngIf="comment.reviewerName !== ''; else elseName">{{comment.reviewerName}}</div>
+  <ng-template #elseName>
+    <div class="review-comments-name">Anonymous</div>
+  </ng-template>
+  <div class="review-comments-desc">{{comment.review}}</div>
+  <div class="review-comments-info">
+    <div class="info-stats">
+      <mat-star-rating
+        class="ratings"
+        [starCount]="5"
+        [size]="16"
+        [rating]="comment.score"></mat-star-rating>
+      <span>{{comment.dateCreated|date: 'dd MMMM'}}</span>
+    </div>
+    <div class="info-likes">
+      <span class="like">
+        <a (click)="voteUp(comment.href)"><i class="material-icons">thumb_up</i></a>
+        <span>({{comment.vote.likes}}) Suka</span>
+      </span>
+      <span class="dislike">
+        <a (click)="voteDown(comment.href)"><i class="material-icons">thumb_down</i></a>
+        <span>({{comment.vote.dislikes}}) Tidak Suka</span>
+      </span>
+    </div>
+  </div>
+</div>

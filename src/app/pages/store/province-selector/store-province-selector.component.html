@@ -1,0 +1,16 @@
+<div class="side-nav">
+  <a class="nav-item"
+     *ngFor="let provinceName of allProvinceNames"
+     routerLinkActive="active"
+     [routerLink]="['/store', provinceName]"
+     queryParamsHandling="preserve">
+    {{provinceName|titlecase}}
+  </a>
+</div>
+
+<div class="side-nav-mobile">
+  <div class="current-province" (click)="selectProvince()">
+    <span class="current-province-text">{{currentProvince | titlecase}}</span>
+    <img src="assets/arrow-down.svg"/>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="cart-summary">
+  <div class="cart-summary-title">Ringkasan Pemesanan</div>
+  <div class="cart-summary-content">
+    <div class="items" *ngFor="let item of cart.weight">
+      <div class="title">{{ item.name }}</div>
+      <div class="line-items">
+        <ng-container *ngFor="let line of cart.cartItems">
+          <ng-container *ngIf="line.warehouse.href === item.href">
+            <div class="line">
+              <div class="left">
+                <div class="image">
+                  <img src="{{ productModified | filterMediaImage:line.product.href }}"
+                       [class.empty]="line.isInStock === false"/>
+                  <span class="empty-stock" *ngIf="line.isInStock === false">Stok Habis</span>
+                </div>
+              </div>
+              <div class="right">
+                <div class="desc">
+                        <span class="name"><a
+                          [routerLink]="['/products',line.product.href|entityToSlug]">{{ line.product.name }}</a></span>
+                  <span class="vendor">{{ line.product.brand.name }}</span>
+                  <div class="desc-price">
+                    <span class="qty">Qty {{ line.quantity }}</span>
+                    <span
+                      class="price">{{ line.product.unitPrice.current|currency: 'Rp. ' : 'symbol' : '1.0' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

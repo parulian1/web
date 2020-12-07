@@ -1,0 +1,120 @@
+<div fxFlex>
+  <div *ngIf="this.cart.cartItems.length > 0; else emptyCart" class="container">
+    <div class="cart">
+      <div class="inner-container">
+        <div class="main-cart">
+          <div class="top">
+            <span class="title">Keranjang Saya</span>
+            <span class="item-count">({{ productCount }}) Produk | ({{ itemCount }}) Item</span>
+          </div>
+
+          <div *ngFor="let item of cart.weight" class="items">
+            <div class="title">{{ item.name }}</div>
+            <div class="line-items">
+              <ng-container *ngFor="let line of cart.cartItems; index as i">
+                <ng-container *ngIf="line.warehouse.href === item.href">
+                  <div class="line">
+                    <div class="left">
+                      <div class="image">
+                        <img src="{{ productModified | filterMediaImage:line.product.href }}" [class.empty]="line.isInStock === false"/>
+                        <span class="empty-stock" *ngIf="line.isInStock === false">Stok Habis</span>
+                      </div>
+                      <div class="desc" [class.empty]="line.isInStock === false">
+                        <span class="name"><a
+                          [routerLink]="['/products',line.product.href|entityToSlug]" [class.empty]="line.isInStock === false">{{ line.product.name }}</a></span>
+                        <span class="vendor" [class.empty]="line.isInStock === false">{{ line.product.brand.name }}</span>
+                        <div *ngIf="line.product.unitPrice.regular !== line.product.unitPrice.current"
+                             class="price-base">
+                          <span
+                            class="price-base-amount">{{ line.product.unitPrice.regular|currency: 'Rp ' : 'symbol' : '1.0' }}</span>
+                          <span *ngIf="discountProduct.length > 0" class="price-base-discount">
+                            <ng-container *ngFor="let item of discountProduct">
+                              <ng-container
+                                *ngIf="item.product === line.product.href && item.warehouse === line.warehouse.name">{{ item.discount }}
+                                %</ng-container>
+                            </ng-container>
+                          </span>
+                        </div>
+                        <span
+                          class="price">{{ line.product.unitPrice.current|currency: 'Rp ' : 'symbol' : '1.0' }}</span>
+                      </div>
+                    </div>
+                    <div class="right">
+                      <div class="quantity" *ngIf="line.isInStock !== false">
+                        <div class="quantity-container">
+                          <div class="operation">
+                            <app-cart-quantity
+                              [line]="line"
+                              class="comp-qty">
+                            </app-cart-quantity>
+                          </div>
+                          <ng-container *ngFor="let product of productModified">
+                            <ng-container *ngFor="let item of product.priceLists">
+                              <div *ngIf="item.ranges.length > 1 && product.href === line.product.href"
+                                   class="price-info">
+                                <span class="text">Belanja banyak, lebih murah! <mat-icon>error_outline</mat-icon></span>
+                                <div class="price-info-list">
+                                  <table>
+                                    <tr>
+                                      <td><b>Qty</b></td>
+                                      <td><b>Harga</b></td>
+                                    </tr>
+                                    <ng-container *ngFor="let price of priceInfo">
+                                      <tr *ngIf="price.productHref === line.product.href">
+                                        <td>{{ price.minQty }}-{{ price.maxQty }}</td>
+                                        <td
+                                          *ngIf="price.priceDiscount">{{ price.priceDiscount|currency:'Rp ': 'symbol' : '1.0-0' }}
+                                          <span
+                                            style="text-decoration-line: line-through">{{ price.priceBase|currency:'Rp ': 'symbol' : '1.0-0' }}</span>
+                                        </td>
+                                        <td
+                                          *ngIf="!price.priceDiscount">{{ price.priceBase|currency:'Rp ': 'symbol' : '1.0-0' }}</td>
+                                      </tr>
+                                    </ng-container>
+                                  </table>
+                                </div>
+                              </div>
+                            </ng-container>
+                          </ng-container>
+                        </div>
+                        <div class="totals">{{ line.lineTotals.price|currency: 'Rp ' : 'symbol' : '1.0-0' }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="additional">
+                    <span><app-add-to-wishlist
+                      [products]="line.product"></app-add-to-wishlist> | <span (click)="removeCartItem(line)"
+                                                                               class="delete-item">Hapus</span></span>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+
+
+        </div>
+        <div class="side-cart">
+          <div class="side-cart-totals">
+            <app-total-summary
+              [cartTotals]="cartTotals"
+              [cart]="cart"></app-total-summary>
+            <div class="continue-payment">
+              <button (click)="continueCheckoutAction()" class="btn-continue" [disabled]="!isValidCart()">Lanjutkan Pembayaran</button>
+            </div>
+          </div>
+          <div class="side-cart-voucher">
+            <app-voucher-card></app-voucher-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #emptyCart>
+    <div class="container">
+      <div class="cart-empty">
+        <img src="assets/cart-empty.png"/>
+        <span>Keranjang belanja Anda kosong <a [routerLink]="['/products']">Belanja sekarang</a></span>
+      </div>
+    </div>
+  </ng-template>
+</div>

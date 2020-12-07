@@ -1,0 +1,56 @@
+<div class="container">
+  <app-sidenav-overlay #sidenav [categoryList]=categoryList [brandList]=brandList [priceRangeList]="priceRangeList"
+                       (filter)="onFiltered($event)"></app-sidenav-overlay>
+  <div id="overlaySortBackground"></div>
+  <div *ngIf="!keyword" class="breadcrumbs">
+    <!--    Home > Kategori > Women > Shampoo-->
+  </div>
+  <h1 *ngIf="queryText" class="title">Hasil Pencarian <strong>"{{ queryText}}"</strong></h1>
+  <div class="flex-grid">
+    <aside class="sidebar">
+      <app-sort-product
+        [orderingList]="orderingList"
+        (sorted)="onSorted($event)">
+      </app-sort-product>
+      <app-filter-product
+        [categoryList]=categoryList
+        [brandList]=brandList
+        [priceRangeList]="priceRangeList"
+        (filter)="onFiltered($event)"></app-filter-product>
+    </aside>
+    <section class="main">
+      <div class="pagination-flex-mobile">
+        <div class="page-col">
+          <button class="filter-mobile" (click)="sidenav.openNav()">Filter</button>
+        </div>
+        <div class="page-col">
+          <div class="sort-mobile">
+            <button class="collapsible" (click)="expandMobileSort($event)">{{ sortMobileTitle }}<i class="arrow down"></i>
+            </button>
+            <ul id="sortMobileUl">
+              <li><p id="price" (click)="sortMobileSelected($event)"
+                     [ngClass]="(sortMobileTitle === 'Harga Terendah') ? 'sort-label active' : 'sort-label'">Harga
+                Terendah</p></li>
+              <li><p id="-price" (click)="sortMobileSelected($event)"
+                     [ngClass]="(sortMobileTitle === 'Harga Tertinggi') ? 'sort-label active' : 'sort-label'">Harga
+                Tertinggi</p></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <app-paginate [page]="productPagedResponse" [hideDescription]="false"></app-paginate>
+      <div class="flex-container">
+        <ng-container *ngIf="!!products; else emptyResponse">
+          <app-product-card [productHref]="product.href" [page]="'pdp-mobile'" *ngFor="let product of products">
+          </app-product-card>
+        </ng-container>
+        <ng-template #emptyResponse>
+        </ng-template>
+      </div>
+      <div class="pagination-bottom">
+        <app-paginate [page]="productPagedResponse" [hideDescription]="true"></app-paginate>
+      </div>
+    </section>
+  </div>
+</div>
+

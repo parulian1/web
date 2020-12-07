@@ -1,7 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {BrandService} from "@app/services/brand.service";
-import {map} from "rxjs/operators";
-import {Brand} from "@app/models/brand";
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {BrandService} from '@app/services/brand.service';
+import {Brand} from '@app/models/brand';
+import {Logger} from '@app/core';
+
+const log = new Logger('MenuBrandComponent');
 
 @Component({
   selector: 'app-menu-brand',
@@ -9,7 +11,9 @@ import {Brand} from "@app/models/brand";
   styleUrls: ['./menu-brand.component.scss']
 })
 export class MenuBrandComponent implements OnInit {
-  brand: Array<Brand> = [];
+  brands: Array<Brand> = [];
+  @Output() listBrands = new EventEmitter<Brand[]>();
+  @Output() clickEvent = new EventEmitter<any>();
 
   constructor(private brandService: BrandService) {
   }
@@ -19,9 +23,20 @@ export class MenuBrandComponent implements OnInit {
   }
 
   getHomeBrand() {
-     this.brandService.getHomeBrand().subscribe(data => {
-     this.brand = data.body;
+    log.debug('getHomeBrand');
+    this.brandService.getHomeBrand(true).subscribe(data => {
+      this.brands = data.body;
+      this.listBrands.emit(data.body);
+      // this.brands = this.brands.slice(0, 5);
+      log.debug(this.brands);
     });
   }
 
+  getDefaultImage(event: any) {
+    event.target.src = '//via.placeholder.com/198';
+  }
+
+  setMode(brands: string) {
+    log.debug(brands);
+  }
 }

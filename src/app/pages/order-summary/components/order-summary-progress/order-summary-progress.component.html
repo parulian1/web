@@ -1,0 +1,101 @@
+<div class="order-progress" *ngIf="isVirtualAccount()">
+  <div class="order-progress-header" style="margin-bottom: 20px">
+    <h2 class="title has-text-centered">
+      Selesaikan Pembayaran Anda
+    </h2>
+  </div>
+
+  <div class="order-progress-content">
+    <div class="order-progress--date-and-bank">
+      <div class="columns">
+        <div class="column is-4 is-offset-2">
+          <div class="box box-date">
+            <span class="due-date-title">Batas Pembayaran</span>
+            <span class="due-date-content">{{ payment.dateExpired | date: "d/MM/yyyy HH:mm" }}</span>
+          </div>
+        </div>
+
+        <div class="column is-4">
+          <div class="box box-bank">
+            <div class="bank-image">
+              <img width="100px;" [src]="payment.logo" alt="{{ payment.name }}" />
+            </div>
+            <div class="transfer">
+              <div>Transfer ke nomor</div>
+              <div class="transfer-number">
+                <span class="number">{{ payment.vaNumber }}</span>
+                <span class="copy" (click)="copyToClipboard(payment.vaNumber)">Salin</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-progress--info">
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <div class="box">
+            <h2 class="info-title">Informasi Pemesanan</h2>
+
+            <div class="info-desc">
+              <div class="info-desc-item">
+                <h4 class="item-header">Nomor Pesanan</h4>
+                <p>{{ orderSummary.orderNumber }}</p>
+              </div>
+              <div class="info-desc-item">
+                <h4 class="item-header">Tanggal Pemesanan</h4>
+                <p>{{ orderSummary.created | date: "d MMMM y" }}</p>
+              </div>
+              <div class="info-desc-item">
+                <h4 class="item-header">Total Belanja</h4>
+                <p>{{ payment.amount | currency: "Rp ":"symbol":"1.0" }}</p>
+              </div>
+              <div class="info-desc-item">
+                <h4 class="item-header">Metode Pembayaran</h4>
+                <p>{{ payment.name }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-progress--actions">
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <div class="box has-text-centered">
+            <a class="button-cancel" [routerLink]="['/profile/orders/', orderSummary.orderNumber]">
+              Batalkan Pesanan
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-progress--guide">
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <div class="box">
+            <h3 class="title guide-title">Petunjuk Pembayaran</h3>
+            <h3 class="guide-label">ATM {{ payment.name }} / Prima</h3>
+            <div class="guide-content">
+              <ol>
+                <li>Masukkan kartu ATM dan PIN Anda.</li>
+                <li>Di menu utama, pilih "Transaksi Lainnya"</li>
+                <li>Pilih "Transfer" kemudian pilih "Antar Bank Online".</li>
+                <li>Masukkan kode {{ payment.vaNumber }} (Kode Bank {{ payment.name }}), lalu pilih "Benar".</li>
+                <li>
+                  Masukkan jumlah harga yang akan Anda bayar secara lengkap (tanpa pembulatan) lalu tekan "Benar".
+                  Jumlah nominal yang tidak sesuai dengan tagihan akan menyebabkan transaksi gagal.
+                </li>
+                <li>Periksa rincian pembayaran Anda, jika benar pilih "Benar"</li>
+                <li>Pembayaran selesai</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

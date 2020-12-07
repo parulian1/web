@@ -1,0 +1,11 @@
+<div class="list-provinces">
+  <a *ngFor="let item of listProvinces"
+     class="province"
+     [class.active]="item === currentProvince ? 'active' : ''"
+     routerLinkActive="active"
+     [routerLink]="['/store', item]"
+     queryParamsHandling="preserve"
+     [mat-dialog-close]="true">
+    {{item | titlecase}}
+  </a>
+</div>

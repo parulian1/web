@@ -1,0 +1,22 @@
+<div
+  *ngFor="let highlight of highlights"
+  class="product-line">
+  <img *ngIf="highlight.background" alt="product-line-background" src="{{highlight.background}}"/>
+  <div class="product-line-container">
+    <div *ngIf="highlight.banner" class="product-line-banner">
+      <img alt="product-line-banner" src="{{highlight.banner}}"/>
+      <a (click)="navigateToProductPage(highlight.href)" class="btn-primary btn-inside">Lihat Semua</a>
+    </div>
+    <div class="product-line-item">
+      <ngx-slick-carousel [config]="slidesConfig"
+      (init)="slidesInit($event, highlight)">
+        <app-product-card
+          *ngFor="let productHighlight of highlight.productHighlights"
+          [page]="mobile? 'bdp-mobile': 'bdp'"
+          [productHref]="productHighlight.href"
+          class="carousel-cell" ngxSlickItem>
+        </app-product-card>
+      </ngx-slick-carousel>
+    </div>
+  </div>
+</div>

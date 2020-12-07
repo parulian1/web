@@ -1,0 +1,17 @@
+@import "src/theme/base";
+
+.container {
+  height: calc(100vh - 520px);
+
+  img {
+    width: 300px;
+    height: 300px;
+  }
+
+  a {
+    text-decoration: none;
+    font-weight: bold;
+    color: $color-accent;
+  }
+}
+

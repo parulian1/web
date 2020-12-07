@@ -1,6 +1,45 @@
 <div class="mt-header-search">
-    <span class="search-input">
-      <input type="search" placeholder="Cari Produk"/>
+  <span class="search-input">
+    <form (appClickOutsideSearch)="clickedInside()"
+          (submit)="onPressEnter()"
+          action="#"
+          class="mt-search-form">
+            <input (click)="clickedInsideData($event)"
+                   (keydown)="changeTextInput($event)"
+                   [(ngModel)]="queryText"
+                   autocomplete="off"
+                   name="search-form"
+                   placeholder="Cari Produk"
+                   type="search"/>
       <i class="material-icons icon-search">search</i>
-    </span>
+      <img [hidden]="(queryText === '')" (click)="queryText = ''"
+           class="clear-search"
+           src="assets/header/close-header-desktop.svg"/>
+    </form>
+  </span>
+  <div [hidden]="searchBox" class="search-box-suggestion">
+    <div *ngIf="!!productSuggestion" class="search-box-products">
+      <ul>
+        <li *ngFor="let item of productSuggestion">
+          <a (click)="onCloseSuggestion(false)"
+             [innerHTML]="highlight(item.name)"
+             [routerLink]="['/products', item.href | entityToSlug]"></a>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="!!showHistory && historySearchStatus === true" class="search-box-history">
+      <div class="history-top">
+        <div class="history-title">Riwayat Pencarian</div>
+        <div class="history-remove" (click)="removeHistorySearch()">Hapus Semua</div>
+      </div>
+      <div class="history-list">
+        <ul>
+          <li *ngFor="let history of showHistory">
+            <a (click)="onCloseSuggestion(true, history.key)" [routerLink]="['/products']" [queryParams]="{q: history.key}"> <img src="assets/header/history-search.svg"/>
+              {{history.key}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

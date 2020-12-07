@@ -1,0 +1,67 @@
+@import "src/theme/base";
+
+.sidenav-overlay {
+  display: none;
+}
+
+#overlayBackground {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3;
+  transition: 0.5s;
+
+  //sidenav-overlay overlay
+  .sidenav-overlay {
+    display: block;
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 4;
+    top: 0;
+    left: 0;
+    background-color: #FFFFFF;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-left: 12px;
+  }
+
+  .sidenav-overlay a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: $color-primary;
+    display: block;
+    transition: 0.3s;
+  }
+
+  .sidenav-overlay a:hover {
+    color: #f1f1f1;
+  }
+
+  .sidenav-overlay .closebtn {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 36px;
+    margin-left: 50px;
+    padding: 0;
+  }
+}
+
+// mobile
+@media screen and (max-width: $mobile-break) {
+
+  #overlayBackground {
+    .sidenav-overlay .closebtn {
+      padding: 75px 0 0 0;
+    }
+  }
+
+}

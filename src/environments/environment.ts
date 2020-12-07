@@ -8,13 +8,15 @@
 // This is useful for granularity you might need beyond just the environment.
 // Note that as usual, any environment variables you expose through it will end up in your
 // bundle, and you should not use it for any sensitive information like passwords or keys.
-import {IEnvironment} from "@env/environment.interface";
+import {IEnvironment} from '@env/environment.interface';
 
 export const environment: IEnvironment = {
   production: false,
-  BASE_API_URL: "/api",
-  FB_APPLICATION_ID: "657992455041552",
-  GOOGLE_APPLICATION_ID: "62419296650-d2cld4t7a0kfm8cvv2pk8sb51epvos62.apps.googleusercontent.com",
+  BASE_API_URL: '/api',
+  FB_APPLICATION_ID: '657992455041552',
+  GOOGLE_APPLICATION_ID: '62419296650-d2cld4t7a0kfm8cvv2pk8sb51epvos62.apps.googleusercontent.com',
+  SHIPPING_COUNTRY_CODE: 'IDN',
+  YOUTUBE_API_KEY: 'AIzaSyB7m0r7paaV5I5U6vjf0pDmocvD8-K-D-w',
 };
 
 /*

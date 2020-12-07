@@ -1,5 +1,4 @@
-import {Action, createAction, props} from '@ngrx/store';
-import {User} from "@app/models/user";
+import {Action} from '@ngrx/store';
 
 export enum AuthActionTypes {
   REGISTER = '[Auth] Register',
@@ -98,6 +97,6 @@ export type All =
   | ChangePassword
   | Login
   | LoginSuccess
-  | AuthFacebook
+  | AuthFacebook;
 
 

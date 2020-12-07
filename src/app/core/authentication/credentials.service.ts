@@ -1,5 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Credentials} from "@app/models/credentials";
+import {Store} from "@ngrx/store";
+
+import {Credentials} from '../../models/credentials';
+import {Token} from '../../models/auth';
+import {AppState} from "../../store/state/app.state";
 
 const credentialsKey = 'credentials';
 
@@ -12,10 +16,13 @@ const credentialsKey = 'credentials';
 })
 export class CredentialsService {
 
+  private static TEN_MINUTES = 1_000 * 60 * 10;
+
   private _credentials: Credentials | null = null;
   private _notification: Notification | null = null;
 
-  constructor() {
+  constructor(
+              private store: Store<AppState>) {
     const savedCredentials = sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey);
     if (savedCredentials) {
       this._credentials = JSON.parse(savedCredentials);
@@ -29,6 +36,60 @@ export class CredentialsService {
   isAuthenticated(): boolean {
     return !!this.credentials;
   }
+
+  get email(): string {
+    if (this.credentials) {
+      const creds = JSON.parse(localStorage.getItem('credentials'));
+      return creds.email;
+    }
+
+    return null;
+  }
+
+  get refreshToken(): string {
+    if (!this.credentials) {
+      return null;
+    }
+    return this.credentials.refresh;
+  }
+
+  /**
+   * Indicates whether the current token is expired.
+   */
+  get isTokenExpired(): boolean {
+    if (!this.parsedToken) {
+      return false;
+    }
+    return this.tokenExpired(this.parsedToken.exp);
+  }
+
+  get isRefreshTokenExpired(): boolean {
+    if (!this.parsedRefreshToken) {
+      return false;
+    }
+    return this.tokenExpired(this.parsedRefreshToken.exp);
+    // return this.parsedRefreshToken.exp <= Date.now();
+  }
+
+  get canRefreshToken(): boolean {
+    if (!this.parsedRefreshToken) {
+      return false;
+    }
+    return !this.isRefreshTokenExpired;
+  }
+
+  get shouldRefreshToken(): boolean {
+    if (this.isAuthenticated() && this.tokenExpired(this.parsedToken.exp, CredentialsService.TEN_MINUTES)) {
+      // if the user's token is expiring within 10 minutes
+      return true;
+    } else if (this.canRefreshToken) {
+      // user's refresh token is still valid
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 
   /**
    * Gets the user credentials.
@@ -44,10 +105,47 @@ export class CredentialsService {
    */
   get token(): string | null {
     if (this.isAuthenticated()) {
-      return this._credentials.token;
+      return this._credentials.access;
     }
   }
 
+  set token(value: string) {
+    if (value === this.token) {
+      return;
+    }
+
+    if (value === null) {
+      localStorage.removeItem('credentials');
+    } else {
+      const creds = JSON.parse(localStorage.getItem('credentials'));
+      const updatedCreds = {
+        access: value,
+        email: creds.email,
+        refresh: this.refreshToken
+      };
+      localStorage.removeItem('credentials');
+      localStorage.setItem(credentialsKey, JSON.stringify(updatedCreds));
+
+    }
+  }
+
+
+  /**
+   * Returned the parsed data from within the user's stored JWT.
+   */
+  get parsedToken(): Token | null {
+    if (this.isAuthenticated()) {
+      const tokenBody = this.token.split('.')[1];
+      return JSON.parse(atob(tokenBody)) as Token;
+    }
+  }
+
+  get parsedRefreshToken(): Token {
+    if (!!this.refreshToken) {
+      const refreshTokenBody = this.refreshToken.split('.')[1];
+      return JSON.parse(atob(refreshTokenBody)) as Token;
+    }
+  }
 
   /**
    * Sets the user credentials.
@@ -68,11 +166,18 @@ export class CredentialsService {
     }
   }
 
-  setVerifyEmail(res: Object) {
+  setVerifyEmail(res: object) {
     if (res) {
-      localStorage.setItem('message',JSON.stringify(res));
+      localStorage.setItem('message', JSON.stringify(res));
     }
   }
 
+  setNewToken(newToken: string) {
+    this._credentials.access = newToken;
+  }
+
+  private tokenExpired(expiry: number, extra: number = 0): boolean {
+    return (Math.floor((new Date()).getTime() / 1000) + extra) >= expiry;
+  }
 
 }

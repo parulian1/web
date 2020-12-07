@@ -1,4 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {MatDialogRef} from "@angular/material/dialog";
+import {SideMenuHeaderComponent} from "@app/shell/header/side-menu-header";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-login',
@@ -6,13 +9,14 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  public formType: String;
+  public formType: string;
 
-  constructor() {
+  constructor(private title: Title) {
   }
 
   ngOnInit(): void {
     this.formType = 'Login';
+    this.title.setTitle('Login ' + ' - Martha Tilaar Shop')
   }
 
 }

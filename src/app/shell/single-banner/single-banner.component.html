@@ -1,0 +1,12 @@
+<div class="single-banner">
+  <ng-container *ngIf="page === 'bdp'">
+    <img class="single-banner-img" src="{{brand.bannerImage}}" (error)="changeSource($event)"
+         alt="top single brand banner">
+    <button class="btn-primary btn-inside" (click)="setBrand(brand.href)">Lihat Semua
+      Produk {{brand.name | titlecase}}</button>
+  </ng-container>
+
+  <ng-container *ngIf="page === 'promo'">
+    <img class="single-banner-img" src="{{imgHref}}" (error)="changeSource($event)" alt="single banner">
+  </ng-container>
+</div>

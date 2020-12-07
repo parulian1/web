@@ -1,0 +1,13 @@
+<div *ngFor="let highlight of highlights" class="product-line">
+  <div class="highlight-title">{{highlight.name|titlecase}}</div>
+  <div class="product-line-container">
+    <div class="product-line-item">
+      <ngx-slick-carousel [config]="slidesConfig">
+        <app-product-card ngxSlickItem *ngFor="let productHighlight of highlight.productHighlights"
+          class="carousel-cell"
+          [productHref]="productHighlight.href">
+        </app-product-card>
+      </ngx-slick-carousel>
+    </div>
+  </div>
+</div>

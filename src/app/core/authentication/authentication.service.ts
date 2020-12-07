@@ -37,6 +37,13 @@ export class AuthenticationService {
   }
 
   /**
+   * Attempts to refresh the user's current token.
+   */
+  refreshToken(): Observable<Credentials> {
+    throw new Error('Waduh');
+  }
+
+  /**
    * Logs out the user and clear credentials.
    * @return True if the user was logged out successfully.
    */

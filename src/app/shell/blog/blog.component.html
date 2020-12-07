@@ -1,0 +1,39 @@
+<div class="blog-wrapper">
+  <div class="blog-header">
+    <span class="blog-title">Blog</span>
+    <a class="blog-readmore"
+       target="_blank"
+       href="{{blogBaseUrl}}">
+      Lihat Semua
+    </a>
+  </div>
+
+  <div class="blog-content">
+
+    <ngx-slick-carousel class="carousel"
+                        #slickModal="slick-carousel"
+                        [config]="slideConfig">
+      <div ngxSlickItem *ngFor="let blog of blogs" class="slide carousel-item">
+        <div class="blog-card">
+          <a href="{{blog.short_URL}}" target="_blank" class="blog-card-linked">
+            <div class="blog-card__image">
+              <img [src]="blog.featured_image || defaultImg"
+                   height="277"
+                   width="400"
+                   alt="{{blog.title}}">
+            </div>
+            <div class="blog-card__content">
+              <span class="blog-card__title">{{blog.title}}</span>
+
+              <span class="blog-card__desc">{{(blog.excerpt|stripHtml|slice:0:150) + '...'}}</span>
+
+              <span class="blog-card__date">
+                {{blog.date|date: 'EEEE, dd LLLL yyyy | HH:mm'}}
+              </span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </ngx-slick-carousel>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 const HttpsProxyAgent = require('https-proxy-agent');
 
-/*
+/**
  * API proxy configuration.
  * This allows you to proxy HTTP request like `http.get('/api/stuff')` to another server/port.
  * This is especially useful during app development to avoid CORS issues while running a local server.
@@ -10,13 +10,13 @@ const proxyConfig = [
   {
     context: "/api",
     pathRewrite: { '^/api': '' },
-    target: "http://localhost:8080/api",
+    target: "https://staging.bhisma.cloud/api",
     secure: false,
     changeOrigin: true,
   },
 ];
 
-/*
+/**
  * Configures a corporate proxy agent for the API proxy if needed.
  */
 function setupForCorporateProxy(proxyConfig) {
@@ -28,7 +28,6 @@ function setupForCorporateProxy(proxyConfig) {
   let agent = null;
 
   if (proxyServer) {
-    console.log(`Using corporate proxy server: ${proxyServer}`);
     agent = new HttpsProxyAgent(proxyServer);
     proxyConfig.forEach(entry => {
       entry.agent = agent;

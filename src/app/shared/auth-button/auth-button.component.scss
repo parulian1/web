@@ -8,9 +8,24 @@
   line-height: 22px;
   background: 0 0;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
   a {
     text-decoration: none;
     color: $color-primary;
+    margin-left: 4px;
+  }
+
+  .auth-user {
+    margin-left: 4px;
+  }
+}
+
+@media screen and (max-width: $mobile-break) {
+  .auth-btn {
+    font-size: 14px;
+    line-height: 19px;
   }
 }

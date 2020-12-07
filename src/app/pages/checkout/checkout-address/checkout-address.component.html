@@ -1,0 +1,77 @@
+<div class="checkout-address" [class.active]="displayStatus === 'list'">
+  <div class="title">
+    <span class="main-title">Alamat Pengiriman</span>
+    <span class="change-title"
+          (click)="setActiveAddress()"
+          *ngIf="addressValue  && displayStatus === 'main'">Ubah</span>
+  </div>
+  <div class="selected-address" *ngIf="addressValue && displayStatus === 'main'">
+    <div class="main-address">
+      <div class="default-label">
+        <span class="name"><b>{{addressValue[0].name}}</b>  |  {{addressValue[0].shipToName}}</span>
+        <span class="main-address-label" *ngIf="addressValue[0].href === defaultAddr.href">Alamat Utama</span>
+      </div>
+      <span class="address">{{addressValue[0].street}}</span>
+      <span class="city">{{addressValue[0].district|titlecase}} - {{addressValue[0].city|titlecase}}</span>
+      <span class="state">{{addressValue[0].state|titlecase}} - {{addressValue[0].zipcode}}</span>
+      <div class="additional">
+        <span class="phone">{{addressValue[0].phoneNumber}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="list-address" *ngIf="displayStatus === 'list' && listAddress.length !== 0">
+    <mat-radio-group [(ngModel)]="addressPick" class="list-address-radio-group">
+      <mat-radio-button
+        [value]="addr.href"
+        [checked]="(addr.href === defaultAddr.href)"
+        (change)="onChange($event)"
+        *ngFor="let addr of listAddress">
+        <div class="list-address-item">
+          <div class="default-label">
+            <span class="name"><b>{{addr.name}}</b>  |  {{addr.shipToName}}</span>
+            <span class="main-address-label" *ngIf="addr.isDefaultShipping">Alamat Utama</span>
+          </div>
+          <span class="address">{{addr.street}}</span>
+          <span class="city">{{addr.district|titlecase}} - {{addr.city|titlecase}}</span>
+          <span class="state">{{addr.state|titlecase}} - {{addr.zipcode}}</span>
+          <div class="additional">
+            <span class="phone">{{addr.phoneNumber}}</span>
+            <span>
+              <a (click)="showAddressDialog(addr)">Ubah Alamat</a>
+              <ng-container *ngIf="addr.href !== defaultAddr.href">
+                |<a (click)="setMainAddress(addr.href, mainAddress)">Jadikan Alamat Utama</a>
+              </ng-container>
+            </span>
+          </div>
+        </div>
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <div class='empty-address'
+       *ngIf="listAddress.length === 0">
+    <span>Tidak ada alamat pengiriman</span>
+  </div>
+  <div class="bottom-control" *ngIf="displayStatus === 'list'">
+    <button class="add-address" (click)="showAddressDialog()">
+      <span class="material-icons">add</span>Tambah Alamat Pengiriman
+    </button>
+    <button class="choose-address" *ngIf="listAddress.length !== 0" (click)="togglePanel()">Pilih</button>
+  </div>
+</div>
+
+<ng-template #mainAddress>
+  <mat-dialog-content style="display: flex;justify-content: center;font-size:16px;">
+    <span>Anda akan menjadikan alamat ini sebagai alamat utama</span>
+  </mat-dialog-content>
+  <mat-dialog-actions style="display: flex;justify-content: center;padding: 8px 0;">
+    <button
+      [mat-dialog-close]="false"
+      style="border: none;background: none;font-size: 14px;">Batal
+    </button>
+    <button
+      [mat-dialog-close]="true" cdkFocusInitial
+      style="background: var(--color-accent);color: var(--color-white); padding: 4px 8px; border-radius: 4px;border: none;font-size: 14px;">
+      Ya, jadikan alamat utama
+    </button>
+  </mat-dialog-actions>
+</ng-template>

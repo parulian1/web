@@ -1,0 +1,583 @@
+@import "src/theme/base";
+
+::ng-deep .md-drppicker {
+  background: white;
+}
+
+::ng-deep .md-drppicker td.active, ::ng-deep .md-drppicker td.active:hover {
+  background-color: #037EE5 !important;
+  color: #fff;
+  border-radius: 12px;
+}
+
+::ng-deep .md-drppicker td.in-range {
+  background-color: #E6F3FF;
+}
+
+::ng-deep .md-drppicker td.start-date {
+  border-radius: 2em !important;
+}
+
+::ng-deep .md-drppicker td.end-date {
+  border-radius: 2em !important;
+}
+
+.parent-order-div {
+  width: 918px;
+
+  .search-filter-modal {
+    display: none;
+  }
+}
+
+.filter-box {
+  height: 40px;
+
+  .search-input {
+    border: none;
+    position: relative;
+
+    input {
+      width: 248px;
+      font-family: $font-primary;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 19px;
+      font-feature-settings: 'liga' off;
+
+      padding: 10px 0 10px 40px;
+      background: $white;
+      box-sizing: border-box;
+      border-radius: $border-radius;
+      border: 1px solid #E5E5E5;
+      outline: none;
+    }
+
+    .icon-search {
+      position: absolute;
+      left: 10px;
+      top: 1px;
+      color: $color-grey;
+    }
+  }
+
+  .filter-date {
+    margin-left: 16px;
+    border: none;
+    position: relative;
+
+    input {
+      width: 204px;
+      font-family: $font-primary;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 19px;
+      font-feature-settings: 'liga' off;
+
+      padding: 10px 0 10px 10px;
+      background: $white;
+      box-sizing: border-box;
+      border-radius: $border-radius;
+      border: 1px solid #E5E5E5;
+      outline: none;
+    }
+
+    .icon {
+      position: absolute;
+      right: 10px;
+      margin-top: 8px;
+      color: black;
+      cursor: pointer;
+    }
+  }
+
+  .order-status-selection {
+    cursor: pointer;
+    height: 40px;
+    padding: 10px 12px;
+    margin-left: 16px;
+
+    background: $white;
+    border: 1px solid #E5E5E5;
+    box-sizing: border-box;
+    border-radius: $border-radius;
+    outline: none;
+
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    font-feature-settings: 'liga' off;
+
+    option {
+      background: $white;
+      border: none;
+      box-sizing: border-box;
+      box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.25);
+      border-radius: 4px;
+    }
+  }
+
+  .sort-order {
+    cursor: pointer;
+    height: 40px;
+    padding: 10px 12px;
+    float: right;
+
+    background: $white;
+    border: 1px solid #E5E5E5;
+    box-sizing: border-box;
+    border-radius: $border-radius;
+    outline: none;
+
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    font-feature-settings: 'liga' off;
+  }
+}
+
+.search-results {
+  width: 100%;
+  height: 100%;
+  margin-bottom: 60px;
+
+  .order-box {
+    width: 918px;
+
+    background: $white;
+    border: 1px solid #E5E5E5;
+    box-sizing: border-box;
+    border-radius: 8px;
+
+    padding: 12px 16px;
+    margin-top: 16px;
+
+    table {
+      width: 100%;
+      font-family: $font-primary;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      font-feature-settings: 'liga' off;
+
+      text-align: left;
+
+      .table-title {
+        color: #979797;
+        line-height: 19px;
+        font-weight: normal;
+      }
+
+      td {
+        padding-top: 4px;
+        line-height: 18px;
+        font-weight: bold;
+      }
+    }
+
+    hr {
+      height: 1px;
+      background-color: #E5E5E5;
+      border: none;
+    }
+
+    .product-section {
+      display: flex;
+      width: 100%;
+
+      .description-div {
+        width: 100%;
+        margin-left: 12px;
+
+        .product-title {
+          margin: 8px 0 8px 0;
+
+          font-family: $color-primary;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 18px;
+
+          font-feature-settings: 'liga' off;
+        }
+
+        .product-qty {
+          font-family: $color-primary;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 19px;
+          font-feature-settings: 'liga' off;
+
+          margin-right: 24px;
+        }
+
+        .product-price {
+          font-family: $color-primary;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 18px;
+          font-feature-settings: 'liga' off;
+        }
+      }
+
+      .button-div {
+        width: 100%;
+        align-items: end;
+
+        button {
+          font-family: $font-primary;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 16px;
+          line-height: 22px;
+          align-items: center;
+          text-align: center;
+          font-feature-settings: 'liga' off;
+          color: #000000;
+
+          float: right;
+          margin-top: 20px;
+
+          border: 1px solid #000000;
+          box-sizing: border-box;
+          border-radius: 4px;
+          background: white;
+
+          padding: 9px 32px;
+        }
+      }
+
+      .image-div {
+        .product-img {
+          object-fit: cover;
+        }
+      }
+    }
+
+    .order-status-text {
+      padding: 4px 12px;
+      border-radius: 4px;
+
+      font-family: $font-primary;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 18px;
+    }
+
+    .unpaid {
+      background: #FFF4EA;
+      color: #F2994A;
+    }
+
+    .paid {
+      background: #E5E5E5;
+      color: #5A5A5A;
+    }
+
+    .done {
+      background: #E6F3FF;
+      color: #037EE5;
+    }
+
+    .cancel {
+      background: pink;
+      color: red;
+    }
+  }
+}
+
+.title-big {
+  font-family: $font-secondary;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 28px;
+  line-height: 37px;
+
+  margin-bottom: 12px;
+}
+
+.no-order-div {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+
+  .not-order-img {
+    margin-top: 48px;
+    width: 300px;
+    height: 300px;
+  }
+
+  .no-order-label {
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 22px;
+    font-feature-settings: 'liga' off;
+    color: $color-primary;
+  }
+}
+
+// mobile
+@media screen and (max-width: $mobile-break) {
+  .parent-order-div {
+    width: 100%;
+
+    .search-filter-modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 100; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0, 0, 0); /* Fallback color */
+      background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+
+      .sf-modal-content {
+        background-color: #fefefe;
+        margin: 120px auto;
+        padding: 12px;
+        border: 1px solid #888;
+        width: 80%;
+        border-radius: $border-radius;
+
+        /* The Close Button */
+        .sf-modal-close {
+          color: #aaaaaa;
+          float: right;
+          font-weight: bold;
+        }
+
+        .sf-modal-close:hover,
+        .sf-modal-close:focus {
+          color: #000;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        .search-filter-modal-title {
+          font-family: $font-secondary;
+          font-size: 18px;
+          line-height: 24px;
+          margin: 0;
+        }
+
+        .sf-search-input {
+          width: 100%;
+          background: $white;
+          border: 1px solid #E5E5E5;
+          box-sizing: border-box;
+          border-radius: $border-radius;
+          margin-top: 12px;
+          padding: 10px 12px;
+        }
+
+        .sf-filter-date {
+          position: relative;
+          margin-top: 12px;
+          input {
+            width: 98%;
+            font-family: $font-primary;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 17px;
+            font-feature-settings: 'liga' off;
+
+            padding: 10px 12px;
+            background: $white;
+            box-sizing: border-box;
+            border-radius: $border-radius;
+            border: 1px solid #E5E5E5;
+            outline: none;
+            margin: auto;
+          }
+
+          .icon {
+            position: absolute;
+            right: 10px;
+            margin-top: 8px;
+            color: black;
+            cursor: pointer;
+          }
+        }
+
+        .sf-order-status {
+          width: 98%;
+          cursor: pointer;
+          height: 40px;
+          padding: 10px 12px;
+          margin-top: 16px;
+
+          background: $white;
+          border: 1px solid #E5E5E5;
+          box-sizing: border-box;
+          border-radius: $border-radius;
+          outline: none;
+
+          font-family: $font-primary;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 17px;
+          font-feature-settings: 'liga' off;
+
+          option {
+            background: $white;
+            border: none;
+            font-size: 12px;
+            line-height: 17px;
+            box-sizing: border-box;
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 4px;
+          }
+        }
+
+        .sf-modal-button {
+          margin-top: 16px;
+          width: 100%;
+          background: #F03BB3;
+          border-radius: 4px;
+          padding: 9px;
+
+          font-family: $font-primary;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 19px;
+
+          text-align: center;
+          font-feature-settings: 'liga' off;
+
+          color: $white;
+
+          outline: none;
+          border: none;
+        }
+      }
+    }
+
+    .title-big {
+      margin-top: 20px;
+      font-size: 18px;
+      line-height: 24px;
+    }
+
+    .filter-box {
+      width: 100%;
+
+      .search-input {
+
+        input {
+          width: 10%;
+        }
+      }
+
+      .filter-btn {
+        background: $white;
+        border: 1px solid #E5E5E5;
+        box-sizing: border-box;
+        border-radius: $border-radius;
+        padding: 9px;
+        width: 40%;
+        margin-left: 12px;
+        font-family: $font-primary;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 17px;
+        text-align: center;
+      }
+
+      .sort-order {
+        width: 40%;
+        font-size: 12px;
+        line-height: 17px;
+      }
+    }
+  }
+
+  .search-results {
+
+    .order-box {
+      width: 100%;
+
+      .not-mobile {
+        display: none;
+      }
+
+      table {
+
+        .table-title {
+          font-size: 12px;
+          line-height: 17px;
+        }
+
+        td {
+          font-size: 12px;
+          line-height: 16px;
+        }
+
+        .order-status-text {
+          font-size: 12px;
+          line-height: 17px;
+        }
+      }
+
+      .product-section {
+        .image-div {
+          .product-img {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+          }
+        }
+
+        .description-div {
+          .product-title, .product-qty, .product-price {
+            font-size: 12px;
+            line-height: 16px;
+          }
+        }
+      }
+
+      .button-div {
+        width: 100%;
+
+        button {
+          width: 100%;
+          font-family: $font-primary;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 19px;
+          align-items: center;
+          text-align: center;
+          font-feature-settings: 'liga' off;
+          color: #000000;
+
+          margin-top: 12px;
+
+          border: 1px solid #000000;
+          box-sizing: border-box;
+          border-radius: 4px;
+          background: white;
+
+          padding: 9px 32px;
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,8 @@
 @import "src/theme/base";
-
-.sidebar-menu-profile {
+.content {
+  padding: 20px 16px 40px 16px;
+}
+.sidebar-menu, .sidebar-menu-profile {
   width: 211px;
   display: flex;
 
@@ -9,4 +11,17 @@
   }
 }
 
+// mobile
+@media screen and (max-width: $mobile-break) {
+  .content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 7rem 16px 0 16px;
+  }
+
+  .sidebar-menu-profile {
+    width: 100%;
+  }
+}
 

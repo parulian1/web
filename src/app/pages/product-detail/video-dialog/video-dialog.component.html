@@ -1,0 +1,13 @@
+<div class="video-dialog">
+  <div class="top-dialog">
+    <span mat-dialog-title class="top-dialog-title">{{data.name}}</span>
+    <span mat-dialog-close class="top-dialog-close"><i class="material-icons">close</i></span>
+  </div>
+  <mat-dialog-content #youtubePlayer>
+    <youtube-player
+      class="youtube-video"
+      [videoId]="data.id"
+      [height]="videoHeight"
+      [width]="videoWidth"></youtube-player>
+  </mat-dialog-content>
+</div>

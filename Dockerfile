@@ -17,7 +17,7 @@ RUN npm install -q
 
 COPY . /root
 
-RUN ng build --configuration $ENV
+RUN ng build --configuration staging
 
 # ---------- Release Image -----------
 # pull official base image
@@ -27,3 +27,4 @@ WORKDIR /usr/share/nginx/html/
 
 COPY --from=Builder /root/dist/martha-web/browser /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
+

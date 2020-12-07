@@ -1,6 +1,5 @@
 @import "src/theme/base";
 
-
 .menu-brand {
   display: block;
   align-items: center;
@@ -19,13 +18,18 @@
     z-index: 1;
     border-radius: $border-radius;
     margin: 0 0 0 10px;
+    max-height: 500px;
+    overflow: hidden;
+    overflow-y: scroll;
 
     .list-brands {
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: flex-start;
+      flex-wrap: wrap;
 
       .brand {
+        margin: 16px 8px 0 8px;
         width: 200px;
         height: 200px;
         border: solid 1px $color-grey;
@@ -34,6 +38,7 @@
         img {
           width: 100%;
           height: 100%;
+          object-fit: contain;
         }
       }
 
@@ -47,6 +52,10 @@
     width: 120px;
     height: 40px;
     cursor: pointer;
+
+    .arrow {
+      display: none;
+    }
 
 
     a {
@@ -74,4 +83,24 @@
 
 }
 
+@media screen and (max-width: $mobile-break) {
+  .menu-brand {
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: auto;
+
+      a {
+        font-size: 14px;
+        line-height: 19px;
+      }
+
+      .arrow {
+        display: flex;
+        font-weight: bold;
+      }
+    }
+  }
+}
 

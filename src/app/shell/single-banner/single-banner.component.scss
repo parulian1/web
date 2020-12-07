@@ -1,0 +1,108 @@
+@import "src/theme/base";
+
+.single-banner {
+  position: relative;
+  max-width: 1152px;
+  max-height: 360px;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+
+  .single-banner-img {
+    width: fit-content;
+    height: -webkit-fill-available;
+    object-fit: scale-down;
+    width: 100%;
+    height: 100%;
+  }
+
+  .btn-inside {
+    cursor: pointer;
+    position: absolute;
+    right: 64px;
+    bottom: 42px;
+
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 22px;
+
+    margin: 0;
+    padding: 9px 35px;
+
+    &:focus {
+      outline-color: transparent;
+    }
+
+    &:active {
+      vertical-align: top;
+      padding: 9px 35px 5px 35px;
+    }
+  }
+}
+
+// mobile
+@media screen and (max-width: $mobile-break) {
+  .single-banner {
+    height: 168px;
+
+    .single-banner-img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+
+    .btn-inside {
+      left: 0;
+      bottom: 8px;
+      right: 0;
+      margin: auto;
+      padding: 9px 73px;
+      font-size: 14px;
+      line-height: 19px;
+      height: auto;
+
+      &:active {
+        vertical-align: top;
+        padding: 9px 73px 5px 73px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $tablet-break) {
+  .single-banner {
+    margin: 0 auto;
+
+    &-image {
+      object-fit: scale-down;
+    }
+
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .single-banner {
+    margin: 0 auto;
+
+    &-image {
+      object-fit: contain;
+    }
+  }
+}
+
+@media screen and (min-width: 480px) and (max-width: 768px) {
+  .single-banner {
+    margin: 0 auto;
+
+    &-image {
+      object-fit: scale-down;
+    }
+
+    .btn-inside {
+      bottom: 75px;
+    }
+  }
+}

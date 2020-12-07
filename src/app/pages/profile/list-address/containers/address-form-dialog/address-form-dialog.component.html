@@ -1,0 +1,189 @@
+<div class="address-form-wrapper">
+  <div class="address-form-header">
+    <h1 class="title">
+      {{ data.isUpdated ? "Update Alamat" : "Tambah Alamat" }}
+    </h1>
+
+    <div style="" class="close-btn">
+      <span class="close" (click)="onClose()">X</span>
+    </div>
+    <div style="clear: both"></div>
+  </div>
+
+  <div class="address-form-content">
+    <form [formGroup]="form" (submit)="onSubmit()" style="width: 100%">
+      <!-- Name (Label of Address) -->
+      <div class="field">
+        <label class="label">Label Alamat* (Contoh: Rumah, Kantor, Kosan)</label>
+        <div class="control">
+          <input
+            class="input"
+            [class.is-danger]="name.invalid && (name.dirty || name.touched)"
+            type="text"
+            placeholder="Masukan Label Alamat"
+            [formControl]="name"
+          />
+        </div>
+        <p *ngIf="name.invalid && (name.dirty || name.touched)" class="help is-danger">Label Alamat harus diisi</p>
+      </div>
+
+      <!-- Group: ShipName and PhoneNumber -->
+      <div class="field is-horizontal">
+        <div class="field-body">
+          <!-- ShipName -->
+          <div class="field">
+            <label class="label">Nama Penerima</label>
+            <div class="control">
+              <input
+                class="input"
+                [class.is-danger]="shipToName.invalid && (shipToName.dirty || shipToName.touched)"
+                type="text"
+                placeholder="Masukan Nama Penerima"
+                [formControl]="shipToName"
+              />
+            </div>
+            <p *ngIf="shipToName.invalid && (shipToName.dirty || shipToName.touched)" class="help is-danger">
+              Nama Penerima Harus diisi
+            </p>
+          </div>
+
+          <!-- Phone Number -->
+          <div class="field">
+            <label class="label">No. Handphone*</label>
+            <div class="control">
+              <input
+                class="input"
+                [class.is-danger]="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)"
+                type="text"
+                placeholder="Masukan Nomor Handphone"
+                [formControl]="phoneNumber"
+              />
+            </div>
+            <p *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)" class="help is-danger">
+              No. Handphone harus diisi
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group: Province and City -->
+      <div class="field field-group is-horizontal">
+        <div class="field-body">
+          <!-- Province / State  -->
+          <div class="field">
+            <label class="label">Provinsi*</label>
+            <div class="control">
+              <div class="select is-fullwidth" [class.is-danger]="state.invalid && (state.dirty || state.touched)">
+                <select name="state" [formControl]="state" (ngModelChange)="selectedState($event)">
+                  <option [ngValue]="null">Cari Provinsi</option>
+                  <option *ngFor="let state of stateChoices" [ngValue]="state">
+                    {{ state.name | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <p *ngIf="state.invalid && (state.dirty || state.touched)" class="help is-danger">Provinsi harus diisi</p>
+          </div>
+
+          <!-- City / Area  -->
+          <div class="field">
+            <label class="label">Kota / Kabupaten*</label>
+            <div class="control">
+              <div class="select is-fullwidth" [class.is-danger]="city.invalid && (city.dirty || city.touched)">
+                <select name="city" [formControl]="city" (ngModelChange)="selectedCity($event)">
+                  <option [ngValue]="null">Cari Kota / Kabupaten</option>
+                  <option *ngFor="let city of cityChoices" [ngValue]="city">
+                    {{ city.name | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <p *ngIf="city.invalid && (city.dirty || city.touched)" class="help is-danger">
+              Kota / Kabupaten harus diisi
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group: SubDistrict and ZipCode -->
+      <div class="field field-group is-horizontal">
+        <div class="field-body">
+          <!-- SubDistrict / Kecamatan  -->
+          <div class="field">
+            <label class="label">Kecamatan*</label>
+            <div class="control">
+              <div
+                class="select is-fullwidth"
+                [class.is-danger]="subDistrict.invalid && (subDistrict.dirty || subDistrict.touched)"
+              >
+                <select name="subDistrict" [formControl]="subDistrict" (ngModelChange)="selectedSubDistrict($event)">
+                  <option [ngValue]="null">Cari Kecamatan</option>
+                  <option *ngFor="let subDistrict of subDistrictChoices" [ngValue]="subDistrict">
+                    {{ subDistrict.name | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <p *ngIf="subDistrict.invalid && (subDistrict.dirty || subDistrict.touched)" class="help is-danger">
+              Kecamatan harus diisi
+            </p>
+          </div>
+
+          <!-- ZipCode / (District - ZipCode)  -->
+          <div class="field">
+            <label class="label">Kode Pos*</label>
+            <div class="control">
+              <div
+                class="select is-fullwidth"
+                [class.is-danger]="district.invalid && (district.dirty || district.touched)"
+              >
+                <select name="district" [formControl]="district">
+                  <option [ngValue]="null">Cari Kode Pos</option>
+                  <option *ngFor="let district of districtChoices" [ngValue]="district">
+                    {{ district.district | titlecase }} - {{ district.postalCode }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <p *ngIf="district.invalid && (district.dirty || district.touched)" class="help is-danger">
+              Masukkan kode pos
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Street -->
+      <div class="field">
+        <label class="label">Alamat Lengkap*</label>
+        <div class="control">
+          <input
+            class="input"
+            [class.is-danger]="street.invalid && (street.dirty || street.touched)"
+            type="text"
+            placeholder="Masukan Alamat lengkap"
+            [formControl]="street"
+          />
+        </div>
+        <p *ngIf="street.invalid && (street.dirty || street.touched)" class="help is-danger">Masukkan alamat lengkap</p>
+      </div>
+
+      <!-- Map -->
+      <div class="field">
+        <label class="label">Pin Alamat*</label>
+        <div class="coordinate" *ngIf="!data.isUpdated && !showMap">
+          <a (click)="toggleShowMap()">Pilih koordinat alamat</a>
+        </div>
+        <app-address-map *ngIf="data.isUpdated || showMap" [parent]="form"> </app-address-map>
+      </div>
+
+      <div class="field">
+        <div class="control">
+          <button class="button button--display-fullwidth" type="submit" [class.button--is-disabled]="form.invalid">
+            Simpan Alamat
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

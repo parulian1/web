@@ -1,0 +1,67 @@
+<div class="order-done">
+  <div class="columns">
+    <div class="column is-12 has-text-centered">
+      <div class="order-done-image" *ngIf="orderSummary.payment.status === 'paid'; else elseFailedImage ">
+        <img src="assets/order-success.png"
+             alt="order-success-img"/>
+      </div>
+      <ng-template #elseFailedImage>
+        <div class="order-failed-image">
+          <img src="assets/order-failed.png"
+               alt="order-failed-img"/>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-12 has-text-centered">
+      <div class="order-success-title" *ngIf="orderSummary.payment.status === 'paid'; else elseFailedTitle ">
+        <h2 class="title-main">Transaksi Berhasil</h2>
+        <span class="title-sub">Terima kasih sudah berbelanja di Martha Tilaar Shop</span>
+      </div>
+
+      <ng-template #elseFailedTitle>
+        <div class="order-fail-title">
+          <h2 class="title-main">Transaksi Gagal</h2>
+          <span class="title-sub">Pembayaran dibatalkan oleh customer</span>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="columns is-multiline">
+    <div class="column is-8 is-offset-2">
+      <div class="order-done-info">
+        <div class="box">
+          <h2 class="info-title">Informasi Pemesanan</h2>
+
+          <div class="info-desc">
+            <div class="info-desc-item">
+              <h4 class="item-header">Nomor Pesanan</h4>
+              <p>{{ orderSummary.orderNumber }}</p>
+            </div>
+            <div class="info-desc-item">
+              <h4 class="item-header">Tanggal Pemesanan</h4>
+              <p>{{ orderSummary.created | date: "d MMMM y" }}</p>
+            </div>
+            <div class="info-desc-item">
+              <h4 class="item-header">Total Belanja</h4>
+              <p>{{ orderSummary.payment.amount | currency: "Rp ":"symbol":"1.0" }}</p>
+            </div>
+            <div class="info-desc-item">
+              <h4 class="item-header">Metode Pembayaran</h4>
+              <p>{{ orderSummary.payment.name }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-done-action has-text-centered" style="margin-top: 20px;">
+        <div class="box">
+          <a [routerLink]="['/profile/orders/']">Lihat Daftar Transaksi</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

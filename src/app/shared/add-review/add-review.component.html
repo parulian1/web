@@ -1,0 +1,67 @@
+<div class="review-add">
+  <div class="review-add-title">
+    <i class="material-icons">arrow_back_ios</i>
+    <span>Mengulas Produk</span>
+  </div>
+  <div class="review-add-main">
+    <div class="review-add-main-content">
+      <div class="content-order">
+        <div class="content-order-label">
+          <span>Nomor Order</span>
+          <span>Toko Pengiriman</span>
+          <span>Pesanan Diterima</span>
+          <span>Status Ulasan</span>
+        </div>
+        <div class="content-order-value">
+          <span>{{ parentOrderNumber }}</span>
+          <span>{{ orderWarehouse }}</span>
+          <span>{{ orderDate|date: 'dd MMM yyyy | hh:mm' }}</span>
+          <span>{{ reviewStatus }}</span>
+        </div>
+      </div>
+      <div class="content-product">
+        <img [src]="productImg" alt="{{ productName }}"/>
+        <span>{{ productName }}</span>
+      </div>
+      <div class="content-form">
+        <div class="content-form-stars">
+          <label>Bagaimana kualitas produk ini secara keseluruhan?</label>
+          <mat-star-rating
+            [starCount]="5"
+            [rating]="rating"
+            [color]="color"
+            (ratingUpdated)="onRatingUpdated($event)"></mat-star-rating>
+        </div>
+        <div class="content-form-input">
+          <label>Berikan ulasan untuk produk ini</label>
+          <div class="input-review">
+              <textarea
+                [(ngModel)]="review"
+                [maxLength]="maxChars"
+                [minLength]="10"
+                placeholder="Tulis deskripsi Anda mengenai produk ini"></textarea>
+            <span class="limit">{{ review.length }}/{{ maxChars }}</span>
+          </div>
+          <div class="btn-review">
+            <button [disabled]="isButtonDisabled"
+            (click)="createReview()">Kirim</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="review-add-main-info">
+      <div class="info-title">
+        <i class="material-icons">info</i>
+        <span>Tips Menulis Ulasan</span>
+      </div>
+      <div class="info-content">
+        <ol>
+          <li>Ceritakan pengalamanmu menggunakan barang ini.</li>
+          <li>Sebutkan apa yang kamu suka/tidak suka dari barang ini.</li>
+          <li>Seberapa sesuai barang tersebut dengan harapan kamu.</li>
+          <li>Jangan menuliskan konten/informasi yang tidak berkaitan dengan barang.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>

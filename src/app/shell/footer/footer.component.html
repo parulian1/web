@@ -1,15 +1,75 @@
 <div class="footer">
-  <div class="social-media">
-    <div class="list-social-media">
-      <span>Follow dan invite social media kami di marthatilaar</span>
-      <img src="assets/footer/instagram.png">
-      <img src="assets/footer/twitter.png">
-      <img src="assets/footer/facebook.png">
+  <div class="inner-container">
+    <div class="newsletter">
+      <form [formGroup]="form" (submit)="subscribe()">
+        <div class="desc">
+          <span>Jadilah yang pertama tahu berita terbaru, event dan penawaran spesial kami</span>
+        </div>
+        <div class="email">
+          <input type="text"
+                 placeholder="Masukkan alamat email Anda"
+                 [formControl]="email"
+                 class="input"
+                 [class.is-danger]="isValidFormControl(email)"/>
+          <p *ngIf="isValidFormControl(email)" class="email-error">
+            <span *ngIf="email.hasError('email')">
+              Email is invalid
+            </span>
+            <span *ngIf="email.hasError('server')">
+              {{ email.errors.server[0] }}
+            </span>
+          </p>
+        </div>
+        <div class="btn-subscribe">
+          <button type="submit" class="btn-primary">Daftar</button>
+        </div>
+        <div class="subscribe-mobile">
+          <div class="email-mobile">
+            <input type="text"
+                   placeholder="Masukkan alamat email Anda"
+                   [formControl]="email"
+                   class="input"
+                   [class.is-danger]="isValidFormControl(email)"/>
+            <p *ngIf="isValidFormControl(email)" class="email-error">
+              Email is invalid
+            </p>
+          </div>
+          <div class="btn-subscribe-mobile">
+            <button type="submit" class="btn-primary">Daftar</button>
+          </div>
+        </div>
+      </form>
     </div>
-  </div>
-  <div class="content-footer">
-
-  </div>
-  <div class="copyright">
+    <div class="static-page">
+      <div *ngFor="let navigation of navigations" class="list">
+        <span class="title">{{ navigation.title }}</span>
+        <app-nus-link class="item-static-page" *ngFor="let navigationChild of navigation.children"  [href]="navigationChild.url"  [title]="navigationChild.title"></app-nus-link>
+      </div>
+    </div>
+    <div class="payment-shipping">
+      <div class="title">
+        <span>Pembayaran</span>
+      </div>
+      <div class="payment-logo">
+        <img src="assets/footer/logo/logo-mandiri.svg"/>
+        <img src="assets/footer/logo/logo-permata.svg"/>
+<!--        <img src="assets/footer/logo/logo-bni.svg"/>-->
+<!--        <img src="assets/footer/logo/logo-bri.svg"/>-->
+        <img src="assets/footer/logo/logo-bca.svg"/>
+        <img src="assets/footer/logo/logo-mastercard.svg"/>
+        <img src="assets/footer/logo/logo-visa.svg"/>
+        <img src="assets/footer/logo/logo-gopay.svg"/>
+<!--        <img src="assets/footer/logo/logo-ovo.svg"/>-->
+<!--        <img src="assets/footer/logo/logo-dana.svg"/>-->
+      </div>
+      <div class="title">
+        <span>Pengiriman</span>
+      </div>
+      <div class="shipping-logo">
+        <img src="assets/footer/logo/logo_kgx.png"/>
+        <img src="assets/footer/logo/logo-pickupinstore.svg"/>
+<!--        <img src="assets/footer/logo/logo-grab.svg"/>-->
+      </div>
+    </div>
   </div>
 </div>
