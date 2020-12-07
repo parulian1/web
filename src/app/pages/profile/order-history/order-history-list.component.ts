@@ -40,7 +40,8 @@ import {Choice} from "@app/models/drf";
           <select [(ngModel)]="selectedStatus" *ngIf="searchFilterModalMode === 'filter'" class="sf-order-status"
                   name="orderStatus" id="orderStatus">
             <option value="all">Semua Pesanan</option>
-            <option value="unpaid">Menunggu Konfirmasi</option>
+            <option value="unpaid">Belum dibayar</option>
+            <option value="waiting">Menunggu Konfirmasi</option>
             <option value="paid">Pesanan Dibayar</option>
             <option value="ready">Pesanan Disiapkan</option>
             <option value="shipped">Pesanan Dikirim</option>
@@ -78,7 +79,8 @@ import {Choice} from "@app/models/drf";
         <select [(ngModel)]="selectedStatus" class="order-status-selection" name="orderStatus" id="orderStatus"
                 (change)="filterStatus()" *ngIf="!mobile">
           <option value="all">Semua Pesanan</option>
-          <option value="unpaid">Menunggu Konfirmasi</option>
+          <option value="unpaid">Belum dibayar</option>
+          <option value="waiting">Menunggu Konfirmasi</option>
           <option value="paid">Pesanan Dibayar</option>
           <option value="ready">Pesanan Disiapkan</option>
           <option value="shipped">Pesanan Dikirim</option>
@@ -112,6 +114,9 @@ import {Choice} from "@app/models/drf";
                     </span>
                     <span *ngIf="data.status === 'paid'" class="order-status-text paid">
                       {{ getStatusName(data.status) }}
+                    </span>
+                    <span *ngIf="data.status === 'waiting'" class="order-status-text waiting">
+                      {{ getStatusName(data.status)|slice:0:7 }}
                     </span>
                     <span *ngIf="data.status === 'ready'" class="order-status-text paid">
                       {{ getStatusName(data.status) }}
@@ -156,7 +161,7 @@ import {Choice} from "@app/models/drf";
                      [class.is-flex]="canConfirmPayment(data)"
                      *ngIf="!mobile">
                   <button *ngIf="canConfirmPayment(data)">
-                    <a style="text-decoration: none; color: #333333">
+                    <a [routerLink]="['/order-confirm']" style="text-decoration: none; color: #333333; cursor: pointer;">
                       Konfirmasi Pembayaran
                     </a>
                   </button>&nbsp;
@@ -489,7 +494,7 @@ export class OrderHistoryListComponent implements OnInit, AfterViewInit {
   canConfirmPayment(order: OrderList): boolean {
     return (
       order.orderPayment.paymentGateway.type === 'manual_transfer' &&
-      order.status === 'unpaid'
+      (order.status === 'unpaid' || order.status === 'waiting')
     );
   }
 }
