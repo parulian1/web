@@ -62,7 +62,7 @@ export class OrderHistoryService extends AbstractCrudService<order.Order> {
       .pipe(map(resp => (resp.actions.POST[fieldName] as ChoiceField).choices));
   }
 
-  fetchAll(query: { user?: string, payment_type?: string, product?: string, per_page?: string }): Observable<any> {
+  fetchAll(query: { user?: string, payment_type?: string, product?: string, per_page?: string, status?: string | string[] }): Observable<any> {
     let params = new HttpParams({fromObject: query});
 
     if (!query.per_page) {
@@ -71,6 +71,11 @@ export class OrderHistoryService extends AbstractCrudService<order.Order> {
 
     if (!query.user) {
       params = params.set('user', this.credentialsService.email);
+    }
+
+    if (query.status && Array.isArray(query.status)) {
+      // fromObject not support when type of status is array, so that we need override (append) in here.
+      params = params.append('status', query.status as any);
     }
 
     return this.httpClient.get(`${this.baseUrl}`, { params });
