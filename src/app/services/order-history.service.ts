@@ -73,11 +73,6 @@ export class OrderHistoryService extends AbstractCrudService<order.Order> {
       params = params.set('user', this.credentialsService.email);
     }
 
-    if (query.status && Array.isArray(query.status)) {
-      // fromObject not support when type of status is array, so that we need override (append) in here.
-      params = params.append('status', query.status as any);
-    }
-
     return this.httpClient.get(`${this.baseUrl}`, { params });
   }
 
