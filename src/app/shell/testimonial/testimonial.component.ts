@@ -1,5 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
-import { Flickity } from 'flickity';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { TestimonialService } from '@app/services/testimonial.service';
 import { Testimonial } from '@app/models/testimonial';
 
@@ -17,7 +16,7 @@ export class TestimonialComponent implements OnInit {
     'mobileFirst': true,
     'variableWidth': true,
     'infinite': true,
-    'dots': true,
+    'dots': false,
     'nextArrow': '<button class="slick-next"><span class="material-icons">\n' +
       'keyboard_arrow_right\n' +
       '</span></button>',
@@ -30,7 +29,7 @@ export class TestimonialComponent implements OnInit {
     'slidesToShow': 1,
     'slidesToScroll': 1,
     'variableWidth': true,
-    'dots': true,
+    'dots': false,
     'infinite': true,
     'nextArrow': '<button class="slick-next"><span class="material-icons">\n' +
       'keyboard_arrow_right\n' +
@@ -78,7 +77,7 @@ export class TestimonialComponent implements OnInit {
 
 
   fetchTestimonial() {
-    this.testimonialService.fetchTestimonial({ perPage: 4, page: 1, is_active: true }).subscribe(res => {
+    this.testimonialService.fetchTestimonial({ perPage: 250, page: 1, is_active: true }).subscribe(res => {
       this.testimonials = res.body;
     });
   }
