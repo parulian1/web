@@ -259,7 +259,11 @@ export class CheckoutComponent implements OnInit, DoCheck {
   _setErrors(error: any) {
     log.error("error", error, Object.values(error));
     Object.keys(error).forEach((field: any) => {
-      this.errorMessages[field] = error[field][0];
+      if (error[field] instanceof Array) {
+        this.errorMessages[field] = error[field][0];
+      } else {
+        this.errorMessages[field] = error[field];
+      }
     });
     log.error("error", this.errorMessages);
   }
