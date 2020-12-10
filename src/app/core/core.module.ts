@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { RouteReusableStrategy } from './route-reusable-strategy';
 import { HttpService } from './http/http.service';
+import {ResponsiveBreakpointsModule} from '@app/core/responsive-breakpoints';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { HttpService } from './http/http.service';
     CommonModule,
     HttpClientModule,
     TranslateModule,
-    RouterModule
+    RouterModule,
+    ResponsiveBreakpointsModule
   ],
   providers: [
     {
