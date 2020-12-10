@@ -40,6 +40,7 @@ import { ClickOutsideSearchDirective } from './search-bar/click-outside-search.d
 import { FocusInputMobileDirective } from './search-bar/focus-input-mobile.directive';
 import { ResponsiveImgChooserDirective } from './responsive-img-chooser.directive';
 import { VideoPlayerComponent } from './video-player/video-player.component';
+import { ImgResizeDirective } from './nus-img-resize/img-resize.directive';
 
 
 @NgModule({
@@ -91,6 +92,7 @@ import { VideoPlayerComponent } from './video-player/video-player.component';
     FocusInputMobileDirective,
     VideoPlayerComponent,
     ResponsiveImgChooserDirective,
+    ImgResizeDirective,
   ],
     exports: [
         LoaderComponent,
@@ -128,6 +130,7 @@ import { VideoPlayerComponent } from './video-player/video-player.component';
         FocusInputMobileDirective,
         VideoPlayerComponent,
         ResponsiveImgChooserDirective,
+        ImgResizeDirective,
     ],
 })
 export class SharedModule {
