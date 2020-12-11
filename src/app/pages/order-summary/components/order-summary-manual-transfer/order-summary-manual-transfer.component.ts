@@ -17,9 +17,9 @@ import { PaymentMethodType } from "@app/models/payment-method";
         <div class="order-progress--date-and-bank">
           <div class="columns">
             <div class="column is-8 is-offset-2">
-              <div class="box box-date">
-                <span class="due-date-title">Batas akhir pembayaran</span>
-                <span class="due-date-content">{{ payment.dateExpired | date: "d/MM/yyyy HH:mm" }}</span>
+              <div class="order-summary__date has-text-centered">
+                <h2 class="due-date-title">Batas akhir pembayaran</h2>
+                <p class="due-date-content">{{ payment.dateExpired | date: "EEEE, d/MM/yyyy HH:mm" }}</p>
               </div>
             </div>
           </div>
@@ -42,7 +42,7 @@ import { PaymentMethodType } from "@app/models/payment-method";
                   </div>
                   <div class="info-desc-item">
                     <h4 class="item-header">Total Belanja</h4>
-                    <p>{{ payment.amount | currency: "Rp ":"symbol":"1.0" }}</p>
+                    <p class="payment-amount">{{ payment.amount | currency: "Rp ":"symbol":"1.0" }}</p>
                   </div>
                   <div class="info-desc-item">
                     <h4 class="item-header">Metode Pembayaran</h4>

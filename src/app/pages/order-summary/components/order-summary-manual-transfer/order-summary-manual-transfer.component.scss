@@ -93,12 +93,17 @@ $desktop: 960px + (2 * $gap) !default;
   .order-progress-content {
 
     .order-progress--date-and-bank {
-      .box-date {
+      .order-summary__date {
         min-height: 80px;
         height: 100%;
-        display: flex;
         justify-content: space-between;
         align-items: center;
+
+        .due-date-title {
+          font-weight: lighter;
+          font-size: 1rem;
+          line-height: 0;
+        }
 
         .due-date-content {
           font-weight: bold;
@@ -149,11 +154,14 @@ $desktop: 960px + (2 * $gap) !default;
           }
 
           p {
-            font-weight: bold;
             font-size: 1rem;
             margin-top: -15px;
             margin-bottom: -1px;
-            //border: 1px solid blue;
+            font-weight: bold;
+          }
+
+          .payment-amount {
+            color: #037EE5;
           }
         }
       }
