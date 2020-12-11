@@ -2,7 +2,7 @@
   <span class="subtitle">Brands</span>
   <div class="list-brands">
     <div class="brand" *ngFor="let brandData of brands; index as i; first as isFirst">
-      <a [routerLink]="['/brand',brandData.href|entityToSlug]" class="brands-link"><img [src]="brandData.iconImage" (error)="getDefaultImage($event)"/></a>
+      <a [routerLink]="['/brand',brandData.href|entityToSlug]" class="brands-link"><img [src]="brandData.iconImage" (error)="getDefaultImage($event)" appImgResize/></a>
     </div>
   </div>
 </div>

@@ -27,10 +27,7 @@ import {ProductDetail} from '@app/models/product-detail';
       <a [routerLink]="['/products', productHref|entityToSlug]">
         <div class="imgwrap">
           <img [src]="productImageUrl"
-             [ngStyle]="{
-             'width': page === 'bdp-mobile' || page === 'pdp-mobile' || page === 'home-mobile'? '100%' : '100%',
-             'height': page === 'bdp-mobile' || page === 'pdp-mobile' || page === 'home-mobile' ? '100%' : '100%'
-              }"
+               appImgResize
              alt="product"
              (error)="$event.target.src = defaultImageUrl">
         </div>
@@ -55,7 +52,7 @@ import {ProductDetail} from '@app/models/product-detail';
     <ng-container *ngIf="!!product && page === 'pdp' ">
       <div class="related">
         <div class="left">
-          <img [src]="product.media[0].image ? product.media[0].image : 'assets/default-image.png' "/>
+          <img [src]="product.media[0].image ? product.media[0].image : 'assets/default-image.png' " appImgResize/>
         </div>
         <div class="right">
           <span class="title">{{product.name}}</span>
@@ -133,6 +130,8 @@ import {ProductDetail} from '@app/models/product-detail';
     .imgwrap {
       display: flex;
       height: 160px;
+      width: 160px;
+      align-self: center;
     }
 
     app-wishlist {
@@ -146,8 +145,8 @@ import {ProductDetail} from '@app/models/product-detail';
     }
 
     img {
-      max-height: 160px;
-      max-width: 180px;
+      height: 160px;
+      width: 160px;
       object-fit: contain;
       margin: auto;
     }
@@ -162,6 +161,8 @@ import {ProductDetail} from '@app/models/product-detail';
 
     a {
       text-decoration: none;
+      display: flex;
+      flex-direction: column;
     }
 
     .vendor {
