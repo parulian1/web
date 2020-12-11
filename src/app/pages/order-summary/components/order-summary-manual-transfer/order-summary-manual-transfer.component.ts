@@ -65,12 +65,16 @@ import { PaymentMethodType } from "@app/models/payment-method";
                       <img width="100px;" [src]="manualTransfer.logo" alt="{{ manualTransfer.accountHoldNumber }}" />
                     </div>
                     <div class="transfer">
-                      <div>Transfer ke nomor</div>
+                      <div>No. Rekening</div>
                       <div class="transfer-number">
-                        <span class="number">
-                          {{ manualTransfer.accountNumber }} - {{ manualTransfer.accountHoldNumber }}
+                        <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                          <span class="number">{{ manualTransfer.accountNumber }}</span>
+                          <span class="copy transfer--copy" (click)="copyToClipboard(manualTransfer.accountNumber)">Salin</span>
+                        </div>
+
+                        <span class="account-hold-number">
+                          {{ manualTransfer.accountHoldNumber }}
                         </span>
-                        <span class="copy transfer--copy" (click)="copyToClipboard(manualTransfer.accountNumber)">Salin</span>
                       </div>
                     </div>
                   </div>

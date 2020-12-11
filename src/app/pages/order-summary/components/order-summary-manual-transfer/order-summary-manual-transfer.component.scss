@@ -110,7 +110,8 @@ $desktop: 960px + (2 * $gap) !default;
           color: #D81936;
         }
       }
-
+    }
+    .order-progress--bank {
       .box-bank {
         display: flex;
         align-items: center;
@@ -118,16 +119,30 @@ $desktop: 960px + (2 * $gap) !default;
 
         .bank-image {}
         .transfer {
+          color: #979797;
+
           .transfer-number {
             margin-top: 5px;
+
             .number {
+              color: black;
               font-weight: bold;
+            }
+            .account-hold-number {
+
             }
             .copy {
               margin-left: 10px;
               color: $color-accent;
               text-decoration: underline;
               cursor: pointer;
+
+              &:active{
+                color: darken($color-accent, 30%);
+              }
+              &:focus {
+                color: darken($color-accent, 30%);
+              }
             }
           }
         }
