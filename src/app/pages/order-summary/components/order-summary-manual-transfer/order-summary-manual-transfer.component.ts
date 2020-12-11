@@ -46,7 +46,8 @@ import { PaymentMethodType } from "@app/models/payment-method";
                   </div>
                   <div class="info-desc-item">
                     <h4 class="item-header">Metode Pembayaran</h4>
-                    <p>{{ payment.name }}</p>
+                    <!-- {{ payment.name }} -->
+                    <p>Transfer Bank (Manual)</p>
                   </div>
                 </div>
               </div>
