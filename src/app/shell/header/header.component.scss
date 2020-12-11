@@ -237,8 +237,7 @@
     margin: 0;
     background: $white;
     z-index: 99;
-    position: relative;
-    bottom: 16px;
+    position: fixed;
 
     .mt-header-search {
       width: 100%;

@@ -12,6 +12,10 @@
   font-family: $font-primary;
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
 html,
 body {
   display: flex;

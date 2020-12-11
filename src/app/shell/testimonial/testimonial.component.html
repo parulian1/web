@@ -1,20 +1,20 @@
-<div class="testimonial" *ngIf="!!testimonials && testimonials.length>0">
+<div *ngIf="!!testimonials && testimonials.length>0" class="testimonial">
   <span class="subtitle">Testimoni</span>
   <div class="testi">
-    <ngx-slick-carousel class="carousel-highlight-category"
-                        [config]="slideConfigDesktop"
+    <ngx-slick-carousel (afterChange)="afterChange($event)"
+                        (beforeChange)="beforeChange($event)"
                         (init)="slickInit($event)"
-                        (afterChange)="afterChange($event)"
-                        (beforeChange)="beforeChange($event)">
-      <div ngxSlickItem class="slide" *ngFor="let item of testimonials">
+                        [config]="slideConfigDesktop"
+                        class="carousel-highlight-category">
+      <div *ngFor="let item of testimonials" class="slide" ngxSlickItem>
         <div class="testi-cell">
           <div class="item">
             <span class="photo">
-              <img src="{{ item.photo }}" alt="{{ item.title }}"/>
+              <img alt="{{ item.title }}" src="{{ item.photo }}" appImgResize/>
             </span>
             <span class="desc">
               <span class="title">
-                {{ item.name | titlecase }}
+                {{(item.name.length > 30) ? (item.name | slice:0:30) + '...' : (item.name)}}
               </span>
               <span class="comment">
                 {{ item.content | stripHtml | slice:0:245 }}
@@ -29,22 +29,22 @@
   </div>
 </div>
 
-<div class="testimonial-mobile" *ngIf="!!testimonials && testimonials.length>0">
-  <span class="subtitle">Testimoni 2</span>
+<div *ngIf="!!testimonials && testimonials.length>0" class="testimonial-mobile">
+  <span class="subtitle">Testimoni</span>
   <div class="testi">
-    <ngx-slick-carousel class="carousel-highlight-category"
-                        [config]="slideConfig"
+    <ngx-slick-carousel (afterChange)="afterChange($event)"
+                        (beforeChange)="beforeChange($event)"
                         (init)="slickInit($event)"
-                        (afterChange)="afterChange($event)"
-                        (beforeChange)="beforeChange($event)">
-      <div ngxSlickItem class="slide" *ngFor="let item of testimonials" style="width: 266px;">
+                        [config]="slideConfig"
+                        class="carousel-highlight-category">
+      <div *ngFor="let item of testimonials" class="slide" ngxSlickItem style="width: 266px;">
         <div class="testi-cell">
           <div class="item">
             <span class="photo">
-              <img src="assets/testimonial-example.png" alt="photo"/>
+              <img alt="{{ item.title }}" src="{{ item.photo }}" appImgResize/>
             </span>
             <span class="desc">
-              <span class="title">{{ item.name | titlecase }}</span>
+              <span class="title">{{(item.name.length > 20) ? (item.name | slice:0:20) + '...' : (item.name)}}</span>
               <span class="comment">
                 {{ item.content | stripHtml | slice:0:245 }}
                 {{ item.content.length > 245 ? '...' : '' }}

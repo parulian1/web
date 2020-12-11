@@ -20,11 +20,10 @@ import {CartService} from '@app/services/cart.service';
 import {LocalStorage} from '@app/services/local-storage.service';
 import {MatDialog} from '@angular/material/dialog';
 import {SideMenuHeaderComponent} from '@app/shell/header/side-menu-header';
-import {ProductsService} from "@app/services";
-import {EntityToSlugPipe} from "@app/shared/utils";
-import {Router} from "@angular/router";
-import {isPlatformBrowser} from "@angular/common";
-
+import {ProductsService} from '@app/services';
+import {EntityToSlugPipe} from '@app/shared/utils';
+import {Router} from '@angular/router';
+import {DOCUMENT, isPlatformBrowser} from '@angular/common';
 
 @Component({
   selector: 'app-header',
@@ -33,6 +32,7 @@ import {isPlatformBrowser} from "@angular/common";
 })
 export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges, DoCheck {
   private static DEBOUNCE_TIMEOUT = 150;
+  bodyElement: HTMLBodyElement;
 
   @Output() search = new EventEmitter<any>();
 
@@ -62,6 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit, OnChan
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
+    @Inject(DOCUMENT) private document: Document,
     private credentialsService: CredentialsService,
     private service: CartService,
     private productService: ProductsService,
@@ -93,6 +94,14 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit, OnChan
     this.matVisibility = !this.credentialsService.isAuthenticated();
     if (this.localStorage.getItem('cart-quantity') !== null || this.localStorage.getItem('cart-quantity') !== null) {
       this.matBadge = this.localStorage.getItem('cart-quantity');
+    }
+
+    if (this.isMobileSearch) {
+      this.document.body.classList.add('no-scroll');
+    } else {
+      if (this.document.body.classList.contains('no-scroll')) {
+        this.document.body.classList.remove('no-scroll');
+      }
     }
   }
 
