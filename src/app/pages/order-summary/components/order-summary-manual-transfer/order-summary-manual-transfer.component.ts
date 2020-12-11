@@ -62,7 +62,7 @@ import { PaymentMethodType } from "@app/models/payment-method";
                 <div class="column is-6" *ngFor="let manualTransfer of manualTransfers">
                   <div class="box box-bank">
                     <div class="bank-image">
-                      <img width="100px;" [src]="manualTransfer.logo" alt="{{ payment.name }}" />
+                      <img width="100px;" [src]="manualTransfer.logo" alt="{{ manualTransfer.accountHoldNumber }}" />
                     </div>
                     <div class="transfer">
                       <div>Transfer ke nomor</div>
@@ -70,8 +70,7 @@ import { PaymentMethodType } from "@app/models/payment-method";
                         <span class="number">
                           {{ manualTransfer.accountNumber }} - {{ manualTransfer.accountHoldNumber }}
                         </span>
-
-                        <span class="copy" (click)="copyToClipboard(manualTransfer.accountNumber)">Salin</span>
+                        <span class="copy transfer--copy" (click)="copyToClipboard(manualTransfer.accountNumber)">Salin</span>
                       </div>
                     </div>
                   </div>
@@ -138,6 +137,8 @@ export class OrderSummaryManualTransferComponent implements OnInit {
       this.manualTransfers = result
         .filter(pList => pList.type === 'manual_transfer')
         .map(payment => payment.paymentMethods)[0];
+
+      console.log('manual:', this.manualTransfers);
     });
 
     this.payment = {
