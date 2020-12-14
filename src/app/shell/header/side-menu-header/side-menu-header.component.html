@@ -1,6 +1,6 @@
 <div class="side-content" *ngIf="mode === 'default'">
   <span class="close" (click)="closeSideMenu('')">X</span>
-  <div class="auth">
+  <div class="auth" [routerLink]="token ? '/profile' : '/login'">
     <a [routerLink]="['/profile']" (click)="closeSideMenu('/profile')"><img src="assets/header/logo-account.svg"
                                                                             alt="Account Logo"></a>
     <button class="auth-btn">
