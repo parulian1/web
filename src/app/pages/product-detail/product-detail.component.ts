@@ -278,8 +278,8 @@ export class ProductDetailComponent implements OnInit, DoCheck {
            this.cartService.fetchCart().subscribe(cart => {
              const _cartItems = cart.body.cartItems;
              let _itemCount = 0;
-             for (const i  of _cartItems) {
-               _itemCount += i.quantity;
+             for (const _cartItem  of _cartItems) {
+               _itemCount += _cartItem.quantity;
              }
              this.localStorage.setItem('cart-quantity', _itemCount);
            })
