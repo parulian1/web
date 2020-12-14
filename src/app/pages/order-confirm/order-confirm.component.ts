@@ -40,33 +40,68 @@ import { PaymentMethod, PaymentMethodType } from '@app/models/payment-method';
                   </select>
                 </div>
               </div>
+
+              <p *ngIf="orderNumber.invalid && (orderNumber.touched || orderNumber.dirty)" class="error-message">
+                <span *ngIf="orderNumber.hasError('required')">Order Number is required</span>
+              </p>
             </div>
+
             <div class="field">
               <label class="label">Tanggal Pesanan</label>
               <div class="control">
-                <input class="input" [formControl]="orderDate" type="date" placeholder="Masukkan Tanggal Pesanan" disabled>
+                <input
+                  class="input"
+                  [class.has-error]="orderDate.invalid && (orderDate.touched || orderDate.dirty)"
+                  [formControl]="orderDate"
+                  type="date"
+                  placeholder="Masukkan Tanggal Pesanan" disabled>
               </div>
+
+
+              <p *ngIf="orderDate.invalid && (orderDate.touched || orderDate.dirty)" class="error-message">
+                <span *ngIf="orderDate.hasError('required')">Order Date is required</span>
+              </p>
             </div>
 
             <div class="field">
               <label class="label">Nama Pengirim</label>
               <div class="control">
-                <input class="input" [formControl]="shippingName" type="text" placeholder="Masukkan Nama Pengirim">
+                <input
+                  class="input"
+                  [class.has-error]="shippingName.invalid && (shippingName.touched || shippingName.dirty)"
+                  [formControl]="shippingName"
+                  type="text"
+                  placeholder="Masukkan Nama Pengirim">
               </div>
+
+              <p *ngIf="shippingName.invalid && (shippingName.touched || shippingName.dirty)" class="error-message">
+                <span *ngIf="shippingName.hasError('required')">Shipping name is required</span>
+              </p>
             </div>
 
             <div class="field">
               <label class="label">Jumlah Transfer</label>
               <div class="control">
-                <input class="input" [formControl]="transferAmount" type="number" placeholder="Rp">
+                <input
+                  class="input"
+                  [class.has-error]="transferAmount.invalid && (transferAmount.touched || transferAmount.dirty)"
+                  [formControl]="transferAmount"
+                  type="number"
+                  placeholder="Rp">
               </div>
+
+              <p *ngIf="transferAmount.invalid && (transferAmount.touched || transferAmount.dirty)" class="error-message">
+                <span *ngIf="transferAmount.hasError('required')">Transfer amount is required</span>
+              </p>
             </div>
 
             <div class="field">
               <label class="label">Dikirim ke</label>
               <div class="control">
                 <div class="select">
-                  <select [formControl]="transferTo">
+                  <select
+                    [class.has-error]="transferTo.invalid && (transferTo.touched || transferTo.dirty)"
+                    [formControl]="transferTo">
                     <option disabled value="">Pilih Rekening</option>
                     <option *ngFor="let payment of paymentChoices" [ngValue]="payment">
                       {{ payment.name }} - {{ payment.accountHoldNumber }} - {{ payment.accountNumber }}
@@ -74,6 +109,10 @@ import { PaymentMethod, PaymentMethodType } from '@app/models/payment-method';
                   </select>
                 </div>
               </div>
+
+              <p *ngIf="transferTo.invalid && (transferTo.touched || transferTo.dirty)" class="error-message">
+                <span *ngIf="transferTo.hasError('required')">Transfer to is required</span>
+              </p>
             </div>
 
             <div class="field">
@@ -81,8 +120,13 @@ import { PaymentMethod, PaymentMethodType } from '@app/models/payment-method';
               <div class="control">
                 <div id="file-js-example" class="file has-name">
                   <label class="file-label">
-                    <input class="file-input" [formControl]="proofImage" (change)="changeProofImage($event)" type="file"
-                           name="resume">
+                    <input
+                      class="file-input"
+                      [class.has-error]="proofImage.invalid && (proofImage.touched || proofImage.dirty)"
+                      [formControl]="proofImage"
+                      (change)="changeProofImage($event)"
+                      type="file"
+                      name="resume">
                     <span class="file-cta">
                         <i class="material-icons icon-search">photo_camera</i>Upload File
                       </span>
@@ -90,6 +134,10 @@ import { PaymentMethod, PaymentMethodType } from '@app/models/payment-method';
                 </div>
               </div>
               <label class="file-name">{{ proofImageHelpers.nameImage ? proofImageHelpers.nameImage : '' }}</label>
+
+              <p *ngIf="proofImage.invalid && (proofImage.touched || proofImage.dirty)" class="error-message">
+                <span *ngIf="proofImage.hasError('required')">Proof image is required</span>
+              </p>
             </div>
 
             <div class="field">
@@ -198,6 +246,8 @@ export class OrderConfirmComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.form.markAllAsTouched();
+
     if (this.form.valid) {
       const formData = this.formData;
       this.orderHistoryService.createOrderPaymentConfirm(formData.orderNumber, formData).subscribe(() => {
