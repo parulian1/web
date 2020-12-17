@@ -1,0 +1,36 @@
+trigger:
+  # - devops/*
+  - release/*
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  FEED_ID: 61101818-286e-47e5-b86b-ef800ee02eea
+  # Don't forget add trailing slash ('/').
+  BUILD_DEST_PATH: dist/martha-web/browser/
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: Operations/pipeline-templates
+
+jobs:
+  - template: web/unit_test.yml@templates
+    parameters:
+      feedId: $(FEED_ID)
+
+  - template: web/build.yml@templates
+    parameters:
+      appEnv: production
+      jobName: build_packaging_prod
+      feedId: $(FEED_ID)
+      buildPath: $(BUILD_DEST_PATH)
+
+  - template: web/build.yml@templates
+    parameters:
+      appEnv: staging
+      jobName: build_packaging_staging
+      feedId: $(FEED_ID)
+      buildPath: $(BUILD_DEST_PATH)
