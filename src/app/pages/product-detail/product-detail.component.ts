@@ -275,6 +275,14 @@ export class ProductDetailComponent implements OnInit, DoCheck {
               width: '464px',
               height: '363px'
             });
+           this.cartService.fetchCart().subscribe(cart => {
+             const _cartItems = cart.body.cartItems;
+             let _itemCount = 0;
+             for (const _cartItem  of _cartItems) {
+               _itemCount += _cartItem.quantity;
+             }
+             this.localStorage.setItem('cart-quantity', _itemCount);
+           })
           }
 
         },

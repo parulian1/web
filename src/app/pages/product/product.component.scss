@@ -241,6 +241,10 @@
 @media screen and (max-width: $mobile-break) {
   .container {
     padding: 0;
+    
+    app-sidenav-overlay {
+      z-index: 99;
+    }
 
     #overlaySortBackground {
       position: fixed;
