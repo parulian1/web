@@ -1,5 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {Title} from "@angular/platform-browser";
+import { Component, OnInit } from '@angular/core';
+import { Title } from "@angular/platform-browser";
+import { Configuration } from "@app/models";
+import { ConfigService } from "@app/core";
 
 @Component({
   selector: 'app-forgot-password',
@@ -8,11 +10,18 @@ import {Title} from "@angular/platform-browser";
 })
 export class ForgotPasswordComponent implements OnInit {
 
-  constructor(private title: Title) {
+  config: Configuration;
+
+  constructor(private title: Title, private appConfigService: ConfigService) {
   }
 
   ngOnInit(): void {
-    this.title.setTitle('Forgot Password ' + ' - Martha Tilaar Shop')
+    this.config = this.appConfigService.config;
+    let shopName = "Martha Tilaar Shop";
+    if (!!this.config) {
+      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
+    this.title.setTitle('Forgot Password ' + ` - ${ shopName }`);
   }
 
 }

@@ -3,7 +3,9 @@ import { ActivatedRoute } from "@angular/router";
 
 import { CheckoutService } from "@app/services";
 import { OrderSummary } from "@app/models/checkout";
-import {Title} from "@angular/platform-browser";
+import { Title } from "@angular/platform-browser";
+import { ConfigService } from "@app/core";
+import { Configuration } from "@app/models";
 import { PaymentTypeChoices } from "@app/models/payment-method";
 
 
@@ -15,12 +17,16 @@ import { PaymentTypeChoices } from "@app/models/payment-method";
 export class OrderSummaryComponent implements OnInit {
   orderNumber: string;
   orderSummary: OrderSummary;
-
+  config: Configuration;
   isPaymentManualTransfer: boolean;
 
-  constructor(private route: ActivatedRoute, private service: CheckoutService, private title: Title) {}
+  constructor(private route: ActivatedRoute,
+              private service: CheckoutService,
+              private title: Title,
+              private appConfigService: ConfigService) {}
 
   ngOnInit(): void {
+    this.config = this.appConfigService.config;
     this.route.queryParams.subscribe((resp) => {
       this.orderNumber = resp.order_id;
       this.getOrderSummary(this.orderNumber);

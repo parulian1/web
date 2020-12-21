@@ -12,4 +12,6 @@ export * from './http/token.interceptor';
 export * from './types';
 
 import * as authentication from './authentication';
-export {authentication};
+export { authentication };
+
+export * from './config.service';

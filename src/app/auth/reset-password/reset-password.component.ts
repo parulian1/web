@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 import { AuthUserService } from "@app/services";
 import { ActivatedRoute, Router } from "@angular/router";
-import {Title} from "@angular/platform-browser";
+import { Title } from "@angular/platform-browser";
+import { Configuration } from "@app/models";
+import { ConfigService } from "@app/core";
 
 @Component({
   selector: 'app-reset-password',
@@ -16,18 +18,26 @@ export class ResetPasswordComponent implements OnInit {
   private uid: string;
   private token: string;
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private authUserService: AuthUserService,
-    private title: Title
-  ) { }
+  config: Configuration;
+
+  constructor(private fb: FormBuilder,
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private authUserService: AuthUserService,
+              private title: Title,
+              private appConfigService: ConfigService
+  ) {
+  }
 
   ngOnInit(): void {
+    this.config = this.appConfigService.config;
+    let shopName = "Martha Tilaar Shop";
+    if (!!this.config) {
+      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
     this.initForm();
     this.initTokenAndUid();
-    this.title.setTitle('Reset Passwords ' + ' - Martha Tilaar Shop')
+    this.title.setTitle('Reset Passwords ' + ` - ${ shopName }`);
 
   }
 
@@ -47,7 +57,7 @@ export class ResetPasswordComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      const { newPassword, confirmationPassword } = this.form.value;
+      const {newPassword, confirmationPassword} = this.form.value;
       if (newPassword === confirmationPassword) {
         this.authUserService.resetPassword({
           token: this.token,
@@ -58,7 +68,9 @@ export class ResetPasswordComponent implements OnInit {
           alert('Berhasil Reset Password');
         }, error => this.handleError(error));
       } else {
-        this.form.controls['newPassword'].setErrors({'nomatch': ['New Password and Confirmation Password didnt match']});
+        this.form.controls['newPassword'].setErrors({
+          'nomatch': ['New Password and Confirmation Password didnt match']
+        });
       }
     }
   }

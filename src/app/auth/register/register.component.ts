@@ -1,5 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {Title} from "@angular/platform-browser";
+import { Component, OnInit } from '@angular/core';
+import { Title } from "@angular/platform-browser";
+import { ConfigService } from "@app/core";
+import { Configuration } from "@app/models";
 
 @Component({
   selector: 'app-register',
@@ -8,14 +10,20 @@ import {Title} from "@angular/platform-browser";
 })
 export class RegisterComponent implements OnInit {
   public formType: string;
+  config: Configuration;
 
-  constructor(private title: Title) {
+  constructor(private title: Title, private appConfigService: ConfigService) {
   }
 
 
   ngOnInit(): void {
+    this.config = this.appConfigService.config;
     this.formType = 'Register';
-    this.title.setTitle('Register ' + ' - Martha Tilaar Shop')
+    let shopName = "Martha Tilaar Shop";
+    if (!!this.config) {
+      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
+    this.title.setTitle(`Register - ${ shopName }`)
 
   }
 

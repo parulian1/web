@@ -19,8 +19,8 @@ import { StoreService } from '@app/services';
 import { WarehouseDialogComponent } from '@app/pages/product-detail/warehouse-dialog/warehouse-dialog.component';
 import { CredentialsService } from '@app/core/authentication';
 import { EntityToSlugPipe } from '@app/shared/utils/entity-to-slug.pipe';
-import { Logger } from '@app/core';
-import { RatingSummary, Review } from '@app/models';
+import { ConfigService, Logger } from '@app/core';
+import { Configuration, RatingSummary, Review } from '@app/models';
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { Title } from "@angular/platform-browser";
 import { StoreWithStock } from "@app/models/store";
@@ -102,6 +102,8 @@ export class ProductDetailComponent implements OnInit, DoCheck {
   };
   mobileMenu: string;
 
+  config: Configuration;
+
   constructor(private productsService: ProductsService,
               private cartService: CartService,
               private el: ElementRef,
@@ -112,10 +114,16 @@ export class ProductDetailComponent implements OnInit, DoCheck {
               private credentialsService: CredentialsService,
               private localStorage: LocalStorage,
               private pipe: EntityToSlugPipe,
-              private title: Title) {
+              private title: Title,
+              private appConfigService: ConfigService) {
   }
 
   ngOnInit(): void {
+    this.config = this.appConfigService.config;
+    let shopName = "Martha Tilaar Shop";
+    if (!!this.config) {
+      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
     if (this.localStorage.getItem('attributes')) {
       this.localStorage.removeItem('attributes');
     }
@@ -174,7 +182,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
         this.setPriceTag(data.product);
         this.setPriceInformation(this.priceLists);
 
-        this.title.setTitle(this.productDetail.name + ' - Martha Tilaar Shop')
+        this.title.setTitle(this.productDetail.name + ` - ${ shopName }`);
       }
     );
     this.slideProductImg2 = this.slideProductImg;

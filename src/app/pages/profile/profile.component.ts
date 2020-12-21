@@ -1,5 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {Title} from "@angular/platform-browser";
+import { Component, OnInit } from '@angular/core';
+import { Title } from "@angular/platform-browser";
+import { Configuration } from "@app/models";
+import { ConfigService } from "@app/core";
 
 @Component({
   selector: 'app-profile',
@@ -9,12 +11,19 @@ import {Title} from "@angular/platform-browser";
 export class ProfileComponent implements OnInit {
   public currentMode: string;
 
-  constructor(private title: Title) {
+  config: Configuration;
+
+  constructor(private title: Title, private appConfigService: ConfigService) {
   }
 
   ngOnInit(): void {
+    this.config = this.appConfigService.config;
     this.currentMode = 'Sambungkan';
-    this.title.setTitle('Profile ' + ' - Martha Tilaar Shop')
+    let shopName = "Martha Tilaar Shop";
+    if (!!this.config) {
+      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
+    this.title.setTitle('Profile ' + ` - ${ shopName }`);
 
   }
 

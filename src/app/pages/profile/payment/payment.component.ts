@@ -1,89 +1,17 @@
-import {AfterViewInit, Component, ElementRef, HostListener, OnInit} from "@angular/core";
-import {PagedResponse} from "@app/core/pagination";
-import {ActivatedRoute, Router} from "@angular/router";
-import {UserPayment} from "@app/models/customer/payment";
-import {UserPaymentService} from "@app/services/user-payment.service";
-import {Logger} from "@app/core";
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit } from "@angular/core";
+import { PagedResponse } from "@app/core/pagination";
+import { ActivatedRoute, Router } from "@angular/router";
+import { UserPayment } from "@app/models/customer/payment";
+import { UserPaymentService } from "@app/services/user-payment.service";
+import { ConfigService, Logger } from "@app/core";
+import { Configuration } from "@app/models";
 
 
 const log = new Logger('app-user-payment');
 
 @Component({
   selector: 'app-user-payment',
-  template: `
-    <div class="payment-wrapper">
-      <h3>Pembayaran</h3>
-      <div class="card-wrapper">
-        <div class="card-list-wrapper">
-          <div class="card-list" *ngFor="let userPayment of page.entities, let i = index">
-            <div class="card-number-masked" [ngClass]="(i === activeListIndex)? 'active': ''"
-                 (click)="setActive(i, userPayment)">
-              <span class="cc-detail">
-                <span class="cc-number">{{formatCardNumber(userPayment.maskedCard)}}</span>
-                <img class="cc-logo-small" src="{{setLogo(userPayment.maskedCard)}}" alt="cc logo small"/>
-              </span>
-              <span class="cc-action">Lihat Detail</span>
-            </div>
-          </div>
-        </div>
-        <div class="card-detail"
-             [ngStyle]="{'background-color': displayCardDetail && !mobile ? '#F5F5F5' : 'transparent' }">
-          <ng-container *ngIf="displayCardDetail && !mobile">
-            <div *ngIf="displayCardDetail" class="card-img-wrapper">
-              <img class="card-sim" src="assets/user-payment/sim-1.png" alt="sim-logo"/>
-              <img class="card-logo" src="{{detailLogoHref}}" alt="sim-logo"/>
-              <p class="num-masked">{{currentCardDetailNumber}}</p>
-              <p class="card-expired-label">month/year</p>
-              <p class="card-expired-value">{{currentCardDetailMonthYear}}</p>
-              <img class="card-background" src="{{detailCardBackgroundHref}}" alt="card-background"/>
-            </div>
-            <p class="card-detail-text">Saya telah membaca dan menyetujui Syarat & Ketentuan serta Kebijakan Privasi
-              Martha Tilaar</p>
-            <button (click)="toggleDeleteModal()">Hapus</button>
-          </ng-container>
-        </div>
-      </div>
-      <div *ngIf="page.totalResults == 0" class="no-payment-wrapper">
-        <img class="no-payment-img" src="assets/user-payment/no-payment-found.png" alt="no-payment-data-img"/>
-        <p class="no-payment-label">Tidak ada kartu kredit yang tersimpan</p>
-      </div>
-
-      <!-- delete modal-->
-      <div id="deleteModal" class="delete-modal-wrapper">
-        <div class="delete-modal-content">
-          <p class="delete-modal-title">Hapus Kartu Kredit</p>
-          <p class="delete-modal-subtitle">Ada 1 kartu kredit yang akan dihapus</p>
-          <div class="button-delete-wrapper">
-            <button class="left" (click)="toggleDeleteModal()">Batal</button>
-            <button class="delete" (click)="deleteCard()">Hapus</button>
-          </div>
-        </div>
-      </div>
-
-      <!--  mobile card detail modal-->
-      <div *ngIf="mobile" id="cardDetailModal" class="card-detail-modal-wrapper">
-        <div class="card-detail-modal-content">
-          <span class="card-detail-modal-close" (click)="closeCardDetailModal()">&times;</span>
-          <p class="card-detail-modal-title">Detail Kartu Kredit</p>
-          <div class="card-detail">
-            <ng-container>
-              <div class="card-img-wrapper">
-                <img class="card-sim" src="assets/user-payment/sim-1.png" alt="sim-logo"/>
-                <img class="card-logo" src="{{detailLogoHref}}" alt="sim-logo"/>
-                <p class="num-masked">{{currentCardDetailNumber}}</p>
-                <p class="card-expired-label">month/year</p>
-                <p class="card-expired-value">{{currentCardDetailMonthYear}}</p>
-                <img class="card-background" src="{{detailCardBackgroundHref}}" alt="card-background"/>
-              </div>
-              <p class="card-detail-text">Saya telah membaca dan menyetujui Syarat & Ketentuan serta Kebijakan Privasi
-                Martha Tilaar</p>
-              <button (click)="toggleDeleteModal()">Hapus</button>
-            </ng-container>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
+  templateUrl: './payment-component.html',
   styleUrls: ['./payment.component.scss']
 })
 
@@ -105,16 +33,19 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   deleteModal: any;
   cardDetailModal: any;
 
+  config: Configuration;
 
   constructor(
     private route: ActivatedRoute,
     private el: ElementRef,
     private service: UserPaymentService,
     private router: Router,
+    private appConfigService: ConfigService
   ) {
   }
 
   ngOnInit(): void {
+    this.config = this.appConfigService.config;
     this.fetchUserPayment();
     this.detectScreenSize();
   }

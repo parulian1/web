@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 import { SocialMediaPage } from '@app/models/social-media';
+import { ConfigService } from "@app/core";
 
 /**
  * Returns information about the client that operates this e-commerce storefront.
@@ -11,11 +12,15 @@ import { SocialMediaPage } from '@app/models/social-media';
 })
 export class ClientService {
 
+  constructor(private appConfigService: ConfigService) {
+  }
   /**
    * Returns the displayable name of this e-commerce storefront.
    */
   storeName(): Observable<string> {
-    return of('Martha Tilaar Shop');
+    const storeName = this.appConfigService.config.name.substr(0, 1).toUpperCase() +
+      this.appConfigService.config.name.substr(1);
+    return of(storeName);
   }
 
   /**
