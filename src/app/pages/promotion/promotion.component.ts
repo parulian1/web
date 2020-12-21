@@ -45,8 +45,10 @@ export class PromotionComponent implements OnInit {
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    const storeName = this.config.name.substr(0, 1).toUpperCase() +
-      this.config.name.substr(1);
+    let storeName = "Martha Tilaar Shop";
+    if (!!this.config) {
+      storeName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
     this.route.data.subscribe((data: { promotion: ProductPromotion }) => {
       this.promotion = data.promotion;
       this.title.setTitle(' ' + this.promotion.name + ` - ${storeName}`);

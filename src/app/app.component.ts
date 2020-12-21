@@ -39,7 +39,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private appConfigService: ConfigService,
               @Inject(PLATFORM_ID) private platformId: any,
               @Inject(DOCUMENT) private document: Document,
-              private renderer2: Renderer2,) {
+              private renderer2: Renderer2) {
   }
 
   ngOnInit() {
@@ -49,6 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
       shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
     this.title.setTitle(shopName);
+    this.addFavIcon();
 
     if (isPlatformBrowser(this.platformId)) {
       this.startRefreshTokenCheck();
@@ -59,6 +60,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (environment.production) {
       Logger.enableProductionMode();
     }
+
   }
 
   ngOnDestroy() {
@@ -138,5 +140,25 @@ export class AppComponent implements OnInit, OnDestroy {
       }
       this.renderer2.appendChild(this.document.body, script);
     })
+  }
+
+  private addFavIcon() {
+    const defaultFavIco = "assets/favicon.ico";
+    var iconLinkElement = document.createElement("link" );
+    var shorCutIconlinkElement = document.createElement("link" );
+    iconLinkElement.setAttribute("rel", "icon" );
+    iconLinkElement.setAttribute("type", "image/x-icon" );
+    shorCutIconlinkElement.setAttribute("rel", "shortcut icon" );
+    shorCutIconlinkElement.setAttribute("type", "image/x-icon" );
+
+    if (!!this.config) {
+      iconLinkElement.setAttribute("href", this.config.logo );
+      shorCutIconlinkElement.setAttribute("href", this.config.logo );
+    } else {
+      iconLinkElement.setAttribute("href", defaultFavIco );
+      shorCutIconlinkElement.setAttribute("href", defaultFavIco);
+    }
+    document.head.appendChild( iconLinkElement );
+    document.head.appendChild( shorCutIconlinkElement );
   }
 }
