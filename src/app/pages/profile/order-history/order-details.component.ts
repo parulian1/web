@@ -117,18 +117,20 @@ import { getBank, AbstractBank } from "@app/pages/order-summary/utils";
         <div style="display: flex;flex-direction: column">
           <div class="order-status-box">
             <div style="display: flex">
-              <div class="order-status-label">
+              <div style="flex: 70%;" class="order-status-label">
                 Status Pesanan
               </div>
-              <div style="flex: 50%">
-                <span *ngIf="order.status === 'unpaid'"
-                      class="order-status-text unpaid">{{ getStatusName(order.status) }}</span>
-                <span *ngIf="order.status === 'paid' || order.status === 'ready'"
-                      class="order-status-text paid">{{ getStatusName(order.status) }}</span>
-                <span *ngIf="order.status === 'cancelled'"
-                      class="order-status-text cancel">{{ getStatusName(order.status) }}</span>
-                <span *ngIf="order.status === 'complete'"
-                      class="order-status-text done">{{ getStatusName(order.status) }}</span>
+              <div style="flex: 30%">
+                <!-- looping and get status that match with order.status -->
+                <span *ngFor="let s of status">
+                  <span
+                    *ngIf="order.status === s.value"
+                    class="order-status-text"
+                    [class]="order.status"
+                  >
+                    {{ s.displayName | slice:0:7 }}
+                  </span>
+                </span>
               </div>
             </div>
           </div>
@@ -319,9 +321,14 @@ import { getBank, AbstractBank } from "@app/pages/order-summary/utils";
             </ng-container>
           </div>
 
-          <button class="continue-order"
-                  (click)="onContinueOrder()"
-                  *ngIf="order.status === 'unpaid' && !order.orderPayment.meta">
+          <button
+            class="continue-order"
+            (click)="onContinueOrder()"
+            *ngIf="
+              (order.status === 'unpaid' && !order.orderPayment.meta) ||
+              order.orderPayment.paymentGateway.type !== 'manual_transfer'
+            "
+          >
             Lanjutkan Pembayaran
           </button>
 
@@ -329,6 +336,12 @@ import { getBank, AbstractBank } from "@app/pages/order-summary/utils";
                   (click)="onCancelOrder()"
                   *ngIf="order.status === 'unpaid'">
             Batalkan Pesanan
+          </button>
+
+          <button class="confirm-order"
+                  (click)="redirectToOrderConfirm()"
+                  *ngIf="canConfirmPayment(order)">
+            Konfirmasi Pembayaran
           </button>
         </div>
       </div>
@@ -475,6 +488,14 @@ export class OrderDetailsComponent implements OnInit {
     return this.payment.name === 'Kartu Kredit';
   }
 
+  /* check can show a button "confirmation" or not */
+  canConfirmPayment(order: Order): boolean {
+    return (
+      order.orderPayment.paymentGateway.type === 'manual_transfer' &&
+      (order.status === 'unpaid' || order.status === 'waiting')
+    );
+  }
+
   // Error
   _handleError(error) {
     if (error.status === 404) {
@@ -494,5 +515,9 @@ export class OrderDetailsComponent implements OnInit {
       queryParamsHandling: "merge",
       relativeTo: this.route,
     });
+  }
+
+  redirectToOrderConfirm(): void {
+    this.router.navigate(['/order-confirm']);
   }
 }

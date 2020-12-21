@@ -278,17 +278,23 @@
       color: #F2994A;
     }
 
+    .waiting {
+      background: #00b89c;
+      color: white;
+    }
+
+    .ready,
     .paid {
       background: #E5E5E5;
       color: #5A5A5A;
     }
 
-    .done {
+    .complete {
       background: #E6F3FF;
       color: #037EE5;
     }
 
-    .cancel {
+    .cancelled {
       background: pink;
       color: red;
     }
@@ -580,4 +586,9 @@
       }
     }
   }
+}
+
+
+.is-flex {
+  display: flex;
 }

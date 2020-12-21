@@ -49,7 +49,8 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     children: [
       {path: 'checkout', loadChildren: () => import('./checkout/checkout.module').then(m => m.CheckoutModule)},
-      {path: 'order-summary',  loadChildren: () => import('./order-summary/order-summary.module').then(m => m.OrderSummaryModule)}
+      {path: 'order-summary',  loadChildren: () => import('./order-summary/order-summary.module').then(m => m.OrderSummaryModule)},
+      {path: 'order-confirm',  loadChildren: () => import('./order-confirm/order-confirm.module').then(m => m.OrderConfirmModule)},
     ]
   }
 

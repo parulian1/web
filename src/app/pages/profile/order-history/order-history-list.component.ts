@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild, HostListener} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 
-import {Order, OrderList} from '@app/models/order';
+import {Order, OrderList, OrderStatusChoices} from '@app/models/order';
 import {PagedResponse} from '@app/core/pagination';
 import {OrderHistoryService} from "@app/services";
 import {DaterangepickerDirective} from "ngx-daterangepicker-material";
@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import {fromEvent} from "rxjs";
 import {debounceTime, distinctUntilChanged, filter, tap} from "rxjs/operators";
 import {Choice} from "@app/models/drf";
+import { PaymentTypeChoices } from "@app/models/payment-method";
 
 @Component({
   selector: 'app-order-history-list',
@@ -40,7 +41,8 @@ import {Choice} from "@app/models/drf";
           <select [(ngModel)]="selectedStatus" *ngIf="searchFilterModalMode === 'filter'" class="sf-order-status"
                   name="orderStatus" id="orderStatus">
             <option value="all">Semua Pesanan</option>
-            <option value="unpaid">Menunggu Konfirmasi</option>
+            <option value="unpaid">Belum dibayar</option>
+            <option value="waiting">Menunggu Konfirmasi</option>
             <option value="paid">Pesanan Dibayar</option>
             <option value="ready">Pesanan Disiapkan</option>
             <option value="shipped">Pesanan Dikirim</option>
@@ -78,7 +80,8 @@ import {Choice} from "@app/models/drf";
         <select [(ngModel)]="selectedStatus" class="order-status-selection" name="orderStatus" id="orderStatus"
                 (change)="filterStatus()" *ngIf="!mobile">
           <option value="all">Semua Pesanan</option>
-          <option value="unpaid">Menunggu Konfirmasi</option>
+          <option value="unpaid">Belum dibayar</option>
+          <option value="waiting">Menunggu Konfirmasi</option>
           <option value="paid">Pesanan Dibayar</option>
           <option value="ready">Pesanan Disiapkan</option>
           <option value="shipped">Pesanan Dikirim</option>
@@ -112,6 +115,9 @@ import {Choice} from "@app/models/drf";
                     </span>
                     <span *ngIf="data.status === 'paid'" class="order-status-text paid">
                       {{ getStatusName(data.status) }}
+                    </span>
+                    <span *ngIf="data.status === 'waiting'" class="order-status-text waiting">
+                      {{ getStatusName(data.status)|slice:0:7 }}
                     </span>
                     <span *ngIf="data.status === 'ready'" class="order-status-text paid">
                       {{ getStatusName(data.status) }}
@@ -152,14 +158,34 @@ import {Choice} from "@app/models/drf";
                   <span class="product-qty">QTY {{ data.featuredProduct.quantity }}</span>
                   <span class="product-price">{{ data.featuredProduct.price | currency:'Rp ':'symbol':'1.0' }}</span>
                 </div>
-                <div class="button-div" *ngIf="!mobile">
-                  <button><a style="text-decoration: none; color: #333333" [routerLink]="[data.orderNumber]">Lihat
-                    Detail</a></button>
+                <div class="button-div"
+                     [class.is-flex]="canConfirmPayment(data)"
+                     *ngIf="!mobile">
+                  <button *ngIf="canConfirmPayment(data)">
+                    <a [routerLink]="['/order-confirm']" style="text-decoration: none; color: #333333; cursor: pointer;">
+                      Konfirmasi Pembayaran
+                    </a>
+                  </button>&nbsp;
+                  <button>
+                    <a style="text-decoration: none; color: #333333" [routerLink]="[data.orderNumber]">Lihat Detail</a>
+                  </button>
                 </div>
               </div>
-              <div class="button-div" *ngIf="mobile" [routerLink]="[data.orderNumber]">
-                <button><a style="text-decoration: none; color: #333333">Lihat
-                  Detail</a></button>
+              <div class="button-div"
+                   [class.is-flex]="canConfirmPayment(data)"
+                   *ngIf="mobile">
+                <button *ngIf="canConfirmPayment(data)">
+                  <a  [routerLink]="['/order-confirm']"
+                      style="text-decoration: none; color: #333333">
+                    Konfirmasi Pembayaran
+                  </a>
+                </button>&nbsp;
+                <button>
+                  <a style="text-decoration: none; color: #333333"
+                     [routerLink]="[data.orderNumber]">
+                    Lihat Detail
+                  </a>
+                </button>
               </div>
             </div>
           </ng-container>
@@ -217,7 +243,7 @@ export class OrderHistoryListComponent implements OnInit, AfterViewInit {
       this.pageNum = data.page.pageNumber;
       this.status = data.status;
 
-      this.orderData = data.page.entities
+      this.orderData = data.page.entities;
     });
   }
 
@@ -463,5 +489,12 @@ export class OrderHistoryListComponent implements OnInit, AfterViewInit {
       queryParams: queryParams,
       queryParamsHandling: 'merge'
     });
+  }
+
+  canConfirmPayment(order: OrderList): boolean {
+    return (
+      order.orderPayment.paymentGateway.type === PaymentTypeChoices.MANUAL_TRANSFER &&
+      (order.status === OrderStatusChoices.UNPAID || order.status === OrderStatusChoices.WAITING)
+    );
   }
 }

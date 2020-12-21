@@ -61,4 +61,22 @@ export class OrderHistoryService extends AbstractCrudService<order.Order> {
       .options<OptionsResponse>(`${this.baseUrl}/`, {observe: 'body', responseType: 'json'})
       .pipe(map(resp => (resp.actions.POST[fieldName] as ChoiceField).choices));
   }
+
+  fetchAll(query: { user?: string, payment_type?: string, product?: string, per_page?: string, status?: string | string[] }): Observable<any> {
+    let params = new HttpParams({fromObject: query});
+
+    if (!query.per_page) {
+      params = params.set('per_page', '250');
+    }
+
+    if (!query.user) {
+      params = params.set('user', this.credentialsService.email);
+    }
+
+    return this.httpClient.get(`${this.baseUrl}`, { params });
+  }
+
+  createOrderPaymentConfirm(orderId: number, data: any): Observable<void> {
+    return this.httpClient.post<void>(`${this.baseUrl}/${orderId}/payment-confirm/`, data);
+  }
 }

@@ -50,4 +50,7 @@ export interface SummaryPayment {
   name: string;
   vaNumber: string;
   status: string;
+  type: string;
+  accountNumber?: string;
+  accountHoldNumber?: string;
 }

@@ -8,12 +8,17 @@ import { SharedModule } from "@app/shared";
 
 import { OrderSummaryRoutingModule } from "./order-summary.routing.module";
 import { OrderSummaryComponent } from "./order-summary.component";
-import { OrderSummaryProgressComponent, OrderSummaryDoneComponent } from "./components";
+import {
+  OrderSummaryProgressComponent,
+  OrderSummaryDoneComponent,
+  OrderSummaryManualTransferComponent
+} from "./components";
 
 @NgModule({
   declarations: [
     OrderSummaryComponent,
-    OrderSummaryProgressComponent, OrderSummaryDoneComponent
+    OrderSummaryProgressComponent, OrderSummaryDoneComponent,
+    OrderSummaryManualTransferComponent,
   ],
   imports: [
     CommonModule,

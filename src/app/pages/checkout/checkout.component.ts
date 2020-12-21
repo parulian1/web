@@ -12,6 +12,7 @@ import {CheckoutService} from "@app/services/checkout.service";
 import {environment} from "@env/environment.staging";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {AlertDialogComponent} from "@app/shared/alert-dialog";
+import { PaymentTypeChoices } from "@app/models/payment-method";
 
 const log = new Logger('Checkout');
 
@@ -90,11 +91,6 @@ export class CheckoutComponent implements OnInit, DoCheck {
       this.cartTotals = this.cart.cartTotals;
     }
     this.canCheckout = this.stateService.canCheckout;
-  }
-
-  getPayment($event: any) {
-    this.stateService.statePaymentMethod = null;
-    this.stateService.statePaymentMethod = $event;
   }
 
   getAddress($event: Addresses) {
@@ -199,11 +195,17 @@ export class CheckoutComponent implements OnInit, DoCheck {
             order_number: this.pipe.transform(res.headers.get('location')),
           };
 
-          this.service.fetchPaymentRequest(orderNumber).subscribe(resp => {
-            if (resp.status === 200) {
-              window.location.href = resp.body.redirectUrl;
-            }
-          });
+          if (this.stateService.getStatePayment.type !== PaymentTypeChoices.MANUAL_TRANSFER) {
+            this.service.fetchPaymentRequest(orderNumber).subscribe(resp => {
+              if (resp.status === 200) {
+                window.location.href = resp.body.redirectUrl;
+              }
+            });
+          } else {
+            this.router.navigate(
+              ['order-summary'], { queryParams: { order_id: orderNumber.order_number } }
+              );
+          }
         }
       }, (error) => {
         this._handleError(error);
