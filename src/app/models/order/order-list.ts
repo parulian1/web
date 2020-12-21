@@ -1,5 +1,11 @@
 import {OrderPayment} from "@app/models/order/order-payment";
 
+export enum OrderStatusChoices {
+  WAITING = 'waiting',
+  UNPAID = 'unpaid',
+  // todo: etc, you can check on api order type OPTIONS
+}
+
 export interface OrderList {
   href: string;
   orderNumber: string;

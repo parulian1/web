@@ -1,3 +1,7 @@
+export enum PaymentTypeChoices {
+  MANUAL_TRANSFER = 'manual_transfer'
+}
+
 export interface PaymentMethod {
   paymentTypeTitle: string;
   type: string;

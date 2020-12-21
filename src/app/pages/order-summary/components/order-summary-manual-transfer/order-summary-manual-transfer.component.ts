@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {OrderSummary, SummaryPayment} from "@app/models/checkout";
 import { PaymentMethodService } from "@app/services/payment-method.service";
-import { PaymentMethodType } from "@app/models/payment-method";
+import { PaymentMethodType, PaymentTypeChoices } from "@app/models/payment-method";
 
 @Component({
   selector: "app-order-manual-transfer",
@@ -140,10 +140,8 @@ export class OrderSummaryManualTransferComponent implements OnInit {
   ngOnInit(): void {
     this.paymentMethodService.fetchList(true).subscribe(result => {
       this.manualTransfers = result
-        .filter(pList => pList.type === 'manual_transfer')
+        .filter(pList => pList.type === PaymentTypeChoices.MANUAL_TRANSFER)
         .map(payment => payment.paymentMethods)[0];
-
-      console.log('manual:', this.manualTransfers);
     });
 
     this.payment = {

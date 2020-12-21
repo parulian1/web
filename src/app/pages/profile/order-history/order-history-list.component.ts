@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild, HostListener} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 
-import {Order, OrderList} from '@app/models/order';
+import {Order, OrderList, OrderStatusChoices} from '@app/models/order';
 import {PagedResponse} from '@app/core/pagination';
 import {OrderHistoryService} from "@app/services";
 import {DaterangepickerDirective} from "ngx-daterangepicker-material";
@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import {fromEvent} from "rxjs";
 import {debounceTime, distinctUntilChanged, filter, tap} from "rxjs/operators";
 import {Choice} from "@app/models/drf";
+import { PaymentTypeChoices } from "@app/models/payment-method";
 
 @Component({
   selector: 'app-order-history-list',
@@ -243,7 +244,6 @@ export class OrderHistoryListComponent implements OnInit, AfterViewInit {
       this.status = data.status;
 
       this.orderData = data.page.entities;
-      console.log('orderData', this.orderData);
     });
   }
 
@@ -493,8 +493,8 @@ export class OrderHistoryListComponent implements OnInit, AfterViewInit {
 
   canConfirmPayment(order: OrderList): boolean {
     return (
-      order.orderPayment.paymentGateway.type === 'manual_transfer' &&
-      (order.status === 'unpaid' || order.status === 'waiting')
+      order.orderPayment.paymentGateway.type === PaymentTypeChoices.MANUAL_TRANSFER &&
+      (order.status === OrderStatusChoices.UNPAID || order.status === OrderStatusChoices.WAITING)
     );
   }
 }

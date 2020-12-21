@@ -12,6 +12,7 @@ import {CheckoutService} from "@app/services/checkout.service";
 import {environment} from "@env/environment.staging";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {AlertDialogComponent} from "@app/shared/alert-dialog";
+import { PaymentTypeChoices } from "@app/models/payment-method";
 
 const log = new Logger('Checkout');
 
@@ -194,7 +195,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
             order_number: this.pipe.transform(res.headers.get('location')),
           };
 
-          if (this.stateService.getStatePayment.type !== 'manual_transfer') {
+          if (this.stateService.getStatePayment.type !== PaymentTypeChoices.MANUAL_TRANSFER) {
             this.service.fetchPaymentRequest(orderNumber).subscribe(resp => {
               if (resp.status === 200) {
                 window.location.href = resp.body.redirectUrl;

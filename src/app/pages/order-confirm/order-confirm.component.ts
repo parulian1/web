@@ -4,7 +4,8 @@ import { OrderHistoryService } from '@app/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Order } from '@app/models/order';
 import { DatePipe } from '@angular/common'
-import { PaymentMethod, PaymentMethodType } from '@app/models/payment-method';
+import { PaymentMethod, PaymentMethodType, PaymentTypeChoices } from '@app/models/payment-method';
+
 
 @Component({
   selector: 'app-order-confirm',
@@ -176,7 +177,7 @@ export class OrderConfirmComponent implements OnInit {
     this.route.data.subscribe((data: { choices: { orders: Order[], payments: PaymentMethod[] } }) => {
       this.orderChoices = data.choices.orders || [];
       this.paymentChoices = data.choices.payments
-        .filter(p => p.type === 'manual_transfer')
+        .filter(p => p.type === PaymentTypeChoices.MANUAL_TRANSFER)
         .map(p => p.paymentMethods)[0] || [];
     });
   }

@@ -8,14 +8,17 @@
   </mat-toolbar>
   <div class="order-summary" *ngIf="orderSummary">
     <ng-container *ngIf="orderSummary.payment.status === 'unpaid'; else elsePaid">
+
       <app-order-summary-progress
-        *ngIf="orderSummary.payment.type !== 'manual_transfer'"
+        *ngIf="!isPaymentManualTransfer"
         [orderSummary]="orderSummary">
       </app-order-summary-progress>
+
       <app-order-manual-transfer
-        *ngIf="orderSummary.payment.type === 'manual_transfer'"
+        *ngIf="isPaymentManualTransfer"
         [orderSummary]="orderSummary">
       </app-order-manual-transfer>
+
     </ng-container>
     <ng-template #elsePaid>
       <app-order-summary-done [orderSummary]="orderSummary"></app-order-summary-done>
