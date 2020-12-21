@@ -1,17 +1,18 @@
-import {Component, DoCheck, EventEmitter, OnChanges, OnInit, Output} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Addresses} from '@app/models/addresses';
-import {Cart, CartModified, CartTotals} from '@app/models/cart';
-import {Area} from '@app/models/area';
-import {Logger} from '@app/core';
-import {ShippingMethodService} from '@app/services/shipping-method.service';
-import {ShippingCost} from '@app/models/shipping-method';
-import {EntityToSlugPipe} from '@app/shared/utils/entity-to-slug.pipe';
-import {StateCheckout} from '@app/services';
-import {CheckoutService} from "@app/services/checkout.service";
-import {environment} from "@env/environment.staging";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {AlertDialogComponent} from "@app/shared/alert-dialog";
+import { Component, DoCheck, EventEmitter, OnChanges, OnInit, Output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Addresses } from '@app/models/addresses';
+import { Cart, CartModified, CartTotals } from '@app/models/cart';
+import { Area } from '@app/models/area';
+import { ConfigService, Logger } from '@app/core';
+import { ShippingMethodService } from '@app/services/shipping-method.service';
+import { ShippingCost } from '@app/models/shipping-method';
+import { EntityToSlugPipe } from '@app/shared/utils/entity-to-slug.pipe';
+import { StateCheckout } from '@app/services';
+import { CheckoutService } from "@app/services/checkout.service";
+import { environment } from "@env/environment.staging";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { AlertDialogComponent } from "@app/shared/alert-dialog";
+import { Configuration } from "@app/models";
 import { PaymentTypeChoices } from "@app/models/payment-method";
 
 const log = new Logger('Checkout');
@@ -37,16 +38,20 @@ export class CheckoutComponent implements OnInit, DoCheck {
 
   @Output() checkoutEmitter: EventEmitter<any> = new EventEmitter<any>();
 
+  config: Configuration;
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private shippingServices: ShippingMethodService,
               private pipe: EntityToSlugPipe,
               private stateService: StateCheckout,
               private service: CheckoutService,
-              private snackbar: MatSnackBar) {
+              private snackbar: MatSnackBar,
+              private appConfigService: ConfigService) {
   }
 
   ngOnInit(): void {
+    this.config = this.appConfigService.config;
     this.route.data
       .subscribe((data: {
         cart: CartModified,

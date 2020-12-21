@@ -18,7 +18,7 @@
     <div class="column is-12 has-text-centered">
       <div class="order-success-title" *ngIf="orderSummary.payment.status === 'paid'; else elseFailedTitle ">
         <h2 class="title-main">Transaksi Berhasil</h2>
-        <span class="title-sub">Terima kasih sudah berbelanja di Martha Tilaar Shop</span>
+        <span class="title-sub">Terima kasih sudah berbelanja di {{ config.name | titlecase }} Shop</span>
       </div>
 
       <ng-template #elseFailedTitle>

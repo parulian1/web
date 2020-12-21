@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Logger } from '@app/core';
+import { ConfigService, Logger } from '@app/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Cart, CartModified, CartTotals, LineItems, ProductCart } from '@app/models/cart';
@@ -9,6 +9,7 @@ import { LocalStorage } from '@app/services';
 import { DeleteCartDialogComponent } from '@app/pages/cart/delete-cart-dialog';
 import { PriceLists } from '@app/models/product-detail';
 import { Title } from "@angular/platform-browser";
+import { Configuration } from "@app/models";
 
 
 const log = new Logger('Cart');
@@ -34,15 +35,22 @@ export class CartComponent implements OnInit {
   page = 'cart';
   priceInfo = [];
   productsImage = [];
+  config: Configuration;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private localStorage: LocalStorage,
               public dialog: MatDialog,
-              private title: Title) {
+              private title: Title,
+              private appConfigService: ConfigService) {
   }
 
   ngOnInit(): void {
+    this.config = this.appConfigService.config;
+    let shopName = "Martha Tilaar Shop";
+    if (!!this.config) {
+      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
     this.route.data.subscribe((data: { cart: CartModified }) => {
       this.localStorage.removeItem('cart-quantity');
       this.cart = data.cart[0].cart;
@@ -63,7 +71,7 @@ export class CartComponent implements OnInit {
       this.setProductImage(this.cartItems, this.productModified);
     });
 
-    this.title.setTitle('Shopping Cart ' + ' - Martha Tilaar Shop')
+    this.title.setTitle('Shopping Cart ' + ` - ${ shopName }`);
   }
 
   removeCartItem(line: LineItems) {

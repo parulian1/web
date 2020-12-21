@@ -1,17 +1,18 @@
-import {AfterViewInit, Component, DoCheck, ElementRef, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import {ProductsService} from '@app/services/products.service';
+import { AfterViewInit, Component, DoCheck, ElementRef, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { ProductsService } from '@app/services/products.service';
 import {
   ProductCategory, ProductItems,
   ProductLists, ProductOrdering, ProductPriceRange, ProductVendor,
 } from '@app/models/product-lists';
-import {PaginationService} from '@app/services/pagination.service';
-import {SharedConstants} from '@app/shared/shared.constants';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Logger} from '@app/core';
-import {ProductPagedResponse} from '@app/core/pagination/product-paged-response';
-import {ProductDetail} from '@app/models/product-detail';
-import {Subscription} from 'rxjs';
-import {Title} from "@angular/platform-browser";
+import { PaginationService } from '@app/services/pagination.service';
+import { SharedConstants } from '@app/shared/shared.constants';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConfigService, Logger } from '@app/core';
+import { ProductPagedResponse } from '@app/core/pagination/product-paged-response';
+import { ProductDetail } from '@app/models/product-detail';
+import { Subscription } from 'rxjs';
+import { Title } from "@angular/platform-browser";
+import { Configuration } from "@app/models";
 
 const log = new Logger('PLP');
 
@@ -62,15 +63,23 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
   productPagedResponse: ProductPagedResponse<ProductLists>;
   private subscription: Subscription;
 
+  config: Configuration;
+
   constructor(private productsService: ProductsService,
               private pagerService: PaginationService,
               private el: ElementRef,
               private route: ActivatedRoute,
               private router: Router,
-              private  title: Title) {
+              private  title: Title,
+              private appConfigService: ConfigService) {
   }
 
   ngOnInit(): void {
+    this.config = this.appConfigService.config;
+    let shopName = "Martha Tilaar Shop";
+    if (!!this.config) {
+      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
     this.subscription = this.route.data.subscribe((data: {
      productPagedResponse: ProductPagedResponse<ProductLists>
     }) => {
@@ -90,7 +99,7 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
       this.queryText = queryParam.q || '';
     });
 
-    this.title.setTitle('Search '+ ' - Martha Tilaar Shop')
+    this.title.setTitle('Search '+ ` - ${ shopName }`);
   }
 
   ngAfterViewInit(): void {

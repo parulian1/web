@@ -13,6 +13,7 @@ import { AuthUserService } from "@app/services/auth-user.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AlertDialogComponent } from "@app/shared/alert-dialog";
 import {standardEmailValidator} from "@app/core/validators";
+import {Configuration} from "@app/models";
 
 
 @Component({
@@ -34,6 +35,8 @@ export class AuthFormComponent implements OnInit {
   public formType: string;
   @Input()
   lazyValidation: boolean = false;
+  @Input()
+  config: Configuration;
 
   constructor(
     private service: AuthUserService,

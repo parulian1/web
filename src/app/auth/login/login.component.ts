@@ -1,7 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MatDialogRef} from "@angular/material/dialog";
-import {SideMenuHeaderComponent} from "@app/shell/header/side-menu-header";
-import {Title} from "@angular/platform-browser";
+import { Component, Input, OnInit } from '@angular/core';
+import { Title } from "@angular/platform-browser";
+import { Configuration } from "@app/models";
+import { ConfigService } from "@app/core";
 
 @Component({
   selector: 'app-login',
@@ -10,13 +10,19 @@ import {Title} from "@angular/platform-browser";
 })
 export class LoginComponent implements OnInit {
   public formType: string;
+  config: Configuration;
 
-  constructor(private title: Title) {
+  constructor(private title: Title, private appConfigService: ConfigService) {
   }
 
   ngOnInit(): void {
+    this.config = this.appConfigService.config;
+    let shopName = "Martha Tilaar Shop";
+    if (!!this.config) {
+      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
     this.formType = 'Login';
-    this.title.setTitle('Login ' + ' - Martha Tilaar Shop')
+    this.title.setTitle(`Login - ${ shopName }`)
   }
 
 }

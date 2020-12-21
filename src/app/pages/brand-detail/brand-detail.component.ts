@@ -1,11 +1,12 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ProductsService} from "@app/services/products.service";
-import {HighlightDetail, HighlightList} from "@app/models/highlight";
-import {BrandService} from "@app/services/brand.service";
-import {Brand} from "@app/models/brand";
-import {ActivatedRoute} from "@angular/router";
-import {HighlightService} from "@app/services/highlight.service";
-import {Title} from "@angular/platform-browser";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { HighlightList } from "@app/models/highlight";
+import { BrandService } from "@app/services/brand.service";
+import { Brand } from "@app/models/brand";
+import { ActivatedRoute } from "@angular/router";
+import { HighlightService } from "@app/services/highlight.service";
+import { Title } from "@angular/platform-browser";
+import { Configuration } from "@app/models";
+import { ConfigService } from "@app/core";
 
 @Component({
   selector: 'app-brand-detail',
@@ -17,18 +18,24 @@ export class BrandDetailComponent implements OnInit, OnDestroy {
   highlight: Array<HighlightList> = [];
   slug: string;
   private subscribe: any;
+  config: Configuration;
 
-  constructor(
-    private brandService: BrandService,
-    private route: ActivatedRoute,
-    private highlightService: HighlightService,
-    private title: Title) {
+  constructor(private brandService: BrandService,
+              private route: ActivatedRoute,
+              private highlightService: HighlightService,
+              private title: Title,
+              private appConfigService: ConfigService) {
   }
 
   ngOnInit(): void {
+    this.config = this.appConfigService.config;
+    let shopName = "Martha Tilaar Shop";
+    if (!!this.config) {
+      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
     this.route.data.subscribe((data: { brand: Brand }) => {
       this.brand = data.brand;
-      this.title.setTitle('Brand ' + this.brand.name + ' - Martha Tilaar Shop')
+      this.title.setTitle('Brand ' + this.brand.name + ` - ${ shopName }`)
     });
     this.subscribe = this.route.params.subscribe(params => {
       this.slug = params['slug'];

@@ -7,14 +7,23 @@
     <img [src]="promotion.banner ? promotion.banner : 'assets/banner-example.png' "/>
   </div>
     <div class="promotion-desc">
-    <h1>{{promotion.name}}</h1>
+    <h1>
+      {{ promotion.name }}
+    </h1>
     <div class="promotion-time"
          *ngIf="!!promotion.validFrom">
-      <div class="promotion-time-valid">Periode
-        <span class="promotion-time-from">{{promotion.validFrom|date:'longDate'}}</span>
-        <span class="promotion-time-to" *ngIf="!!promotion.validTo; else elseValidTo">- {{promotion.validTo|date: 'longDate'}}</span>
+      <div class="promotion-time-valid">
+        Periode
+        <span class="promotion-time-from">
+          {{ promotion.validFrom|date:'longDate' }}
+        </span>
+        <span class="promotion-time-to" *ngIf="!!promotion.validTo; else elseValidTo">
+          - {{ promotion.validTo|date: 'longDate'}}
+        </span>
         <ng-template #elseValidTo>
-          <span class="promotion-time-to">Sampai Batas Waktu yang Tidak Ditentukan</span>
+          <span class="promotion-time-to">
+            Sampai Batas Waktu yang Tidak Ditentukan
+          </span>
         </ng-template>
       </div>
     </div>
@@ -22,77 +31,21 @@
   </div>
   <div class="promotion-products">
     <div class="promotion-products-side">
-      <app-sidenav-overlay
-        #sidenav
-        (filter)="onFiltered($event)">
+      <app-sidenav-overlay #sidenav (filter)="onFiltered($event)">
       </app-sidenav-overlay>
       <aside class="sidebar">
-        <app-sort-product
-          [orderingList]="orderingList"
-          (sorted)="onSorted($event)">
+        <app-sort-product [orderingList]="orderingList" (sorted)="onSorted($event)">
         </app-sort-product>
-        <app-filter-product
-          [categoryList]=categoryList
-          [brandList]=brandList
-          [priceRangeList]="priceRangeList"
-          (filter)="onFiltered($event)"></app-filter-product>
+        <app-filter-product [categoryList]="categoryList" [brandList]="brandList"
+                            [priceRangeList]="priceRangeList" (filter)="onFiltered($event)">
+        </app-filter-product>
       </aside>
     </div>
     <section class="promotion-products-list" *ngIf="promotion.products.length !== 0">
       <div class="flex-container">
-        <app-product-card *ngFor="let product of promotion.products"
-          [productHref]="product.href">
+        <app-product-card *ngFor="let product of promotion.products" [productHref]="product.href">
         </app-product-card>
       </div>
     </section>
-
-    <!--  <section class="header">-->
-    <!--    <div style="align-items: center; text-align: center">-->
-    <!--      <h1>{{ promotion.name }}</h1>-->
-    <!--      <div>Periode</div>-->
-    <!--      <div>-->
-    <!--        <span>{{ promotion.validFrom|date:'longDate' }} -</span>-->
-    <!--        <span *ngIf="!promotion.validTo"></span>-->
-
-    <!--        <div *ngIf="!!promotion.validTo; then thenBlock else elseBlock"></div>-->
-    <!--        <ng-template #thenBlock>{{ promotion.validTo|date:'longDate' }}</ng-template>-->
-    <!--        <ng-template #elseBlock>Sampai Batas Waktu Yang Tidak Ditentukan</ng-template>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--  </section>-->
-
-    <!--  <section class="product" style="margin: 16px auto">-->
-    <!--    <app-sidenav-overlay-->
-    <!--      #sidenav-->
-    <!--      (filter)="onFiltered($event)">-->
-    <!--    </app-sidenav-overlay>-->
-
-    <!--    <div style="width: 100%; display: flex">-->
-    <!--      <aside class="sidebar" style="flex: 20%">-->
-    <!--        <app-sort-product-->
-    <!--          [orderingList]="orderingList"-->
-    <!--          (sorted)="onSorted($event)">-->
-    <!--        </app-sort-product>-->
-    <!--        <app-filter-product-->
-    <!--          [categoryList]=categoryList-->
-    <!--          [brandList]=brandList-->
-    <!--          [priceRangeList]="priceRangeList"-->
-    <!--          (filter)="onFiltered($event)"></app-filter-product>-->
-    <!--      </aside>-->
-    <!--      <section class="main" style="flex: 80%;flex-direction: column;justify-content: start;">-->
-
-    <!--        <app-paginate [page]="productPagedResponse"></app-paginate>-->
-    <!--        <ng-container *ngIf="!!promotion.products else emptyResponse">-->
-    <!--          <app-product-card-->
-    <!--            [productHref]="product.href"-->
-    <!--            *ngFor="let product of promotion.products">-->
-    <!--          </app-product-card>-->
-    <!--        </ng-container>-->
-    <!--        <ng-container #emptyResponse>-->
-    <!--          &lt;!&ndash;          TODO: Design for empty product promotion result&ndash;&gt;-->
-    <!--          &lt;!&ndash;          <div>Kosong</div>&ndash;&gt;-->
-    <!--        </ng-container>-->
-    <!--      </section>-->
-    <!--    </div>-->
-    <!--  </section>-->
   </div>
+</div>

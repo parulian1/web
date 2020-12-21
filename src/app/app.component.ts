@@ -1,16 +1,17 @@
-import {DOCUMENT, isPlatformBrowser} from '@angular/common';
-import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2} from '@angular/core';
-import {Title} from '@angular/platform-browser';
-import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
-import {Store} from '@ngrx/store';
-import {SubscriptionLike} from 'rxjs';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { SubscriptionLike } from 'rxjs';
 
-import {AuthenticationService, CredentialsService} from '@app/core/authentication';
-import {AppState} from '@app/store/state/app.state';
-import {AuthUserService} from '@app/services';
-import {Logout} from '@app/store/actions';
-import {environment} from '@env/environment.prod';
-import {Logger} from '@app/core';
+import { AuthenticationService, CredentialsService } from '@app/core/authentication';
+import { AppState } from '@app/store/state/app.state';
+import { AuthUserService } from '@app/services';
+import { Logout } from '@app/store/actions';
+import { environment } from '@env/environment.prod';
+import { ConfigService, Logger } from '@app/core';
+import { Configuration } from "@app/models";
 
 declare let gtag: Function;
 declare let fbq:Function;
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isBusy = false;
   private routerEventsSub: SubscriptionLike;
   private timer;
+  config: Configuration;
 
   constructor(private store: Store<AppState>,
               private title: Title,
@@ -34,13 +36,19 @@ export class AppComponent implements OnInit, OnDestroy {
               private authService: AuthenticationService,
               private credentialsService: CredentialsService,
               private service: AuthUserService,
+              private appConfigService: ConfigService,
               @Inject(PLATFORM_ID) private platformId: any,
               @Inject(DOCUMENT) private document: Document,
               private renderer2: Renderer2,) {
   }
 
   ngOnInit() {
-    this.title.setTitle('Martha Tilaar Shop'); // todo: is this necessary?
+    this.config = this.appConfigService.config;
+    let shopName = "Martha Tilaar Shop";
+    if (!!this.config) {
+      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
+    this.title.setTitle(shopName);
 
     if (isPlatformBrowser(this.platformId)) {
       this.startRefreshTokenCheck();

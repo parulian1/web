@@ -3,15 +3,8 @@
   <div class="field">
     <label class="label">Email</label>
     <div class="control">
-      <input
-        class="input"
-        [formControl]="email"
-        [class.is-danger]="isValidFormControl(email)"
-        type="text"
-        id="input-email"
-        name="input-email"
-        placeholder="Masukkan Email"
-      />
+      <input class="input" [formControl]="email" [class.is-danger]="isValidFormControl(email)"
+             type="text" id="input-email" name="input-email" placeholder="Masukkan Email"/>
     </div>
 
     <p *ngIf="isValidFormControl(email)" class="help is-danger" id="email-alert" name="email-alert">
@@ -23,17 +16,13 @@
   <div class="field">
     <label class="label">Password</label>
     <div class="control has-icons-right" appPasswordToggleIcon>
-      <input
-        class="input"
-        [formControl]="password"
-        [class.is-danger]="isValidFormControl(password)"
-        type="password"
-        id="input-password"
-        name="input-password"
-        placeholder="Masukkan Password"/>
+      <input class="input" [formControl]="password" [class.is-danger]="isValidFormControl(password)"
+             type="password" id="input-password" name="input-password" placeholder="Masukkan Password"/>
 
       <span class="icon icon-password is-right">
-        <i class="material-icons">visibility</i>
+        <i class="material-icons">
+          visibility
+        </i>
       </span>
     </div>
 
@@ -44,9 +33,9 @@
 
   <!-- Forgot Password -->
   <div *ngIf="!isRegisterPage" class="forgot-password">
-    <a [routerLink]="['/forgot-password']"
-       id="forgot-password"
-       name="forgot-password">Lupa Password</a>
+    <a [routerLink]="['/forgot-password']" id="forgot-password" name="forgot-password">
+      Lupa Password
+    </a>
   </div>
 
   <!--  Terms and Condition (T&C) -->
@@ -54,8 +43,14 @@
     <mat-checkbox formControlName="tnc" id="input-tnc" name="input-tnc" required>
       Dengan pembuatan akun, Anda menyetujui
       <!-- todo: ensure tnc and privacy / policy have same `slug` format -->
-      <a [routerLink]="['/page/syarat-dan-ketentuan']" class="tnc-text" id="syarat-tnc" name="syarat-tnc"> Syarat & Ketentuan </a> serta
-      <a [routerLink]="['/page/kebijakan-privasi']" class="tnc-text" id="kebijakan-tnc" name="kebijakan-tnc">Kebijakan Privasi</a> Martha Tilaar
+      <a [routerLink]="['/page/syarat-dan-ketentuan']" class="tnc-text" id="syarat-tnc" name="syarat-tnc">
+        Syarat & Ketentuan
+      </a>
+      serta
+      <a [routerLink]="['/page/kebijakan-privasi']" class="tnc-text" id="kebijakan-tnc" name="kebijakan-tnc">
+        Kebijakan Privasi
+      </a>
+      {{ config.name | titlecase }}
     </mat-checkbox>
 
     <div *ngIf="tnc.errors && submitted" class="form-alert" id="tnc-alert" name="tnc-alert">
@@ -65,9 +60,17 @@
 
   <!-- Button Groups -->
   <div class="auth-btn">
-    <button *ngIf="!isRegisterPage" class="btn-primary btn-login" type="submit" id="login-button" name="login-button" (click)="defaultAuth()">Login</button>
-    <button *ngIf="!isRegisterPage" class="btn-outline" id="register-button" name="register-button"><a [routerLink]="['/register']" id="register-link" name="register-link">Daftar</a></button>
-    <button *ngIf="isRegisterPage" class="btn-primary btn-register" type="submit" id="default-register-button" name="default-register-button" (click)="defaultAuth()">
+    <button *ngIf="!isRegisterPage" class="btn-primary btn-login" type="submit" id="login-button"
+            name="login-button" (click)="defaultAuth()">
+      Login
+    </button>
+    <button *ngIf="!isRegisterPage" class="btn-outline" id="register-button" name="register-button">
+      <a [routerLink]="['/register']" id="register-link" name="register-link">
+        Daftar
+      </a>
+    </button>
+    <button *ngIf="isRegisterPage" class="btn-primary btn-register" type="submit" id="default-register-button"
+            name="default-register-button" (click)="defaultAuth()">
       Daftar
     </button>
   </div>
@@ -75,6 +78,9 @@
     <app-social-button [currentMode]="currentMode"></app-social-button>
   </div>
   <div *ngIf="isRegisterPage" class="already-register" style="margin-bottom: 50px">
-    Sudah mendaftar? <a [routerLink]="['/login']" id="registered-login-button" name="registered-login-button">Masuk</a>
+    Sudah mendaftar?
+    <a [routerLink]="['/login']" id="registered-login-button" name="registered-login-button">
+      Masuk
+    </a>
   </div>
 </form>

@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import {ProductPagedResponse} from '@app/core/pagination/product-paged-response';
-import {SharedConstants} from '@app/shared/shared.constants';
+import { ProductPagedResponse } from '@app/core/pagination/product-paged-response';
+import { SharedConstants } from '@app/shared/shared.constants';
 import {
   ProductCategory,
   ProductLists,
@@ -10,8 +10,9 @@ import {
   ProductPriceRange,
   ProductVendor
 } from '@app/models/product-lists';
-import {ProductPromotion} from '@app/models';
-import {Title} from "@angular/platform-browser";
+import { Configuration, ProductPromotion } from '@app/models';
+import { Title } from "@angular/platform-browser";
+import { ConfigService } from "@app/core";
 
 @Component({
   selector: 'app-promotion',
@@ -37,13 +38,18 @@ export class PromotionComponent implements OnInit {
 
   productPagedResponse: ProductPagedResponse<ProductLists>;
 
-  constructor(private route: ActivatedRoute, private title: Title) {
+  config: Configuration;
+
+  constructor(private route: ActivatedRoute, private title: Title, private appConfigService: ConfigService) {
   }
 
   ngOnInit(): void {
+    this.config = this.appConfigService.config;
+    const storeName = this.config.name.substr(0, 1).toUpperCase() +
+      this.config.name.substr(1);
     this.route.data.subscribe((data: { promotion: ProductPromotion }) => {
       this.promotion = data.promotion;
-      this.title.setTitle(' ' + this.promotion.name + ' - Martha Tilaar Shop')
+      this.title.setTitle(' ' + this.promotion.name + ` - ${storeName}`);
 
     });
   }
@@ -85,7 +91,6 @@ export class PromotionComponent implements OnInit {
         }
         break;
     }
-    // this.fetchProductLists();
   }
 
   onSorted($event: any) {

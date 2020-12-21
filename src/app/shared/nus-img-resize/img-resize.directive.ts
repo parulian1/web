@@ -37,11 +37,14 @@ export class ImgResizeDirective implements OnInit, AfterViewInit {
 
   parseImgSource(_imgData: { src: string; width: number; height: number }) {
     const slug = _imgData.src.split('/').pop();
-    const name = slug.match(/(^[a-zA-Z0-9\-\_\.]+)\./)[1];
-    const extension = slug.match(/([0-9a-zA-Z]+$)/)[0];
+    const matchedSlug = slug.match(/(^[a-zA-Z0-9\-\_\.]+)\./);
+    if (matchedSlug) {
+      const name = slug.match(/(^[a-zA-Z0-9\-\_\.]+)\./)[1];
+      const extension = slug.match(/([0-9a-zA-Z]+$)/)[0];
 
-    this._imgData.name = `${name}__w${_imgData.width}_h${_imgData.height}.${extension}`;
-    this._imgData.extension = extension;
+      this._imgData.name = `${name}__w${_imgData.width}_h${_imgData.height}.${extension}`;
+      this._imgData.extension = extension;
+    }
   }
 
   setLambdaResizer(_imgData: { src: string; width: number; height: number; name?: string; extension?: string }) {

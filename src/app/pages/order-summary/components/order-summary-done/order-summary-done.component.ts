@@ -1,5 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {OrderSummary} from '@app/models/checkout';
+import { Component, Input, OnInit } from '@angular/core';
+import { OrderSummary } from '@app/models/checkout';
+import { Configuration } from "@app/models";
 
 @Component({
   selector: 'app-order-summary-done',
@@ -8,6 +9,7 @@ import {OrderSummary} from '@app/models/checkout';
 })
 export class OrderSummaryDoneComponent implements OnInit {
   @Input() orderSummary: OrderSummary;
+  @Input() config: Configuration;
 
   constructor() { }
 

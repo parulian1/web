@@ -2,7 +2,7 @@
   <mat-toolbar class="order-summary-navbar" color="white">
     <mat-toolbar-row>
       <div class="mt-header-logo">
-        <a [routerLink]="['']"><img src="assets/header/logo-MTS-355x75.png" alt="Martha Tilaar Logo" /></a>
+        <a [routerLink]="['']"><img src="{{ config.logo }}" alt="{{ config.name }} Logo" /></a>
       </div>
     </mat-toolbar-row>
   </mat-toolbar>
@@ -21,7 +21,7 @@
 
     </ng-container>
     <ng-template #elsePaid>
-      <app-order-summary-done [orderSummary]="orderSummary"></app-order-summary-done>
+      <app-order-summary-done [orderSummary]="orderSummary" [config]="config"></app-order-summary-done>
     </ng-template>
   </div>
 </div>

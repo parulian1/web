@@ -12,18 +12,20 @@ import {
   PLATFORM_ID,
   SimpleChanges
 } from '@angular/core';
-import {Subscription} from 'rxjs';
+import { Subscription } from 'rxjs';
 
-import {Cart} from '@app/models/cart';
-import {CredentialsService} from '@app/core/authentication/credentials.service';
-import {CartService} from '@app/services/cart.service';
-import {LocalStorage} from '@app/services/local-storage.service';
-import {MatDialog} from '@angular/material/dialog';
-import {SideMenuHeaderComponent} from '@app/shell/header/side-menu-header';
-import {ProductsService} from '@app/services';
-import {EntityToSlugPipe} from '@app/shared/utils';
-import {Router} from '@angular/router';
-import {DOCUMENT, isPlatformBrowser} from '@angular/common';
+import { Cart } from '@app/models/cart';
+import { CredentialsService } from '@app/core/authentication/credentials.service';
+import { CartService } from '@app/services/cart.service';
+import { LocalStorage } from '@app/services/local-storage.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SideMenuHeaderComponent } from '@app/shell/header/side-menu-header';
+import { ProductsService } from '@app/services';
+import { EntityToSlugPipe } from '@app/shared/utils';
+import { Router } from '@angular/router';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { ConfigService } from "@app/core";
+import { Configuration } from "@app/models";
 
 @Component({
   selector: 'app-header',
@@ -60,9 +62,12 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit, OnChan
   showHistory: any;
   productSuggestion: Array<any>;
 
+  config: Configuration;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
     @Inject(DOCUMENT) private document: Document,
+    private appConfigService: ConfigService,
     private credentialsService: CredentialsService,
     private service: CartService,
     private productService: ProductsService,
@@ -73,6 +78,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit, OnChan
   }
 
   ngOnInit() {
+    this.config = this.appConfigService.config;
     if (this.credentialsService.isAuthenticated()) {
       this.localStorage.removeItem('cart-quantity');
       this.service.fetchCart()
