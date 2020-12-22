@@ -3,7 +3,7 @@
 .container {
   width: 100%;
   max-width: 432px;
-  padding: 0 16px 30px 16px;
+  padding: 0 16px 90px 16px;
 }
 
 .mat-toolbar-row {
@@ -156,4 +156,22 @@ select {
   margin: 0;
   font-size: 0.75rem;
   color: red;
+}
+
+.mt-header-logo {
+  a img {
+    max-width: 100%;
+    max-height: 55px;
+    padding: 4px 0;
+  }
+}
+
+@media screen and (max-width: $mobile-break) {
+  .mt-header-logo {
+    a img {
+      width: 153px;
+      height: auto;
+      margin: 15px 0;
+    }
+  }
 }
