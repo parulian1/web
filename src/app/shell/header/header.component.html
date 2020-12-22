@@ -2,7 +2,9 @@
   <mat-toolbar class="navbar-desktop" color="white">
     <mat-toolbar-row class="first-row">
       <div class="mt-header-logo">
-        <a [routerLink]="['/home']" ><img alt='{{ config.name }} Logo' src="config.logo"></a>
+        <a [routerLink]="['/home']" >
+          <img alt='{{ config.name | titlecase }} Logo' src="{{ config.logo }}">
+        </a>
       </div>
       <app-current-store></app-current-store>
       <app-search-bar (search)="searchEvent($event)"></app-search-bar>
@@ -32,7 +34,9 @@
       </div>
       <div class="mobile-middle">
         <div class="mt-header-logo">
-          <a [routerLink]="['/home']" (click)="backButton()"><img alt="{{ config.name }} Logo" src="assets/header/logo-MTS-174x37.png"></a>
+          <a [routerLink]="['/home']" (click)="backButton()">
+            <img alt="{{ config.name | titlecase }} Logo" src="{{ config.logo }}">
+          </a>
         </div>
       </div>
       <div class="mobile-right">
@@ -74,8 +78,7 @@
                    placeholder="Cari Produk"
                    type="search"/>
       <i class="material-icons icon-search">search</i>
-      <img (click)="queryText = ''" [hidden]="(queryText === '')"
-           class="clear-search"
+      <img (click)="queryText = ''" [hidden]="(queryText === '')" class="clear-search"
            src="assets/header/close-header-desktop.svg"/>
     </form>
   </span>
