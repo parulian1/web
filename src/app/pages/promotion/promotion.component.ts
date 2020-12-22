@@ -45,7 +45,7 @@ export class PromotionComponent implements OnInit {
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let storeName = "Martha Tilaar Shop";
+    let storeName = "Nusantara Platform";
     if (!!this.config) {
       storeName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
