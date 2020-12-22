@@ -1,0 +1,70 @@
+.social-button-dialog-wrapper {
+  padding: 5px;
+
+  .social-button__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      font-size: 1.5rem;
+      margin: 0;
+    }
+
+    .close-btn > a {
+      cursor: pointer;
+    }
+  }
+
+  .social-button__content {
+    margin-top: 20px;
+    display: flex;
+
+    .button {
+      display: flex;
+      justify-items: center;
+      align-items: center;
+      margin-right: 3px;
+      margin-left: 3px;
+    }
+  }
+}
+
+
+.button {
+  background-color: transparent;
+  border-color: transparent;
+  border-width: 1px;
+  border-radius: 4px;
+  cursor: pointer;
+  justify-content: center;
+  padding: calc(0.575em - 1px) 1em;
+  text-align: center;
+  white-space: nowrap;
+  font-size: 1rem;
+  font-weight: bold;
+
+  &[disabled] {
+    background-color: grey;
+  }
+}
+
+.button--facebook {
+  background-color: #4267B2;
+  color: #ffffff;
+}
+
+.button--twitter {
+  background-color: #1DA1F2;
+  color: #ffffff;
+}
+
+.button--whatsapp {
+  background-color: #25D366;
+  color: #FFFFFF;
+}
+
+
+.is-flex {
+  display: flex;
+}

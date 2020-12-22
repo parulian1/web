@@ -43,15 +43,24 @@
               <div class="brand">
                 <a href="{{ productDetail.vendor.href }}">{{ productDetail.vendor.name }}</a>
               </div>
-              <div class="review">
-                <mat-star-rating
-                  [rating]="ratingSummary.rating"
-                  [size]="16"
-                  [starCount]="5"
-                  style="margin-left: -5px;"></mat-star-rating>
-                <span class="review-score">({{ ratingSummary.rating }})</span>
-                <span class="review-total">({{ ratingSummary.totalReview }}) Review</span>
+
+              <div class="review-and-share">
+                <div class="review">
+                  <mat-star-rating
+                    [rating]="ratingSummary.rating"
+                    [size]="16"
+                    [starCount]="5"
+                    style="margin-left: -5px;"></mat-star-rating>
+                  <span class="review-score">({{ ratingSummary.rating }})</span>
+                  <span class="review-total">({{ ratingSummary.totalReview }}) Review</span>
+                </div>
+
+                <div class="share">
+                  <app-share-social-buttons>
+                  </app-share-social-buttons>
+                </div>
               </div>
+
               <div class="description">
                 <span [innerHTML]="productDetail.description"></span>
               </div>
