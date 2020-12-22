@@ -27,10 +27,14 @@ export class OrderSummaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
+    let shopName = "Nusantara Platform";
+    if (!!this.config) {
+      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
     this.route.queryParams.subscribe((resp) => {
       this.orderNumber = resp.order_id;
       this.getOrderSummary(this.orderNumber);
-      this.title.setTitle('Order Summary ' + ' - Martha Tilaar Shop')
+      this.title.setTitle(`Order Summary - ${ shopName }`);
     });
   }
 

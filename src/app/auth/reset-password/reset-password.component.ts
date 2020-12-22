@@ -31,7 +31,7 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let shopName = "Martha Tilaar Shop";
+    let shopName = "Nusantara Platform";
     if (!!this.config) {
       shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }

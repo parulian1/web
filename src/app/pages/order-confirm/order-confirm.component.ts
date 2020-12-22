@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Order } from '@app/models/order';
 import { DatePipe } from '@angular/common'
 import { PaymentMethod, PaymentMethodType, PaymentTypeChoices } from '@app/models/payment-method';
+import {ConfigService} from "@app/core";
+import {Configuration} from "@app/models";
 
 
 @Component({
@@ -14,7 +16,7 @@ import { PaymentMethod, PaymentMethodType, PaymentTypeChoices } from '@app/model
       <mat-toolbar color="white">
         <mat-toolbar-row>
           <div class="mt-header-logo">
-            <a [routerLink]="['']"><img src="assets/header/logo-mt.svg" alt="Martha Tilaar Logo"/></a>
+            <a [routerLink]="['']"><img src="{{ config?.logo }}" alt="{{ config?.name | titlecase }}"/></a>
           </div>
         </mat-toolbar-row>
       </mat-toolbar>
@@ -163,16 +165,20 @@ export class OrderConfirmComponent implements OnInit {
     nameImage: '',
   }
 
+  config: Configuration;
+
   constructor(
     private fb: FormBuilder,
     private orderHistoryService: OrderHistoryService,
     private router: Router,
     private route: ActivatedRoute,
     public datePipe: DatePipe,
+    private appConfigService: ConfigService
   ) {
   }
 
   ngOnInit(): void {
+    this.config = this.appConfigService.config;
     this.initialForm();
     this.route.data.subscribe((data: { choices: { orders: Order[], payments: PaymentMethod[] } }) => {
       this.orderChoices = data.choices.orders || [];
