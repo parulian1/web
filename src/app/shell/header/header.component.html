@@ -3,7 +3,7 @@
     <mat-toolbar-row class="first-row">
       <div class="mt-header-logo">
         <a [routerLink]="['/home']" >
-          <img alt='{{ config.name | titlecase }} Logo' src="{{ config.logo }}">
+          <img alt='{{ config.name | titlecase }} Logo' [src]="config.logo" [imgResizeType]="'brands-desktop'"appImgResize>
         </a>
       </div>
       <app-current-store></app-current-store>

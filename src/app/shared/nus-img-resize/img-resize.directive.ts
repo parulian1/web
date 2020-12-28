@@ -1,9 +1,21 @@
-import {AfterViewInit, Directive, ElementRef, OnInit} from '@angular/core';
+import {AfterViewInit, Directive, ElementRef, Input, OnInit} from '@angular/core';
+import {
+  DEFAULT_HEIGHT_BRANDS_DESKTOP,
+  DEFAULT_HEIGHT_BRANDS_MOBILE,
+  DEFAULT_HEIGHT_LOGO_HEADER_DESKTOP,
+  DEFAULT_HEIGHT_TESTIMONIAL_DESKTOP,
+  DEFAULT_WIDTH_BRANDS_DESKTOP,
+  DEFAULT_WIDTH_BRANDS_MOBILE,
+  DEFAULT_WIDTH_LOGO_HEADER_DESKTOP,
+  DEFAULT_WIDTH_TESTIMONIAL_DESKTOP
+} from '@app/models/images';
 
 @Directive({
   selector: '[appImgResize]'
 })
 export class ImgResizeDirective implements OnInit, AfterViewInit {
+  @Input() imgResizeType: string;
+
   nativeElement: HTMLImageElement;
   _imgData: { src: string, width: number, height: number, name?: string, extension?: string };
 
@@ -21,7 +33,7 @@ export class ImgResizeDirective implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.setImgData();
 
-    if(this._imgData) {
+    if (this._imgData) {
       this.setLambdaResizer(this._imgData);
     }
   }
@@ -32,6 +44,11 @@ export class ImgResizeDirective implements OnInit, AfterViewInit {
       height: this.nativeElement.clientHeight,
       width: this.nativeElement.clientWidth
     };
+
+    if (this._imgData.height === 0 || this._imgData.width === 0) {
+      this.setDefaultByType();
+    }
+
     this.parseImgSource(this._imgData);
   }
 
@@ -50,5 +67,28 @@ export class ImgResizeDirective implements OnInit, AfterViewInit {
   setLambdaResizer(_imgData: { src: string; width: number; height: number; name?: string; extension?: string }) {
     const prefix = _imgData.src.match(/^[a-zA-Z0-9\.\-\_\:\/]+\//)[0];
     this.nativeElement.src = prefix + _imgData.name;
+  }
+
+  setDefaultByType() {
+    if (this.imgResizeType) {
+      switch (this.imgResizeType) {
+        case 'brands-desktop' :
+          this._imgData.width = DEFAULT_WIDTH_BRANDS_DESKTOP;
+          this._imgData.height = DEFAULT_HEIGHT_BRANDS_DESKTOP;
+          break;
+        case 'brands-mobile' :
+          this._imgData.width = DEFAULT_WIDTH_BRANDS_MOBILE;
+          this._imgData.height = DEFAULT_HEIGHT_BRANDS_MOBILE;
+          break;
+        case 'testimonial-desktop' :
+          this._imgData.width = DEFAULT_WIDTH_TESTIMONIAL_DESKTOP;
+          this._imgData.height = DEFAULT_HEIGHT_TESTIMONIAL_DESKTOP;
+          break;
+        case 'logo-header-desktop' :
+          this._imgData.width = DEFAULT_WIDTH_LOGO_HEADER_DESKTOP;
+          this._imgData.height = DEFAULT_HEIGHT_LOGO_HEADER_DESKTOP;
+          break;
+      }
+    }
   }
 }
