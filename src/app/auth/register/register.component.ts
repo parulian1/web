@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
     this.config = this.appConfigService.config;
     this.formType = 'Register';
     let shopName = "Nusantara Platform";
-    if (!!this.config) {
+    if (!!this.config?.name) {
       shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
     this.title.setTitle(`${this.formType} - ${ shopName }`)
