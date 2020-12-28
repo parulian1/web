@@ -144,7 +144,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       case 'mastercard':
         return 'assets/user-payment/mastercard-med.png';
     }
-    return 'https://via.placeholder.com/35x21.png';
+    return 'assets/defaults/card.png';
   }
 
   formatCardMonthYear(param: string) {
