@@ -1,8 +1,11 @@
 <div class="brands">
   <span class="subtitle">Brands</span>
   <div class="list-brands">
-    <div class="brand" *ngFor="let brandData of brands; index as i; first as isFirst">
-      <a [routerLink]="['/brand',brandData.href|entityToSlug]" class="brands-link"><img [src]="brandData.iconImage" (error)="getDefaultImage($event)" appImgResize/></a>
+    <div *ngFor="let brandData of brands; index as i; first as isFirst" class="brand">
+      <a [routerLink]="['/brand',brandData.href|entityToSlug]" class="brands-link">
+        <img
+          (error)="getDefaultImage($event)" [src]="brandData.iconImage" [imgResizeType]="'brands-desktop'" appImgResize/>
+      </a>
     </div>
   </div>
 </div>
@@ -10,14 +13,18 @@
 <div class="brands-mobile">
   <span class="subtitle">Brands</span>
   <div class="list-brands">
-    <ngx-slick-carousel class="carousel-highlight-category"
-                        [config]="slideConfig"
+    <ngx-slick-carousel (afterChange)="afterChange($event)"
+                        (beforeChange)="beforeChange($event)"
                         (init)="slickInit($event)"
-                        (afterChange)="afterChange($event)"
-                        (beforeChange)="beforeChange($event)">
-      <div ngxSlickItem class="slide" style="width: 90px;" *ngFor="let brandData of brands; index as i; first as isFirst">
+                        [config]="slideConfig"
+                        class="carousel-highlight-category">
+      <div *ngFor="let brandData of brands; index as i; first as isFirst" class="slide" ngxSlickItem
+           style="width: 90px;">
         <div class="brand">
-          <a [routerLink]="['/brand',brandData.href|entityToSlug]" class="brands-link"><img [src]="brandData.iconImage" (error)="getDefaultImage($event)" appImgResize/></a>
+          <a [routerLink]="['/brand',brandData.href|entityToSlug]" class="brands-link"><img (error)="getDefaultImage($event)"
+                                                                                            [src]="brandData.iconImage"
+                                                                                            [imgResizeType]="'brands-mobile'"
+                                                                                            appImgResize/></a>
         </div>
       </div>
     </ngx-slick-carousel>

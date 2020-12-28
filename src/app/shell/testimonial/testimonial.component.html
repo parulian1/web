@@ -10,7 +10,7 @@
         <div class="testi-cell">
           <div class="item">
             <span class="photo">
-              <img alt="{{ item.title }}" src="{{ item.photo }}" appImgResize/>
+              <img alt="{{ item.title }}" src="{{ item.photo }}" [imgResizeType]="'testimonial-desktop'" appImgResize/>
             </span>
             <span class="desc">
               <span class="title">
@@ -40,9 +40,6 @@
       <div *ngFor="let item of testimonials" class="slide" ngxSlickItem style="width: 266px;">
         <div class="testi-cell">
           <div class="item">
-            <span class="photo">
-              <img alt="{{ item.title }}" src="{{ item.photo }}" appImgResize/>
-            </span>
             <span class="desc">
               <span class="title">{{(item.name.length > 20) ? (item.name | slice:0:20) + '...' : (item.name)}}</span>
               <span class="comment">
