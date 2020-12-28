@@ -28,7 +28,7 @@ export class OrderSummaryComponent implements OnInit {
   ngOnInit(): void {
     this.config = this.appConfigService.config;
     let shopName = "Nusantara Platform";
-    if (!!this.config) {
+    if (!!this.config?.name) {
       shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
     this.route.queryParams.subscribe((resp) => {

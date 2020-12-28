@@ -45,7 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.config = this.appConfigService.config;
     let shopName = "Nusantara Platform";
-    if (!!this.config) {
+    if (!!this.config?.name) {
       shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
     this.title.setTitle(shopName);
@@ -151,9 +151,9 @@ export class AppComponent implements OnInit, OnDestroy {
     shorCutIconlinkElement.setAttribute("rel", "shortcut icon" );
     shorCutIconlinkElement.setAttribute("type", "image/x-icon" );
 
-    if (!!this.config) {
-      iconLinkElement.setAttribute("href", this.config.logo );
-      shorCutIconlinkElement.setAttribute("href", this.config.logo );
+    if (!!this.config?.favicon) {
+      iconLinkElement.setAttribute("href", this.config.favicon );
+      shorCutIconlinkElement.setAttribute("href", this.config.favicon );
     } else {
       iconLinkElement.setAttribute("href", defaultFavIco );
       shorCutIconlinkElement.setAttribute("href", defaultFavIco);

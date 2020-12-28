@@ -18,8 +18,11 @@ export class ClientService {
    * Returns the displayable name of this e-commerce storefront.
    */
   storeName(): Observable<string> {
-    const storeName = this.appConfigService.config.name.substr(0, 1).toUpperCase() +
-      this.appConfigService.config.name.substr(1);
+    let storeName = "Nusantara Platform";
+    if (!!this.appConfigService.config?.name){
+      storeName = this.appConfigService.config.name.substr(0, 1).toUpperCase() +
+        this.appConfigService.config.name.substr(1);
+    }
     return of(storeName);
   }
 
