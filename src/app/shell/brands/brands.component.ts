@@ -71,7 +71,7 @@ export class BrandsComponent implements OnInit {
   }
 
   getDefaultImage(event: any) {
-    event.target.src = '//via.placeholder.com/638';
+    event.target.src = 'assets/defaults/brand.png';
   }
 
 }

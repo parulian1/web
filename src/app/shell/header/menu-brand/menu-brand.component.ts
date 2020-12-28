@@ -33,7 +33,7 @@ export class MenuBrandComponent implements OnInit {
   }
 
   getDefaultImage(event: any) {
-    event.target.src = '//via.placeholder.com/198';
+    event.target.src = 'assets/default-image.png';
   }
 
   setMode(brands: string) {

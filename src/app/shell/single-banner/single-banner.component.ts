@@ -43,6 +43,6 @@ export class SingleBannerComponent implements OnInit {
   }
 
   changeSource($event: any) {
-    $event.target.src = `http://via.placeholder.com/1152x360.png?text=Brand ${this.brand.name}`;
+    $event.target.src = `assets/defaults/banner-hero.png`;
   }
 }

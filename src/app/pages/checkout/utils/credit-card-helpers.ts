@@ -3,7 +3,7 @@ export const VISA_CARD_ID = 'visa';
 export const VISA_CARD_IMAGE = 'assets/user-payment/visa-med.png';
 export const MASTER_CARD_ID = 'mastercard'
 export const MASTER_CARD_IMAGE = 'assets/user-payment/mastercard-med.png'
-export const DEFAULT_CARD_IMAGE = 'https://via.placeholder.com/35x21.png'
+export const DEFAULT_CARD_IMAGE = 'assets/defaults/card.png'
 
 
 // Interfaces
