@@ -36,4 +36,13 @@ export class CartService {
     return this.http
       .delete(`/order/cart-item/${id}/`, {observe: 'response'});
   }
+
+
+  applyVoucher(code: string): Observable<HttpResponse<any>> {
+    return this.http.patch(`/order/cart/`, { code },{ observe: 'response'});
+  }
+
+  clearVoucher(): Observable<HttpResponse<any>> {
+    return this.http.delete(`/order/cart/delete-voucher/`, { observe: 'response'});
+  }
 }

@@ -5,11 +5,11 @@ import { ConfigService, Logger } from '@app/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Cart, CartModified, CartTotals, LineItems, ProductCart } from '@app/models/cart';
-import { LocalStorage } from '@app/services';
+import {CartService, LocalStorage} from '@app/services';
 import { DeleteCartDialogComponent } from '@app/pages/cart/delete-cart-dialog';
 import { PriceLists } from '@app/models/product-detail';
-import { Title } from "@angular/platform-browser";
-import { Configuration } from "@app/models";
+import { Title } from '@angular/platform-browser';
+import { Configuration } from '@app/models';
 
 
 const log = new Logger('Cart');
@@ -42,12 +42,13 @@ export class CartComponent implements OnInit {
               private localStorage: LocalStorage,
               public dialog: MatDialog,
               private title: Title,
-              private appConfigService: ConfigService) {
+              private appConfigService: ConfigService,
+              public cartService: CartService) {
   }
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let shopName = "Nusantara Platform";
+    let shopName = 'Nusantara Platform';
     if (!!this.config?.name) {
       shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
@@ -166,4 +167,24 @@ export class CartComponent implements OnInit {
     }
   }
 
+  voucherApplied(event: boolean) {
+    this.cartService.fetchCart().subscribe(resp => {
+      this.localStorage.removeItem('cart-quantity');
+      this.cart = resp.body;
+      this.cartItems = this.cart.cartItems;
+      this.warehouse = this.cart.weight;
+      this.itemCount = 0;
+      for (const item of this.cart.cartItems) {
+        this.itemCount += item.quantity;
+      }
+      this.localStorage.setItem('cart-quantity', this.itemCount);
+      this.cartCount = this.localStorage.getItem('cart-quantity');
+      this.productCount = this.cart.cartItems.length;
+      this.cartTotals = this.cart.cartTotals;
+
+      this.setDiscountPrice(this.productModified);
+      this.setPriceInfo();
+      this.setProductImage(this.cartItems, this.productModified);
+    })
+  }
 }

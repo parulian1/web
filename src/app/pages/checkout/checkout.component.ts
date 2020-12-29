@@ -7,13 +7,14 @@ import { ConfigService, Logger } from '@app/core';
 import { ShippingMethodService } from '@app/services/shipping-method.service';
 import { ShippingCost } from '@app/models/shipping-method';
 import { EntityToSlugPipe } from '@app/shared/utils/entity-to-slug.pipe';
-import { StateCheckout } from '@app/services';
-import { CheckoutService } from "@app/services/checkout.service";
-import { environment } from "@env/environment.staging";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { AlertDialogComponent } from "@app/shared/alert-dialog";
-import { Configuration } from "@app/models";
-import { PaymentTypeChoices } from "@app/models/payment-method";
+import {CartService, StateCheckout} from '@app/services';
+import { CheckoutService } from '@app/services/checkout.service';
+import { environment } from '@env/environment.staging';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertDialogComponent } from '@app/shared/alert-dialog';
+import { Configuration } from '@app/models';
+import { PaymentTypeChoices } from '@app/models/payment-method';
+import {HttpErrorResponse} from '@angular/common/http';
 
 const log = new Logger('Checkout');
 
@@ -47,7 +48,8 @@ export class CheckoutComponent implements OnInit, DoCheck {
               private stateService: StateCheckout,
               private service: CheckoutService,
               private snackbar: MatSnackBar,
-              private appConfigService: ConfigService) {
+              private appConfigService: ConfigService,
+              private cartService: CartService) {
   }
 
   ngOnInit(): void {
@@ -229,6 +231,50 @@ export class CheckoutComponent implements OnInit, DoCheck {
     }
   }
 
+  changeShippingMethodMode(value: 'edit' | 'default', force: boolean = false): void {
+    // can change when mode still in 'idle' value
+    // its just make ensure change of mode dont make any side effect.
+    if (this.shippingMethodMode === 'idle') {
+      this.shippingMethodMode = value;
+    }
+
+    // force change.
+    if (force) { this.shippingMethodMode = value; }
+  }
+
+  _handleError(err: HttpErrorResponse) {
+    if (err.status === 400) {
+      this._setErrors(err.error);
+    } else {
+      log.error('unexpected error:', err);
+    }
+  }
+  _setErrors(error: any) {
+    log.error('error', error, Object.values(error));
+    Object.keys(error).forEach((field: any) => {
+      if (error[field] instanceof Array) {
+        this.errorMessages[field] = error[field][0];
+      } else {
+        this.errorMessages[field] = error[field];
+      }
+    });
+    log.error('error', this.errorMessages);
+  }
+
+
+  public voucherApplied(event: boolean) {
+    console.log('Voucher Applied');
+    this.cartService.fetchCart().subscribe(resp => {
+      this.cart = resp.body;
+      if (this.cart) {
+        this.cartTotals.subTotal = this.cart.cartTotals.subTotal;
+        this.cartTotals.discountTotal = this.cart.cartTotals.discountTotal;
+        this.cartTotals.grandTotal = (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal;
+      }
+      this.canCheckout = this.stateService.canCheckout;
+    })
+  }
+
   private getShippingCost(cart: Cart, address: Addresses) {
     const destinationZipcode = address.zipcode;
     this.shippingMethod$ = [];
@@ -245,33 +291,4 @@ export class CheckoutComponent implements OnInit, DoCheck {
     }
   }
 
-  changeShippingMethodMode(value: 'edit' | 'default', force: boolean = false): void {
-    // can change when mode still in 'idle' value
-    // its just make ensure change of mode dont make any side effect.
-    if (this.shippingMethodMode === 'idle') {
-      this.shippingMethodMode = value;
-    }
-
-    // force change.
-    if (force) { this.shippingMethodMode = value; }
-  }
-
-  _handleError(err) {
-    if (err.status === 400) {
-      this._setErrors(err.error);
-    } else {
-      log.error("unexpected error:", err);
-    }
-  }
-  _setErrors(error: any) {
-    log.error("error", error, Object.values(error));
-    Object.keys(error).forEach((field: any) => {
-      if (error[field] instanceof Array) {
-        this.errorMessages[field] = error[field][0];
-      } else {
-        this.errorMessages[field] = error[field];
-      }
-    });
-    log.error("error", this.errorMessages);
-  }
 }
