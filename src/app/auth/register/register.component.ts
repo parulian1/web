@@ -12,8 +12,10 @@ export class RegisterComponent implements OnInit {
   public formType: string;
   config: Configuration;
 
-  constructor(private title: Title, private appConfigService: ConfigService) {
-  }
+  constructor(
+    private title: Title,
+    private appConfigService: ConfigService
+  ) { }
 
 
   ngOnInit(): void {

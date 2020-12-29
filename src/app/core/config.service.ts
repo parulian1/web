@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Configuration } from "@app/models/configuration";
+import { tap } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -16,17 +17,12 @@ export class ConfigService {
     return this.http.get<Configuration>('/client/site-config/', {
       observe: 'body',
       responseType: 'json'
-    }).toPromise();
+    }).pipe(
+      tap(result => this.config = Object.assign(this.config, result)),
+    ).toPromise();
   }
 
   loadConfig(): Promise<Configuration> {
-    this.processConfig().then(res => {
-      Object.assign(this.config, res);
-    });
-    console.log('config called');
-    return new Promise<Configuration>(resolve => {
-      resolve(this.config);
-    });
+    return this.processConfig();
   }
-
 }
