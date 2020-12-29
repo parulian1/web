@@ -40,6 +40,8 @@ export interface CartTotals {
 export interface CartDiscounts {
   href: string;
   name: string;
+  code?: string;
+  discount?: number;
 }
 
 export interface LineItems {

@@ -103,7 +103,8 @@
             </div>
           </div>
           <div class="side-cart-voucher">
-            <app-voucher-card></app-voucher-card>
+            <app-voucher-card  (voucherApplied)="voucherApplied($event)" [currentVoucher]="cart.cartDiscounts"></app-voucher-card>
+
           </div>
         </div>
       </div>

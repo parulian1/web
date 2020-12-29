@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Voucher} from '@app/models';
+import {CartService} from '@app/services';
+import {CartDiscounts} from '@app/models/cart';
 
 @Component({
   selector: 'app-voucher-card',
@@ -8,16 +10,20 @@ import {Voucher} from '@app/models';
   styleUrls: ['./voucher-card.component.scss']
 })
 export class VoucherCardComponent implements OnInit {
-  voucherForm: FormGroup;
+  public voucherForm: FormGroup;
+  public voucherError = '';
   voucher: Voucher;
-  isButtonDisabled: boolean;
 
-  constructor() {
+
+  @Output() voucherApplied = new EventEmitter<boolean>();
+  @Input() public currentVoucher: Array<CartDiscounts>;
+
+
+  constructor(public cartService: CartService) {
   }
 
   ngOnInit(): void {
     this.initForm();
-    this.isButtonDisabled = true;
   }
 
   initForm() {
@@ -26,7 +32,21 @@ export class VoucherCardComponent implements OnInit {
     });
   }
 
+
   submitVoucher() {
     // TODO: check validation of voucher code
+    this.cartService.applyVoucher(this.voucherForm.get('voucher').value).subscribe(resp => {
+      this.voucherApplied.emit(true);
+      this.voucherError = '';
+    }, err => {
+      this.voucherError = err.error.message;
+      console.log(err.error);
+    });
+  }
+
+  clearVoucher() {
+    this.cartService.clearVoucher().subscribe(resp => {
+      this.voucherApplied.emit(true);
+    })
   }
 }
