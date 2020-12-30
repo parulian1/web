@@ -4,6 +4,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {SlickCarouselModule} from 'ngx-slick-carousel';
+import { ShareModule as ShareButtonsModule } from 'ngx-sharebuttons';
 
 import {MaterialModule} from '@app/material.module';
 import {LoaderComponent} from './loader/loader.component';
@@ -41,7 +42,10 @@ import { FocusInputMobileDirective } from './search-bar/focus-input-mobile.direc
 import { ResponsiveImgChooserDirective } from './responsive-img-chooser.directive';
 import { VideoPlayerComponent } from './video-player/video-player.component';
 import { ImgResizeDirective } from './nus-img-resize/img-resize.directive';
-
+import {
+  ShareSocialButtonsComponent,
+  ShareSocialButtonsDialogComponent
+} from './share-social-buttons';
 
 @NgModule({
   imports: [
@@ -52,6 +56,7 @@ import { ImgResizeDirective } from './nus-img-resize/img-resize.directive';
     RouterModule,
     FormsModule,
     SlickCarouselModule,
+    ShareButtonsModule,
   ],
   declarations: [
     LoaderComponent,
@@ -93,6 +98,8 @@ import { ImgResizeDirective } from './nus-img-resize/img-resize.directive';
     VideoPlayerComponent,
     ResponsiveImgChooserDirective,
     ImgResizeDirective,
+    ShareSocialButtonsComponent,
+    ShareSocialButtonsDialogComponent,
   ],
     exports: [
         LoaderComponent,
@@ -131,6 +138,8 @@ import { ImgResizeDirective } from './nus-img-resize/img-resize.directive';
         VideoPlayerComponent,
         ResponsiveImgChooserDirective,
         ImgResizeDirective,
+        ShareSocialButtonsComponent,
+        ShareSocialButtonsDialogComponent,
     ],
 })
 export class SharedModule {
