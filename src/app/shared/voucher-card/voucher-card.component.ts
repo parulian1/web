@@ -1,5 +1,5 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {Component, OnInit, Input, Output, EventEmitter, DoCheck} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Voucher} from '@app/models';
 import {CartService} from '@app/services';
 import {CartDiscounts} from '@app/models/cart';
@@ -9,11 +9,11 @@ import {CartDiscounts} from '@app/models/cart';
   templateUrl: './voucher-card.component.html',
   styleUrls: ['./voucher-card.component.scss']
 })
-export class VoucherCardComponent implements OnInit {
+export class VoucherCardComponent implements OnInit, DoCheck {
   public voucherForm: FormGroup;
   public voucherError = '';
   voucher: Voucher;
-
+  isButtonDisabled: boolean;
 
   @Output() voucherApplied = new EventEmitter<boolean>();
   @Input() public currentVoucher: Array<CartDiscounts>;
@@ -26,9 +26,17 @@ export class VoucherCardComponent implements OnInit {
     this.initForm();
   }
 
+  ngDoCheck(): void {
+    this.isButtonDisabled = !this.voucherForm.valid;
+  }
+
   initForm() {
     this.voucherForm = new FormGroup({
-      'voucher': new FormControl('')
+      'voucher': new FormControl('', [
+        Validators.required,
+        Validators.maxLength(10),
+        Validators.minLength(1)
+      ])
     });
   }
 

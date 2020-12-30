@@ -14,13 +14,19 @@
         <span>{{voucherError}}</span>
       </div>
       <div class="voucher-bottom-button">
-        <button type="submit" class="btn-voucher">Gunakan</button>
+        <button type="submit" class="btn-voucher" [disabled]="isButtonDisabled">Gunakan</button>
       </div>
     </form>
     <ng-template #showVoucher>
-      Vouchers :
-      <div *ngFor="let voucher of currentVoucher">
-        <span>{{voucher.code}} <button (click)="clearVoucher()">Remove</button></span>
+
+      <div *ngFor="let voucher of currentVoucher" class="voucher-applied">
+        <div class="voucher-bottom-input">
+          <input type="text" formControlName="voucher-applied" value="{{voucher.code}}" disabled/>
+          <span>Voucher code successfully applied!</span>
+        </div>
+        <div class="voucher-bottom-button">
+          <button (click)="clearVoucher()"  class="btn-voucher">Remove</button>
+        </div>
       </div>
     </ng-template>
   </div>
