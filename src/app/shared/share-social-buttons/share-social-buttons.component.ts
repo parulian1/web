@@ -21,6 +21,24 @@ import { ShareSocialButtonsDialogComponent } from "./share-social-buttons-dialog
       .share-social-wrapper > a {
         cursor: pointer;
       }
+
+      mat-icon {
+        background-color: black;
+        color: white;
+        border-radius: 4px;
+        width: 36px;
+        height: 36px;
+        padding: 5px;
+      }
+
+      @media only screen and (max-width: 500px) {
+        mat-icon {
+          width: 24px;
+          height: 24px;
+          padding: 0.2em;
+          font-size: 17px;
+        }
+      }
     `,
   ],
 })
