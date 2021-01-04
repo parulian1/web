@@ -1,0 +1,85 @@
+@import "../../../../theme/base";
+
+.container {
+  width: 1280px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 15px;
+  padding: 20px 0 40px 0;
+}
+
+.card {
+  height: 100%;
+  align-self: start;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1);
+  border-radius: $border-radius-double;
+  overflow: hidden;
+
+  &:hover {
+    box-shadow: -1px 4px 8px 2px rgba(147, 175, 189, 0.85);
+    transform: translate(0, -3px);
+  }
+
+  a {
+    text-decoration: none;
+    color: $color-primary;
+  }
+
+  &-item {
+    img {
+      display: block;
+      width: 100%;
+      height: 183px;
+      object-fit: contain;
+    }
+  }
+
+  &-bottom {
+    margin: 10px;
+
+    .text-body2 {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .container {
+    width: 100%;
+    padding: 20px 15px 30px 15px;
+  }
+
+  .card {
+
+    &-item {
+      img {
+        height: 170px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    grid-template-columns: auto auto;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .container {
+    grid-template-columns: auto;
+    padding: 20px 8px 30px 8px;
+
+  }
+  .card {
+    &-item {
+      img {
+        height: 130px;
+      }
+    }
+  }
+}

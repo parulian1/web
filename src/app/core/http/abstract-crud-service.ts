@@ -37,6 +37,26 @@ export abstract class AbstractCrudService<T extends {href: string}> {
       .pipe(map(resp => new PagedResponse(resp)));
   }
 
+  fetchParamList(params: HttpParams): Observable<PagedResponse<T>> {
+    let page = params.get('page');
+    let per_page = params.get('per_page');
+    if (!page) {
+      page = '1';
+    }
+
+    if (!per_page) {
+      per_page = '20';
+    }
+
+    params = params.set('page', page);
+    params = params.set('per_page', per_page);
+
+    return this.httpClient
+      .get<T[]>(`${this.baseUrl}/`, {observe: 'response', responseType: 'json', params})
+      .pipe(map(resp => new PagedResponse(resp)));
+
+  }
+
   create(entity: T): Observable<T> {
     return this.httpClient
       .post<T>(`${this.baseUrl}/`, entity, {observe: 'body', responseType: 'json'});
