@@ -2,7 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { PromotionComponent } from './promotion.component';
-import {PromotionResolverService} from "@app/pages/promotion/promotion-resolver.service";
+import {PromotionResolverService} from '@app/pages/promotion/promotion-resolver.service';
 
 const routes: Routes = [
   {
