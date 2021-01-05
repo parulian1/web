@@ -5,7 +5,7 @@ import { ConfigService, Logger } from '@app/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Cart, CartModified, CartTotals, LineItems, ProductCart } from '@app/models/cart';
-import {CartService, LocalStorage} from '@app/services';
+import { CartService, LocalStorage } from '@app/services';
 import { DeleteCartDialogComponent } from '@app/pages/cart/delete-cart-dialog';
 import { PriceLists } from '@app/models/product-detail';
 import { Title } from '@angular/platform-browser';
@@ -48,9 +48,9 @@ export class CartComponent implements OnInit {
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let shopName = 'Nusantara Platform';
+    let title = "Nusantara Platform";
     if (!!this.config?.name) {
-      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
     this.route.data.subscribe((data: { cart: CartModified }) => {
       this.localStorage.removeItem('cart-quantity');
@@ -72,7 +72,7 @@ export class CartComponent implements OnInit {
       this.setProductImage(this.cartItems, this.productModified);
     });
 
-    this.title.setTitle('Shopping Cart ' + ` - ${ shopName }`);
+    this.title.setTitle(`Shopping Cart - ${ title }`);
   }
 
   removeCartItem(line: LineItems) {
