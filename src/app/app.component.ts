@@ -44,11 +44,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.config = this.appConfigService.config;
-    let shopName = "Nusantara Platform";
+    let title = "Nusantara Platform";
     if (!!this.config?.name) {
-      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
-    this.title.setTitle(shopName);
+    if (!!this.config?.tagLine) {
+      title += this.config.tagLine.substr(0, 1).toUpperCase() + this.config.tagLine.substr(1);
+    }
+    this.title.setTitle(title);
     this.addFavIcon();
 
     if (isPlatformBrowser(this.platformId)) {

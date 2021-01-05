@@ -5,5 +5,6 @@ export class Configuration {
   logo?: string;
   gaAccountId?: string;
   favicon?: string;
+  tagLine?: string;
   extraConfig?: ConfigurationLine[];
 }
