@@ -147,6 +147,9 @@ form {
     line-height: 22px;
     height: 40px;
     border: none;
+    align-items: center;
+    justify-content: center;
+    display: flex;
 
     a {
       text-decoration: none;

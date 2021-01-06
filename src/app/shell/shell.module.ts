@@ -27,6 +27,7 @@ import { PromoBannerComponent } from './promo-banner/promo-banner.component';
 import { SideMenuHeaderComponent } from '@app/shell/header/side-menu-header';
 import { EntityToSlugPipe } from "@app/shared/utils/entity-to-slug.pipe";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { DefaultPipe } from "@app/shell/default.pipe";
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     ProductLineNoImageComponent,
     PromoBannerComponent,
     SideMenuHeaderComponent,
+    DefaultPipe,
   ],
   exports: [
     ShellComponent,
@@ -78,7 +80,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     BlogComponent,
     ProductLineNoImageComponent,
     PromoBannerComponent,
-    SideMenuHeaderComponent
+    SideMenuHeaderComponent,
+    DefaultPipe,
   ],
   providers: [
     DatePipe,

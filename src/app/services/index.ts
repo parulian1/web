@@ -18,3 +18,5 @@ export * from './state-checkout.service.';
 export * from './cart.service';
 
 export * from './product-promotion.service';
+
+export * from './reseller';
