@@ -225,6 +225,30 @@ form {
   &-full {
     width: 100%;
   }
+
+  &-fill-accent {
+    background: $white;
+    border-radius: $border-radius;
+    border: 1px solid $color-accent;
+    color: $white;
+    margin: 0 0 16px 0;
+    font-family: $font-primary;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 22px;
+    height: 40px;
+    padding: 11px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      color: $color-accent;
+      display: block;
+    }
+
+  }
 }
 
 .box-content {
