@@ -1,4 +1,4 @@
-import { ConfigurationLine } from "@app/models/configuration/configuration-line";
+import { ExtraConfig } from "@app/models";
 
 export class Configuration {
   name: string;
@@ -6,5 +6,5 @@ export class Configuration {
   gaAccountId?: string;
   favicon?: string;
   tagLine?: string;
-  extraConfig?: ConfigurationLine[];
+  extraConfig?: ExtraConfig;
 }

@@ -1,6 +1,6 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
-import { Title } from '@angular/platform-browser';
+import {Meta, Title} from '@angular/platform-browser';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { SubscriptionLike } from 'rxjs';
@@ -39,7 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
               private appConfigService: ConfigService,
               @Inject(PLATFORM_ID) private platformId: any,
               @Inject(DOCUMENT) private document: Document,
-              private renderer2: Renderer2) {
+              private renderer2: Renderer2,
+              private meta: Meta) {
   }
 
   ngOnInit() {
@@ -53,6 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     this.title.setTitle(title);
     this.addFavIcon();
+    this.addSeoMeta();
 
     if (isPlatformBrowser(this.platformId)) {
       this.startRefreshTokenCheck();
@@ -163,5 +165,18 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     document.head.appendChild( iconLinkElement );
     document.head.appendChild( shorCutIconlinkElement );
+  }
+
+  private addSeoMeta() {
+    if (!!this.config?.extraConfig?.description) {
+      this.meta.addTag({
+        name: 'description', content: this.config.extraConfig.description
+      });
+    }
+    if (!!this.config?.extraConfig?.keywords) {
+      this.meta.addTag({
+        name: 'keywords', content: this.config.extraConfig.keywords
+      });
+    }
   }
 }
