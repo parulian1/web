@@ -29,13 +29,13 @@ export class BrandDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let shopName = "Nusantara Platform";
+    let title = "Nusantara Platform";
     if (!!this.config?.name) {
-      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
     this.route.data.subscribe((data: { brand: Brand }) => {
       this.brand = data.brand;
-      this.title.setTitle('Brand ' + this.brand.name + ` - ${ shopName }`)
+      this.title.setTitle('Brand ' + this.brand.name + ` - ${ title }`)
     });
     this.subscribe = this.route.params.subscribe(params => {
       this.slug = params['slug'];

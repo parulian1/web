@@ -76,9 +76,9 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let shopName = "Nusantara Platform";
+    let title = "Nusantara Platform";
     if (!!this.config?.name) {
-      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
     this.subscription = this.route.data.subscribe((data: {
      productPagedResponse: ProductPagedResponse<ProductLists>
@@ -99,7 +99,7 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
       this.queryText = queryParam.q || '';
     });
 
-    this.title.setTitle('Search '+ ` - ${ shopName }`);
+    this.title.setTitle(`Search ${this.queryText} - ${ title }`);
   }
 
   ngAfterViewInit(): void {

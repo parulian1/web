@@ -2,7 +2,7 @@
   <mat-toolbar class="checkout-navbar" color="white">
     <mat-toolbar-row>
       <div class="mt-header-logo">
-        <a [routerLink]="['']"><img src="{{ config.logo }}" alt="{{ config.name | titlecase }} Logo"></a>
+        <a [routerLink]="['']"><img [src]="config.logo" alt="{{ config.name | titlecase }} Logo"></a>
       </div>
     </mat-toolbar-row>
   </mat-toolbar>

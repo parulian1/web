@@ -31,13 +31,13 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let shopName = "Nusantara Platform";
+    let title = "Nusantara Platform";
     if (!!this.config?.name) {
-      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
     this.initForm();
     this.initTokenAndUid();
-    this.title.setTitle('Reset Passwords ' + ` - ${ shopName }`);
+    this.title.setTitle('Reset Passwords ' + ` - ${ title }`);
 
   }
 

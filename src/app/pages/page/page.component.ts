@@ -23,13 +23,13 @@ export class PageComponent implements OnInit {
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let shopName = "Nusantara Platform";
+    let title = "Nusantara Platform";
     if (!!this.config?.name) {
-      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
     this.route.data.subscribe((data: { page: Page }) => {
       this.pageContent = data.page;
-      this.title.setTitle(this.pageContent.title + ` - ${ shopName }`) ;
+      this.title.setTitle(`${this.pageContent.title} - ${ title }`) ;
     });
   }
 }
