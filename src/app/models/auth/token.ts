@@ -10,4 +10,5 @@ export interface Token {
   last_name: string;
   email: string;
   iss: string;
+  is_reseller?: boolean;
 }

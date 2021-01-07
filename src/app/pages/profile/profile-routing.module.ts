@@ -28,6 +28,11 @@ import { PaymentComponent } from '@app/pages/profile/payment';
 import { PaymentResolver } from '@app/pages/profile/payment/payment.resolver';
 import { AddReviewComponent } from '@app/shared/add-review';
 import { AddReviewResolver, ListReviewComponent, ListReviewResolver } from '@app/pages/profile/list-review';
+import {
+  DropShipListResolver,
+  DropShipListsComponent, SavedCatalogComponent,
+  SavedCatalogListComponent, SavedCatalogListResolver, SavedCatalogResolver
+} from "@app/pages/profile/drop-shipping";
 
 
 const routes: Routes = [
@@ -118,6 +123,29 @@ const routes: Routes = [
           order: AddReviewResolver
         },
         runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'drop-shipping',
+        component: DropShipListsComponent,
+        resolve: {resellerCatalog: DropShipListResolver},
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'saved-catalog',
+        children: [
+          {
+            path: '',
+            component: SavedCatalogListComponent,
+            resolve: {page: SavedCatalogListResolver},
+            runGuardsAndResolvers: 'always'
+          },
+          {
+            path: ':id',
+            component: SavedCatalogComponent,
+            resolve: { entity:  SavedCatalogResolver },
+            runGuardsAndResolvers: 'always'
+          }
+        ]
       }
     ]
   }

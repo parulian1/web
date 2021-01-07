@@ -397,4 +397,11 @@ export class ProductDetailComponent implements OnInit, DoCheck {
     }
   }
 
+  getShowReseller() {
+    if (!this.currentWarehouse || !this.credentialsService.isAuthenticated() || !this.credentialsService.getIsReseller()) {
+      return false;
+    }
+    return true;
+  }
+
 }

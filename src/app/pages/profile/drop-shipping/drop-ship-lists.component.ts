@@ -1,0 +1,186 @@
+import { Component, DoCheck, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { ProductDetail } from '@app/models/product-detail';
+import { ProductsService, ResellerCatalogService } from '@app/services';
+import { ResellerCatalog, ResellerCatalogItem, ResellerSavedCatalog } from "@app/models";
+import { getSlugFromHref } from "@app/shared/helpers";
+import { ResellerSavedCatalogService } from "@app/services";
+import { MatDialog } from "@angular/material/dialog";
+import { Logger } from "@app/core";
+import { ResponsiveBreakpointsService } from "@app/core/responsive-breakpoints";
+import { DialogSaveCatalogComponent } from "@app/pages/profile/drop-shipping/saved-catalog";
+
+const log = new Logger('DropShipping');
+
+@Component({
+  selector: 'app-drop-ship-lists',
+  templateUrl: './drop-ship-list.html',
+  styleUrls: ['./drop-ship.scss'],
+})
+export class DropShipListsComponent implements OnInit {
+
+  resellerCatalog: ResellerCatalog;
+  isSelectAll: boolean = false;
+  selectedCatalogItems: ResellerCatalogItem[] = [];
+
+  constructor(private route: ActivatedRoute, private resellerCatalogService: ResellerCatalogService,
+              private resellerSavedCatalogService: ResellerSavedCatalogService,
+              private productService: ProductsService,
+              public dialog: MatDialog,
+              public responsiveService: ResponsiveBreakpointsService
+              ) {
+  }
+
+  ngOnInit(): void {
+    this.route.data.subscribe((data) => {
+      this.resellerCatalog = data.resellerCatalog;
+    });
+  }
+
+  get selectedCatalog(): number {
+    return this.selectedCatalogItems.length;
+  }
+
+  fetchCatalog() {
+    this.resellerCatalogService.fetchCatalog().subscribe((resp) => {
+      this.resellerCatalog = resp;
+    });
+  }
+
+  removeProduct(p: ResellerCatalogItem) {
+    this.resellerCatalogService.removeCartItem(getSlugFromHref(p.href)).subscribe((resp) => {
+        if (resp.status === 204) {
+          alert(`Product ${p.product.name} succesfully removed`);
+        }
+      }, (error) => {
+          alert(`Failed to remove ${p.product.name}`);
+      });
+
+    this.fetchCatalog();
+  }
+
+  selectAll() {
+    this.isSelectAll = !this.isSelectAll;
+    this.selectProduct()
+  }
+
+  getIsSelectAll() {
+    this.isSelectAll = this.resellerCatalog.resellerCatalogItems.length === this.selectedCatalogItems.length;
+    return this.isSelectAll && this.selectedCatalogItems.length > 0;
+  }
+
+  selectProduct(resellerCatalogItem?: ResellerCatalogItem) {
+    if (!resellerCatalogItem) {
+      if (!this.isSelectAll) {
+        this.selectedCatalogItems = [];
+      } else {
+        this.resellerCatalog.resellerCatalogItems.forEach((catalogItem) => {
+          if (this.selectedCatalogItems.indexOf(catalogItem) === -1) {
+            this.selectedCatalogItems.push(catalogItem);
+          }
+        });
+      }
+    } else {
+        let indexResellerCatalogItem = this.selectedCatalogItems.indexOf(resellerCatalogItem);
+        if (indexResellerCatalogItem !== -1) {
+          this.selectedCatalogItems.splice(indexResellerCatalogItem, 1);
+          this.isSelectAll = false;
+        } else {
+          this.selectedCatalogItems.push(resellerCatalogItem);
+        }
+    }
+
+  }
+
+  downloadPdf(filePath: string) {
+    window.open(filePath).print();
+  }
+
+  saveAsSavedCatalog(catalogName: string) {
+    if (this.selectedCatalogItems.length > 0) {
+      this.resellerSavedCatalogService.createNewCatalogWithSelectedItem(this.createPayload(catalogName)).subscribe(
+        (resp) => {
+          if (resp.status === 201) {
+            let newCatalog: ResellerSavedCatalog = resp.body;
+            this.downloadPdf(newCatalog.pdf);
+          }
+        }, (error) => {
+          log.error(error.error.message);
+      });
+    }
+  }
+
+  updateCatalogAndSaveAsNewSavedCatalog() {
+    this.updateCatalog();
+    const dialogRef = this.dialog.open(DialogSaveCatalogComponent, {
+      data: { catalogName: null },
+      width: '564px',
+      height: '226px',
+      panelClass: 'save-catalog-form'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!!result) {
+        this.saveAsSavedCatalog(result);
+      }
+    });
+  }
+
+  updateCatalog() {
+    this.selectedCatalogItems.forEach((item) => {
+      this.resellerCatalogService.updateCatalog(getSlugFromHref(item.href), item.quantity, item.price).subscribe(
+        (resp) => {
+        },
+        (error) => {
+          log.debug()
+        });
+    });
+  }
+
+  createPayload(catalogName: string) {
+    const savedCatalogItems = [];
+    this.selectedCatalogItems.forEach((catalogItem) => {
+      savedCatalogItems.push({
+        product: {
+          name: catalogItem.product.name,
+          href: catalogItem.product.href
+        },
+        warehouse: {
+          name: catalogItem.warehouse.name,
+          href: catalogItem.warehouse.href
+        },
+        quantity: catalogItem.quantity,
+        price: catalogItem.price,
+      })
+    });
+    const payload = {
+      name: catalogName,
+      items: savedCatalogItems,
+      href: ''
+    };
+    return payload;
+  }
+
+  getIsChecked(catalogItem: ResellerCatalogItem) {
+    return this.selectedCatalogItems.indexOf(catalogItem) !== -1;
+  }
+
+  getProductAttributes(catalogItem: ResellerCatalogItem) {
+    let product: ProductDetail;
+    this.productService.fetchProduct(getSlugFromHref(catalogItem.product.href)).subscribe((resp) => {
+      product = resp.body;
+    });
+    if (!!product) {
+      return product.attributes;
+    }
+    return {};
+  }
+
+  getCatalogItemProductImage(catalogItem: ResellerCatalogItem): string {
+    if (catalogItem.product.media.length > 0) {
+      return catalogItem.product.media[0].image;
+    }
+    return "";
+  }
+
+}

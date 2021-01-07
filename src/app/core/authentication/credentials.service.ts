@@ -1,9 +1,10 @@
-import {Injectable} from '@angular/core';
-import {Store} from "@ngrx/store";
+import { Injectable } from '@angular/core';
+import { Store } from "@ngrx/store";
 
-import {Credentials} from '../../models/credentials';
-import {Token} from '../../models/auth';
-import {AppState} from "../../store/state/app.state";
+import { Credentials } from '../../models/credentials';
+import { Token } from '../../models/auth';
+import { AppState } from "../../store/state/app.state";
+import { JwtHelperService } from "@auth0/angular-jwt";
 
 const credentialsKey = 'credentials';
 
@@ -135,8 +136,8 @@ export class CredentialsService {
    */
   get parsedToken(): Token | null {
     if (this.isAuthenticated()) {
-      const tokenBody = this.token.split('.')[1];
-      return JSON.parse(atob(tokenBody)) as Token;
+      const helper = new JwtHelperService();
+      return helper.decodeToken(this.token) as Token;
     }
   }
 
@@ -180,4 +181,10 @@ export class CredentialsService {
     return (Math.floor((new Date()).getTime() / 1000) + extra) >= expiry;
   }
 
+  getIsReseller(): boolean {
+    if (!this.parsedToken) {
+      return false;
+    }
+    return this.parsedToken.is_reseller;
+  }
 }

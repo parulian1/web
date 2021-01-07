@@ -14,3 +14,5 @@ export * from './review';
 export { store, customer, drf, auth, order, socialMedia };
 
 export * from './configuration';
+
+export * from './reseller';

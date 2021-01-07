@@ -1,9 +1,9 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {AppState} from '@app/store/state/app.state';
-import {Store} from '@ngrx/store';
-import {Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
-import {AuthenticationService} from '@app/core/authentication';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AppState } from '@app/store/state/app.state';
+import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { AuthenticationService, CredentialsService } from '@app/core/authentication';
 
 @Component({
   selector: 'app-side-menu',
@@ -19,7 +19,8 @@ export class SideMenuComponent implements OnInit {
   constructor(private store: Store<AppState>,
               private router: Router,
               public dialog: MatDialog,
-              private authService: AuthenticationService) {
+              private authService: AuthenticationService,
+              private credentialService: CredentialsService) {
   }
 
   ngOnInit(): void {
@@ -66,5 +67,9 @@ export class SideMenuComponent implements OnInit {
     } else {
       this.overlaySortBackground.nativeElement.style.display = 'none';
     }
+  }
+
+  getIsReseller(): boolean {
+    return this.credentialService.getIsReseller();
   }
 }
