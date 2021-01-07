@@ -3,8 +3,8 @@
   <!--    <app-single-banner page="promo"></app-single-banner>-->
   <!--  </section>-->
   <div class="banner">
-    <div class="promotion-banner">
-    <img [src]="promotion.banner ? promotion.banner : 'assets/banner-example.png' "/>
+    <div class="promotion-banner" *ngIf="!!promotion && promotion.banner">
+    <img [src]="promotion.banner ? promotion.banner : 'assets/defaults/banner-hero.png' "/>
   </div>
     <div class="promotion-desc">
     <h1>
@@ -30,22 +30,28 @@
   </div>
   </div>
   <div class="promotion-products">
-    <div class="promotion-products-side">
-      <app-sidenav-overlay #sidenav (filter)="onFiltered($event)">
-      </app-sidenav-overlay>
-      <aside class="sidebar">
-        <app-sort-product [orderingList]="orderingList" (sorted)="onSorted($event)">
-        </app-sort-product>
-        <app-filter-product [categoryList]="categoryList" [brandList]="brandList"
-                            [priceRangeList]="priceRangeList" (filter)="onFiltered($event)">
-        </app-filter-product>
-      </aside>
-    </div>
+<!--    <div class="promotion-products-side">-->
+<!--      <app-sidenav-overlay #sidenav (filter)="onFiltered($event)">-->
+<!--      </app-sidenav-overlay>-->
+<!--      <aside class="sidebar">-->
+<!--        <app-sort-product [orderingList]="orderingList" (sorted)="onSorted($event)">-->
+<!--        </app-sort-product>-->
+<!--        <app-filter-product [categoryList]="categoryList" [brandList]="brandList"-->
+<!--                            [priceRangeList]="priceRangeList" (filter)="onFiltered($event)">-->
+<!--        </app-filter-product>-->
+<!--      </aside>-->
+<!--    </div>-->
     <section class="promotion-products-list" *ngIf="promotion.products.length !== 0">
-      <div class="flex-container">
-        <app-product-card *ngFor="let product of promotion.products" [productHref]="product.href">
-        </app-product-card>
+      <div class=" flex-container"
+           *ngIf="promotion.products.length !== 0">
+        <ng-container *ngIf="!!promotion.products; else emptyResponse">
+          <app-product-card [productHref]="product.href" [page]="'pdp-mobile'" *ngFor="let product of promotion.products">
+          </app-product-card>
+        </ng-container>
+        <ng-template #emptyResponse>
+        </ng-template>
       </div>
     </section>
+
   </div>
 </div>
