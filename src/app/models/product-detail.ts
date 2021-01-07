@@ -20,6 +20,8 @@ export interface ProductDetail extends NamedHrefEntity {
   structure: string;
 
   tags: Array<string>;
+  seoDescription?: string;
+  seoMeta?: string;
 
 }
 
