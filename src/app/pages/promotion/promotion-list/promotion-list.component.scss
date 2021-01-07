@@ -5,7 +5,7 @@
   margin: auto;
   display: grid;
   grid-template-columns: auto auto auto;
-  grid-gap: 15px;
+  grid-gap: 24px;
   padding: 20px 0 40px 0;
 }
 
@@ -54,7 +54,6 @@
   }
 
   .card {
-
     &-item {
       img {
         height: 170px;
@@ -73,8 +72,8 @@
   .container {
     grid-template-columns: auto;
     padding: 20px 8px 30px 8px;
-
   }
+
   .card {
     &-item {
       img {

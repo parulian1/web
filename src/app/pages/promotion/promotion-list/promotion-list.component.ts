@@ -12,7 +12,9 @@ import {PagedResponse} from '@app/core/pagination';
 @Component({
   selector: 'app-promotion-list',
   template: `
+
     <div class="container">
+      <app-paginate [page]="entities" [hideDescription]="false"></app-paginate>
       <div class="card" *ngFor="let entity of entities">
         <a [routerLink]="['/promo', entity.href|entityToSlug]">
           <div class="card-item">
