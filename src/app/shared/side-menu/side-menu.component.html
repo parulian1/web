@@ -1,81 +1,72 @@
-<div class="overlaySortBackground" #overlaySortBackground></div>
+<div class="overlaySortBackground" #overlaySortBackground>
+</div>
 <div class="side-profile-nav">
-  <button
-    class="nav-item"
-    [routerLink]="['/profile']"
-    [routerLinkActive]="'active'"
-    [routerLinkActiveOptions]="{ exact: true }"
-  >
+  <button class="nav-item" [routerLink]="['/profile']" [routerLinkActive]="'active'"
+          [routerLinkActiveOptions]="{ exact: true }">
     Profile
   </button>
-  <button class="nav-item" [routerLink]="['addresses']" [routerLinkActive]="'active'">Daftar Alamat</button>
-  <button class="nav-item" [routerLink]="['payments']" [routerLinkActive]="'active'">Pembayaran</button>
-  <button class="nav-item" [routerLink]="['orders']" [routerLinkActive]="'active'">Daftar Transaksi</button>
-  <button class="nav-item" [routerLink]="['list-wishlist']" [routerLinkActive]="'active'">Wishlist</button>
-  <button class="nav-item" [routerLink]="['list-review']" [routerLinkActive]="'active'">Ulasan</button>
-  <button class="nav-item" (click)="logout()" [routerLinkActive]="'active'">Keluar</button>
-</div>
-
-<div
-  class="mobile-side-div"
-  (click)="toggleMobileMenu()"
-  [ngStyle]="{ 'z-index': showModalMenu ? 200 : 0, display: showModalMenu ? 'none' : 'block' }"
->
-  <span class="mobile-side-button" #tes>{{ getActiveUrl() }}</span
-  ><i class="arrow down"></i>
-</div>
-
-<div
-  class="menu-modal-content"
-  [ngStyle]="{ 'z-index': showModalMenu ? 200 : 0, display: showModalMenu ? 'block' : 'none' }"
->
-  <button
-    class="nav-item"
-    [ngClass]="{ active: getActiveStat('default') }"
-    (click)="toggleMobileMenu()"
-    [routerLink]="['/profile']"
-  >
-    Profile
-  </button>
-  <button
-    class="nav-item"
-    [ngClass]="{ active: getActiveStat('address') }"
-    (click)="toggleMobileMenu()"
-    [routerLink]="['addresses']"
-  >
+  <button class="nav-item" [routerLink]="['addresses']" [routerLinkActive]="'active'">
     Daftar Alamat
   </button>
-  <button
-    class="nav-item"
-    [ngClass]="{ active: getActiveStat('payments') }"
-    (click)="toggleMobileMenu()"
-    [routerLink]="['payments']"
-  >
+  <button class="nav-item" [routerLink]="['payments']" [routerLinkActive]="'active'">
     Pembayaran
   </button>
-  <button
-    class="nav-item"
-    [ngClass]="{ active: getActiveStat('orders') }"
-    (click)="toggleMobileMenu()"
-    [routerLink]="['orders']"
-  >
+  <button class="nav-item" [routerLink]="['orders']" [routerLinkActive]="'active'">
     Daftar Transaksi
   </button>
-  <button
-    class="nav-item"
-    [ngClass]="{ active: getActiveStat('wishlist') }"
-    (click)="toggleMobileMenu()"
-    [routerLink]="['list-wishlist']"
-  >
+  <button class="nav-item" [routerLink]="['list-wishlist']" [routerLinkActive]="'active'">
     Wishlist
   </button>
-  <button
-    class="nav-item"
-    [ngClass]="{ active: getActiveStat('review') }"
-    (click)="toggleMobileMenu()"
-    [routerLink]="['list-review']"
-  >
+  <button class="nav-item" [routerLink]="['list-review']" [routerLinkActive]="'active'">
     Ulasan
   </button>
-  <button class="nav-item" (click)="logout()">Keluar</button>
+  <button class="nav-item" [routerLink]="['drop-shipping']" [routerLinkActive]="'active'" *ngIf="getIsReseller()">
+    Katalog Reseller
+  </button>
+  <button class="nav-item" (click)="logout()">
+    Keluar
+  </button>
+</div>
+
+<div class="mobile-side-div" (click)="toggleMobileMenu()"
+     [ngStyle]="{ 'z-index':showModalMenu ? 200 : 0 , 'display': showModalMenu ? 'none': 'block' }">
+  <span class="mobile-side-button" #tes>
+    {{ getActiveUrl() }}
+  </span>
+  <i class="arrow down"></i>
+</div>
+
+<div class="menu-modal-content"
+     [ngStyle]="{ 'z-index':showModalMenu ? 200 : 0, 'display': showModalMenu ? 'block': 'none' }">
+  <button class="nav-item" [ngClass]="{ 'active':getActiveStat('default') }" (click)="toggleMobileMenu()"
+          [routerLink]="['/profile']">
+    Profile
+  </button>
+  <button class="nav-item" [ngClass]="{ 'active':getActiveStat('address') }" (click)="toggleMobileMenu()"
+          [routerLink]="['addresses']">
+    Daftar Alamat
+  </button>
+  <button class="nav-item" [ngClass]="{ 'active':getActiveStat('payments') }" (click)="toggleMobileMenu()"
+          [routerLink]="['payments']">
+    Pembayaran
+  </button>
+  <button class="nav-item" [ngClass]="{ 'active':getActiveStat('orders') }" (click)="toggleMobileMenu()"
+          [routerLink]="['orders']">
+    Daftar Transaksi
+  </button>
+  <button class="nav-item" [ngClass]="{ 'active':getActiveStat('wishlist') }" (click)="toggleMobileMenu()"
+          [routerLink]="['list-wishlist']">
+    Wishlist
+  </button>
+  <button class="nav-item" [ngClass]="{ 'active':getActiveStat('review') }" (click)="toggleMobileMenu()"
+          [routerLink]="['list-review']">
+    Ulasan
+  </button>
+  <button class="nav-item"  [ngClass]="{ 'active':getActiveStat('drop-shipping') }" (click)="toggleMobileMenu()"
+          [routerLink]="['drop-shipping']">
+    Katalog Reseller
+  </button>
+  <button class="nav-item" (click)="logout()">
+    Keluar
+  </button>
 </div>

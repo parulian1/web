@@ -21,11 +21,11 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.config = this.appConfigService.config;
     this.formType = 'Register';
-    let shopName = "Nusantara Platform";
+    let title = "Nusantara Platform";
     if (!!this.config?.name) {
-      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
-    this.title.setTitle(`${this.formType} - ${ shopName }`)
+    this.title.setTitle(`${this.formType} - ${ title }`)
 
   }
 

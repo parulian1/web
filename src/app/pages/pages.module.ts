@@ -12,7 +12,7 @@ import { ShellModule } from '@app/shell/shell.module';
 import { StateCheckout } from '@app/services';
 import { PagesRoutingModule } from './pages-routing.module';
 import {
-  ProductDetailComponent,
+  ProductDetailComponent, ResellerCatalogButtonComponent,
   RichTextAttributeComponent,
   VariantAttributesComponent,
   WarehouseDialogComponent
@@ -23,7 +23,7 @@ import { RatingReviewStarsComponent } from '@app/pages/product-detail/rating-rev
 import { RatingReviewBarComponent } from '@app/pages/product-detail/rating-review/rating-review-bar';
 import { RatingReviewPercentageComponent } from '@app/pages/product-detail/rating-review/rating-review-percentage';
 import { RatingReviewCommentsComponent } from '@app/pages/product-detail/rating-review/rating-review-comments';
-import {EntityToSlugPipe} from "@app/shared/utils";
+import { EntityToSlugPipe } from "@app/shared/utils";
 import { ProvinceDialogComponent } from './store/province-dialog/province-dialog.component';
 import { VideoDialogComponent } from './product-detail/video-dialog/video-dialog.component';
 
@@ -42,6 +42,7 @@ import { VideoDialogComponent } from './product-detail/video-dialog/video-dialog
     RatingReviewCommentsComponent,
     ProvinceDialogComponent,
     VideoDialogComponent,
+    ResellerCatalogButtonComponent,
   ],
     imports: [
         CommonModule,

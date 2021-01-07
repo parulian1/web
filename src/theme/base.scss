@@ -26,6 +26,9 @@ $desktop-break: 980px;
 
 $color-error: #D81936;
 
+$color-light-black: #282828;
+$color-darken-white: #F4F4F4;
+$color-light-grey: #E7E7E7;
 
 
 :root {
@@ -44,4 +47,39 @@ $color-error: #D81936;
 
   --mobile-break: 500px;
   --desktop-break: 980px;
+}
+
+.save-catalog-form > mat-dialog-container {
+  position: relative !important;
+  h1.mat-dialog-title {
+    border-bottom: 1px solid #E7E7E7;
+    padding-bottom: 12px;
+  }
+  .mat-form-row {
+    overflow: hidden;
+    display: block;
+    padding-top: 5px;
+    padding-bottom: 24px;
+    .left {
+      float: left;
+      width: 30%;
+    }
+    .right {
+      float: left;
+      width: 70%;
+      .catalog-name {
+        width: 100%;
+        border: 1px solid #B4B4B4;
+        box-sizing: border-box;
+        border-radius: 8px;
+        height: 42px;
+      }
+    }
+  }
+  .mat-dialog-actions {
+    float: right;
+    button {
+      border-radius: 20px;
+    }
+  }
 }

@@ -35,7 +35,7 @@
       <div class="mobile-middle">
         <div class="mt-header-logo">
           <a [routerLink]="['/home']" (click)="backButton()">
-            <img alt="{{ config.name | titlecase }} Logo" src="{{ config.logo }}">
+            <img alt="{{ config.name | titlecase }} Logo" [src]="config.logo">
           </a>
         </div>
       </div>

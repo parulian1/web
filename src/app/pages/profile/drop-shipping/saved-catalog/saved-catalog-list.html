@@ -1,0 +1,43 @@
+<div class="title-big">
+  <span>
+    <a [routerLink]="['/profile/drop-shipping']">Item List</a>
+  </span>
+  <span class="active">
+    Saved Catalog
+  </span>
+</div>
+<div class="saved-catalog-list">
+  <div *ngFor="let savedCatalog of page.entities" class="saved-catalog-row">
+    <div class="saved-catalog-name">
+      <span class="text-subheading-2">Nama Katalog</span>
+      <span class="text-body-1">{{ savedCatalog.name | default: "-" }}</span>
+    </div>
+    <div class="item-detail">
+      <div class="saved-catalog-first-item">
+        <div class="item-img">
+          <a [routerLink]="['/products', getFirstProduct(savedCatalog.items)?.href | entityToSlug ]">
+            <img [src]="getFirstProductImage(savedCatalog.items)"/>
+          </a>
+        </div>
+        <div class="item-info">
+          <span>
+            <a [routerLink]="['/products', getFirstProduct(savedCatalog.items)?.href | entityToSlug ]" class="text-body-1">
+              {{ getFirstProduct(savedCatalog.items)?.name }}
+            </a>
+          </span>
+          <p class="text-caption">
+            <ng-container *ngFor="let attribute of getFirstProduct(savedCatalog.items)?.attributes | keyvalue">
+              {{ attribute.key | entityToSlug | titlecase }} {{ attribute.value | titlecase }}
+            </ng-container>
+        </p>
+        </div>
+      </div>
+      <div class="item-action">
+        <a class="btn btn-primary btn-full"
+           [routerLink]="['/profile/saved-catalog', savedCatalog.href | entityToSlug]">
+          Lihat Detail
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

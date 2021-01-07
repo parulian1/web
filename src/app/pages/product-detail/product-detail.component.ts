@@ -120,9 +120,9 @@ export class ProductDetailComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let shopName = "Nusantara Platform";
+    let title = "Nusantara Platform";
     if (!!this.config?.name) {
-      shopName = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
     if (this.localStorage.getItem('attributes')) {
       this.localStorage.removeItem('attributes');
@@ -182,7 +182,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
         this.setPriceTag(data.product);
         this.setPriceInformation(this.priceLists);
 
-        this.title.setTitle(this.productDetail.name + ` - ${ shopName }`);
+        this.title.setTitle(this.productDetail.name + ` - ${ title }`);
       }
     );
     this.slideProductImg2 = this.slideProductImg;
@@ -395,6 +395,13 @@ export class ProductDetailComponent implements OnInit, DoCheck {
         }
       }
     }
+  }
+
+  getShowReseller() {
+    if (!this.currentWarehouse || !this.credentialsService.isAuthenticated() || !this.credentialsService.getIsReseller()) {
+      return false;
+    }
+    return true;
   }
 
 }

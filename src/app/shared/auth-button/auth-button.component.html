@@ -1,8 +1,28 @@
-<button class="auth-btn" [routerLink]="token ? '/profile' : '/login'">
-  <img src="assets/header/logo-account.svg" alt="Account Logo">
-  <a *ngIf="!token">Masuk / Daftar</a>
-  <span *ngIf="token" class="auth-user">Hai,
-    <span *ngIf="displayName">{{displayName}}</span>
+<div (appClickOutsideSearch)="clickCheck($event)">
+  <button (click)="toogleMenu()" class="auth-btn" >
+    <img alt="Account Logo" src="assets/header/logo-account.svg">
+    <a *ngIf="!token">Masuk / Daftar</a>
+    <span *ngIf="token" class="auth-user">Hai,
+    <span *ngIf="displayName">{{ displayName }}</span>
     <span *ngIf="!displayName">Teman</span>
   </span>
-</button>
+  </button>
+
+  <div *ngIf="token" [hidden]="!isShowPopup" class="account-popup">
+    <img alt="account-logo" class="rotated-rectangle" src="assets/header/rectange.svg">
+    <div class="account-popup-content">
+      <img alt="account-logo" src="assets/header/ic_user.svg">
+      <a (click)="goTo('/profile')" class="text">Profile</a>
+    </div>
+    <div class="account-popup-content" *ngIf="getIsReseller()">
+      <img alt="reseller-logo" src="assets/header/ic_people.svg">
+      <a (click)="goTo('/profile/drop-shipping')" class="text">Menu Reseller</a>
+    </div>
+    <div class="account-popup-content">
+      <img alt="logout-logo" src="assets/header/ic_logout.svg">
+      <a (click)="logout()" class="text">Keluar</a>
+    </div>
+  </div>
+</div>
+
+

@@ -30,6 +30,12 @@ import {GoogleMapsModule} from '@angular/google-maps';
 import {PaymentComponent} from '@app/pages/profile/payment';
 import { ListReviewComponent } from '@app/pages/profile/list-review';
 import { ReviewCardComponent } from './list-review/review-card/review-card.component';
+import {
+  DialogSaveCatalogComponent,
+  DropShipListsComponent,
+  SavedCatalogComponent,
+  SavedCatalogListComponent
+} from "@app/pages/profile/drop-shipping";
 
 @NgModule({
   declarations: [
@@ -51,7 +57,12 @@ import { ReviewCardComponent } from './list-review/review-card/review-card.compo
     OrderHistoryListComponent,
     PaymentComponent,
     ListReviewComponent,
-    ReviewCardComponent
+    ReviewCardComponent,
+
+    DropShipListsComponent,
+    SavedCatalogListComponent,
+    SavedCatalogComponent,
+    DialogSaveCatalogComponent,
   ],
     imports: [
         CommonModule,

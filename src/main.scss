@@ -93,3 +93,15 @@
   line-height: 14px;
   font-style: italic;
 }
+
+// for printing (reseller catalog)
+.print-only { display: none !important; }
+.print-hidden { }
+@media print {
+  header { display: none !important; }
+  footer { display: none !important; }
+  app-side-menu { display: none !important; }
+  .print-hidden { display: none !important; }
+  .print-only { display: initial !important; }
+
+}
