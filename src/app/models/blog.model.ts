@@ -1,4 +1,5 @@
 export interface WpBlog {
+  blogUrl?: string;
   posts: Blog[]
 }
 
@@ -12,6 +13,7 @@ export interface Blog {
   excerpt: string;
   jetpack_featured_media_url?: string;
   featured_image: string;
+  featuredImage: string;
   short_URL: string;
   URL: string;
 }

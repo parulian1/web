@@ -12,12 +12,12 @@
 
     <ngx-slick-carousel class="carousel"
                         #slickModal="slick-carousel"
-                        [config]="slideConfig">
+                        [config]="slideConfig" *ngIf="!!blogs">
       <div ngxSlickItem *ngFor="let blog of blogs" class="slide carousel-item">
         <div class="blog-card">
-          <a href="{{blog.short_URL}}" target="_blank" class="blog-card-linked">
+          <a [href]="getPostUrl(blog)" target="_blank" class="blog-card-linked">
             <div class="blog-card__image">
-              <img [src]="blog.featured_image || defaultImg"
+              <img [src]="getPostImage(blog)"
                    height="277"
                    width="400"
                    alt="{{blog.title}}">
