@@ -63,14 +63,15 @@ export class BrandDetailComponent implements OnInit, OnDestroy {
     if (!!this.brand?.extra?.seoKeywords) {
       seoContentKeyword = this.brand.extra.seoKeywords;
     }
-    let seoContentDescription = seoContentKeyword;
+    if (!!this.config?.extraConfig?.keywords) {
+      seoContentKeyword += ` ${this.config.extraConfig.keywords}`;
+    }
+    let seoContentDescription = '';
     if (!!this.brand?.extra?.seoDescription) {
-      seoContentDescription += seoContentDescription.length > 0 ? ' ' : '';
       seoContentDescription += this.brand.extra.seoDescription;
     }
     if (!!this.config?.extraConfig?.description) {
-      seoContentDescription += seoContentDescription.length > 0 ? ' ' : '';
-      seoContentDescription += `${this.config.extraConfig.description}`;
+      seoContentDescription += ` ${this.config.extraConfig.description}`;
     }
     this.meta.addTag({
       name: 'description',
