@@ -412,7 +412,10 @@ export class ProductDetailComponent implements OnInit, DoCheck {
     if (!!this.productDetail?.seoMeta) {
       seoContentKeyword = this.productDetail.seoMeta;
     }
-    let seoContentDescription = seoContentKeyword;
+    if (!!this.config?.extraConfig?.keywords) {
+      seoContentKeyword += ` ${this.config.extraConfig.keywords}`;
+    }
+    let seoContentDescription = '';
     if (!!this.productDetail?.seoDescription) {
       seoContentDescription += ` ${this.productDetail.seoDescription}`;
     }
