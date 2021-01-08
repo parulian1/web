@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
-import { Brand } from '@app/models/brand';
+import { Brand } from '@app/models/brand/brand';
 import { Observable } from 'rxjs';
 import { Logger } from "@app/core";
 const log = new Logger('BrandService');

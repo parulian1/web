@@ -1,3 +1,5 @@
+import { BrandExtra } from "@app/models";
+
 export interface Brand {
   href: string;
   name: string;
@@ -10,5 +12,6 @@ export interface Brand {
   picPhoneNumber: number;
   showInHomepage: boolean;
   sortPriority: number;
+  extra?: BrandExtra;
 }
 

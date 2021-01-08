@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BrandService} from '@app/services/brand.service';
-import {Brand} from '@app/models/brand';
+import {Brand} from '@app/models/brand/brand';
 import {Logger} from '@app/core';
 
 const log = new Logger('BrandComponent');
