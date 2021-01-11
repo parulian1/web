@@ -9,7 +9,7 @@
   <div class="middle" *ngIf="stateService.getStateAddress && mode !== 'default' && mode !== 'idle' && this.address ">
     <ng-container *ngFor="let item of this.cart.weight">
       <div class="shipping-options">
-        <span class="title">{{item.name}}</span>
+        <span class="title">{{ item.name }}</span>
       </div>
       <app-select-price
         [shippingMethod]="shippingMethod"
@@ -17,6 +17,26 @@
         [shippingSelect]="shippingSelect"
         (shippingChosen)="getShippingChosen($event)"></app-select-price>
     </ng-container>
+    <div class="dropship_option" *ngIf="!!isReseller">
+      <mat-checkbox [(ngModel)]="dropshipOption.active" (change)="dropshipSelected($event.checked)">Dropshipper
+      </mat-checkbox>
+      <div class="dropship_form" *ngIf="dropshipOpen">
+        <label class="address-input">
+          <span class="label">Nama Pengirim</span>
+          <input type="text" name="dropship_name" class="dropship_name" [(ngModel)]="dropshipOption.meta.name"/>
+          <!--          <small *ngIf="dropship_name.invalid && (dropship_name.dirty || dropship_name.touched)">-->
+          <!--            <span *ngIf="dropship_name.errors['required']">Label alamat harus diisi</span>-->
+          <!--          </small>-->
+        </label>
+        <label class="address-input">
+          <span class="label">Nomor Telepon</span>
+          <input type="text" name="dropship_mobile" class="dropship_mobile" [(ngModel)]="dropshipOption.meta.mobile"/>
+        </label>
+      </div>
+      <div class="dropship-error" *ngIf="!!shippingError ">
+        <span>{{ shippingError }}</span>
+      </div>
+    </div>
 
     <button class="chose-shipping"
             *ngIf="this.address"
@@ -33,6 +53,15 @@
         <span *ngIf="ship.warehouse === (item.href|entityToSlug)">
           {{ship.method.method}} | {{ship.method.cost|currency:'Rp ':'symbol':'1.0'}} {{'(' + ship.method.sla + ')'}}
         </span>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="dropshipOption.active">
+      <div class="dropship-option">
+        <span class="title">Dropship</span>
+      </div>
+      <div class="dropship-value">
+        <span class="title">{{ dropshipOption.meta.name }}</span>
+        <span class="title">{{ dropshipOption.meta.mobile }}</span>
       </div>
     </ng-container>
   </div>

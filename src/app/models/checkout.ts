@@ -1,8 +1,11 @@
+import { DropshipMeta } from "@app/models/shipping-method";
+
 export class Checkout {
   totals: CheckoutTotals;
   shipping: Array<CheckoutShipping>;
   payment: CheckoutPayment;
   address: CheckoutAddress;
+  dropship?: DropshipMeta;
 }
 
 export interface CheckoutTotals {

@@ -16,6 +16,7 @@ import { Configuration } from '@app/models';
 import { PaymentTypeChoices } from '@app/models/payment-method';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CredentialsService} from "@app/core/authentication";
+import {Checkout} from "@app/models/checkout";
 
 const log = new Logger('Checkout');
 
@@ -188,7 +189,13 @@ export class CheckoutComponent implements OnInit, DoCheck {
         'zipcode': this.stateService.getStateAddress.zipcode,
         'phone_number': this.stateService.getStateAddress.phoneNumber,
       }
-    };
+    } as Checkout;
+
+    const stateDropship = this.stateService.getStateDropshipOption;
+    if (stateDropship && stateDropship.active && this.getIsReseller()) {
+      order.dropship = stateDropship.meta;
+    }
+    console.log(`dropship`, stateDropship, stateDropship.active, this.getIsReseller());
 
     log.debug(order);
 
@@ -297,6 +304,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
       horizontalPosition: 'right',
     });
   }
+
   getIsReseller() {
     if (!this.credentialsService.isAuthenticated() || !this.credentialsService.getIsReseller()) {
       return false;

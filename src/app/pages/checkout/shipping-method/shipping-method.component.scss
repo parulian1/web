@@ -99,3 +99,29 @@
 
 
 }
+
+.dropship_form {
+  flex-flow: row;
+  display: flex;
+
+  label {
+    padding: 10px;
+
+    span {
+      display: block;
+    }
+
+    input {
+      height: 40px;
+      border: solid 1px $color-primary;;
+      border-radius: 4px;
+      padding: 9px 12px;
+    }
+  }
+}
+
+.dropship_option {
+  padding: 20px 0;
+  border-bottom: 1px solid $color-light-grey;
+  margin-bottom: 15px;
+}
