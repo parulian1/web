@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BrandService } from "@app/services/brand.service";
 import { ActivatedRoute } from "@angular/router";
 import { HighlightService } from "@app/services/highlight.service";
-import {Meta, Title} from "@angular/platform-browser";
+import { Meta, Title } from "@angular/platform-browser";
 import { Brand, Configuration, HighlightList } from "@app/models";
 import { ConfigService } from "@app/core";
 
