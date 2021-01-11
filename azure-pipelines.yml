@@ -3,7 +3,7 @@ trigger:
   - release/*
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: ubuntu-20.04
 
 variables:
   FEED_ID: 61101818-286e-47e5-b86b-ef800ee02eea
