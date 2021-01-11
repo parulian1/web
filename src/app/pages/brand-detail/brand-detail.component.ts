@@ -1,11 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { HighlightList } from "@app/models/highlight";
 import { BrandService } from "@app/services/brand.service";
-import { Brand } from "@app/models/brand";
 import { ActivatedRoute } from "@angular/router";
 import { HighlightService } from "@app/services/highlight.service";
-import { Title } from "@angular/platform-browser";
-import { Configuration } from "@app/models";
+import {Meta, Title} from "@angular/platform-browser";
+import { Brand, Configuration, HighlightList } from "@app/models";
 import { ConfigService } from "@app/core";
 
 @Component({
@@ -24,23 +22,22 @@ export class BrandDetailComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private highlightService: HighlightService,
               private title: Title,
-              private appConfigService: ConfigService) {
+              private appConfigService: ConfigService,
+              private meta: Meta) {
   }
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let title = "Nusantara Platform";
-    if (!!this.config?.name) {
-      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
-    }
     this.route.data.subscribe((data: { brand: Brand }) => {
       this.brand = data.brand;
-      this.title.setTitle('Brand ' + this.brand.name + ` - ${ title }`)
+
     });
     this.subscribe = this.route.params.subscribe(params => {
       this.slug = params['slug'];
       this.fetchHighlight();
-    })
+    });
+    this.setSeoTitle();
+    this.setSeoMeta();
   }
 
   fetchHighlight() {
@@ -53,5 +50,36 @@ export class BrandDetailComponent implements OnInit, OnDestroy {
     this.subscribe.unsubscribe();
   }
 
+  setSeoTitle() {
+    let title = "Nusantara Platform";
+    if (!!this.config?.name) {
+      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
+    this.title.setTitle('Brand ' + this.brand.name + ` - ${ title }`);
+  }
 
+  setSeoMeta() {
+    let seoContentKeyword = '';
+    if (!!this.brand?.extra?.seoKeywords) {
+      seoContentKeyword = this.brand.extra.seoKeywords;
+    }
+    if (!!this.config?.extraConfig?.keywords) {
+      seoContentKeyword += ` ${this.config.extraConfig.keywords}`;
+    }
+    let seoContentDescription = '';
+    if (!!this.brand?.extra?.seoDescription) {
+      seoContentDescription += this.brand.extra.seoDescription;
+    }
+    if (!!this.config?.extraConfig?.description) {
+      seoContentDescription += ` ${this.config.extraConfig.description}`;
+    }
+    this.meta.addTag({
+      name: 'description',
+      content: seoContentDescription
+    });
+    this.meta.addTag({
+      name: 'keywords',
+      content: seoContentKeyword
+    });
+  }
 }

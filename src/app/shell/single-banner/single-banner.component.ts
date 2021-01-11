@@ -1,9 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ProductsService} from '@app/services/products.service';
-import {Router} from '@angular/router';
-import {Banner} from '@app/models/banner';
-import {Brand} from '@app/models/brand';
-import {getSlugFromHref} from "@app/shared/helpers";
+import { Component, Input, OnInit } from '@angular/core';
+import { ProductsService } from '@app/services/products.service';
+import { Router } from '@angular/router';
+import { Banner, Brand } from '@app/models';
+import { getSlugFromHref } from "@app/shared/helpers";
 
 @Component({
   selector: 'app-single-banner',

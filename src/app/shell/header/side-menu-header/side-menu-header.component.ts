@@ -4,7 +4,7 @@ import {NavigationExtras, Router} from '@angular/router';
 
 import {Logger} from '@app/core';
 import {AuthenticationService, CredentialsService} from '@app/core/authentication';
-import {Brand} from '@app/models/brand';
+import {Brand} from '@app/models/brand/brand';
 import {BrandService} from '@app/services';
 
 import {filter, map} from 'rxjs/operators';

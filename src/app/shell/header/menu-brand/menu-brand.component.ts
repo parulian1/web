@@ -1,7 +1,7 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {BrandService} from '@app/services/brand.service';
-import {Brand} from '@app/models/brand';
-import {Logger} from '@app/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { BrandService } from '@app/services/brand.service';
+import { Brand } from '@app/models';
+import { Logger } from '@app/core';
 
 const log = new Logger('MenuBrandComponent');
 
