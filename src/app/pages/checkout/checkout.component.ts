@@ -78,12 +78,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
           const params = {
             message: 'Your cart is empty. Redirecting back to cart...',
           };
-          this.snackbar.openFromComponent(AlertDialogComponent, {
-            data: params,
-            duration: 7 * 1000, // 5 seconds
-            verticalPosition: 'top',
-            horizontalPosition: 'right',
-          });
+          this.showAlertDialog(params);
           this.router.navigateByUrl('/cart');
         }
 
@@ -207,6 +202,12 @@ export class CheckoutComponent implements OnInit, DoCheck {
               if (resp.status === 200) {
                 window.location.href = resp.body.redirectUrl;
               }
+            }, (error) => {
+              this.showAlertDialog({
+                message: 'Maaf, saat ini sedang ada gangguan dengan sistem pembayaran. ' +
+                  'Silakan lanjutkan pembayaran melalui Order Detail atau hubungi Customer Service kami.'
+              })
+              this.router.navigate(['/profile/orders', orderNumber.order_number]);
             });
           } else {
             this.router.navigate(
@@ -221,12 +222,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
       const params = {
         message: 'Your cart is empty. Redirecting back to cart...',
       };
-      this.snackbar.openFromComponent(AlertDialogComponent, {
-        data: params,
-        duration: 7 * 1000, // 5 seconds
-        verticalPosition: 'top',
-        horizontalPosition: 'right',
-      });
+      this.showAlertDialog(params);
       this.router.navigateByUrl('/cart');
     }
   }
@@ -291,4 +287,12 @@ export class CheckoutComponent implements OnInit, DoCheck {
     }
   }
 
+  showAlertDialog(messageParams: {message: string, additionalMessage?: string}): void {
+    this.snackbar.openFromComponent(AlertDialogComponent, {
+      data: messageParams,
+      duration: 7 * 1000, // 5 seconds
+      verticalPosition: 'top',
+      horizontalPosition: 'right',
+    });
+  }
 }

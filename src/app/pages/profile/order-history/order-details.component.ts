@@ -456,30 +456,6 @@ export class OrderDetailsComponent implements OnInit {
     // }, error => error => this._handleError(error));
   }
 
-  // Messages
-  showSuccessMessage(msg: string = "") {
-    const message = msg ? msg : "Profile berhasil diperbaharui.";
-    const status = 201;
-
-    this.snackbar.openFromComponent(AlertDialogComponent, {
-      data: { message, status },
-      duration: 3 * 1000, // 3 seconds
-      verticalPosition: "top",
-      panelClass: ["mt-alert--is-primary", "mt-alert--has-text-centered"],
-    });
-  }
-  showErrorMessage(msg: string = "") {
-    const message = msg ? msg : "Terjadi kesalahan !!";
-    const status = 400;
-
-    this.snackbar.openFromComponent(AlertDialogComponent, {
-      data: { message, status },
-      duration: 3 * 1000, // 3 seconds
-      verticalPosition: "top",
-      horizontalPosition: "right",
-    });
-  }
-
   get payment(): any {
     return this.order.orderPayment.paymentGateway;
   }
@@ -499,15 +475,22 @@ export class OrderDetailsComponent implements OnInit {
   // Error
   _handleError(error) {
     if (error.status === 404) {
-      this.showErrorMessage("Order is Not Found");
+      this.showAlertDialog({message: "Order is Not Found"});
       this.router.navigate(['profile', 'orders']);
-    } else if (error.status === 409) {
-      this.showErrorMessage("Payment already Paid");
-      this.router.navigate(['profile', 'orders', this.order.orderNumber]);
-    } else if (error.status === 400) {
-      this.showErrorMessage("Order has been paid and utilized");
-      this.router.navigate(['profile', 'orders', this.order.orderNumber]);
+      return;
     }
+
+    if (error.status === 409) {
+      this.showAlertDialog({message: "Payment already Paid"});
+    } else if (error.status === 400) {
+      this.showAlertDialog({message: "Order has been paid and utilized"});
+    } else if (error.status === 500) {
+      this.showAlertDialog({
+        message: "Sedang terjadi gangguan dengan sistem pembayaran. " +
+          "Silahkan hubungi customer kami"
+      });
+    }
+    this.router.navigate(['profile', 'orders', this.order.orderNumber]);
   }
 
   _refreshPage(): void {
@@ -519,5 +502,14 @@ export class OrderDetailsComponent implements OnInit {
 
   redirectToOrderConfirm(): void {
     this.router.navigate(['/order-confirm']);
+  }
+
+  showAlertDialog(messageParams: {message: string, additionalMessage?: string, status?: number}): void {
+    this.snackbar.openFromComponent(AlertDialogComponent, {
+      data: messageParams,
+      duration: 3 * 1000, // 3 seconds
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
   }
 }
