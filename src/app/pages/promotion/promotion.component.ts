@@ -11,8 +11,8 @@ import {
   ProductVendor
 } from '@app/models/product-lists';
 import { Configuration, ProductPromotion } from '@app/models';
-import { Title } from "@angular/platform-browser";
-import { ConfigService } from "@app/core";
+import { Title } from '@angular/platform-browser';
+import { ConfigService } from '@app/core';
 
 @Component({
   selector: 'app-promotion',
@@ -45,7 +45,7 @@ export class PromotionComponent implements OnInit {
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let title = "Nusantara Platform";
+    let title = 'Nusantara Platform';
     if (!!this.config?.name) {
       title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }

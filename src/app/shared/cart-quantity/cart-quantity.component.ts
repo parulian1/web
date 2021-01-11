@@ -1,10 +1,10 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {LineItems} from '@app/models/cart';
-import {EntityToSlugPipe} from "@app/shared/utils/entity-to-slug.pipe";
-import {Router} from "@angular/router";
-import {CartService} from "@app/services/cart.service";
-import {MatDialog} from "@angular/material/dialog";
-import {DeleteCartDialogComponent} from "@app/pages/cart/delete-cart-dialog";
+import {EntityToSlugPipe} from '@app/shared/utils/entity-to-slug.pipe';
+import {Router} from '@angular/router';
+import {CartService} from '@app/services/cart.service';
+import {MatDialog} from '@angular/material/dialog';
+import {DeleteCartDialogComponent} from '@app/pages/cart/delete-cart-dialog';
 import {GtagService} from '@app/library/gtagjs/gtag.service';
 import {Action} from '@app/library/gtagjs/gtag-definitions';
 
