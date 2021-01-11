@@ -5,6 +5,8 @@ import {Router} from "@angular/router";
 import {CartService} from "@app/services/cart.service";
 import {MatDialog} from "@angular/material/dialog";
 import {DeleteCartDialogComponent} from "@app/pages/cart/delete-cart-dialog";
+import {GtagService} from '@app/library/gtagjs/gtag.service';
+import {Action} from '@app/library/gtagjs/gtag-definitions';
 
 @Component({
   selector: 'app-cart-quantity',
@@ -19,7 +21,9 @@ export class CartQuantityComponent implements OnInit {
   constructor(private pipe: EntityToSlugPipe,
               private service: CartService,
               private router: Router,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private gtag: GtagService) {
+    // TODO: Refactor to Store Based
   }
 
   ngOnInit(): void {
@@ -47,17 +51,35 @@ export class CartQuantityComponent implements OnInit {
         width: '464px',
         height: '363px'
       });
+    } else {
+      this.selectedQuantity--;
+      this.service.updateCart(itemId, this.selectedQuantity).subscribe(res => {
+        this.gtag.removeFromCart({
+          items: [{
+            id: this.line.href,
+            name: this.line.product.name,
+            brand: this.line.product?.brand?.name || '',
+            quantity: 1,
+            price: this.line.product?.unitPrice?.current || 0,
+          }]
+        } as Action)
+        this.router.navigateByUrl('/cart');
+      });
     }
-    this.selectedQuantity--;
-    this.service.updateCart(itemId, this.selectedQuantity).subscribe(res => {
-      this.router.navigateByUrl('/cart');
-    });
-
   }
 
   increase(itemId: string) {
     this.selectedQuantity++;
     this.service.updateCart(itemId, this.selectedQuantity).subscribe(res => {
+      this.gtag.addToCart({
+        items: [{
+          id: this.line.href,
+          name: this.line.product.name,
+          brand: this.line.product?.brand?.name || '',
+          quantity: 1,
+          price: this.line.product?.unitPrice?.current || 0,
+        }]
+      })
       this.router.navigateByUrl('/cart');
     });
 

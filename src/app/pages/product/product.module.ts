@@ -6,6 +6,7 @@ import {ShellModule} from '@app/shell/shell.module';
 import {SharedModule} from '@app/shared';
 import { AddToCartDialogComponent } from './add-to-cart-dialog/add-to-cart-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import {GtagModule} from '@app/library/gtagjs/gtag.module';
 
 
 @NgModule({
@@ -13,13 +14,14 @@ import {MatDialogModule} from "@angular/material/dialog";
     ProductComponent,
     AddToCartDialogComponent
   ],
-  imports: [
-    CommonModule,
-    ProductRoutingModule,
-    ShellModule,
-    SharedModule,
-    MatDialogModule
-  ]
+    imports: [
+        CommonModule,
+        ProductRoutingModule,
+        ShellModule,
+        SharedModule,
+        MatDialogModule,
+        GtagModule
+    ]
 })
 export class ProductModule {
 }

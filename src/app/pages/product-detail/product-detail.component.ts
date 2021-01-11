@@ -24,6 +24,7 @@ import { Configuration, RatingSummary, Review } from '@app/models';
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { Title } from "@angular/platform-browser";
 import { StoreWithStock } from "@app/models/store";
+import {GtagService} from '@app/library/gtagjs/gtag.service';
 
 const log = new Logger('VariantsResolver');
 
@@ -108,14 +109,15 @@ export class ProductDetailComponent implements OnInit, DoCheck {
               private cartService: CartService,
               private el: ElementRef,
               private route: ActivatedRoute,
-              private router: Router,
+              public router: Router,
               public dialog: MatDialog,
               private storeService: StoreService,
               private credentialsService: CredentialsService,
               private localStorage: LocalStorage,
               private pipe: EntityToSlugPipe,
-              private title: Title,
-              private appConfigService: ConfigService) {
+              public title: Title,
+              private appConfigService: ConfigService,
+              private gtag: GtagService) {
   }
 
   ngOnInit(): void {
@@ -183,6 +185,8 @@ export class ProductDetailComponent implements OnInit, DoCheck {
         this.setPriceInformation(this.priceLists);
 
         this.title.setTitle(this.productDetail.name + ` - ${ title }`);
+
+        this.trackAnalyticView(this.productDetail);
       }
     );
     this.slideProductImg2 = this.slideProductImg;
@@ -290,7 +294,9 @@ export class ProductDetailComponent implements OnInit, DoCheck {
                _itemCount += _cartItem.quantity;
              }
              this.localStorage.setItem('cart-quantity', _itemCount);
-           })
+           });
+
+           this.trackAnalyticCart(products, this.priceSelected, this.defaultQty);
           }
 
         },
@@ -402,6 +408,27 @@ export class ProductDetailComponent implements OnInit, DoCheck {
       return false;
     }
     return true;
+  }
+
+  private trackAnalyticCart(product: ProductDetail, price: number, qty: number = 1) {
+   this.gtag.addToCart({
+     items: [{
+       id: product.href,
+       name: product.name,
+       brand: product.vendor?.name || '',
+       quantity: qty,
+       price,
+     }]
+   })
+  }
+
+  private trackAnalyticView(product: ProductDetail) {
+    this.gtag.viewItem([{
+        id: product.href,
+        name: product.name,
+        brand: product.vendor?.name || '',
+      }]
+    )
   }
 
 }

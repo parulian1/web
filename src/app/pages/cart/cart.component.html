@@ -1,4 +1,4 @@
-<div fxFlex>
+<div fxFlex [gtag]="title.getTitle()">
   <div *ngIf="this.cart.cartItems.length > 0; else emptyCart" class="container">
     <div class="cart">
       <div class="inner-container">

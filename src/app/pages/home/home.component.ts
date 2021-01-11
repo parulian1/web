@@ -7,11 +7,14 @@ import {HighlightService} from '@app/services/highlight.service';
 import {DatePipe} from '@angular/common';
 import {TestimonialService} from '@app/services/testimonial.service';
 import {Testimonial} from '@app/models/testimonial';
+import {Title} from '@angular/platform-browser';
+import {ConfigService} from '@app/core';
+import {Configuration} from '@app/models';
 
 @Component({
   selector: 'app-home',
   template: `
-    <div class="container-home">
+    <div class="container-home" [gtag]="title.getTitle()">
       <section class="banner">
         <app-banner
           class="main-banner"
@@ -53,13 +56,22 @@ export class HomeComponent implements OnInit {
 
   testimonials: Testimonial[];
 
+  config: Configuration;
+
   constructor(private route: ActivatedRoute,
               private highlightService: HighlightService,
               private datePipe: DatePipe,
-              private testimonialService: TestimonialService) {
+              private testimonialService: TestimonialService,
+              public title: Title,
+              private appConfigService: ConfigService) {
   }
 
   ngOnInit() {
+    this.config = this.appConfigService.config;
+    let title = 'Nusantara Platform';
+    if (!!this.config?.name) {
+      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
     this.route.data.subscribe((data: { banners: Array<Banner> }) => {
       if (data.banners) {
         let now = String(new Date());
@@ -71,6 +83,7 @@ export class HomeComponent implements OnInit {
     });
     this.fetchHighlight();
     this.checkTestimonials();
+    this.title.setTitle(title);
   }
 
   fetchHighlight() {

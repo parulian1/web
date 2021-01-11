@@ -40,7 +40,7 @@ export class PromotionComponent implements OnInit {
 
   config: Configuration;
 
-  constructor(private route: ActivatedRoute, private title: Title, private appConfigService: ConfigService) {
+  constructor(private route: ActivatedRoute, public title: Title, private appConfigService: ConfigService) {
   }
 
   ngOnInit(): void {
