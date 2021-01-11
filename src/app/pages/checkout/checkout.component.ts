@@ -15,7 +15,7 @@ import { AlertDialogComponent } from '@app/shared/alert-dialog';
 import { Configuration } from '@app/models';
 import { PaymentTypeChoices } from '@app/models/payment-method';
 import {HttpErrorResponse} from '@angular/common/http';
-import {CredentialsService} from "../../../../../rb-web/src/app/core/authentication";
+import {CredentialsService} from "@app/core/authentication";
 
 const log = new Logger('Checkout');
 
