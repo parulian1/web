@@ -15,6 +15,7 @@ import { AlertDialogComponent } from '@app/shared/alert-dialog';
 import { Configuration } from '@app/models';
 import { PaymentTypeChoices } from '@app/models/payment-method';
 import {HttpErrorResponse} from '@angular/common/http';
+import {CredentialsService} from "../../../../../rb-web/src/app/core/authentication";
 
 const log = new Logger('Checkout');
 
@@ -49,6 +50,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
               private service: CheckoutService,
               private snackbar: MatSnackBar,
               private appConfigService: ConfigService,
+              public credentialsService: CredentialsService,
               private cartService: CartService) {
   }
 
@@ -295,4 +297,11 @@ export class CheckoutComponent implements OnInit, DoCheck {
       horizontalPosition: 'right',
     });
   }
+  getIsReseller() {
+    if (!this.credentialsService.isAuthenticated() || !this.credentialsService.getIsReseller()) {
+      return false;
+    }
+    return true;
+  }
+
 }

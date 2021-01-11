@@ -28,13 +28,17 @@
     <p class="text-subheading-2">Metode Pengiriman</p>
     <label>
       <ng-container *ngFor="let warehouseCatalogItem of warehouseCatalogItems">
-        <app-shared-shipping-method *ngIf="!!shippingMethod" [shippingMethod]="shippingMethod"
-                                    [item]="warehouseCatalogItem"
-                                    [shippingSelect]="shippingSelect"
-                                    [selectedShipmentCost]="getMethodOfShippingSelect()"
-                                    (shippingChosen)="getShippingChosen($event)">
-        </app-shared-shipping-method>
+        <div class="saved-catalog-shipment-cost">
+          <label *ngIf="warehouseCatalogItems.length > 1">{{ warehouseCatalogItem.name }}</label>
+          <app-shared-shipping-method *ngIf="!!shippingMethod" [shippingMethod]="shippingMethod"
+                                      [item]="warehouseCatalogItem"
+                                      [shippingSelect]="shippingSelect"
+                                      [selectedShipmentCost]="getMethodOfShippingSelect()"
+                                      (shippingChosen)="getShippingChosen($event)">
+          </app-shared-shipping-method>
+        </div>
       </ng-container>
+
     </label>
   </div>
 </div>

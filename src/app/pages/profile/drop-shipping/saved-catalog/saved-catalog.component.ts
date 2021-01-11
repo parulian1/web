@@ -39,49 +39,53 @@ export class SavedCatalogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let warehouses: ResellerCatalogItemWarehouse[] = [];
     this.route.data.subscribe((data) => {
       this.entity = data.entity;
-      this.entity.items.forEach((catalogItem) => {
-        let foundWh = warehouses.filter((wh) => {
-          return wh.href === catalogItem.warehouse.href;
-        });
-        if (foundWh.length === 0) {
-          warehouses.push(catalogItem.warehouse);
-        }
+      this.initialSetWarehouseCatalogItems();
+    });
+  }
+
+  initialSetWarehouseCatalogItems() {
+    let warehouses: ResellerCatalogItemWarehouse[] = [];
+    this.entity.items.forEach((catalogItem) => {
+      let foundWh = warehouses.filter((wh) => {
+        return wh.href === catalogItem.warehouse.href;
       });
-      warehouses.forEach((warehouse) => {
-        let totalWeightItemInWarehouse = 0;
-        this.entity.items.filter((catalogItem) => {
-          return catalogItem.warehouse.href === warehouse.href;
-        }).forEach((catalogItem) => {
-          totalWeightItemInWarehouse += +catalogItem.product.weight;
-          this.totalWeight += totalWeightItemInWarehouse;
-        });
-
-        this.warehouseCatalogItems.push({
-          href: warehouse.href,
-          name: warehouse.name,
-          postalCode: warehouse.postalCode,
-          totalWeight: totalWeightItemInWarehouse
-        });
-        const slug = getSlugFromHref(warehouse.href);
-
-        let foundMatchedSavedShipmentForWarehouse = [];
-        if (!!this.entity.data?.savedShipmentMethods) {
-          foundMatchedSavedShipmentForWarehouse = this.entity.data?.savedShipmentMethods.filter(
-            (savedShipment) => { return savedShipment.fullWarehouse === warehouse.href; }
-          );
-        }
-
-        this.getShipmentMethod();
-
-        if (foundMatchedSavedShipmentForWarehouse.length > 0) {
-          this.shippingSelect.push(foundMatchedSavedShipmentForWarehouse[0]);
-        } else {
-          this.shippingSelect.push({warehouse: slug, fullWarehouse: warehouse.href, method: null, status: false});
-        }
+      if (foundWh.length === 0) {
+        warehouses.push(catalogItem.warehouse);
+      }
+    });
+    warehouses.forEach((warehouse) => {
+      let totalWeightItemInWarehouse = 0;
+      this.entity.items.filter((catalogItem) => {
+        return catalogItem.warehouse.href === warehouse.href;
+      }).forEach((catalogItem) => {
+        totalWeightItemInWarehouse += +catalogItem.product.weight;
+        this.totalWeight += totalWeightItemInWarehouse;
       });
+
+      this.warehouseCatalogItems.push({
+        href: warehouse.href,
+        name: warehouse.name,
+        postalCode: warehouse.postalCode,
+        totalWeight: totalWeightItemInWarehouse
+      });
+      const slug = getSlugFromHref(warehouse.href);
+
+      let foundMatchedSavedShipmentForWarehouse = [];
+      if (!!this.entity.data?.savedShipmentMethods) {
+        foundMatchedSavedShipmentForWarehouse = this.entity.data?.savedShipmentMethods.filter(
+          (savedShipment) => { return savedShipment.fullWarehouse === warehouse.href; }
+        );
+      }
+
+      this.getShipmentMethod();
+
+      if (foundMatchedSavedShipmentForWarehouse.length > 0) {
+        this.shippingSelect.push(foundMatchedSavedShipmentForWarehouse[0]);
+      } else {
+        this.shippingSelect.push({warehouse: slug, fullWarehouse: warehouse.href, method: null, status: false});
+      }
     });
   }
 
@@ -90,23 +94,26 @@ export class SavedCatalogComponent implements OnInit {
     */
     this.shippingMethod = [];
     if (!!this.entity.data?.savedAddress?.zipCode && this.selectedCatalogItems.length > 0) {
-      this.shipmentService.getShippingCost(
-        this.totalWeight,
-        this.warehouseCatalogItems[0].postalCode,
-        this.entity.data?.savedAddress?.zipCode
-      ).subscribe(resp => {
-        let foundExistingShippingMethod = this.shippingMethod.filter((method) => {
-          return method.shippingCost === resp.body;
-        });
-        if (foundExistingShippingMethod.length === 0) {
-          this.shippingMethod.push({
-            shippingCost: resp.body,
-            warehouse: getSlugFromHref(this.entity.items[0].warehouse.href)
+      this.warehouseCatalogItems.forEach((warehouseCartWeight) => {
+        this.shipmentService.getShippingCost(
+          warehouseCartWeight.totalWeight,
+          warehouseCartWeight.postalCode,
+          this.entity.data?.savedAddress?.zipCode
+        ).subscribe(resp => {
+          let foundExistingShippingMethod = this.shippingMethod.filter((method) => {
+            return method.shippingCost === resp.body;
           });
-        }
-      }, error => {
-        log.error(error);
+          if (foundExistingShippingMethod.length === 0) {
+            this.shippingMethod.push({
+              shippingCost: resp.body,
+              warehouse: getSlugFromHref(warehouseCartWeight.href)
+            });
+          }
+        }, error => {
+          log.error(error);
+        });
       });
+
     }
   }
 
@@ -124,23 +131,53 @@ export class SavedCatalogComponent implements OnInit {
     if (!resellerCatalogItem) {
       if (!this.isSelectAll) {
         this.selectedCatalogItems = [];
+        this.resetWarehouseCartItemTotalWeight();
       } else {
-        this.entity.items.forEach((catalogItem) => {
-          if (this.selectedCatalogItems.indexOf(catalogItem) === -1) {
-            this.selectedCatalogItems.push(catalogItem);
+        this.pushAllItemIntoSelectedItems();
+      }
+    } else {
+      this.addOrRemoveProductAtSelectedItems(resellerCatalogItem);
+    }
+    this.getShipmentMethod();
+  }
+
+  resetWarehouseCartItemTotalWeight() {
+    this.warehouseCatalogItems.forEach((warehouse) => {
+      warehouse.totalWeight = 0;
+    });
+  }
+
+  pushAllItemIntoSelectedItems() {
+    this.entity.items.forEach((catalogItem) => {
+      if (this.selectedCatalogItems.indexOf(catalogItem) === -1) {
+        this.selectedCatalogItems.push(catalogItem);
+        this.warehouseCatalogItems.map((warehouse, index) => {
+          if (warehouse.href == catalogItem.warehouse.href){
+            this.warehouseCatalogItems[index].totalWeight += catalogItem.product.weight;
           }
         });
       }
+    });
+  }
+
+  addOrRemoveProductAtSelectedItems(resellerCatalogItem?: ResellerCatalogItem) {
+    let indexResellerCatalogItem = this.selectedCatalogItems.indexOf(resellerCatalogItem);
+    if (indexResellerCatalogItem !== -1) {
+      this.selectedCatalogItems.splice(indexResellerCatalogItem, 1);
+      this.isSelectAll = false;
+      this.warehouseCatalogItems.map((warehouse, index) => {
+        if (warehouse.href == resellerCatalogItem.warehouse.href){
+          this.warehouseCatalogItems[index].totalWeight -= resellerCatalogItem.product.weight;
+        }
+      });
     } else {
-      let indexResellerCatalogItem = this.selectedCatalogItems.indexOf(resellerCatalogItem);
-      if (indexResellerCatalogItem !== -1) {
-        this.selectedCatalogItems.splice(indexResellerCatalogItem, 1);
-        this.isSelectAll = false;
-      } else {
-        this.selectedCatalogItems.push(resellerCatalogItem);
-      }
+      this.warehouseCatalogItems.map((warehouse, index) => {
+        if (warehouse.href == resellerCatalogItem.warehouse.href){
+          this.warehouseCatalogItems[index].totalWeight += resellerCatalogItem.product.weight;
+        }
+      });
+      this.selectedCatalogItems.push(resellerCatalogItem);
     }
-    this.getShipmentMethod();
   }
 
   getFirstProduct(catalogItems: Array<ResellerSavedCatalogItem>) {
@@ -311,4 +348,6 @@ export class SavedCatalogComponent implements OnInit {
     }
     return "";
   }
+
+
 }

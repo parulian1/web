@@ -8,3 +8,5 @@ export * from './star-rating/star-rating.component';
 
 import * as helpers from './helpers';
 export {helpers};
+
+export * from './shared-shipping-method.component';

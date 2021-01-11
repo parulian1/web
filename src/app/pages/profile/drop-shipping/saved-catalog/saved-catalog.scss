@@ -153,6 +153,12 @@
 
   .reseller-column {
     float: left;
+
+    label {
+      div.saved-catalog-shipment-cost {
+        margin: 5px 0px;
+      }
+    }
   }
 }
 
