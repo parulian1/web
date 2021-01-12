@@ -195,9 +195,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
     if (stateDropship && stateDropship.active && this.getIsReseller()) {
       order.dropship = stateDropship.meta;
     }
-    console.log(`dropship`, stateDropship, stateDropship.active, this.getIsReseller());
 
-    log.debug(order);
 
     if (this.cart.cartItems.length !== 0) {
       this.service.createOrder(order).subscribe(res => {
