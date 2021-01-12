@@ -8,7 +8,19 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
+
+    :first-child {
+      margin-right: 12px;
+    }
+
+    :last-child {
+      margin-left: 12px;
+    }
+
+    :not(:first-child):not(:last-child) {
+      margin: 0 12px;
+    }
 
     .highlight {
       width: 211px;
