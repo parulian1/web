@@ -109,15 +109,13 @@
       <span class="text-caption show-mobile">Quantity</span>
       <input class="primary" type="number" [(ngModel)]="catalogItem.quantity" [min]="1"
              [max]="catalogItem.availableStock"
-             (change)="calculateShipmentCostAndFetchShipmentMethod()" placeholder="1">
+             (change)="getShipmentMethod()" placeholder="1">
     </div>
     <div class="divCell subtotal">
       <span class="text-caption show-mobile">Subtotal</span>
-      <span class="text-body2">{{ catalogItem.price * catalogItem.quantity |currency:'Rp. ' : 'symbol' : '1.0'}}</span>
-<!--      <div class="delete">-->
-<!--        <img src="assets/ic_trash.svg"/>-->
-<!--        <button class="print-hidden">Hapus</button>-->
-<!--      </div>-->
+      <span class="text-body2">
+        {{ catalogItem.price * catalogItem.quantity |currency:'Rp. ' : 'symbol' : '1.0'}}
+      </span>
     </div>
   </div>
 </div>
