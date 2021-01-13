@@ -6,6 +6,7 @@
 // bundle, and you should not use it for any sensitive information like passwords or keys.
 import { env } from './.env';
 import {IEnvironment} from '@env/environment.interface';
+import {version} from '../../package.json';
 
 export const environment: IEnvironment = {
   production: true,
@@ -14,4 +15,15 @@ export const environment: IEnvironment = {
   GOOGLE_APPLICATION_ID: '50988981071-qebioumemg77jogdg54oe98be1qifaum.apps.googleusercontent.com',
   SHIPPING_COUNTRY_CODE: 'IDN',
   YOUTUBE_API_KEY: 'AIzaSyB7m0r7paaV5I5U6vjf0pDmocvD8-K-D-w',
+  elasticAPM: {
+    serviceName: 'MT-Prod-Web',
+    serverUrl: 'https://apm.bhisma.cloud',
+    serviceVersion: version,
+    debug: true,
+    active: true,
+    environment: 'development',
+    breakdownMetrics: true,
+    distributedTracingOrigins: [ ],
+    ignoreTransactions: [],
+  }
 };
