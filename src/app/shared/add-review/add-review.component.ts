@@ -45,7 +45,6 @@ export class AddReviewComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(param => {
-      console.log('param', param);
       if (param.keys.length !== 0) {
         this.productSlug = param.get('productSlug');
         this.warehouseSlug = param.get('warehouse');
@@ -53,7 +52,6 @@ export class AddReviewComponent implements OnInit, DoCheck {
       }
     });
     this.route.data.subscribe((data: { order: any }) => {
-      console.log('data-order', data.order);
       this.parentOrder = data.order[0];
       this.product = data.order[2];
       this.checkStatus(data.order);
