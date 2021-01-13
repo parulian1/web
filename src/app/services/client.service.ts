@@ -30,10 +30,6 @@ export class ClientService {
    * Get the clients social media pages.
    */
   socialMediaLinks(): Observable<SocialMediaPage[]> {
-    return of([
-      {href: 'https://www.instagram.com/marthatilaarshop/?hl=id', type: 'instagram'},
-      {href: 'https://twitter.com/MT_Shop?s=20', type: 'twitter'},
-      {href: 'https://www.facebook.com/shopmarthatilaar/', type: 'facebook'},
-    ]);
+    return of(this.appConfigService.config.socialMedias);
   }
 }
