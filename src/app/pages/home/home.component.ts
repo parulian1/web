@@ -115,6 +115,9 @@ export class HomeComponent implements OnInit {
     if (!!this.config?.name) {
       title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
+    if (!!this.config?.tagLine) {
+      title += ` ${this.config.tagLine}`;
+    }
     this.title.setTitle(`Home - ${ title }`);
   }
 
