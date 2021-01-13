@@ -1,10 +1,10 @@
-import { Component, DoCheck, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, DoCheck, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 
-import { Order } from '@app/models/order';
-import { Logger } from '@app/core';
-import { ReviewService } from '@app/services';
-import { EntityToSlugPipe } from "@app/shared/utils";
+import {Order} from '@app/models/order';
+import {Logger} from '@app/core';
+import {ReviewService} from '@app/services';
+import {EntityToSlugPipe} from "@app/shared/utils";
 
 const log = new Logger('AddReview');
 
@@ -45,6 +45,7 @@ export class AddReviewComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(param => {
+      console.log('param', param);
       if (param.keys.length !== 0) {
         this.productSlug = param.get('productSlug');
         this.warehouseSlug = param.get('warehouse');
@@ -52,9 +53,10 @@ export class AddReviewComponent implements OnInit, DoCheck {
       }
     });
     this.route.data.subscribe((data: { order: any }) => {
+      console.log('data-order', data.order);
       this.parentOrder = data.order[0];
-      this.reviewStatus = data.order[1].message;
       this.product = data.order[2];
+      this.checkStatus(data.order);
     });
 
     this.setOrderInfo();
@@ -69,7 +71,7 @@ export class AddReviewComponent implements OnInit, DoCheck {
   setOrderInfo() {
     this.parentOrderNumber = this.parentOrder.orderNumber;
     this.parentOrder.children.forEach(orderChild => {
-      if (orderChild.warehouse?.slug == this.warehouseSlug) {
+      if (orderChild.warehouse?.slug === this.warehouseSlug) {
         this.orderWarehouse = orderChild.warehouse.name;
         orderChild.data.forEach(child_info => {
           this.orderHref = child_info.href;
@@ -102,6 +104,15 @@ export class AddReviewComponent implements OnInit, DoCheck {
       if (res.status === 201) {
         this.router.navigate(['/profile/orders']);
       }
+    });
+  }
+
+  checkStatus(order: any) {
+    const orderHref = order[0].href;
+    const productHref = order[2].productHref;
+
+    this.service.checkReviewInOrder(orderHref, productHref).subscribe(result => {
+      this.reviewStatus = result.body.filter(data => data.product === this.productSlug && data.order.includes(order[0].orderNumber)).length > 0 ? 'Sudah Diulas' : 'Belum Diulas';
     });
   }
 }
