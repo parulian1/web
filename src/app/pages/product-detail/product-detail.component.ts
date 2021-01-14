@@ -98,7 +98,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
     'prevArrow': '<button class="slick-prev"><span class="material-icons">\n' +
       'keyboard_arrow_left\n' +
       '</span></button>',
-    'variableWidth': 88,
+    'variableWidth': true,
   };
   mobileMenu: string;
 

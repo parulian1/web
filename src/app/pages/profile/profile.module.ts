@@ -37,6 +37,7 @@ import {
   SavedCatalogListComponent
 } from '@app/pages/profile/drop-shipping';
 import { OrderProductBoxComponent } from '@app/pages/profile/order-history/order-product-box';
+import { ReviewCardSingleComponent } from './list-review/review-card-single/review-card-single.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { OrderProductBoxComponent } from '@app/pages/profile/order-history/order
     SavedCatalogComponent,
     DialogSaveCatalogComponent,
     OrderProductBoxComponent,
+    ReviewCardSingleComponent,
   ],
     imports: [
         CommonModule,

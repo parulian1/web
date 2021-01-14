@@ -1,9 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {OrderHistoryService} from '@app/services';
 import {Logger} from '@app/core';
-import {SubOrder} from '@app/models/order/sub-order';
-import {OrderReview} from "@app/models/order/order-review";
-import {EntityToSlugPipe} from "@app/shared/utils";
+
+import {OrderReview} from '@app/models/order/order-review';
 
 const log = new Logger('ReviewCard');
 
@@ -15,8 +13,7 @@ const log = new Logger('ReviewCard');
 export class ReviewCardComponent implements OnInit {
   @Input() orderReview: OrderReview;
 
-  constructor(private orderService: OrderHistoryService,
-              private pipe: EntityToSlugPipe) {
+  constructor() {
   }
 
   ngOnInit(): void {
