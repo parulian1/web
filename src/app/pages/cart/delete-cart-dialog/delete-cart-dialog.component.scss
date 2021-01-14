@@ -102,3 +102,36 @@ mat-dialog-actions {
     }
   }
 }
+
+@media screen and (max-width: $mobile-break) {
+  .mat-dialog-title {
+    font-family: $font-secondary;
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  .mat-dialog-content {
+    .dialog-content {
+      .product {
+        .left {
+          width: 80px;
+          height: 80px;
+        }
+      }
+    }
+  }
+
+  .mat-dialog-actions {
+    flex-direction: column-reverse;
+    width: 100%;
+
+    button {
+      width: 100%;
+
+      &.btn-continue-cart {
+        margin-bottom: 16px;
+      }
+    }
+  }
+}
+
