@@ -54,6 +54,7 @@ export class AddReviewComponent implements OnInit, DoCheck {
     this.route.data.subscribe((data: { order: any }) => {
       this.parentOrder = data.order[0];
       this.product = data.order[2];
+      this.warehouseSlug = data.order[0].children[0].warehouse.slug;
       this.checkStatus(data.order);
     });
 
@@ -75,8 +76,7 @@ export class AddReviewComponent implements OnInit, DoCheck {
           this.orderHref = child_info.href;
         });
       }
-    });
-    log.info(this.parentOrder);
+    });;
     this.orderDate = this.parentOrder.orderPayment.completedDate;
   }
 
