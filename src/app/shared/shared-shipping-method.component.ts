@@ -6,6 +6,7 @@ import { ShippingCost } from '@app/models/shipping-method';
 import { CartWeight } from '@app/models/cart';
 import { EntityToSlugPipe } from "@app/shared/utils/entity-to-slug.pipe";
 import { MatSelectChange } from "@angular/material/select";
+import {getSlugFromHref} from "@app/shared/helpers";
 
 const log = new Logger('Shipping-Method');
 
@@ -27,6 +28,9 @@ const log = new Logger('Shipping-Method');
           </ng-container>
         </ng-container>
     </mat-select>
+    <div class="shipping-err" *ngIf="!getShippingMethodForWarehouse() && item.totalWeight > 0">
+        <span>Cannot get the shipping cost. Please check/change your address</span>
+    </div>
   `,
   styleUrls: ['./shared-shipping-method.scss']
 })
@@ -37,6 +41,7 @@ export class SharedShippingMethodComponent implements OnInit {
   @Input() selectedShipmentCost: ShippingCost;
 
   @Output() shippingChosen = new EventEmitter<Array<{ warehouse: string, cost?: number, status?: boolean }>>();
+
 
   constructor(private pipe: EntityToSlugPipe) {
   }
@@ -53,5 +58,10 @@ export class SharedShippingMethodComponent implements OnInit {
     this.shippingChosen.emit(this.shippingSelect);
   }
 
+  getShippingMethodForWarehouse() {
+    return this.shippingMethod.find((shipmentMethod) => {
+      return shipmentMethod.warehouse === getSlugFromHref(this.item.href);
+    });
+  }
 }
 

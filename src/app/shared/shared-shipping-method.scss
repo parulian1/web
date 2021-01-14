@@ -10,3 +10,16 @@ mat-select {
   font-size: 16px;
   line-height: 22px;
 }
+
+.shipping-err {
+  margin: 8px 0;
+
+  span {
+    font-size: 11px;
+    color: #c3002f;
+    font-weight: bold;
+    background: rgba(195, 0, 47, 0.1);
+    padding: 8px;
+    border-radius: 4px;
+  }
+}
