@@ -1,20 +1,20 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
+import {DOCUMENT, isPlatformBrowser} from '@angular/common';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2} from '@angular/core';
 import {Meta, Title} from '@angular/platform-browser';
-import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { SubscriptionLike } from 'rxjs';
+import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
+import {Store} from '@ngrx/store';
+import {SubscriptionLike} from 'rxjs';
 
-import { AuthenticationService, CredentialsService } from '@app/core/authentication';
-import { AppState } from '@app/store/state/app.state';
-import { AuthUserService } from '@app/services';
-import { Logout } from '@app/store/actions';
-import { environment } from '@env/environment.prod';
-import { ConfigService, Logger } from '@app/core';
-import { Configuration } from "@app/models";
+import {AuthenticationService, CredentialsService} from '@app/core/authentication';
+import {AppState} from '@app/store/state/app.state';
+import {AuthUserService} from '@app/services';
+import {Logout} from '@app/store/actions';
+import {environment} from '@env/environment.prod';
+import {ConfigService, Logger} from '@app/core';
+import {Configuration} from "@app/models";
 
 declare let gtag: Function;
-declare let fbq:Function;
+declare let fbq: Function;
 
 @Component({
   selector: 'app-root',
@@ -125,9 +125,10 @@ export class AppComponent implements OnInit, OnDestroy {
     return '19e09c8c-543e-4a52-98fd-1ddba548df6c';
   }
 
-  loadZendesk(): void{
+  loadZendesk(): void {
     this.loadScript(`https://static.zdassets.com/ekr/snippet.js?key=${this.getZendeskID()}`, 'ze-snippet').then(res => {
-    })
+    });
+    this.loadSettingsScript();
   }
 
   private loadScript(url: string, id: string = '') {
@@ -140,7 +141,7 @@ export class AppComponent implements OnInit, OnDestroy {
       script.defer = true;
       script.onload = resolve;
       script.onerror = reject;
-      if ( id !== '') {
+      if (id !== '') {
         script.id = id;
       }
       this.renderer2.appendChild(this.document.body, script);
@@ -149,22 +150,22 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private addFavIcon() {
     const defaultFavIco = "assets/favicon.ico";
-    var iconLinkElement = document.createElement("link" );
-    var shorCutIconlinkElement = document.createElement("link" );
-    iconLinkElement.setAttribute("rel", "icon" );
-    iconLinkElement.setAttribute("type", "image/x-icon" );
-    shorCutIconlinkElement.setAttribute("rel", "shortcut icon" );
-    shorCutIconlinkElement.setAttribute("type", "image/x-icon" );
+    var iconLinkElement = document.createElement("link");
+    var shorCutIconlinkElement = document.createElement("link");
+    iconLinkElement.setAttribute("rel", "icon");
+    iconLinkElement.setAttribute("type", "image/x-icon");
+    shorCutIconlinkElement.setAttribute("rel", "shortcut icon");
+    shorCutIconlinkElement.setAttribute("type", "image/x-icon");
 
     if (!!this.config?.favicon) {
-      iconLinkElement.setAttribute("href", this.config.favicon );
-      shorCutIconlinkElement.setAttribute("href", this.config.favicon );
+      iconLinkElement.setAttribute("href", this.config.favicon);
+      shorCutIconlinkElement.setAttribute("href", this.config.favicon);
     } else {
-      iconLinkElement.setAttribute("href", defaultFavIco );
+      iconLinkElement.setAttribute("href", defaultFavIco);
       shorCutIconlinkElement.setAttribute("href", defaultFavIco);
     }
-    document.head.appendChild( iconLinkElement );
-    document.head.appendChild( shorCutIconlinkElement );
+    document.head.appendChild(iconLinkElement);
+    document.head.appendChild(shorCutIconlinkElement);
   }
 
   private addSeoMeta() {
@@ -178,5 +179,22 @@ export class AppComponent implements OnInit, OnDestroy {
         name: 'keywords', content: this.config.extraConfig.keywords
       });
     }
+  }
+
+  private loadSettingsScript() {
+    const script = this.renderer2.createElement('script');
+    script.type = 'text/javascript';
+    script.text = `
+     window.zESettings = {
+    webWidget: {
+      offset: {
+        mobile: {
+          vertical: '50px'
+        }
+      }
+    }
+  };
+      `;
+    this.renderer2.appendChild(this.document.body, script);
   }
 }
