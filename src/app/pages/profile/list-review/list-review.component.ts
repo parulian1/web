@@ -29,7 +29,8 @@ export class ListReviewComponent implements OnInit {
       this.pageNum = data.orderReviews.pageNumber;
 
       this.orderReviews = data.orderReviews.entities;
-      console.log('list reviews', this.orderReviews);
+      log.debug(this.pageNum);
+      log.debug(this.orderReviews);
     });
   }
 }
