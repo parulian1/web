@@ -81,8 +81,6 @@ export class SavedCatalogComponent implements OnInit {
   }
 
   getShipmentMethod() {
-    /* TODO : This is rough, get the first warehouse ???
-    */
     this.shippingMethod = [];
     if (!!this.entity.data?.savedAddress?.zipCode && this.selectedCatalogItems.length > 0) {
       this.updateWarehouseCatalogItemTotalWeight();
@@ -93,29 +91,29 @@ export class SavedCatalogComponent implements OnInit {
         }
       });
       warehouseFromSelected.forEach((warehouseHref) => {
-        let foundWarehouse = this.warehouseCatalogItems.filter((whCatalogItems) => {
+        let foundWarehouse = this.warehouseCatalogItems.find((whCatalogItems) => {
           return whCatalogItems.href === warehouseHref;
         });
-        if (foundWarehouse.length > 0) {
+        if (!!foundWarehouse) {
           this.shipmentService.getShippingCost(
-            foundWarehouse[0].totalWeight,
-            foundWarehouse[0].postalCode,
+            foundWarehouse.totalWeight,
+            foundWarehouse.postalCode,
             this.entity.data?.savedAddress?.zipCode
           ).subscribe((resp) => {
             console.log(`resp.body`, resp, resp.body);
             let foundShipmentMethod = this.shippingMethod.find((shipmentMethod) => {
-              return shipmentMethod.warehouse === getSlugFromHref(foundWarehouse[0].href);
+              return shipmentMethod.warehouse === getSlugFromHref(foundWarehouse.href);
             });
             if (!!foundShipmentMethod) {
               this.shippingMethod.map((shipmentMethod) => {
-                if (shipmentMethod.warehouse === getSlugFromHref(foundWarehouse[0].href)) {
+                if (shipmentMethod.warehouse === getSlugFromHref(foundWarehouse.href)) {
                   shipmentMethod.shippingCost = resp.body;
                 }
               });
             } else {
               this.shippingMethod.push({
                 shippingCost: resp.body,
-                warehouse: getSlugFromHref(foundWarehouse[0].href)
+                warehouse: getSlugFromHref(foundWarehouse.href)
               });
             }
           }, error => {
