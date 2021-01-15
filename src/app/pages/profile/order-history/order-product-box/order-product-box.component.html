@@ -12,7 +12,7 @@
       <div class="price">{{lineItems.price|currency:'Rp ':'symbol':'1.0'}}</div>
     </div>
     <div class="actions">
-      <div class="completed-order" *ngIf="status === 'paid'">
+      <div class="completed-order" *ngIf="status === 'complete'">
         <button class="btn-outline"
                 *ngIf="!isReviewed">
           <a [routerLink]="[lineItems.product.href|entityToSlug, warehouse]">Tulis Ulasan</a>
