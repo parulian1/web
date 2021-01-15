@@ -81,8 +81,6 @@ export class SavedCatalogComponent implements OnInit {
   }
 
   getShipmentMethod() {
-    /* TODO : This is rough, get the first warehouse ???
-    */
     this.shippingMethod = [];
     if (!!this.entity.data?.savedAddress?.zipCode && this.selectedCatalogItems.length > 0) {
       this.updateWarehouseCatalogItemTotalWeight();
@@ -93,22 +91,29 @@ export class SavedCatalogComponent implements OnInit {
         }
       });
       warehouseFromSelected.forEach((warehouseHref) => {
-        let foundWarehouse = this.warehouseCatalogItems.filter((whCatalogItems) => {
+        let foundWarehouse = this.warehouseCatalogItems.find((whCatalogItems) => {
           return whCatalogItems.href === warehouseHref;
         });
-        if (foundWarehouse.length > 0) {
+        if (!!foundWarehouse) {
           this.shipmentService.getShippingCost(
-            foundWarehouse[0].totalWeight,
-            foundWarehouse[0].postalCode,
+            foundWarehouse.totalWeight,
+            foundWarehouse.postalCode,
             this.entity.data?.savedAddress?.zipCode
-          ).subscribe(resp => {
-            let foundExistingShippingMethod = this.shippingMethod.filter((method) => {
-              return method.shippingCost === resp.body;
+          ).subscribe((resp) => {
+            console.log(`resp.body`, resp, resp.body);
+            let foundShipmentMethod = this.shippingMethod.find((shipmentMethod) => {
+              return shipmentMethod.warehouse === getSlugFromHref(foundWarehouse.href);
             });
-            if (foundExistingShippingMethod.length === 0) {
+            if (!!foundShipmentMethod) {
+              this.shippingMethod.map((shipmentMethod) => {
+                if (shipmentMethod.warehouse === getSlugFromHref(foundWarehouse.href)) {
+                  shipmentMethod.shippingCost = resp.body;
+                }
+              });
+            } else {
               this.shippingMethod.push({
                 shippingCost: resp.body,
-                warehouse: getSlugFromHref(foundWarehouse[0].href)
+                warehouse: getSlugFromHref(foundWarehouse.href)
               });
             }
           }, error => {
@@ -256,7 +261,18 @@ export class SavedCatalogComponent implements OnInit {
 
   updateSavedCatalogAndDownloadQuotation(download?: boolean) {
     this.updateDataSavedSelectedShipments();
-    this.resellerSavedCatalogService.update(this.entity).subscribe((resp) => {
+    let copyOfEntity: ResellerSavedCatalog = JSON.parse(JSON.stringify(this.entity));
+    copyOfEntity.items.forEach((item) => {
+      let foundItem = this.selectedCatalogItems.find((selectedCatalogItem) => {
+        return selectedCatalogItem.product.href === item.product.href;
+      });
+      let foundItemIndex = this.selectedCatalogItems.indexOf(foundItem);
+      if (foundItemIndex === -1 && this.selectedCatalogItems.length > 0) {
+        let itemIndexRemove = copyOfEntity.items.indexOf(item);
+        copyOfEntity.items.splice(itemIndexRemove, 1);
+      }
+    });
+    this.resellerSavedCatalogService.update(copyOfEntity).subscribe((resp) => {
       let updatedEntity: ResellerSavedCatalog = resp.body;
       this.entity.pdf = updatedEntity.pdf;
       if (download) {
