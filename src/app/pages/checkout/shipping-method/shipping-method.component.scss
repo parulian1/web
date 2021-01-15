@@ -125,3 +125,9 @@
   border-bottom: 1px solid $color-light-grey;
   margin-bottom: 15px;
 }
+
+@media all and (max-width: 480px) {
+  .dropship_form {
+    flex-direction: column;
+  }
+}
