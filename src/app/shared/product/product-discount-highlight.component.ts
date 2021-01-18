@@ -172,7 +172,7 @@ export class ProductDiscountHighlightComponent implements OnInit {
     }
 
     if (this.startingListRange.activePromotionalPrices.length) {
-      const promo = this.startingListRange.activePromotionalPrices?.[0] || null;
+      const promo = this.startingListRange.activePromotionalPrices?.[0];
       if (!!promo?.type) {
         if (promo.type === 'percentage') {
           return promo.amount;
