@@ -1,0 +1,71 @@
+@import "src/theme/base";
+
+.product-box {
+  display: flex;
+  flex-direction: row;
+  margin: 12px 0;
+
+  &-left {
+    width: 78px;
+    height: 78px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &-right {
+    width: 100%;
+    margin-left: 12px;
+
+    .title {
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: bold;
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .qty {
+        margin-right: 24px;
+        font-size: 14px;
+        line-height: 18px;
+        font-weight: normal;
+      }
+
+      .price {
+        font-size: 14px;
+        line-height: 18px;
+        font-weight: bold;
+      }
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      margin-top: 16px;
+
+      .completed-order {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        button {
+          cursor: pointer;
+          width: 150px;
+
+          &.btn-outline {
+            margin-right: 24px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -188,20 +188,23 @@
             </app-wishlist>
           </div>
           <div class="actions-mobile">
-            <button (click)="toogleSideMobile()" [disabled]="disabled" class="btn-cart" *ngIf="!!currentWarehouse">
-              Tambah ke Keranjang
-            </button>
-            <app-reseller-catalog-button *ngIf="getShowReseller()"
-                                         [productDetail]="productDetail"
-                                         [warehouse]="currentWarehouse"
-                                         [quantity]="defaultQty">
-            </app-reseller-catalog-button>
             <app-wishlist
               [fullWidth]="true"
+              [iconOnly]="true"
               [product]="productDetail"
               [text]="'Simpan ke Wishlist'"
               class="btn-wishlist">
             </app-wishlist>
+            <app-reseller-catalog-button *ngIf="getShowReseller()"
+                                         class="reseller-btn"
+                                         [productDetail]="productDetail"
+                                         [warehouse]="currentWarehouse"
+                                         [quantity]="defaultQty">
+            </app-reseller-catalog-button>
+            <button (click)="toogleSideMobile()" [disabled]="disabled" class="btn-cart" *ngIf="!!currentWarehouse">
+              Tambah ke Keranjang
+            </button>
+
           </div>
         </div>
       </div>

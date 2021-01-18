@@ -2,8 +2,8 @@
  * Store and manage state for checkout page
  *
  */
-import {Addresses} from '@app/models/addresses';
-import {ShippingCost, ShippingMethod} from '@app/models/shipping-method';
+import { Addresses } from '@app/models/addresses';
+import {DropshipOption, ShippingCost, ShippingMethod} from '@app/models/shipping-method';
 import { PaymentMethodType } from "@app/models/payment-method";
 
 export class StateCheckout {
@@ -13,7 +13,8 @@ export class StateCheckout {
     stateShippingMethod: null,
     statePayment: null,
     statePaymentMethod: null,
-    shippingSelect: null
+    shippingSelect: null,
+    stateDropship: null,
   };
   public err: Array<string> = [];
   public savedAddress: any;
@@ -76,5 +77,18 @@ export class StateCheckout {
 
   removeSavedTokenId(): void {
     this.savedTokenId = null;
+  }
+
+  set stateDropshipOption(dropship: DropshipOption) {
+
+    if (dropship.active) {
+      this.stateCheckout.stateDropship = dropship;
+    } else {
+      this.stateCheckout.stateDropship = null;
+    }
+  }
+
+  get getStateDropshipOption(): DropshipOption {
+    return this.stateCheckout.stateDropship;
   }
 }

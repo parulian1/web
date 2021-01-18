@@ -16,3 +16,9 @@ export { store, customer, drf, auth, order, socialMedia };
 export * from './configuration';
 
 export * from './reseller';
+
+export * from './brand';
+
+export * from './highlight';
+
+export * from './banner';

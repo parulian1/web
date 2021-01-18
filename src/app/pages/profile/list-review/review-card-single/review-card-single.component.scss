@@ -1,0 +1,128 @@
+@import "src/theme/base";
+
+.review-card {
+  border: solid 1px #E5E5E5;
+  border-radius: $border-radius-double;
+  margin-bottom: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+
+  &-label {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr 150px;
+    padding-bottom: 16px;
+    border-bottom: solid 1px #E5E5E5;
+
+    .label {
+      &-order {
+        font-size: 14px;
+        line-height: 18px;
+        font-weight: bold;
+      }
+
+      &-warehouse {
+        font-size: 14px;
+        line-height: 18px;
+        font-weight: bold;
+      }
+
+      &-date {
+        display: flex;
+        align-items: center;
+
+        &-text {
+          font-size: 14px;
+          line-height: 19px;
+          color: #979797;
+        }
+
+        &-content {
+          margin-left: 16px;
+          font-size: 14px;
+          line-height: 18px;
+          font-weight: bold;
+        }
+      }
+
+      &-status {
+        font-size: 14px;
+        line-height: 19px;
+        border-radius: 4px;
+        width: 102px;
+        text-align: center;
+        padding: 4px 12px;
+      }
+    }
+  }
+
+  &-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 12px 0;
+
+    .left {
+      display: flex;
+
+      .info {
+        &-image {
+          width: 78px;
+          height: 78px;
+          border-radius: $border-radius;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: $border-radius;
+          }
+        }
+
+        &-product {
+          margin-left: 12px;
+          display: flex;
+          flex-direction: column;
+
+          .name {
+            font-size: 14px;
+            line-height: 18px;
+            font-weight: bold;
+          }
+
+          .rating {
+            margin-top: 12px;
+          }
+        }
+      }
+    }
+
+    .right {
+      display: flex;
+      align-items: center;
+
+      .info-action {
+        width: 150px;
+
+        &-add {
+          border: none;
+          border-radius: $border-radius;
+          width: 100%;
+          color: $white;
+          background-color: $color-accent;
+          font-size: 16px;
+          line-height: 22px;
+          font-weight: bold;
+          padding: 9px 0;
+          cursor: pointer;
+
+          a {
+            text-decoration: none;
+            color: $white;
+          }
+        }
+      }
+    }
+
+  }
+}

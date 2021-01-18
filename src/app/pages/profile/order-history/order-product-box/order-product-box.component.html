@@ -1,0 +1,27 @@
+<div class="product-box">
+  <div class="product-box-left">
+    <img
+      src="{{lineItems.product.image}}"
+      alt="{{lineItems.product.name}}"
+      (error)="changeSource($event)"/>
+  </div>
+  <div class="product-box-right">
+    <div class="title">{{lineItems.product.name}}</div>
+    <div class="subtitle">
+      <div class="qty">Qty {{lineItems.quantity}}</div>
+      <div class="price">{{lineItems.price|currency:'Rp ':'symbol':'1.0'}}</div>
+    </div>
+    <div class="actions">
+      <div class="completed-order" *ngIf="status === 'complete'">
+        <button class="btn-outline"
+                *ngIf="!isReviewed">
+          <a [routerLink]="[lineItems.product.href|entityToSlug, warehouse]">Tulis Ulasan</a>
+        </button>
+        <button class="btn-primary">
+          <a [routerLink]="['/products', lineItems.product.href|entityToSlug]">Beli Lagi</a>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

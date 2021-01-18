@@ -27,7 +27,6 @@ export class SavedCatalogComponent implements OnInit {
   selectedCatalogItems: ResellerSavedCatalogItem[] = [];
   shippingMethod: Array<{ shippingCost: ShippingCost[], warehouse: string }> = [];
   shippingSelect: Array<{ method?: ShippingCost, warehouse: string, fullWarehouse?: string, status?: boolean }> = [];
-  totalWeight: number = 0;
   warehouseCatalogItems: Array<CartWeight> = [];
 
   constructor(private route: ActivatedRoute,
@@ -39,73 +38,88 @@ export class SavedCatalogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let warehouses: ResellerCatalogItemWarehouse[] = [];
     this.route.data.subscribe((data) => {
       this.entity = data.entity;
-      this.entity.items.forEach((catalogItem) => {
-        let foundWh = warehouses.filter((wh) => {
-          return wh.href === catalogItem.warehouse.href;
-        });
-        if (foundWh.length === 0) {
-          warehouses.push(catalogItem.warehouse);
-        }
+      this.initialSetWarehouseCatalogItems();
+    });
+  }
+
+  initialSetWarehouseCatalogItems() {
+    let warehouses: ResellerCatalogItemWarehouse[] = [];
+    this.entity.items.forEach((catalogItem) => {
+      let foundWh = warehouses.filter((wh) => {
+        return wh.href === catalogItem.warehouse.href;
       });
-      warehouses.forEach((warehouse) => {
-        let totalWeightItemInWarehouse = 0;
-        this.entity.items.filter((catalogItem) => {
-          return catalogItem.warehouse.href === warehouse.href;
-        }).forEach((catalogItem) => {
-          totalWeightItemInWarehouse += +catalogItem.product.weight;
-          this.totalWeight += totalWeightItemInWarehouse;
-        });
-
-        this.warehouseCatalogItems.push({
-          href: warehouse.href,
-          name: warehouse.name,
-          postalCode: warehouse.postalCode,
-          totalWeight: totalWeightItemInWarehouse
-        });
-        const slug = getSlugFromHref(warehouse.href);
-
-        let foundMatchedSavedShipmentForWarehouse = [];
-        if (!!this.entity.data?.savedShipmentMethods) {
-          foundMatchedSavedShipmentForWarehouse = this.entity.data?.savedShipmentMethods.filter(
-            (savedShipment) => { return savedShipment.fullWarehouse === warehouse.href; }
-          );
-        }
-
-        this.getShipmentMethod();
-
-        if (foundMatchedSavedShipmentForWarehouse.length > 0) {
-          this.shippingSelect.push(foundMatchedSavedShipmentForWarehouse[0]);
-        } else {
-          this.shippingSelect.push({warehouse: slug, fullWarehouse: warehouse.href, method: null, status: false});
-        }
+      if (foundWh.length === 0) {
+        warehouses.push(catalogItem.warehouse);
+      }
+    });
+    warehouses.forEach((warehouse) => {
+      this.warehouseCatalogItems.push({
+        href: warehouse.href,
+        name: warehouse.name,
+        postalCode: warehouse.postalCode,
+        totalWeight: 0
       });
+      const slug = getSlugFromHref(warehouse.href);
+
+      let foundMatchedSavedShipmentForWarehouse = [];
+      if (!!this.entity.data?.savedShipmentMethods) {
+        foundMatchedSavedShipmentForWarehouse = this.entity.data?.savedShipmentMethods.filter(
+          (savedShipment) => { return savedShipment.fullWarehouse === warehouse.href; }
+        );
+      }
+
+      this.getShipmentMethod();
+
+      if (foundMatchedSavedShipmentForWarehouse.length > 0) {
+        this.shippingSelect.push(foundMatchedSavedShipmentForWarehouse[0]);
+      } else {
+        this.shippingSelect.push({warehouse: slug, fullWarehouse: warehouse.href, method: null, status: false});
+      }
     });
   }
 
   getShipmentMethod() {
-    /* TODO : This is rough, get the first warehouse ???
-    */
     this.shippingMethod = [];
     if (!!this.entity.data?.savedAddress?.zipCode && this.selectedCatalogItems.length > 0) {
-      this.shipmentService.getShippingCost(
-        this.totalWeight,
-        this.warehouseCatalogItems[0].postalCode,
-        this.entity.data?.savedAddress?.zipCode
-      ).subscribe(resp => {
-        let foundExistingShippingMethod = this.shippingMethod.filter((method) => {
-          return method.shippingCost === resp.body;
+      this.updateWarehouseCatalogItemTotalWeight();
+      let warehouseFromSelected: Array<string> = [];
+      this.selectedCatalogItems.forEach((item) => {
+        if (warehouseFromSelected.indexOf(item.warehouse.href) === -1) {
+          warehouseFromSelected.push(item.warehouse.href);
+        }
+      });
+      warehouseFromSelected.forEach((warehouseHref) => {
+        let foundWarehouse = this.warehouseCatalogItems.find((whCatalogItems) => {
+          return whCatalogItems.href === warehouseHref;
         });
-        if (foundExistingShippingMethod.length === 0) {
-          this.shippingMethod.push({
-            shippingCost: resp.body,
-            warehouse: getSlugFromHref(this.entity.items[0].warehouse.href)
+        if (!!foundWarehouse) {
+          this.shipmentService.getShippingCost(
+            foundWarehouse.totalWeight,
+            foundWarehouse.postalCode,
+            this.entity.data?.savedAddress?.zipCode
+          ).subscribe((resp) => {
+            console.log(`resp.body`, resp, resp.body);
+            let foundShipmentMethod = this.shippingMethod.find((shipmentMethod) => {
+              return shipmentMethod.warehouse === getSlugFromHref(foundWarehouse.href);
+            });
+            if (!!foundShipmentMethod) {
+              this.shippingMethod.map((shipmentMethod) => {
+                if (shipmentMethod.warehouse === getSlugFromHref(foundWarehouse.href)) {
+                  shipmentMethod.shippingCost = resp.body;
+                }
+              });
+            } else {
+              this.shippingMethod.push({
+                shippingCost: resp.body,
+                warehouse: getSlugFromHref(foundWarehouse.href)
+              });
+            }
+          }, error => {
+            log.error(error);
           });
         }
-      }, error => {
-        log.error(error);
       });
     }
   }
@@ -124,23 +138,38 @@ export class SavedCatalogComponent implements OnInit {
     if (!resellerCatalogItem) {
       if (!this.isSelectAll) {
         this.selectedCatalogItems = [];
+        this.resetWarehouseCartItemTotalWeight();
       } else {
-        this.entity.items.forEach((catalogItem) => {
-          if (this.selectedCatalogItems.indexOf(catalogItem) === -1) {
-            this.selectedCatalogItems.push(catalogItem);
-          }
-        });
+        this.pushAllItemIntoSelectedItems();
       }
     } else {
-      let indexResellerCatalogItem = this.selectedCatalogItems.indexOf(resellerCatalogItem);
-      if (indexResellerCatalogItem !== -1) {
-        this.selectedCatalogItems.splice(indexResellerCatalogItem, 1);
-        this.isSelectAll = false;
-      } else {
-        this.selectedCatalogItems.push(resellerCatalogItem);
-      }
+      this.addOrRemoveProductAtSelectedItems(resellerCatalogItem);
     }
     this.getShipmentMethod();
+  }
+
+  resetWarehouseCartItemTotalWeight() {
+    this.warehouseCatalogItems.forEach((warehouse) => {
+      warehouse.totalWeight = 0;
+    });
+  }
+
+  pushAllItemIntoSelectedItems() {
+    this.entity.items.forEach((catalogItem) => {
+      if (this.selectedCatalogItems.indexOf(catalogItem) === -1) {
+        this.selectedCatalogItems.push(catalogItem);
+      }
+    });
+  }
+
+  addOrRemoveProductAtSelectedItems(resellerCatalogItem?: ResellerCatalogItem) {
+    let indexResellerCatalogItem = this.selectedCatalogItems.indexOf(resellerCatalogItem);
+    if (indexResellerCatalogItem !== -1) {
+      this.selectedCatalogItems.splice(indexResellerCatalogItem, 1);
+      this.isSelectAll = false;
+    } else {
+      this.selectedCatalogItems.push(resellerCatalogItem);
+    }
   }
 
   getFirstProduct(catalogItems: Array<ResellerSavedCatalogItem>) {
@@ -232,7 +261,18 @@ export class SavedCatalogComponent implements OnInit {
 
   updateSavedCatalogAndDownloadQuotation(download?: boolean) {
     this.updateDataSavedSelectedShipments();
-    this.resellerSavedCatalogService.update(this.entity).subscribe((resp) => {
+    let copyOfEntity: ResellerSavedCatalog = JSON.parse(JSON.stringify(this.entity));
+    copyOfEntity.items.forEach((item) => {
+      let foundItem = this.selectedCatalogItems.find((selectedCatalogItem) => {
+        return selectedCatalogItem.product.href === item.product.href;
+      });
+      let foundItemIndex = this.selectedCatalogItems.indexOf(foundItem);
+      if (foundItemIndex === -1 && this.selectedCatalogItems.length > 0) {
+        let itemIndexRemove = copyOfEntity.items.indexOf(item);
+        copyOfEntity.items.splice(itemIndexRemove, 1);
+      }
+    });
+    this.resellerSavedCatalogService.update(copyOfEntity).subscribe((resp) => {
       let updatedEntity: ResellerSavedCatalog = resp.body;
       this.entity.pdf = updatedEntity.pdf;
       if (download) {
@@ -293,16 +333,26 @@ export class SavedCatalogComponent implements OnInit {
 
   }
 
-  getMethodOfShippingSelect() {
-    return !!this.shippingSelect && this.shippingSelect.length > 0 ? this.shippingSelect[0].method : null;
+  updateWarehouseCatalogItemTotalWeight() {
+    this.warehouseCatalogItems.forEach((whCatalogItems) => {
+      whCatalogItems.totalWeight = 0;
+    });
+    this.selectedCatalogItems.forEach((item) => {
+      this.warehouseCatalogItems.map((warehouse, index) => {
+          if (warehouse.href == item.warehouse.href){
+            let productWeight = +item.product.weight;
+            if (!isNaN(productWeight)) {
+              this.warehouseCatalogItems[index].totalWeight += productWeight * item.quantity;
+            }
+            console.log(`updatetotalweightcart`, index, this.warehouseCatalogItems[index].totalWeight,
+              productWeight * item.quantity);
+          }
+        });
+    });
   }
 
-  calculateShipmentCostAndFetchShipmentMethod() {
-    this.totalWeight = 0;
-    this.entity.items.forEach((item) => {
-      this.totalWeight += item.quantity * item.product.weight;
-    });
-    this.getShipmentMethod();
+  getMethodOfShippingSelect() {
+    return !!this.shippingSelect && this.shippingSelect.length > 0 ? this.shippingSelect[0].method : null;
   }
 
   getCatalogItemProductImage(catalogItem: ResellerCatalogItem): string {
@@ -311,4 +361,6 @@ export class SavedCatalogComponent implements OnInit {
     }
     return "";
   }
+
+
 }

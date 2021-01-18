@@ -14,14 +14,14 @@ import {
   AddressDeleteDialogComponent,
   AddressPaginationComponent,
   AddressMapComponent,
-} from "@app/pages/profile/list-address";
+} from '@app/pages/profile/list-address';
 import {ChangePasswordComponent} from './change-password';
 import {
   ListWishlistComponent,
   WishlistSelectWarehouseComponent,
   WishlistSearchComponent,
   WishlistPaginationComponent,
-} from "@app/pages/profile/list-wishlist";
+} from '@app/pages/profile/list-wishlist';
 import {EditProfileComponent} from './edit-profile.component';
 import {OrderHistoryListComponent, OrderDetailsComponent} from './order-history';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
@@ -35,7 +35,9 @@ import {
   DropShipListsComponent,
   SavedCatalogComponent,
   SavedCatalogListComponent
-} from "@app/pages/profile/drop-shipping";
+} from '@app/pages/profile/drop-shipping';
+import { OrderProductBoxComponent } from '@app/pages/profile/order-history/order-product-box';
+import { ReviewCardSingleComponent } from './list-review/review-card-single/review-card-single.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import {
     SavedCatalogListComponent,
     SavedCatalogComponent,
     DialogSaveCatalogComponent,
+    OrderProductBoxComponent,
+    ReviewCardSingleComponent,
   ],
     imports: [
         CommonModule,

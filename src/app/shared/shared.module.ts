@@ -46,6 +46,7 @@ import {
   ShareSocialButtonsComponent,
   ShareSocialButtonsDialogComponent
 } from './share-social-buttons';
+import { SharedShippingMethodComponent } from "@app/shared/shared-shipping-method.component";
 
 @NgModule({
   imports: [
@@ -100,6 +101,7 @@ import {
     ImgResizeDirective,
     ShareSocialButtonsComponent,
     ShareSocialButtonsDialogComponent,
+    SharedShippingMethodComponent,
   ],
     exports: [
         LoaderComponent,
@@ -140,6 +142,7 @@ import {
         ImgResizeDirective,
         ShareSocialButtonsComponent,
         ShareSocialButtonsDialogComponent,
+        SharedShippingMethodComponent,
     ],
 })
 export class SharedModule {

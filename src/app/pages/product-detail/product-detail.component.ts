@@ -22,7 +22,7 @@ import { EntityToSlugPipe } from '@app/shared/utils/entity-to-slug.pipe';
 import { ConfigService, Logger } from '@app/core';
 import { Configuration, RatingSummary, Review } from '@app/models';
 import { animate, state, style, transition, trigger } from "@angular/animations";
-import { Title } from "@angular/platform-browser";
+import {Meta, Title} from "@angular/platform-browser";
 import { StoreWithStock } from "@app/models/store";
 import {GtagService} from '@app/library/gtagjs/gtag.service';
 
@@ -99,7 +99,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
     'prevArrow': '<button class="slick-prev"><span class="material-icons">\n' +
       'keyboard_arrow_left\n' +
       '</span></button>',
-    'variableWidth': 88,
+    'variableWidth': true,
   };
   mobileMenu: string;
 
@@ -115,8 +115,9 @@ export class ProductDetailComponent implements OnInit, DoCheck {
               private credentialsService: CredentialsService,
               private localStorage: LocalStorage,
               private pipe: EntityToSlugPipe,
-              public title: Title,
+              private title: Title,
               private appConfigService: ConfigService,
+              private meta: Meta,
               private gtag: GtagService) {
   }
 
@@ -190,6 +191,8 @@ export class ProductDetailComponent implements OnInit, DoCheck {
       }
     );
     this.slideProductImg2 = this.slideProductImg;
+
+    this.setSeo();
   }
 
   get displayedPromo(): PromotionalPrice | number {
@@ -408,6 +411,31 @@ export class ProductDetailComponent implements OnInit, DoCheck {
       return false;
     }
     return true;
+  }
+
+  setSeo() {
+    let seoContentKeyword = '';
+    if (!!this.productDetail?.seoMeta) {
+      seoContentKeyword = this.productDetail.seoMeta;
+    }
+    if (!!this.config?.extraConfig?.keywords) {
+      seoContentKeyword += ` ${this.config.extraConfig.keywords}`;
+    }
+    let seoContentDescription = '';
+    if (!!this.productDetail?.seoDescription) {
+      seoContentDescription += ` ${this.productDetail.seoDescription}`;
+    }
+    if (!!this.config?.extraConfig?.description) {
+      seoContentDescription += ` ${this.config.extraConfig.description}`;
+    }
+    this.meta.addTag({
+      name: 'description',
+      content: seoContentDescription
+    });
+    this.meta.addTag({
+      name: 'keywords',
+      content: seoContentKeyword
+    });
   }
 
   private trackAnalyticCart(product: ProductDetail, price: number, qty: number = 1) {

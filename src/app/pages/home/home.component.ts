@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import {Banner} from '@app/models/banner';
-import {HighlightList} from '@app/models/highlight';
-import {HighlightService} from '@app/services/highlight.service';
-import {DatePipe} from '@angular/common';
-import {TestimonialService} from '@app/services/testimonial.service';
-import {Testimonial} from '@app/models/testimonial';
-import {Title} from '@angular/platform-browser';
-import {ConfigService} from '@app/core';
-import {Configuration} from '@app/models';
+import { Banner } from '@app/models/banner';
+import { HighlightList } from '@app/models/highlight';
+import { HighlightService } from '@app/services/highlight.service';
+import { DatePipe } from '@angular/common';
+import { TestimonialService } from '@app/services/testimonial.service';
+import { Testimonial } from '@app/models/testimonial';
+import { Configuration } from "@app/models";
+import { Meta, Title} from "@angular/platform-browser";
+import { ConfigService } from "@app/core";
 
 @Component({
   selector: 'app-home',
@@ -62,16 +62,13 @@ export class HomeComponent implements OnInit {
               private highlightService: HighlightService,
               private datePipe: DatePipe,
               private testimonialService: TestimonialService,
-              public title: Title,
-              private appConfigService: ConfigService) {
+              private appConfigService: ConfigService,
+              private title: Title,
+              private meta: Meta,) {
   }
 
   ngOnInit() {
     this.config = this.appConfigService.config;
-    let title = 'Nusantara Platform';
-    if (!!this.config?.name) {
-      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
-    }
     this.route.data.subscribe((data: { banners: Array<Banner> }) => {
       if (data.banners) {
         let now = String(new Date());
@@ -83,7 +80,8 @@ export class HomeComponent implements OnInit {
     });
     this.fetchHighlight();
     this.checkTestimonials();
-    this.title.setTitle(title);
+    this.setSeoTitle();
+    this.setSeoMeta();
   }
 
   fetchHighlight() {
@@ -110,5 +108,29 @@ export class HomeComponent implements OnInit {
     this.testimonialService.fetchTestimonial({ perPage: 4, page: 1, is_active: true }).subscribe(result => {
       this.testimonials = result.body;
     })
+  }
+
+  setSeoTitle() {
+    let title = "Nusantara Platform";
+    if (!!this.config?.name) {
+      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
+    if (!!this.config?.tagLine) {
+      title += ` ${this.config.tagLine}`;
+    }
+    this.title.setTitle(`Home - ${ title }`);
+  }
+
+  private setSeoMeta() {
+    if (!!this.config?.extraConfig?.description) {
+      this.meta.addTag({
+        name: 'description', content: this.config.extraConfig.description
+      });
+    }
+    if (!!this.config?.extraConfig?.keywords) {
+      this.meta.addTag({
+        name: 'keywords', content: this.config.extraConfig.keywords
+      });
+    }
   }
 }

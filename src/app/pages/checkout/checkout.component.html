@@ -13,6 +13,7 @@
       </app-checkout-address>
       <app-shipping-method [cart]="cart" [warehouse]="warehouse" [address]="address"
                            [shippingMethod]="shippingMethod$" [mode]="shippingMethodMode"
+                           [isReseller]="getIsReseller()"
                            (shipping)="getShipping($event)" (totalShipping)="getTotalShipping($event)">
       </app-shipping-method>
       <app-payment-method>

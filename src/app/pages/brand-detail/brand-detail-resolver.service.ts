@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {BrandService} from "@app/services/brand.service";
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from "@angular/router";
-import {Observable} from "rxjs";
-import {Brand} from "@app/models/brand";
-import {map} from "rxjs/operators";
-import {Logger} from "@app/core";
+import { BrandService } from "@app/services/brand.service";
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
+import { Observable } from "rxjs";
+import { Brand } from "@app/models";
+import { map } from "rxjs/operators";
+import { Logger } from "@app/core";
 
 const log = new Logger('BrandDetailResolver');
 
