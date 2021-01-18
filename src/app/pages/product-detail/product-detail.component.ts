@@ -115,7 +115,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
               private credentialsService: CredentialsService,
               private localStorage: LocalStorage,
               private pipe: EntityToSlugPipe,
-              private title: Title,
+              public title: Title,
               private appConfigService: ConfigService,
               private meta: Meta,
               private gtag: GtagService) {
@@ -123,7 +123,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let title = "Nusantara Platform";
+    let title = 'Nusantara Platform';
     if (!!this.config?.name) {
       title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
@@ -148,7 +148,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
           log.info(resp);
           this.listWarehouses = resp;
 
-          let foundWarehouseFromPreferred = this.listWarehouses.filter( warehouse => {
+          const foundWarehouseFromPreferred = this.listWarehouses.filter( warehouse => {
             return warehouse.href === this.storeService.preferredStore.href;
           });
           if (foundWarehouseFromPreferred.length > 0) {

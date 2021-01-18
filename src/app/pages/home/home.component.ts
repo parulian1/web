@@ -7,9 +7,9 @@ import { HighlightService } from '@app/services/highlight.service';
 import { DatePipe } from '@angular/common';
 import { TestimonialService } from '@app/services/testimonial.service';
 import { Testimonial } from '@app/models/testimonial';
-import { Configuration } from "@app/models";
-import { Meta, Title} from "@angular/platform-browser";
-import { ConfigService } from "@app/core";
+import { Configuration } from '@app/models';
+import { Meta, Title} from '@angular/platform-browser';
+import { ConfigService } from '@app/core';
 
 @Component({
   selector: 'app-home',
@@ -63,8 +63,8 @@ export class HomeComponent implements OnInit {
               private datePipe: DatePipe,
               private testimonialService: TestimonialService,
               private appConfigService: ConfigService,
-              private title: Title,
-              private meta: Meta,) {
+              public title: Title,
+              private meta: Meta) {
   }
 
   ngOnInit() {
@@ -111,7 +111,7 @@ export class HomeComponent implements OnInit {
   }
 
   setSeoTitle() {
-    let title = "Nusantara Platform";
+    let title = 'Nusantara Platform';
     if (!!this.config?.name) {
       title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
