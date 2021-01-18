@@ -30,15 +30,18 @@ export class AddReviewResolver implements Resolve<any> {
         productImage: result.children
           .filter(m => m.warehouse.slug === warehouse)[0].data
           .filter(t => t.lineItems
-            .filter(v => this.pipe.transform(v.product.href) === product))[0].lineItems[0].product.image,
+            .filter(v => this.pipe.transform(v.product.href) === product))[0].lineItems
+          .filter(x => this.pipe.transform(x.product.href) === product)[0].product.image,
         productName: result.children
           .filter(m => m.warehouse.slug === warehouse)[0].data
           .filter(t => t.lineItems
-            .filter(v => this.pipe.transform(v.product.href) === product))[0].lineItems[0].product.name,
+            .filter(v => this.pipe.transform(v.product.href) === product))[0].lineItems
+          .filter(x => this.pipe.transform(x.product.href) === product)[0].product.name,
         productHref: result.children
           .filter(m => m.warehouse.slug === warehouse)[0].data
           .filter(t => t.lineItems
-            .filter(v => this.pipe.transform(v.product.href) === product))[0].lineItems[0].product.href
+            .filter(v => this.pipe.transform(v.product.href) === product))[0].lineItems
+          .filter(x => this.pipe.transform(x.product.href) === product)[0].product.href
       }))
     );
     this.reviewStatus$ = this.reviewService.fetchReviewProductInOrder(product, orderHref);

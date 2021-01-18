@@ -3,6 +3,7 @@ import {HttpClient, HttpParams, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {RatingSummary, Review} from "@app/models";
 import {EntityToSlugPipe} from "@app/shared/utils";
+import {filter, map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,23 @@ export class ReviewService {
     return this.http
       .get<any>(`/order/review/`, {observe: 'response', params, responseType: 'json'});
   }
+
+  checkReviewInOrder(orderHref: string, productHref: string): Observable<HttpResponse<any>> {
+    let params = new HttpParams();
+
+    if (productHref) {
+      params = params.set('product', productHref);
+    }
+
+
+    if (orderHref) {
+      params = params.set('order', orderHref);
+    }
+
+    return this.http
+      .get<any>(`/order/review/`, {observe: 'response', params, responseType: 'json'});
+  }
+
 
   createReview(review: any): Observable<HttpResponse<any>> {
     return this.http

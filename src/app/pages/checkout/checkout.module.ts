@@ -28,6 +28,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { CartSummaryComponent } from '@app/pages/checkout/cart-summary';
 import {CartModule} from '@app/pages/cart/cart.module';
 import { CheckoutCreditCardChoiceComponent } from './containers';
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 
 @NgModule({
@@ -43,25 +44,26 @@ import { CheckoutCreditCardChoiceComponent } from './containers';
     CartSummaryComponent,
     CheckoutCreditCardChoiceComponent,
   ],
-  imports: [
-    CommonModule,
-    CheckoutRoutingModule,
-    ShellModule,
-    MatToolbarModule,
-    SharedModule,
-    MatSelectModule,
-    MatRadioModule,
-    MatExpansionModule,
-    FormsModule,
-    MatIconModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    PortalModule,
-    ReactiveFormsModule,
-    GoogleMapsModule,
-    MatButtonModule,
-    CartModule
-  ],
+    imports: [
+        CommonModule,
+        CheckoutRoutingModule,
+        ShellModule,
+        MatToolbarModule,
+        SharedModule,
+        MatSelectModule,
+        MatRadioModule,
+        MatExpansionModule,
+        FormsModule,
+        MatIconModule,
+        MatDatepickerModule,
+        MatDialogModule,
+        PortalModule,
+        ReactiveFormsModule,
+        GoogleMapsModule,
+        MatButtonModule,
+        CartModule,
+        MatCheckboxModule
+    ],
   providers: [EntityToSlugPipe, TitleCasePipe]
 })
 export class CheckoutModule {

@@ -1,7 +1,7 @@
 import {Component, DoCheck, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Cart} from '@app/models/cart';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ShippingMethod} from '@app/models/shipping-method';
+import {DropshipMeta, DropshipOption, ShippingMethod} from '@app/models/shipping-method';
 import {ShippingCost} from '@app/models/shipping-method';
 import {Addresses} from '@app/models/addresses';
 import {ShippingMethodService} from '@app/services/shipping-method.service';
@@ -21,6 +21,7 @@ export class ShippingMethodComponent implements OnInit {
   @Input() warehouse: Array<{ href: string, name: string, postalCode?: string }>;
   @Input() address: Addresses;
   @Input() shippingMethod: Array<{ shippingCost: ShippingCost[], warehouse: string }> = [];
+  @Input() isReseller: boolean;
 
   @Output() shipping: EventEmitter<any> = new EventEmitter<any>();
   @Output() totalShipping: EventEmitter<any> = new EventEmitter<any>();
@@ -31,6 +32,9 @@ export class ShippingMethodComponent implements OnInit {
   shippingParams: Array<{ warehouse: string, cost: number, method: string }> = [];
   shippingSelect: Array<{ method?: ShippingCost, warehouse: string, fullWarehouse?: string, status?: boolean }> = [];
   @Input() mode: 'idle' | 'edit' | 'default' = 'idle';
+  dropshipOpen = false;
+  dropshipOption : DropshipOption;
+  shippingError = '';
 
   constructor(private route: ActivatedRoute,
               private shippingServices: ShippingMethodService,
@@ -59,6 +63,7 @@ export class ShippingMethodComponent implements OnInit {
     if (this.stateService.getStateAddress) {
       this.mode = 'edit';
     }
+    this.dropshipOption = <DropshipOption>{ active: false, meta: <DropshipMeta>{ name: '', mobile: ''}};
   }
 
   getShippingChosen($event: Array<{ warehouse: string; cost?: number; status?: boolean }>) {
@@ -82,11 +87,32 @@ export class ShippingMethodComponent implements OnInit {
   }
 
   saveShippingMethod() {
-    log.debug(this.shippingSelect.map(m => m.method));
-    this.stateService.stateShippingMethod = this.shippingSelect.map(m => m.method);
-    this.mode = 'default';
+    log.debug(this.dropshipOption);
+    if (this.dropshipOption.active) {
+      if (this.validDropship(this.dropshipOption.meta)) {
+        this.stateService.stateDropshipOption = this.dropshipOption;
+        this.mode = 'default';
+        this.shippingError = ''
+      } else {
+        this.mode = 'edit';
+        this.shippingError = 'Data dropship tidak lengkap';
+      }
+    } else {
+      this.stateService.stateDropshipOption = <DropshipOption>{ active: false };
+      this.shippingError = '';
+    }
+    if (this.shippingError === '') {  // TODO: Bad way, fix it bro
+
+      log.debug(this.shippingSelect.map(m => m.method));
+      this.stateService.stateShippingMethod = this.shippingSelect.map(m => m.method);
+      this.mode = 'default';
+    }
   }
 
+  validDropship(dropshipMeta: DropshipMeta) {
+    //TODO: More complete validation
+    return dropshipMeta.name!== '' && dropshipMeta.mobile !== '';
+  }
 
   changeMode() {
     this.mode = 'edit';
@@ -113,5 +139,9 @@ export class ShippingMethodComponent implements OnInit {
       costChange: value,
     };
     this.totalShipping.emit(param);
+  }
+
+  dropshipSelected(checked: boolean): void {
+    this.dropshipOpen = checked;
   }
 }

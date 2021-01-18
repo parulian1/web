@@ -15,6 +15,8 @@ import { AlertDialogComponent } from '@app/shared/alert-dialog';
 import { Configuration } from '@app/models';
 import { PaymentTypeChoices } from '@app/models/payment-method';
 import {HttpErrorResponse} from '@angular/common/http';
+import {CredentialsService} from "@app/core/authentication";
+import {Checkout} from "@app/models/checkout";
 
 const log = new Logger('Checkout');
 
@@ -49,6 +51,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
               private service: CheckoutService,
               private snackbar: MatSnackBar,
               private appConfigService: ConfigService,
+              public credentialsService: CredentialsService,
               private cartService: CartService) {
   }
 
@@ -78,12 +81,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
           const params = {
             message: 'Your cart is empty. Redirecting back to cart...',
           };
-          this.snackbar.openFromComponent(AlertDialogComponent, {
-            data: params,
-            duration: 7 * 1000, // 5 seconds
-            verticalPosition: 'top',
-            horizontalPosition: 'right',
-          });
+          this.showAlertDialog(params);
           this.router.navigateByUrl('/cart');
         }
 
@@ -191,9 +189,13 @@ export class CheckoutComponent implements OnInit, DoCheck {
         'zipcode': this.stateService.getStateAddress.zipcode,
         'phone_number': this.stateService.getStateAddress.phoneNumber,
       }
-    };
+    } as Checkout;
 
-    log.debug(order);
+    const stateDropship = this.stateService.getStateDropshipOption;
+    if (stateDropship && stateDropship.active && this.getIsReseller()) {
+      order.dropship = stateDropship.meta;
+    }
+
 
     if (this.cart.cartItems.length !== 0) {
       this.service.createOrder(order).subscribe(res => {
@@ -207,6 +209,12 @@ export class CheckoutComponent implements OnInit, DoCheck {
               if (resp.status === 200) {
                 window.location.href = resp.body.redirectUrl;
               }
+            }, (error) => {
+              this.showAlertDialog({
+                message: 'Maaf, saat ini sedang ada gangguan dengan sistem pembayaran. ' +
+                  'Silakan lanjutkan pembayaran melalui Order Detail atau hubungi Customer Service kami.'
+              })
+              this.router.navigate(['/profile/orders', orderNumber.order_number]);
             });
           } else {
             this.router.navigate(
@@ -221,12 +229,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
       const params = {
         message: 'Your cart is empty. Redirecting back to cart...',
       };
-      this.snackbar.openFromComponent(AlertDialogComponent, {
-        data: params,
-        duration: 7 * 1000, // 5 seconds
-        verticalPosition: 'top',
-        horizontalPosition: 'right',
-      });
+      this.showAlertDialog(params);
       this.router.navigateByUrl('/cart');
     }
   }
@@ -289,6 +292,22 @@ export class CheckoutComponent implements OnInit, DoCheck {
         this.stateService.err.push(this.pipe.transform(item.href));
       });
     }
+  }
+
+  showAlertDialog(messageParams: {message: string, additionalMessage?: string}): void {
+    this.snackbar.openFromComponent(AlertDialogComponent, {
+      data: messageParams,
+      duration: 7 * 1000, // 5 seconds
+      verticalPosition: 'top',
+      horizontalPosition: 'right',
+    });
+  }
+
+  getIsReseller() {
+    if (!this.credentialsService.isAuthenticated() || !this.credentialsService.getIsReseller()) {
+      return false;
+    }
+    return true;
   }
 
 }
