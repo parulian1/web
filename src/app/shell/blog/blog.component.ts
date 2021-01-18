@@ -10,7 +10,7 @@ import {Blog} from '@app/models/blog.model';
 })
 export class BlogComponent implements OnInit {
   @Input() limit = 5;
-  blogBaseUrl = 'https://marthatilaarblog.wordpress.com/';
+  blogBaseUrl: string;
   defaultImg = 'assets/blog-not-found.png';
   blogs: Blog[] = [];
 
@@ -41,8 +41,16 @@ export class BlogComponent implements OnInit {
   //
   getList(): void {
     this.blogService.getList().subscribe((blogs) => {
-
+      this.blogBaseUrl = blogs.blogUrl;
       this.blogs = blogs.posts.slice(0, this.limit);
     });
+  }
+
+  public getPostImage(blog: Blog): string {
+    return blog.featured_image || blog.featuredImage || this.defaultImg;
+  }
+
+  public getPostUrl(blog: Blog): string {
+    return blog.short_URL || blog.link || '#';
   }
 }
