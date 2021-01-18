@@ -334,20 +334,14 @@ export class SavedCatalogComponent implements OnInit {
   }
 
   updateWarehouseCatalogItemTotalWeight() {
-    this.warehouseCatalogItems.forEach((whCatalogItems) => {
-      whCatalogItems.totalWeight = 0;
-    });
-    this.selectedCatalogItems.forEach((item) => {
-      this.warehouseCatalogItems.map((warehouse, index) => {
-          if (warehouse.href == item.warehouse.href){
-            let productWeight = +item.product.weight;
-            if (!isNaN(productWeight)) {
-              this.warehouseCatalogItems[index].totalWeight += productWeight * item.quantity;
-            }
-            console.log(`updatetotalweightcart`, index, this.warehouseCatalogItems[index].totalWeight,
-              productWeight * item.quantity);
-          }
-        });
+    this.warehouseCatalogItems.map((whCatalogItems, index) => {
+      let totalWeight: number = 0;
+      this.selectedCatalogItems.filter((item) => {
+        return item.warehouse.href === whCatalogItems.href;
+      }).forEach((item) => {
+        let productWeight = item.product.weight;
+        whCatalogItems.totalWeight  += Number((productWeight * item.quantity));
+      });
     });
   }
 
