@@ -144,7 +144,7 @@ export class ProductDiscountHighlightComponent implements OnInit {
       if (this.startCurrentPrice) {
         return this.startCurrentPrice;
       }
-      return this.startingListRange.activePromotionalPrices[0][0].netPrice;
+      return this.startingListRange.activePromotionalPrices[0]?.netPrice || 0;
     }
 
     this.priceSelected.emit(this.baseStartingPrice);
@@ -161,27 +161,27 @@ export class ProductDiscountHighlightComponent implements OnInit {
       if (this.endCurrentPrice) {
         return this.endCurrentPrice;
       }
-      return this.endingListRange.activePromotionalPrices[0][0].netPrice;
+      return this.endingListRange.activePromotionalPrices[0]?.netPrice || 0;
     }
     return this.baseEndingPrice;
   }
 
   get displayedPromo(): PromotionalPrice | number {
-
     if (!this.startingListRange) {
       return null;
     }
 
     if (this.startingListRange.activePromotionalPrices.length) {
-      const promo = this.startingListRange.activePromotionalPrices[0][0];
+      const promo = this.startingListRange.activePromotionalPrices?.[0] || null;
+      if (!!promo?.type) {
+        if (promo.type === 'percentage') {
+          return promo.amount;
+        } else {
+          const basePrice = promo.amount + promo.netPrice;
+          const discountPrice = (promo.amount / basePrice) * 100;
 
-      if (promo.type === 'percentage') {
-        return promo.amount;
-      } else {
-        const basePrice = promo.amount + promo.netPrice;
-        const discountPrice = (promo.amount / basePrice) * 100;
-
-        return Math.round(discountPrice);
+          return Math.round(discountPrice);
+        }
       }
     }
     return null;

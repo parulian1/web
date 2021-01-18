@@ -197,15 +197,16 @@ export class ProductDetailComponent implements OnInit, DoCheck {
     }
 
     if (this.startingListRange.activePromotionalPrices.length) {
-      const promo = this.startingListRange.activePromotionalPrices[0][0];
+      const promo = this.startingListRange.activePromotionalPrices?.[0] || null;
+      if (!!promo?.type) {
+        if (promo.type === 'percentage') {
+          return promo.amount;
+        } else {
+          const basePrice = promo.amount + promo.netPrice;
+          const discountPrice = (promo.amount / basePrice) * 100;
 
-      if (promo.type === 'percentage') {
-        return promo.amount;
-      } else {
-        const basePrice = promo.amount + promo.netPrice;
-        const discountPrice = (promo.amount / basePrice) * 100;
-
-        return Math.round(discountPrice);
+          return Math.round(discountPrice);
+        }
       }
     }
     return null;
@@ -236,11 +237,8 @@ export class ProductDetailComponent implements OnInit, DoCheck {
 
             if (price.activePromotionalPrices.length) {
               this.priceBase = price.price;
-              this.priceSelected = price.activePromotionalPrices[0][0].netPrice;
-            } else {
-              this.priceSelected = price.price;
             }
-
+            this.priceSelected = price.activePromotionalPrices[0]?.netPrice || price.price;
             break;
           }
         } else if (price.maxQuantity === null) {
@@ -248,11 +246,8 @@ export class ProductDetailComponent implements OnInit, DoCheck {
           if (this.defaultQty >= price.minQuantity) {
             if (price.activePromotionalPrices.length) {
               this.priceBase = price.price;
-              this.priceSelected = price.activePromotionalPrices[0][0].netPrice;
-            } else {
-              this.priceSelected = price.price;
             }
-
+            this.priceSelected = price.activePromotionalPrices[0]?.netPrice || price.price;
             break;
           }
         }
@@ -354,26 +349,17 @@ export class ProductDetailComponent implements OnInit, DoCheck {
   }
 
   setPriceInformation(priceLists: Array<PriceRanges>) {
-    this.priceInfo = [];
-    for (const price of priceLists) {
-      const minQty = price.minQuantity;
-      const maxQty = price.maxQuantity;
-      const priceBase = price.price;
-      let priceDiscount = 0;
+    this.priceInfo = priceLists.map(priceData => {
+      const { minQuantity, maxQuantity, price } = priceData;
+      const priceDiscount = priceData.activePromotionalPrices[0]?.netPrice || 0;
 
-      if (price.activePromotionalPrices.length !== 0) {
-        priceDiscount = price.activePromotionalPrices[0][0].netPrice;
+      return {
+        priceBase: price,
+        minQty: minQuantity,
+        maxQty: maxQuantity,
+        priceDiscount,
       }
-
-      const info = {
-        minQty,
-        maxQty,
-        priceBase,
-        priceDiscount
-      };
-
-      this.priceInfo.push(info);
-    }
+    }) || [];
   }
 
   popUpVideo($event: MouseEvent) {
