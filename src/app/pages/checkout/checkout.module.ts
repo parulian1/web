@@ -28,6 +28,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { CartSummaryComponent } from '@app/pages/checkout/cart-summary';
 import {CartModule} from '@app/pages/cart/cart.module';
 import { CheckoutCreditCardChoiceComponent } from './containers';
+import {GtagModule} from '@app/library/gtagjs/gtag.module';
 import {MatCheckboxModule} from "@angular/material/checkbox";
 
 
@@ -62,7 +63,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
         GoogleMapsModule,
         MatButtonModule,
         CartModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+      GtagModule
     ],
   providers: [EntityToSlugPipe, TitleCasePipe]
 })

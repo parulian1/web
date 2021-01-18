@@ -26,6 +26,7 @@ import { RatingReviewCommentsComponent } from '@app/pages/product-detail/rating-
 import { EntityToSlugPipe } from "@app/shared/utils";
 import { ProvinceDialogComponent } from './store/province-dialog/province-dialog.component';
 import { VideoDialogComponent } from './product-detail/video-dialog/video-dialog.component';
+import {GtagModule} from '@app/library/gtagjs/gtag.module';
 
 @NgModule({
   declarations: [
@@ -44,19 +45,20 @@ import { VideoDialogComponent } from './product-detail/video-dialog/video-dialog
     VideoDialogComponent,
     ResellerCatalogButtonComponent,
   ],
-    imports: [
-        CommonModule,
-        TranslateModule,
-        SharedModule,
-        FlexLayoutModule,
-        MaterialModule,
-        ShellModule,
-        PagesRoutingModule,
-        ReactiveFormsModule,
-        SlickCarouselModule,
-        FormsModule,
-        NgxYoutubePlayerModule.forRoot(),
-    ],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    SharedModule,
+    FlexLayoutModule,
+    MaterialModule,
+    ShellModule,
+    PagesRoutingModule,
+    ReactiveFormsModule,
+    SlickCarouselModule,
+    FormsModule,
+    NgxYoutubePlayerModule.forRoot(),
+    GtagModule,
+  ],
   providers: [EntityToSlugPipe, StateCheckout]
 })
 export class PagesModule {

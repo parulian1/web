@@ -15,13 +15,13 @@ export class BrandDetailComponent implements OnInit, OnDestroy {
   brand: Brand;
   highlight: Array<HighlightList> = [];
   slug: string;
-  private subscribe: any;
   config: Configuration;
+  private subscribe: any;
 
   constructor(private brandService: BrandService,
               private route: ActivatedRoute,
               private highlightService: HighlightService,
-              private title: Title,
+              public title: Title,
               private appConfigService: ConfigService,
               private meta: Meta) {
   }

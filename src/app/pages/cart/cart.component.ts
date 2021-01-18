@@ -41,7 +41,7 @@ export class CartComponent implements OnInit {
               private router: Router,
               private localStorage: LocalStorage,
               public dialog: MatDialog,
-              private title: Title,
+              public title: Title,
               private appConfigService: ConfigService,
               public cartService: CartService) {
   }
