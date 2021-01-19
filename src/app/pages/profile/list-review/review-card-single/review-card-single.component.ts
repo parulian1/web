@@ -37,7 +37,8 @@ export class ReviewCardSingleComponent implements OnInit {
 
   checkReviewStatus() {
     this.reviewService.checkReviewInOrder(this.orderHref, this.productHref).subscribe(result => {
-      const _result = result.body.filter(data => data.product === this.productSlug && data.order === this.orderHref);
+      const orderSlug = this.pipe.transform(this.orderHref);
+      const _result = result.body.filter(data => data.product === this.productSlug && data.order.includes(orderSlug));
       this.isReviewed = _result.length > 0;
       if (this.isReviewed) {
         this.reviewResult = _result;
