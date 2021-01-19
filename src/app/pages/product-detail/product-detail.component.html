@@ -43,7 +43,13 @@
               <div class="brand">
                 <a href="{{ productDetail.vendor.href }}">{{ productDetail.vendor.name }}</a>
               </div>
-
+              <div class="price">
+                <div class="price-top">
+                  <span *ngIf="priceBase" class="regular">{{ priceBase|currency:'Rp ' : 'symbol' : '1.0' }}</span>
+                  <span *ngIf="displayedPromo" class="promo-pct">{{ displayedPromo }}%</span>
+                </div>
+                <span class="current">{{ priceSelected|currency:'Rp ' : 'symbol' : '1.0' }}</span>
+              </div>
               <div class="review-and-share">
                 <div class="review">
                   <mat-star-rating
@@ -64,13 +70,7 @@
               <div class="description">
                 <span [innerHTML]="productDetail.description"></span>
               </div>
-              <div class="price">
-                <div class="price-top">
-                  <span *ngIf="priceBase" class="regular">{{ priceBase|currency:'Rp ' : 'symbol' : '1.0' }}</span>
-                  <span *ngIf="displayedPromo" class="promo-pct">{{ displayedPromo }}%</span>
-                </div>
-                <span class="current">{{ priceSelected|currency:'Rp ' : 'symbol' : '1.0' }}</span>
-              </div>
+
 
               <div class="tags">
                 <div *ngFor="let t of productDetail.tags" class="tags-content" style="display: inline-flex">
