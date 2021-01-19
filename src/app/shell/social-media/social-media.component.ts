@@ -11,9 +11,8 @@ import { SocialMediaPage } from '@app/models/social-media';
   template: `
     <div class="footer-top">
       <p>Follow dan invite social media kami di {{ storeName }}</p>
-      <a *ngFor="let link of socialMediaPages"
-         [href]="link.href"
-         appSocialIcon>
+      <a *ngFor="let link of socialMediaPages" [href]="link.url" class="footer-logo">
+        <img [src]="link.logo" alt="Logo {{ link.type | titlecase }}" />
       </a>
     </div>
 

@@ -17,6 +17,9 @@ import { PaymentTypeChoices } from '@app/models/payment-method';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CredentialsService} from "@app/core/authentication";
 import {Checkout} from "@app/models/checkout";
+import {Action, Product as GtagProduct} from '@app/library/gtagjs/gtag-definitions';
+import {Title} from '@angular/platform-browser';
+import {GtagService} from '@app/library/gtagjs/gtag.service';
 
 const log = new Logger('Checkout');
 
@@ -38,6 +41,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
   shippingMethodMode: 'idle' | 'edit' | 'default' = 'idle';
   canCheckout: boolean;
   errorMessages: object = {};
+  itemList: Array<GtagProduct>;
 
   @Output() checkoutEmitter: EventEmitter<any> = new EventEmitter<any>();
 
@@ -52,7 +56,9 @@ export class CheckoutComponent implements OnInit, DoCheck {
               private snackbar: MatSnackBar,
               private appConfigService: ConfigService,
               public credentialsService: CredentialsService,
-              private cartService: CartService) {
+              private cartService: CartService,
+              public title: Title,
+              public gtag: GtagService) {
   }
 
   ngOnInit(): void {
@@ -65,8 +71,18 @@ export class CheckoutComponent implements OnInit, DoCheck {
       }) => {
         this.cart = data.cart[0].cart;
         if (this.cart.cartItems.length !== 0) {
+          this.itemList = [];
+
           for (const item of this.cart.cartItems) {
             this.warehouse.push(item.warehouse);
+            this.itemList.push({
+                id: item.product.href,
+                name: item.product.name,
+                brand: item.product.brand.name,
+                quantity: item.quantity,
+                price: item.lineTotals.price
+              }
+            )
           }
           this.warehouse = [...new Set(this.warehouse)];
           for (const store of this.warehouse) {
@@ -77,6 +93,9 @@ export class CheckoutComponent implements OnInit, DoCheck {
               }
             }
           }
+          this.gtag.beginCheckout({
+            items: this.itemList,
+          } as Action)
         } else {
           const params = {
             message: 'Your cart is empty. Redirecting back to cart...',
@@ -89,6 +108,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
           this.address = data.addresses[0];
           this.stateService.stateAddress = this.address;
           this.changeShippingMethodMode('edit');
+          this.gtag.setCheckoutOption(1, 'select address');
         }
       });
 
@@ -96,6 +116,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
       this.cartTotals = this.cart.cartTotals;
     }
     this.canCheckout = this.stateService.canCheckout;
+    this.title.setTitle('Checkout - Martha Tilaar Shop');
   }
 
   getAddress($event: Addresses) {
@@ -114,10 +135,12 @@ export class CheckoutComponent implements OnInit, DoCheck {
 
         this.getShippingCost(this.cart, this.address);
       }
+      this.gtag.setCheckoutOption(1, 'select address');
     }
   }
 
   getShipping($event: any) {
+    this.gtag.setCheckoutOption(2, 'shipping method');
     if (this.tempShippingMethod.length === 0) {
       this.tempShippingMethod.push($event);
     } else {
@@ -140,6 +163,15 @@ export class CheckoutComponent implements OnInit, DoCheck {
     this.cartTotals.shippingTotal = 0;
     this.cartTotals.shippingTotal += $event.costChange;
     this.cartTotals.grandTotal = (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal;
+    this.gtag.checkoutProgress({
+      value: (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal,
+      currency: 'IDR',
+      tax: 0,
+      shipping: this.cartTotals.shippingTotal,
+      items: this.itemList,
+      checkout_step: 2,
+      checkout_option: 'shipping method'
+    });
   }
 
   ngDoCheck(): void {
@@ -203,6 +235,16 @@ export class CheckoutComponent implements OnInit, DoCheck {
           const orderNumber = {
             order_number: this.pipe.transform(res.headers.get('location')),
           };
+          const purchaseEvent = {
+            transaction_id: orderNumber.order_number,
+            value: (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal,
+            currency: 'IDR',
+            tax: 0,
+            shipping: this.cartTotals.shippingTotal,
+            items: this.itemList,
+          }
+          this.gtag.purchase(purchaseEvent as Action)
+
 
           if (this.stateService.getStatePayment.type !== PaymentTypeChoices.MANUAL_TRANSFER) {
             this.service.fetchPaymentRequest(orderNumber).subscribe(resp => {

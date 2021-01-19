@@ -70,7 +70,7 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
               private el: ElementRef,
               private route: ActivatedRoute,
               private router: Router,
-              private  title: Title,
+              public  title: Title,
               private appConfigService: ConfigService) {
   }
 
