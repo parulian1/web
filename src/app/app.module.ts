@@ -1,5 +1,5 @@
 import '@angular/common/locales/global/id';
-import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
+import {APP_INITIALIZER, Inject, LOCALE_ID, NgModule, Optional} from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -29,6 +29,9 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MaterialModule } from './material.module';
 import { FocusedLayoutComponent, MainLayoutComponent } from '@app/layouts';
+import {GtagModule} from '@app/library/gtagjs/gtag.module';
+import {GtagConfigToken, gtagFactory} from '@app/library/gtagjs/gtag-factory';
+import {GTAG, GtagService} from '@app/library/gtagjs/gtag.service';
 import {AuthSocialService} from '@app/services/auth-social.service';
 
 
@@ -61,7 +64,8 @@ function loadSocial(authSocialService: AuthSocialService) {
     AppRoutingModule,
     GoogleMapsModule,
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([effects.AuthEffects, effects.EmailEffects, effects.CartEffects])
+    EffectsModule.forRoot([effects.AuthEffects, effects.EmailEffects, effects.CartEffects]),
+    GtagModule
   ],
   declarations: [
     AppComponent,
@@ -86,6 +90,21 @@ function loadSocial(authSocialService: AuthSocialService) {
       useFactory: loadSocial,
       deps: [AuthSocialService],
       multi: true
+    },
+    GtagService,
+    {
+      provide: GtagConfigToken,
+      deps: [ConfigService, APP_INITIALIZER],
+      useFactory: (configService: ConfigService) => {
+        return {
+          targetId: configService?.config.gaAccountId
+      }
+      }
+    },
+    {
+      provide: GTAG,
+      useFactory: gtagFactory,
+      deps: [[new Optional(), new Inject(GtagConfigToken)]]
     },
     {
       provide: 'SocialAuthServiceConfig',

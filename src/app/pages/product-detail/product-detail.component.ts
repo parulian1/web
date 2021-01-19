@@ -24,6 +24,7 @@ import { Configuration, RatingSummary, Review } from '@app/models';
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import {Meta, Title} from "@angular/platform-browser";
 import { StoreWithStock } from "@app/models/store";
+import {GtagService} from '@app/library/gtagjs/gtag.service';
 
 const log = new Logger('VariantsResolver');
 
@@ -98,7 +99,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
     'prevArrow': '<button class="slick-prev"><span class="material-icons">\n' +
       'keyboard_arrow_left\n' +
       '</span></button>',
-    'variableWidth': 88,
+    'variableWidth': true,
   };
   mobileMenu: string;
 
@@ -108,20 +109,21 @@ export class ProductDetailComponent implements OnInit, DoCheck {
               private cartService: CartService,
               private el: ElementRef,
               private route: ActivatedRoute,
-              private router: Router,
+              public router: Router,
               public dialog: MatDialog,
               private storeService: StoreService,
               private credentialsService: CredentialsService,
               private localStorage: LocalStorage,
               private pipe: EntityToSlugPipe,
-              private title: Title,
+              public title: Title,
               private appConfigService: ConfigService,
-              private meta: Meta) {
+              private meta: Meta,
+              private gtag: GtagService) {
   }
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let title = "Nusantara Platform";
+    let title = 'Nusantara Platform';
     if (!!this.config?.name) {
       title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
@@ -146,7 +148,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
           log.info(resp);
           this.listWarehouses = resp;
 
-          let foundWarehouseFromPreferred = this.listWarehouses.filter( warehouse => {
+          const foundWarehouseFromPreferred = this.listWarehouses.filter( warehouse => {
             return warehouse.href === this.storeService.preferredStore.href;
           });
           if (foundWarehouseFromPreferred.length > 0) {
@@ -184,6 +186,8 @@ export class ProductDetailComponent implements OnInit, DoCheck {
         this.setPriceInformation(this.priceLists);
 
         this.title.setTitle(this.productDetail.name + ` - ${ title }`);
+
+        this.trackAnalyticView(this.productDetail);
       }
     );
     this.slideProductImg2 = this.slideProductImg;
@@ -197,15 +201,16 @@ export class ProductDetailComponent implements OnInit, DoCheck {
     }
 
     if (this.startingListRange.activePromotionalPrices.length) {
-      const promo = this.startingListRange.activePromotionalPrices[0][0];
+      const promo = this.startingListRange.activePromotionalPrices?.[0];
+      if (!!promo?.type) {
+        if (promo.type === 'percentage') {
+          return promo.amount;
+        } else {
+          const basePrice = promo.amount + promo.netPrice;
+          const discountPrice = (promo.amount / basePrice) * 100;
 
-      if (promo.type === 'percentage') {
-        return promo.amount;
-      } else {
-        const basePrice = promo.amount + promo.netPrice;
-        const discountPrice = (promo.amount / basePrice) * 100;
-
-        return Math.round(discountPrice);
+          return Math.round(discountPrice);
+        }
       }
     }
     return null;
@@ -236,11 +241,8 @@ export class ProductDetailComponent implements OnInit, DoCheck {
 
             if (price.activePromotionalPrices.length) {
               this.priceBase = price.price;
-              this.priceSelected = price.activePromotionalPrices[0][0].netPrice;
-            } else {
-              this.priceSelected = price.price;
             }
-
+            this.priceSelected = price.activePromotionalPrices[0]?.netPrice || price.price;
             break;
           }
         } else if (price.maxQuantity === null) {
@@ -248,11 +250,8 @@ export class ProductDetailComponent implements OnInit, DoCheck {
           if (this.defaultQty >= price.minQuantity) {
             if (price.activePromotionalPrices.length) {
               this.priceBase = price.price;
-              this.priceSelected = price.activePromotionalPrices[0][0].netPrice;
-            } else {
-              this.priceSelected = price.price;
             }
-
+            this.priceSelected = price.activePromotionalPrices[0]?.netPrice || price.price;
             break;
           }
         }
@@ -293,7 +292,9 @@ export class ProductDetailComponent implements OnInit, DoCheck {
                _itemCount += _cartItem.quantity;
              }
              this.localStorage.setItem('cart-quantity', _itemCount);
-           })
+           });
+
+           this.trackAnalyticCart(products, this.priceSelected, this.defaultQty);
           }
 
         },
@@ -354,26 +355,17 @@ export class ProductDetailComponent implements OnInit, DoCheck {
   }
 
   setPriceInformation(priceLists: Array<PriceRanges>) {
-    this.priceInfo = [];
-    for (const price of priceLists) {
-      const minQty = price.minQuantity;
-      const maxQty = price.maxQuantity;
-      const priceBase = price.price;
-      let priceDiscount = 0;
+    this.priceInfo = priceLists.map(priceData => {
+      const { minQuantity, maxQuantity, price } = priceData;
+      const priceDiscount = priceData.activePromotionalPrices[0]?.netPrice || 0;
 
-      if (price.activePromotionalPrices.length !== 0) {
-        priceDiscount = price.activePromotionalPrices[0][0].netPrice;
+      return {
+        priceBase: price,
+        minQty: minQuantity,
+        maxQty: maxQuantity,
+        priceDiscount,
       }
-
-      const info = {
-        minQty,
-        maxQty,
-        priceBase,
-        priceDiscount
-      };
-
-      this.priceInfo.push(info);
-    }
+    }) || [];
   }
 
   popUpVideo($event: MouseEvent) {
@@ -430,6 +422,27 @@ export class ProductDetailComponent implements OnInit, DoCheck {
       name: 'keywords',
       content: seoContentKeyword
     });
+  }
+
+  private trackAnalyticCart(product: ProductDetail, price: number, qty: number = 1) {
+   this.gtag.addToCart({
+     items: [{
+       id: product.href,
+       name: product.name,
+       brand: product.vendor?.name || '',
+       quantity: qty,
+       price,
+     }]
+   })
+  }
+
+  private trackAnalyticView(product: ProductDetail) {
+    this.gtag.viewItem([{
+        id: product.href,
+        name: product.name,
+        brand: product.vendor?.name || '',
+      }]
+    )
   }
 
 }

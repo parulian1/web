@@ -41,7 +41,7 @@ export class CartComponent implements OnInit {
               private router: Router,
               private localStorage: LocalStorage,
               public dialog: MatDialog,
-              private title: Title,
+              public title: Title,
               private appConfigService: ConfigService,
               public cartService: CartService) {
   }
@@ -114,7 +114,7 @@ export class CartComponent implements OnInit {
             let priceDiscount = 0;
 
             if (price.activePromotionalPrices.length !== 0) {
-              priceDiscount = price.activePromotionalPrices[0][0].netPrice;
+              priceDiscount = price.activePromotionalPrices[0]?.netPrice || 0;
             }
 
             const info = {

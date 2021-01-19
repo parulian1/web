@@ -1,20 +1,21 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
+import {DOCUMENT, isPlatformBrowser} from '@angular/common';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2} from '@angular/core';
 import {Meta, Title} from '@angular/platform-browser';
-import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { SubscriptionLike } from 'rxjs';
+import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
+import {Store} from '@ngrx/store';
+import {SubscriptionLike} from 'rxjs';
 
-import { AuthenticationService, CredentialsService } from '@app/core/authentication';
-import { AppState } from '@app/store/state/app.state';
-import { AuthUserService } from '@app/services';
-import { Logout } from '@app/store/actions';
-import { environment } from '@env/environment.prod';
-import { ConfigService, Logger } from '@app/core';
-import { Configuration } from "@app/models";
+import {AuthenticationService, CredentialsService} from '@app/core/authentication';
+import {AppState} from '@app/store/state/app.state';
+import {AuthUserService} from '@app/services';
+import {Logout} from '@app/store/actions';
+import {environment} from '@env/environment.prod';
+import {ConfigService, Logger} from '@app/core';
+import {Configuration} from '@app/models';
+import {GtagService} from '@app/library/gtagjs/gtag.service';
 
-declare let gtag: Function;
-declare let fbq:Function;
+
+declare let fbq: Function;
 
 @Component({
   selector: 'app-root',
@@ -26,9 +27,9 @@ export class AppComponent implements OnInit, OnDestroy {
   private static FIVE_MINUTES = 1000 * 60 * 5;
 
   isBusy = false;
+  config: Configuration;
   private routerEventsSub: SubscriptionLike;
   private timer;
-  config: Configuration;
 
   constructor(private store: Store<AppState>,
               private title: Title,
@@ -40,12 +41,13 @@ export class AppComponent implements OnInit, OnDestroy {
               @Inject(PLATFORM_ID) private platformId: any,
               @Inject(DOCUMENT) private document: Document,
               private renderer2: Renderer2,
-              private meta: Meta) {
+              private meta: Meta,
+              private gtag: GtagService) {
   }
 
   ngOnInit() {
     this.config = this.appConfigService.config;
-    let title = "Nusantara Platform";
+    let title = 'Nusantara Platform';
     if (!!this.config?.name) {
       title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
@@ -116,7 +118,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   getSlugToAnalytics(e: NavigationEnd | NavigationCancel | NavigationError) {
     if (e instanceof NavigationEnd) {
-      gtag('config', 'UA-17290976-18', {'page_path': e.urlAfterRedirects});
+      // gtag('config', 'UA-17290976-18', {'page_path': e.urlAfterRedirects});
+      // this.gtag.pageView();
       fbq('track', 'PageView');
     }
   }
@@ -125,9 +128,10 @@ export class AppComponent implements OnInit, OnDestroy {
     return '19e09c8c-543e-4a52-98fd-1ddba548df6c';
   }
 
-  loadZendesk(): void{
+  loadZendesk(): void {
     this.loadScript(`https://static.zdassets.com/ekr/snippet.js?key=${this.getZendeskID()}`, 'ze-snippet').then(res => {
-    })
+    });
+    this.loadSettingsScript();
   }
 
   private loadScript(url: string, id: string = '') {
@@ -140,7 +144,7 @@ export class AppComponent implements OnInit, OnDestroy {
       script.defer = true;
       script.onload = resolve;
       script.onerror = reject;
-      if ( id !== '') {
+      if (id !== '') {
         script.id = id;
       }
       this.renderer2.appendChild(this.document.body, script);
@@ -148,23 +152,23 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private addFavIcon() {
-    const defaultFavIco = "assets/favicon.ico";
-    var iconLinkElement = document.createElement("link" );
-    var shorCutIconlinkElement = document.createElement("link" );
-    iconLinkElement.setAttribute("rel", "icon" );
-    iconLinkElement.setAttribute("type", "image/x-icon" );
-    shorCutIconlinkElement.setAttribute("rel", "shortcut icon" );
-    shorCutIconlinkElement.setAttribute("type", "image/x-icon" );
+    const defaultFavIco = 'assets/favicon.ico';
+    let iconLinkElement = document.createElement('link');
+    let shorCutIconlinkElement = document.createElement('link');
+    iconLinkElement.setAttribute('rel', 'icon');
+    iconLinkElement.setAttribute('type', 'image/x-icon');
+    shorCutIconlinkElement.setAttribute('rel', 'shortcut icon');
+    shorCutIconlinkElement.setAttribute('type', 'image/x-icon');
 
     if (!!this.config?.favicon) {
-      iconLinkElement.setAttribute("href", this.config.favicon );
-      shorCutIconlinkElement.setAttribute("href", this.config.favicon );
+      iconLinkElement.setAttribute('href', this.config.favicon);
+      shorCutIconlinkElement.setAttribute('href', this.config.favicon);
     } else {
-      iconLinkElement.setAttribute("href", defaultFavIco );
-      shorCutIconlinkElement.setAttribute("href", defaultFavIco);
+      iconLinkElement.setAttribute('href', defaultFavIco);
+      shorCutIconlinkElement.setAttribute('href', defaultFavIco);
     }
-    document.head.appendChild( iconLinkElement );
-    document.head.appendChild( shorCutIconlinkElement );
+    document.head.appendChild(iconLinkElement);
+    document.head.appendChild(shorCutIconlinkElement);
   }
 
   private addSeoMeta() {
@@ -178,5 +182,22 @@ export class AppComponent implements OnInit, OnDestroy {
         name: 'keywords', content: this.config.extraConfig.keywords
       });
     }
+  }
+
+  private loadSettingsScript() {
+    const script = this.renderer2.createElement('script');
+    script.type = 'text/javascript';
+    script.text = `
+     window.zESettings = {
+    webWidget: {
+      offset: {
+        mobile: {
+          vertical: '50px'
+        }
+      }
+    }
+  };
+      `;
+    this.renderer2.appendChild(this.document.body, script);
   }
 }

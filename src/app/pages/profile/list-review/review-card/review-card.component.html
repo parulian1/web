@@ -1,51 +1,8 @@
 <div *ngFor="let childOrder of orderReview.children">
-  <div class="review-card"
-       *ngFor="let lineItem of childOrder.lineItems">
-    <div class="review-card-label">
-      <div class="label-order">{{this.orderReview.orderNumber}}</div>
-      <div class="label-warehouse">{{childOrder.warehouse.name}}</div>
-      <div class="label-date">
-        <span class="label-date-text">Pesanan diterima</span>
-        <span class="label-date-content">{{orderReview.modified | date:'dd MMM yyyy | hh:mm'}}</span></div>
-      <div *ngIf="!!lineItem.review.score; else writeReview" class="label-status"
-           [style.background]="'#E6F3FF'"
-           [style.color]="'#037EE5'">Sudah diulas</div>
-    </div>
-    <div class="review-card-info">
-      <div class="left">
-        <div class="info-image">
-          <img src="{{lineItem.product.image}}" alt="{{lineItem.product.name}}"/>
-        </div>
-        <div class="info-product">
-          <div class="name">{{lineItem.product.name}}</div>
-          <div class="rating">
-            <mat-star-rating
-              [starCount]="5"
-              [size]="24"
-              [color]="!!lineItem.review &&lineItem.review.score > 0 ? '#F2994A' : '#000000'"
-              [rating]="lineItem.review.score"></mat-star-rating>
-          </div>
-        </div>
-      </div>
-      <div class="right">
-        <div class="info-action" *ngIf="!lineItem.review.score">
-          <button class="info-action-add">
-            <a [routerLink]="['./add-review']"
-               [queryParams]="{
-                parentOrderNumber: orderReview.orderNumber,
-                orderHref: childOrder.href,
-                productSlug: lineItem.product.href|entityToSlug,
-                warehouse: childOrder.warehouse.slug}">
-            Tulis Ulasan
-          </a></button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-  <ng-template #writeReview>
-    <div class="label-status"
-         [style.background]="'#FFF4EA'"
-         [style.color]="'#F2994A'">Belum diulas</div>
-  </ng-template>
+    <app-review-card-single
+      *ngFor="let lineItem of childOrder.lineItems"
+      [orderReview]="orderReview"
+      [childOrder]="childOrder"
+      [lineItem]="lineItem">
+    </app-review-card-single>
 </div>

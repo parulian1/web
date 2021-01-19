@@ -1,4 +1,4 @@
-<div class="inner-container" *ngIf="cart.cartItems.length !== 0">
+<div class="inner-container" *ngIf="cart.cartItems.length !== 0" [gtag]="title.getTitle() || 'Checkout'">
   <mat-toolbar class="checkout-navbar" color="white">
     <mat-toolbar-row>
       <div class="mt-header-logo">

@@ -5,8 +5,9 @@
 // Note that as usual, any environment variables you expose through it will end up in your
 // bundle, and you should not use it for any sensitive information like passwords or keys.
 import { env } from './.env';
+import {IEnvironment} from '@env/environment.interface';
 
-export const environment = {
+export const environment: IEnvironment = {
   production: true,
   BASE_API_URL: '/api',
   FB_APPLICATION_ID: '700626284166786',
