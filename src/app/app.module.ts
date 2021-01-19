@@ -32,12 +32,17 @@ import { FocusedLayoutComponent, MainLayoutComponent } from '@app/layouts';
 import {GtagModule} from '@app/library/gtagjs/gtag.module';
 import {GtagConfigToken, gtagFactory} from '@app/library/gtagjs/gtag-factory';
 import {GTAG, GtagService} from '@app/library/gtagjs/gtag.service';
+import {AuthSocialService} from '@app/services/auth-social.service';
 
 
 function load(configService: ConfigService) {
   return () => {
     return configService.loadConfig();
   };
+}
+
+function loadSocial(authSocialService: AuthSocialService) {
+  return () => authSocialService.fetchConfig()
 }
 
 @NgModule({
@@ -80,6 +85,12 @@ function load(configService: ConfigService) {
       deps: [ConfigService],
       multi: true
     },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: loadSocial,
+      deps: [AuthSocialService],
+      multi: true
+    },
     GtagService,
     {
       provide: GtagConfigToken,
@@ -97,19 +108,10 @@ function load(configService: ConfigService) {
     },
     {
       provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(environment.GOOGLE_APPLICATION_ID)
-          },
-          {
-            id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider(environment.FB_APPLICATION_ID)
-          }
-        ]
-      } as SocialAuthServiceConfig,
+      deps: [AuthSocialService, APP_INITIALIZER],
+      useFactory: (authSocialService: AuthSocialService) => {
+        return authSocialService.fetchConfig();
+      },
     },
     {provide: LOCALE_ID, useValue: 'id'}
   ],

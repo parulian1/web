@@ -1,2 +1,2 @@
-<button type="button" class="btn-fb" id="btn-fb" name="btn-fb" (click)="authFb()"><img src="assets/social/logo-fb.svg" alt="Logo Facebook"/>{{currentMode}} dengan Facebook</button>
-<button type="button" class="btn-google" id="btn-google" name="btn-google" (click)="authGoogle()"><img src="assets/social/logo-google.svg" alt="Logo Google"/>{{currentMode}} dengan Google</button>
+<button *ngIf="fbOn" type="button" class="btn-fb" id="btn-fb" name="btn-fb" (click)="authFb()"><img src="assets/social/logo-fb.svg" alt="Logo Facebook"/>{{currentMode}} dengan Facebook</button>
+<button *ngIf="googleOn" type="button" class="btn-google" id="btn-google" name="btn-google" (click)="authGoogle()"><img src="assets/social/logo-google.svg" alt="Logo Google"/>{{currentMode}} dengan Google</button>

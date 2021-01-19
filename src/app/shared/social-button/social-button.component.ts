@@ -9,6 +9,7 @@ import { AuthFacebook, AuthGoogle } from '@app/store/actions/auth.actions';
 import { Logger } from "@app/core";
 import { AuthUserService } from "@app/services";
 import { AuthenticationService } from "@app/core/authentication";
+import {AuthSocialService} from '@app/services/auth-social.service';
 
 
 const logger = new Logger('social-button.coponents.ts');
@@ -22,6 +23,8 @@ const logger = new Logger('social-button.coponents.ts');
 export class SocialButtonComponent implements OnInit {
   @Input()
   public currentMode: string;
+  public fbOn = false;
+  public googleOn = false;
 
   constructor(
     // private store: Store<AppState>,
@@ -29,9 +32,22 @@ export class SocialButtonComponent implements OnInit {
     private authUserService: AuthUserService,
     private authService: AuthenticationService,
     private router: Router,
+    private authSocialService: AuthSocialService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authSocialService.fetchList().subscribe(res => {
+      res.map( xres => {
+        if (xres.authType === 'google-oauth2') {
+          this.googleOn = true;
+        }
+        if (xres.authType === 'facebook') {
+          this.fbOn = true;
+        }
+
+      })
+    })
+  }
 
   authFb() {
     // this.store.dispatch(new AuthFacebook()); # error happens to auth-effect
