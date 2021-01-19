@@ -19,11 +19,11 @@ export const environment: IEnvironment = {
   SHIPPING_COUNTRY_CODE: 'IDN',
   YOUTUBE_API_KEY: 'AIzaSyB7m0r7paaV5I5U6vjf0pDmocvD8-K-D-w',
   elasticAPM: {
-    serviceName: 'MT-Local-Web',
+    serviceName: 'Nusantara-Web-MT',
     serverUrl: 'https://apm.bhisma.cloud',
     serviceVersion: version,
     debug: true,
-    active: true,
+    active: false,
     environment: 'development',
     breakdownMetrics: true,
     distributedTracingOrigins: [ ],
