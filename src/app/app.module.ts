@@ -1,5 +1,5 @@
 import '@angular/common/locales/global/id';
-import {APP_INITIALIZER, Inject, LOCALE_ID, NgModule, Optional} from '@angular/core';
+import {APP_INITIALIZER, ErrorHandler, Inject, LOCALE_ID, NgModule, Optional} from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -33,6 +33,8 @@ import {GtagModule} from '@app/library/gtagjs/gtag.module';
 import {GtagConfigToken, gtagFactory} from '@app/library/gtagjs/gtag-factory';
 import {GTAG, GtagService} from '@app/library/gtagjs/gtag.service';
 import {AuthSocialService} from '@app/services/auth-social.service';
+import {Router} from '@angular/router';
+import { ApmService, ApmErrorHandler } from '@elastic/apm-rum-angular';
 
 
 function load(configService: ConfigService) {
@@ -113,9 +115,22 @@ function loadSocial(authSocialService: AuthSocialService) {
         return authSocialService.fetchConfig();
       },
     },
-    {provide: LOCALE_ID, useValue: 'id'}
+    {provide: LOCALE_ID, useValue: 'id'},
+    {
+      provide: ApmService,
+      useClass: ApmService,
+      deps: [Router]
+    },
+    {
+      provide: ErrorHandler,
+      useClass: ApmErrorHandler
+    },
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule {
+
+  constructor(@Inject(ApmService) apm: ApmService) {
+    apm.init(environment.elasticAPM);
+  }
 }

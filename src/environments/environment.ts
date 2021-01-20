@@ -9,6 +9,7 @@
 // Note that as usual, any environment variables you expose through it will end up in your
 // bundle, and you should not use it for any sensitive information like passwords or keys.
 import {IEnvironment} from '@env/environment.interface';
+import {version} from '../../package.json';
 
 export const environment: IEnvironment = {
   production: false,
@@ -17,6 +18,17 @@ export const environment: IEnvironment = {
   GOOGLE_APPLICATION_ID: '62419296650-d2cld4t7a0kfm8cvv2pk8sb51epvos62.apps.googleusercontent.com',
   SHIPPING_COUNTRY_CODE: 'IDN',
   YOUTUBE_API_KEY: 'AIzaSyB7m0r7paaV5I5U6vjf0pDmocvD8-K-D-w',
+  elasticAPM: {
+    serviceName: 'Nusantara-Web-MT',
+    serverUrl: 'https://apm.bhisma.cloud',
+    serviceVersion: version,
+    debug: true,
+    active: false,
+    environment: 'development',
+    breakdownMetrics: true,
+    distributedTracingOrigins: [ ],
+    ignoreTransactions: [],
+  }
 };
 
 /*
