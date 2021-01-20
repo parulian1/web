@@ -12,6 +12,10 @@
   font-family: $font-primary;
 }
 
+button {
+  outline: none;
+}
+
 .no-scroll {
   overflow: hidden;
 }
