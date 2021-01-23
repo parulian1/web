@@ -3,9 +3,9 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 @Component({
   selector: 'app-nus-link',
   template: `
-    <a class="link {{lastChildren}}" *ngIf="isInternal && isValid" [routerLink]="theLink()"
+    <a class="link {{lastChildren}}" *ngIf="isInternal" [routerLink]="theLink()"
        [queryParams]="theParam()">{{title}}</a>
-    <a class="link {{lastChildren}}" *ngIf="!isInternal && isValid" [routerLink]="href" target="_blank">{{title}}</a>
+    <a class="link {{lastChildren}}" *ngIf="!isInternal" [routerLink]="href" target="_blank">{{title}}</a>
   `,
   styleUrls: ['./nus-link.component.scss']
 })
@@ -16,7 +16,7 @@ export class NusLinkComponent implements OnInit, OnChanges {
   @Input() grandChild: boolean;
 
   isValid = false;
-  isInternal = true;
+  isInternal = false;
   parsedUrl: any;
   lastChildren = '';
 
