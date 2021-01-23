@@ -48,7 +48,6 @@ export class VoucherCardComponent implements OnInit, DoCheck {
       this.voucherError = '';
     }, err => {
       this.voucherError = err.error.message;
-      console.log(err.error);
     });
   }
 

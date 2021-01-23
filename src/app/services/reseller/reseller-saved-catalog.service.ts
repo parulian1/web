@@ -43,7 +43,6 @@ export class ResellerSavedCatalogService {
       return this.httpClient
         .post(`${this.baseUrl}`, payload, {observe: 'response'});
     }
-    console.log('Failed', payload);
   }
 
   update(entity: ResellerSavedCatalog): Observable<HttpResponse<ResellerSavedCatalog>> {
