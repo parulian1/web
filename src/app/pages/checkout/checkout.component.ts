@@ -308,7 +308,6 @@ export class CheckoutComponent implements OnInit, DoCheck {
 
 
   public voucherApplied(event: boolean) {
-    console.log('Voucher Applied');
     this.cartService.fetchCart().subscribe(resp => {
       this.cart = resp.body;
       if (this.cart) {

@@ -100,7 +100,6 @@ export class SavedCatalogComponent implements OnInit {
             foundWarehouse.postalCode,
             this.entity.data?.savedAddress?.zipCode
           ).subscribe((resp) => {
-            console.log(`resp.body`, resp, resp.body);
             let foundShipmentMethod = this.shippingMethod.find((shipmentMethod) => {
               return shipmentMethod.warehouse === getSlugFromHref(foundWarehouse.href);
             });

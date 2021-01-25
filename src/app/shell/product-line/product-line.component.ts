@@ -31,7 +31,6 @@ export class ProductLineComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('highlights', this.highlights);
     this.detectScreenSize();
   }
 
