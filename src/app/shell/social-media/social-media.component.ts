@@ -9,7 +9,7 @@ import { SocialMediaPage } from '@app/models/social-media';
 @Component({
   selector: 'app-social-media',
   template: `
-    <div class="footer-top">
+    <div class="footer-top" *ngIf="!!socialMediaPages && socialMediaPages.length > 0">
       <p>Follow dan invite social media kami di {{ storeName }}</p>
       <a *ngFor="let link of socialMediaPages" [href]="link.url" class="footer-logo">
         <img [src]="link.logo" alt="Logo {{ link.type | titlecase }}" />
