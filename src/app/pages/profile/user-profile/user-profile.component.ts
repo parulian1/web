@@ -15,6 +15,7 @@ import {Logger} from "@app/core";
 import { timer } from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {AlertDialogComponent} from "@app/shared/alert-dialog";
+import {AuthSocialService} from '@app/services/auth-social.service';
 
 
 const log = new Logger('user-profile.component.ts');
@@ -41,17 +42,32 @@ export class UserProfileComponent implements OnInit {
 
   public customer: Customer;
 
+  public fbOn = false;
+  public googleOn = false;
+
   constructor(
     private route: ActivatedRoute,
     private routers: Router,
     private authUserService: AuthUserService,
     private authService: AuthenticationService,
     private socialAuthService: SocialAuthService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private authSocialService: AuthSocialService
   ) {}
 
   ngOnInit(): void {
     this.getSocialLink();
+    this.authSocialService.fetchList().subscribe(res => {
+      res.map( xres => {
+        if (xres.authType === 'google-oauth2') {
+          this.googleOn = true;
+        }
+        if (xres.authType === 'facebook') {
+          this.fbOn = true;
+        }
+
+      })
+    })
     this.route.data.subscribe((data: { profile: Customer, verify: VerifyEmail }) => {
       this.customer = data.profile;
       this.verifyUser = data.verify;
@@ -62,7 +78,6 @@ export class UserProfileComponent implements OnInit {
   getSocialLink() {
     this.authUserService.getSocialLink().subscribe(res => {
       this.socialAuth = res;
-
       // google
       if ((this.socialAuth[0].isConnect) && (!this.socialAuth[0].canUnlink)) {
         this.currentModeGoogle = 'Putuskan Sambungan';
@@ -102,6 +117,7 @@ export class UserProfileComponent implements OnInit {
       });
     }
   }
+
   connectWithFacebook(): void {
     if (this.isCheckFb && !this.disabledFb) {
       // disconnect

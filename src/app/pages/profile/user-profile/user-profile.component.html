@@ -56,16 +56,16 @@
       </div>
     </div>
 
-    <div class="social-media-box">
+    <div class="social-media-box" *ngIf="googleOn || fbOn">
       <h2 class="title title--size-s">Hubungkan dengan Sosial Media</h2>
       <div class="social-connect">
-        <button class="btn-fb" (click)="connectWithFacebook()" [disabled]="disabledFb">
+        <button class="btn-fb" (click)="connectWithFacebook()" [disabled]="disabledFb" *ngIf="fbOn">
           <img class="btn-fb__icon" src="assets/social/logo-fb.svg" alt="Logo Facebook"/>
           <div class="btn-fb__content">{{currentModeFb}} dengan Facebook</div>
           <mat-icon class="btn-fb__check" *ngIf="isCheckFb">check</mat-icon>
         </button>
 
-        <button class="btn-google" (click)="connectWithGoogle()" [disabled]="disabledGoogle">
+        <button class="btn-google" (click)="connectWithGoogle()" [disabled]="disabledGoogle" *ngIf="googleOn">
           <img class="btn-google__icon" [src]="srcGoogle" alt="Logo Google"/>
           <div class="btn-google__content">{{currentModeGoogle}} dengan Google</div>
           <mat-icon class="btn-google__check" *ngIf="isCheckGoogle">check</mat-icon>
