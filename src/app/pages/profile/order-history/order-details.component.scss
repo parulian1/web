@@ -355,6 +355,57 @@
   }
 }
 
+.manual-transfer-wrapper {
+  width: 368px;
+  margin-top: 12px;
+  margin-left: 20px;
+
+  .m-box {
+    border-radius: 5px;
+    background: $white;
+    border: 1px solid #E5E5E5;
+    padding: 10px;
+
+    .m-box-content {
+      display: flex;
+      align-items: center;
+
+      .m-box-img {
+        width: 30%;
+        img {
+          max-width: 64px;
+          max-height: 64px;
+        }
+      }
+
+      .m-box-account {
+        width: 60%;
+        color: #979797;
+
+        .m-box-account-number {
+          color: #000000;
+          font-weight: bold;
+          margin: 7px 0;
+        }
+
+      }
+
+      .m-box-copy {
+        width: 10%;
+        a {
+          color: #F03BB3;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .m-box:not(:last-child) {
+    margin-bottom: 10px;
+  }
+}
+
 .va-cc-box {
   width: 368px;
   height: 74px;
@@ -651,6 +702,12 @@
         font-size: 12px;
         line-height: 17px;
       }
+    }
+
+    .manual-transfer-wrapper {
+      width: 100%;
+      margin-left: 0;
+      font-size: 0.85rem;
     }
 
     .va-cc-box {

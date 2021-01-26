@@ -9,6 +9,8 @@ import {CheckoutService} from '@app/services';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AlertDialogComponent} from '@app/shared/alert-dialog';
 import {getBank, AbstractBank} from '@app/pages/order-summary/utils';
+import { PaymentMethodService } from "@app/services/payment-method.service";
+import { PaymentMethodType, PaymentTypeChoices } from "@app/models/payment-method";
 
 
 /**
@@ -140,6 +142,29 @@ import {getBank, AbstractBank} from '@app/pages/order-summary/utils';
                       </div>
                   </div>
 
+                  <!-- Manual Transfer Bank -->
+                  <div *ngIf="canShowListManualTransfer(order)" class="manual-transfer-wrapper">
+                    <div class="m-box" *ngFor="let m of manualTransfers">
+                      <div class="m-box-content">
+                        <div class="m-box-img">
+                          <img [src]="m.logo" />
+                        </div>
+                        <div class="m-box-account">
+                          <div>No Rekening</div>
+                          <div class="m-box-account-number">
+                            {{ m.accountNumber }}
+                          </div>
+                          <div>
+                            {{ m.accountHoldNumber }}
+                          </div>
+                        </div>
+                        <div class="m-box-copy">
+                          <a (click)="copyToClipboard(m.accountNumber, 'copied!')">salin</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="va-cc-box" *ngIf="order.status === 'unpaid' && !isCCPayment()">
                       <table class="va-image" align="left">
                           <tbody>
@@ -154,7 +179,7 @@ import {getBank, AbstractBank} from '@app/pages/order-summary/utils';
                       <p class="va-cc-label">Transfer ke nomor</p>
                       <ng-container *ngIf="order.orderPayment?.meta">
                           <span class="va-cc-number">{{ order.orderPayment?.meta.vaNumber }}</span>
-                          <button class="va-cc-copy-label" (click)="copyToClipboard(order.orderPayment?.meta.vaNumber)">
+                          <button class="va-cc-copy-label" (click)="copyToClipboard(order.orderPayment?.meta.vaNumber, 'copy va!')">
                               Salin
                           </button>
                       </ng-container>
@@ -353,10 +378,13 @@ export class OrderDetailsComponent implements OnInit {
   bank: AbstractBank;
   mobile = false;
 
+  manualTransfers: PaymentMethodType[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private orderShipmentService: OrderShipmentService,
+    private paymentMethodService: PaymentMethodService,
     private service: CheckoutService,
     private snackbar: MatSnackBar,
   ) {
@@ -396,9 +424,16 @@ export class OrderDetailsComponent implements OnInit {
 
       this.bank = getBank(this.payment);
     });
+
+    // list bank manual transfer
+    this.paymentMethodService.fetchList(true).subscribe(result => {
+      this.manualTransfers = result
+        .filter(pList => pList.type === PaymentTypeChoices.MANUAL_TRANSFER)
+        .map(payment => payment.paymentMethods)[0];
+    });
   }
 
-  copyToClipboard(vaNumber: string) {
+  copyToClipboard(vaNumber: string, text?: string) {
     if (vaNumber) {
       document.addEventListener('copy', (e: ClipboardEvent) => {
         e.clipboardData.setData('text/plain', (vaNumber));
@@ -406,7 +441,10 @@ export class OrderDetailsComponent implements OnInit {
         document.removeEventListener('copy', null);
       });
       document.execCommand('copy');
-      alert('va copied!');
+
+      if (text) {
+        alert(text);
+      }
     }
   }
 
@@ -456,6 +494,11 @@ export class OrderDetailsComponent implements OnInit {
       order.orderPayment.paymentGateway.type === 'manual_transfer' &&
       (order.status === 'unpaid' || order.status === 'waiting')
     );
+  }
+  canShowListManualTransfer(order: Order): boolean {
+    return (
+      order.orderPayment.paymentGateway.type === 'manual_transfer'
+    )
   }
 
   // Error
