@@ -63,6 +63,7 @@
     Ulasan
   </button>
   <button class="nav-item"  [ngClass]="{ 'active':getActiveStat('drop-shipping') }" (click)="toggleMobileMenu()"
+          *ngIf="getIsReseller()"
           [routerLink]="['drop-shipping']">
     Katalog Reseller
   </button>
