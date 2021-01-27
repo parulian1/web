@@ -134,11 +134,17 @@ import { PaymentMethodType, PaymentTypeChoices } from "@app/models/payment-metho
                           <span class="payment-deadline-label">Batas Pembayaran</span>
                       </div>
                       <div style="flex: 1">
-                          <ng-container *ngIf="order.orderPayment?.meta">
-            <span class="payment-deadline-datetime">
-              {{ order.orderPayment?.meta.dateExpired | date:'dd/MM/yyyy HH:mm' }}
-            </span>
+                          <ng-container *ngIf="order.orderPayment?.meta; else orderCreated">
+                            <span class="payment-deadline-datetime">
+                              {{ order.orderPayment?.meta.dateExpired | date:'dd/MM/yyyy HH:mm' }}
+                            </span>
                           </ng-container>
+
+                          <div #orderCreated>
+                              <span class="payment-deadline-datetime">
+                                {{ manualExpiredTime | date:'dd/MM/yyyy HH:mm' }}
+                              </span>
+                          </div>
                       </div>
                   </div>
 
@@ -165,7 +171,7 @@ import { PaymentMethodType, PaymentTypeChoices } from "@app/models/payment-metho
                     </div>
                   </div>
 
-                  <div class="va-cc-box" *ngIf="order.status === 'unpaid' && !isCCPayment()">
+                  <div class="va-cc-box" *ngIf="order.status === 'unpaid' && !isCCPayment() && !canShowListManualTransfer(order)">
                       <table class="va-image" align="left">
                           <tbody>
                           <td style="vertical-align: top">
@@ -379,6 +385,7 @@ export class OrderDetailsComponent implements OnInit {
   mobile = false;
 
   manualTransfers: PaymentMethodType[] = [];
+  manualExpiredTime: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -397,6 +404,15 @@ export class OrderDetailsComponent implements OnInit {
 
     this.route.data.subscribe((data: { order: Order, status: Choice[] }) => {
       this.order = data.order;
+
+      // manual transfer have different manual expired time handler
+      // order created + 24 hours (1 days)
+      if (this.canShowListManualTransfer(this.order)) {
+        const result: any = new Date(this.order.created);
+        result.setHours(result.getDate() + 1);
+        this.manualExpiredTime = result;
+      }
+
       this.status = data.status;
 
       const childrenLength = data.order.children.length;
