@@ -2,7 +2,7 @@
   <div class="container">
     <section class="content">
 <!--      <div class="title">{{pageContent.title}}</div>-->
-      <div [innerHTML]="pageContent.content"></div>
+      <div [innerHTML]="pageContent.content | safeHtmlFilter" class="text-content"></div>
 
     </section>
   </div>

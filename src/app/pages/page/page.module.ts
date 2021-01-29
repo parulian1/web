@@ -6,6 +6,7 @@ import {PageComponent} from "@app/pages/page/page.component";
 import {PageRoutingModule} from "@app/pages/page/page-routing.module";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {GtagModule} from '@app/library/gtagjs/gtag.module';
+import {NusantaraCoreModule} from '@gdnnusantara/nusantara-web-lib';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import {GtagModule} from '@app/library/gtagjs/gtag.module';
         SharedModule,
         PageRoutingModule,
         MatToolbarModule,
-        GtagModule
+        GtagModule,
+        NusantaraCoreModule
     ]
 })
 export class PageModule {
