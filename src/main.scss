@@ -65,14 +65,17 @@
   background: hsl(10, 86%, 59%);
   color: hsl(0, 0%, 100%);
 }
+
 .mt-alert--is-primary {
   background: hsl(320, 86%, 59%);
   color: hsl(0, 0%, 100%);
 }
+
 .mt-alert--is-warning {
   background: hsl(80, 86%, 59%);
   color: hsl(0, 0%, 100%);
 }
+
 .mt-alert--is-info {
   background: hsl(160, 86%, 59%);
   color: hsl(0, 0%, 100%);
@@ -95,13 +98,90 @@
 }
 
 // for printing (reseller catalog)
-.print-only { display: none !important; }
-.print-hidden { }
+.print-only {
+  display: none !important;
+}
+
+.print-hidden {
+}
+
 @media print {
-  header { display: none !important; }
-  footer { display: none !important; }
-  app-side-menu { display: none !important; }
-  .print-hidden { display: none !important; }
-  .print-only { display: initial !important; }
+  header {
+    display: none !important;
+  }
+  footer {
+    display: none !important;
+  }
+  app-side-menu {
+    display: none !important;
+  }
+  .print-hidden {
+    display: none !important;
+  }
+  .print-only {
+    display: initial !important;
+  }
+
+}
+
+// For CKEditor Support
+:root {
+  --ck-image-style-spacing: 1.5em;
+}
+.text-content {
+  max-width: 100%;
+
+  .image > img {
+    max-width: 100%;
+  }
+
+  .image > figcaption {
+    display: table-caption;
+    caption-side: bottom;
+    word-break: break-word;
+    color: hsl(0, 0%, 20%);
+    background-color: hsl(0, 0%, 97%);
+    padding: .6em;
+    font-size: .75em;
+    outline-offset: -1px;
+  }
+
+  .image.image_resized {
+    max-width: 100%;
+    display: block;
+    box-sizing: border-box;
+
+    & img {
+      /* For resized images it is the `<figure>` element that determines the image width. */
+      width: 100%;
+      max-width: 100%;
+    }
+
+    & > figcaption {
+      display: block;
+      text-align: center;
+    }
+  }
+
+  .image-style-side {
+    float: right;
+    margin-left: var(--ck-image-style-spacing);
+    max-width: 50%;
+  }
+
+  .image-style-align-left {
+    float: left;
+    margin-right: var(--ck-image-style-spacing);
+  }
+
+  .image-style-align-center {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .image-style-align-right {
+    float: right;
+    margin-left: var(--ck-image-style-spacing);
+  }
 
 }
