@@ -53,4 +53,9 @@ export class ResellerSavedCatalogService {
       });
   }
 
+  removeItem(id: string): Observable<HttpResponse<any>> {
+    return this.httpClient
+      .delete(`/order/reseller-saved-catalog-item/${id}/`, {observe: 'response'});
+  }
+
 }

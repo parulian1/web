@@ -116,6 +116,9 @@
       <span class="text-body2">
         {{ catalogItem.price * catalogItem.quantity |currency:'Rp. ' : 'symbol' : '1.0'}}
       </span>
+      <div class="print-hidden-remove">
+        <a (click)="removeProduct(catalogItem)">Hapus</a>
+      </div>
     </div>
   </div>
 </div>

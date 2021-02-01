@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
-import { ResellerCatalogItem } from "@app/models";
-import { ResellerSavedCatalogService } from "@app/services";
-import { ResellerSavedCatalog, ResellerSavedCatalogItem, ResellerCatalogItemWarehouse } from "@app/models/reseller";
-import { ShippingMethodService } from "@app/services/shipping-method.service";
-import { ShippingCost } from "@app/models/shipping-method";
-import { getSlugFromHref } from "@app/shared/helpers";
-import { CartWeight } from "@app/models/cart";
-import { MatDialog } from "@angular/material/dialog";
-import { CheckoutAddressFormDialogComponent } from "@app/pages/checkout/checkout-address";
-import { Logger } from "@app/core";
-import { CartService } from "@app/services";
+import { ResellerCatalogItem } from '@app/models';
+import { ResellerSavedCatalogService } from '@app/services';
+import { ResellerSavedCatalog, ResellerSavedCatalogItem, ResellerCatalogItemWarehouse } from '@app/models/reseller';
+import { ShippingMethodService } from '@app/services/shipping-method.service';
+import { ShippingCost } from '@app/models/shipping-method';
+import { getSlugFromHref } from '@app/shared/helpers';
+import { CartWeight } from '@app/models/cart';
+import { MatDialog } from '@angular/material/dialog';
+import { CheckoutAddressFormDialogComponent } from '@app/pages/checkout/checkout-address';
+import { Logger } from '@app/core';
+import { CartService } from '@app/services';
+import {EntityToSlugPipe} from '@app/shared/utils';
 
 const log = new Logger('SavedCatalog');
 
@@ -34,7 +35,8 @@ export class SavedCatalogComponent implements OnInit {
               private resellerSavedCatalogService: ResellerSavedCatalogService,
               private shipmentService: ShippingMethodService,
               private cartService: CartService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private pipe: EntityToSlugPipe) {
   }
 
   ngOnInit(): void {
@@ -214,8 +216,8 @@ export class SavedCatalogComponent implements OnInit {
         isUpdated: !!this.entity.data?.savedAddress?.zipCode,
         isDefaultShipping: true
       },
-      width: "540px",
-      height: "640px",
+      width: '540px',
+      height: '640px',
     });
 
     dialog.afterClosed().subscribe((result) => {
@@ -308,13 +310,13 @@ export class SavedCatalogComponent implements OnInit {
     let isValid = true;
     if (this.selectedCatalogItems.length === 0) {
       isValid = false;
-      alert("Silahkan memilih barang-barang untuk mengunduh Quotation");
+      alert('Silahkan memilih barang-barang untuk mengunduh Quotation');
     } else if (!this.entity.data?.savedAddress?.zipCode) {
       isValid = false;
-      alert("Silahkan memasukkan alamat untuk mengunduh Quotation");
+      alert('Silahkan memasukkan alamat untuk mengunduh Quotation');
     } else if (this.shippingSelect.length === 0) {
       isValid = false;
-      alert("Silahkan memilih metode pengiriman untuk mengunduh Quotation");
+      alert('Silahkan memilih metode pengiriman untuk mengunduh Quotation');
     } else {
       this.shippingSelect.forEach((shipment) => {
         if (!shipment.method && isValid) {
@@ -322,7 +324,7 @@ export class SavedCatalogComponent implements OnInit {
         }
       });
       if (!isValid) {
-        alert("Silahkan memilih metode pengiriman untuk mengunduh Quotation");
+        alert('Silahkan memilih metode pengiriman untuk mengunduh Quotation');
       }
     }
 
@@ -352,8 +354,25 @@ export class SavedCatalogComponent implements OnInit {
     if (catalogItem.product.media.length > 0) {
       return catalogItem.product.media[0].image;
     }
-    return "";
+    return '';
   }
 
+  removeProduct(catalogItem: ResellerSavedCatalogItem) {
+    const id = this.pipe.transform(catalogItem.href);
+    this.resellerSavedCatalogService.removeItem(id).subscribe(result => {
+      if (result.status === 204) {
+        alert(`Product ${catalogItem.product.name} successfully removed`);
+        const indexResellerSavedCatalogItem = this.entity.items.indexOf(catalogItem);
+        this.entity.items.splice(indexResellerSavedCatalogItem, 1);
+        const indexSelectedCatalogItem = this.selectedCatalogItems.indexOf(catalogItem);
+        this.selectedCatalogItems.splice(indexSelectedCatalogItem, 1);
+        if (this.entity.items.length === 0) {
+          this.router.navigate(['/profile/saved-catalog']);
+        }
+      }
+    }, (error) => {
+      alert(`Failed to remove ${catalogItem.product.name}`);
+    })
+  }
 
 }
