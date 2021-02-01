@@ -107,9 +107,8 @@
     </div>
     <div class="divCell quantity print-hidden">
       <span class="text-caption show-mobile">Quantity</span>
-      <input class="primary" type="number" [(ngModel)]="catalogItem.quantity" [min]="1"
-             [max]="catalogItem.availableStock"
-             (change)="getShipmentMethod()" placeholder="1">
+      <app-saved-catalog-qty [catalogItem]="catalogItem"  (quantityFilled)="quantityFilled($event)"
+                             (getShipment)="getShipmentMethod()"></app-saved-catalog-qty>
     </div>
     <div class="divCell subtotal">
       <span class="text-caption show-mobile">Subtotal</span>

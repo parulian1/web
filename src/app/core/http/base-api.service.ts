@@ -22,7 +22,7 @@ export abstract class BaseApiService<T> {
 
   getShippingCost(weight: number, origin: string, destination: string): Observable<HttpResponse<ShippingCost[]>> {
     let params = new HttpParams();
-    params = params.set('weight', weight.toString());
+    params = params.set('weight', weight.toFixed(2).toString());
     params = params.set('origin', origin);
     params = params.set('destination', destination);
 

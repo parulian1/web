@@ -30,6 +30,9 @@ export class SavedCatalogComponent implements OnInit {
   shippingSelect: Array<{ method?: ShippingCost, warehouse: string, fullWarehouse?: string, status?: boolean }> = [];
   warehouseCatalogItems: Array<CartWeight> = [];
 
+  isQuantityFilled: boolean;
+  statusArr = [];
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private resellerSavedCatalogService: ResellerSavedCatalogService,
@@ -243,7 +246,7 @@ export class SavedCatalogComponent implements OnInit {
 
   isDisabledToCheckout(): boolean {
     if (!this.entity.data?.savedAddress?.zipCode || this.shippingSelect.length === 0 ||
-          this.selectedCatalogItems.length === 0) {
+          this.selectedCatalogItems.length === 0 || this.isQuantityFilled === false) {
       return true;
     }
     return false;
@@ -341,7 +344,7 @@ export class SavedCatalogComponent implements OnInit {
         return item.warehouse.href === whCatalogItems.href;
       }).forEach((item) => {
         let productWeight = item.product.weight;
-        whCatalogItems.totalWeight  += Number((productWeight * item.quantity));
+        whCatalogItems.totalWeight  += Number(productWeight) * Number(item.quantity);
       });
     });
   }
@@ -355,6 +358,10 @@ export class SavedCatalogComponent implements OnInit {
       return catalogItem.product.media[0].image;
     }
     return '';
+  }
+
+  quantityFilled($event: boolean) {
+    this.statusArr.push($event);
   }
 
   removeProduct(catalogItem: ResellerSavedCatalogItem) {

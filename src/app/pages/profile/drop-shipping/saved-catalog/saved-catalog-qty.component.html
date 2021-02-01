@@ -1,0 +1,25 @@
+<div class="saved-qty">
+  <button class="saved-qty-plus" (click)="increase()">+</button>
+  <label>
+    <input
+      class="form-control"
+      type="text"
+      [(ngModel)]="selectedQty"/>
+  </label>
+  <button class="saved-qty-min" (click)="decrease()">-</button>
+</div>
+<span
+  class="saved-qty-err"
+  *ngIf="isExceeded">Exceeds available stock</span>
+
+<span
+  class="saved-qty-err-comma"
+  *ngIf="isComma">Characters are not allowed</span>
+
+<span
+  class="saved-qty-err-null"
+  *ngIf="isNull">Please fill the quantity correctly</span>
+
+<span
+  class="saved-qty-err-one"
+  *ngIf="isZero">Minimum value is 1</span>
