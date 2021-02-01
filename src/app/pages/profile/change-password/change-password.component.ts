@@ -106,8 +106,8 @@ export class ChangePasswordComponent implements OnInit {
     }
   }
   _setErrors(error: any) {
-    Object.values(error.details).forEach((field: any) => {
-      this.form.controls[field.field].setErrors({ fromServer: field.message });
+    Object.keys(error).forEach((field: any) => {
+      this.form.controls[field].setErrors({ fromServer: error[field][0] });
     });
   }
   _setErrorPasswordDoesntMatch(): void {

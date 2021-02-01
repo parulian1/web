@@ -57,7 +57,13 @@ import { AlertDialogComponent } from "@app/shared/alert-dialog";
                 *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched || submitted)"
                 class="help is-danger"
               >
-                Nomor Telepon harus diisi
+                <span *ngIf="phoneNumber.hasError('required')">
+                  Nomor Telepon harus diisi
+                </span>
+
+                <span *ngIf="phoneNumber.hasError('pattern')">
+                  Nomor Telepon invalid
+                </span>
               </p>
             </div>
 
@@ -139,7 +145,7 @@ export class EditProfileComponent implements OnInit {
         `${data.profile?.firstName} ${data.profile?.lastName}`.trim(),
         [Validators.minLength(3)],
       ],
-      phoneNumber: [data.profile?.phoneNumber, [Validators.required]],
+      phoneNumber: [data.profile?.phoneNumber, [Validators.required, Validators.pattern("^[0-9]*$"),]],
       profile: this.fb.group({
         gender: [data.profile?.profile?.gender, []],
         birthDate: [data.profile?.profile?.birthDate, []],
