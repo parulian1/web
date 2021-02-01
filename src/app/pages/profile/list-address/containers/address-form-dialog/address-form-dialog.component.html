@@ -60,7 +60,12 @@
               />
             </div>
             <p *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)" class="help is-danger">
-              No. Handphone harus diisi
+              <span *ngIf="phoneNumber.hasError('required')">
+                No. Handphone harus diisi
+              </span>
+              <span *ngIf="phoneNumber.hasError('fromServer')">
+                {{ phoneNumber.errors?.fromServer }}
+              </span>
             </p>
           </div>
         </div>

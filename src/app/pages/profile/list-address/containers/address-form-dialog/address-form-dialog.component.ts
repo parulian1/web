@@ -129,7 +129,7 @@ export class AddressFormDialogComponent implements OnInit {
     }
   }
   _setErrors(error: any) {
-    Object.values(error).forEach((field: any) => {
+    Object.keys(error).forEach((field: any) => {
       this.form.controls[field].setErrors({ fromServer: error[field][0] });
     });
   }
