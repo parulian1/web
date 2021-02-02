@@ -52,9 +52,9 @@
         <div class="title">
           <span>Pengiriman</span>
         </div>
-        <div class="shipping-logo">
-          <img src="assets/footer/logo/logo_kgx.png"/>
-          <img src="assets/footer/logo/logo-pickupinstore.svg"/>
+        <div class="shipping-wrapper">
+          <app-footer-shipping [shippings]="shippings$ | async">
+          </app-footer-shipping>
         </div>
       </div>
     </div>

@@ -18,7 +18,7 @@ import { MenuBrandComponent } from './header/menu-brand/menu-brand.component';
 import { HighlightCategoryComponent } from './highlight-category/highlight-category.component';
 import { BlogComponent } from './blog/blog.component';
 import { SocialMediaComponent } from './social-media/social-media.component';
-import { CopyrightComponent, FooterComponent, PaymentComponent } from './footer';
+import { CopyrightComponent, FooterComponent, PaymentComponent, FooterShippingComponent } from './footer';
 import { SingleBannerComponent } from './single-banner/single-banner.component';
 import { ProductLineComponent } from './product-line/product-line.component';
 import { StripHtmlPipe } from '@app/shell/strip-html.pipe';
@@ -53,6 +53,7 @@ import { DefaultPipe } from '@app/shell/default.pipe';
     MenuBrandComponent,
     HighlightCategoryComponent,
     FooterComponent,
+    FooterShippingComponent,
     SocialMediaComponent,
     CopyrightComponent,
     SingleBannerComponent,

@@ -5,6 +5,9 @@ import { Router } from "@angular/router";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { NewsletterService } from "@app/services/newsletter.service";
 import { titleCase } from "@app/shared/helpers";
+import { ShippingMethodService } from "@app/services/shipping-method.service";
+import { Observable } from "rxjs";
+import { ShippingMethod } from "@app/models/shipping-method";
 
 @Component({
   selector: 'app-footer',
@@ -18,14 +21,23 @@ export class FooterComponent implements OnInit {
   lazyValidation: boolean = true;
   submitted: boolean = false;
 
-  constructor(private navigationService: NavigationService,
-              private router: Router, private fb: FormBuilder,
-              private newsletterService: NewsletterService) {
-  }
+  shippings$: Observable<ShippingMethod[]>;
+
+  constructor(
+    private navigationService: NavigationService,
+    private router: Router, private fb: FormBuilder,
+    private newsletterService: NewsletterService,
+    private shippingMethodService: ShippingMethodService,
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
+    this.initShipping();
     this.getNavigationFooter();
+  }
+
+  initShipping(): void {
+    this.shippings$ = this.shippingMethodService.fetchList(true);
   }
 
   getNavigationFooter() {
