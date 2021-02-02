@@ -20,7 +20,7 @@ export const environment: IEnvironment = {
   YOUTUBE_API_KEY: 'AIzaSyB7m0r7paaV5I5U6vjf0pDmocvD8-K-D-w',
   elasticAPM: {
     serviceName: 'Nusantara-Web-MT',
-    serverUrl: 'https://apm.bhisma.cloud',
+    serverUrl: 'https://f51291eec6a94ce2a7309a312be33aa7.apm.ap-southeast-1.aws.cloud.es.io:443',
     serviceVersion: version,
     debug: true,
     active: false,
