@@ -61,7 +61,10 @@ export class AppComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.startRefreshTokenCheck();
       this.startNavigationChangeListener();
-      this.loadZendesk();
+
+      this.appConfigService.loadChatService(
+        this.renderer2, this.document, this.config,
+      )
     }
 
     if (environment.production) {
@@ -124,16 +127,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  getZendeskID(): string {
-    return '19e09c8c-543e-4a52-98fd-1ddba548df6c';
-  }
-
-  loadZendesk(): void {
-    this.loadScript(`https://static.zdassets.com/ekr/snippet.js?key=${this.getZendeskID()}`, 'ze-snippet').then(res => {
-    });
-    this.loadSettingsScript();
-  }
-
   private loadScript(url: string, id: string = '') {
     return new Promise((resolve, reject) => {
       const script = this.renderer2.createElement('script');
@@ -147,6 +140,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (id !== '') {
         script.id = id;
       }
+      console.log('script', script);
       this.renderer2.appendChild(this.document.body, script);
     })
   }
@@ -182,22 +176,5 @@ export class AppComponent implements OnInit, OnDestroy {
         name: 'keywords', content: this.config.extraConfig.keywords
       });
     }
-  }
-
-  private loadSettingsScript() {
-    const script = this.renderer2.createElement('script');
-    script.type = 'text/javascript';
-    script.text = `
-     window.zESettings = {
-    webWidget: {
-      offset: {
-        mobile: {
-          vertical: '50px'
-        }
-      }
-    }
-  };
-      `;
-    this.renderer2.appendChild(this.document.body, script);
   }
 }
