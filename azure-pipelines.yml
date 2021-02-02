@@ -9,6 +9,7 @@ variables:
   FEED_ID: 61101818-286e-47e5-b86b-ef800ee02eea
   # Don't forget add trailing slash ('/').
   BUILD_DEST_PATH: dist/martha-web/browser/
+  APM_URL: https://f51291eec6a94ce2a7309a312be33aa7.apm.ap-southeast-1.aws.cloud.es.io:443
 
 resources:
   repositories:
@@ -27,6 +28,7 @@ jobs:
       jobName: build_packaging_prod
       feedId: $(FEED_ID)
       buildPath: $(BUILD_DEST_PATH)
+      env_vars: APM_NAME=mt-web APM_ACTIVE=True APM_URL=$(APM_URL)
 
   - template: web/build.yml@templates
     parameters:
@@ -34,3 +36,4 @@ jobs:
       jobName: build_packaging_staging
       feedId: $(FEED_ID)
       buildPath: $(BUILD_DEST_PATH)
+      env_vars: APM_NAME=mt-web-staging APM_ACTIVE=False APM_URL=$(APM_URL)
