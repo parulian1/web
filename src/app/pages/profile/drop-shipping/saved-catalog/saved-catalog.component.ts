@@ -344,8 +344,9 @@ export class SavedCatalogComponent implements OnInit {
         return item.warehouse.href === whCatalogItems.href;
       }).forEach((item) => {
         let productWeight = item.product.weight;
-        whCatalogItems.totalWeight  += Number(productWeight) * Number(item.quantity);
+        totalWeight += Number(productWeight) * Number(item.quantity);
       });
+      whCatalogItems.totalWeight = totalWeight;
     });
   }
 

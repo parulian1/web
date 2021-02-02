@@ -5,4 +5,4 @@ export * from './dialog-save-catalog.component';
 export * from './saved-catalog-list.resolver';
 export * from './saved-catalog.resolver';
 
-export * from './saved-catalog-qty.component';
+export * from './saved-catalog-qty';

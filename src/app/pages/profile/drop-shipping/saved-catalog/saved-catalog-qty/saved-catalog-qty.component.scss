@@ -1,0 +1,55 @@
+@import "src/theme/base";
+
+.saved-qty {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: solid 1px #B4B4B4;
+  border-radius: 18px;
+  height: 36px;
+
+  label {
+    max-width: 40px;
+
+    input {
+      width: 100%;
+      border: none;
+      outline: none;
+      color: $color-primary;
+      font-size: 16px;
+      line-height: 24px;
+      text-align: center;
+    }
+  }
+
+  button {
+    color: $color-primary;
+    background: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+.saved-qty-err {
+  font-size: 10px;
+  color: $color-error;
+}
+
+.saved-qty-err-comma {
+  font-size: 10px;
+  color: $color-error;
+}
+
+.saved-qty-err-null {
+  font-size: 10px;
+  color: $color-error;
+}
+
+.saved-qty-err-one {
+  font-size: 10px;
+  color: $color-error;
+}
+
