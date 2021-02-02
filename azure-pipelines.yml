@@ -28,7 +28,7 @@ jobs:
       jobName: build_packaging_prod
       feedId: $(FEED_ID)
       buildPath: $(BUILD_DEST_PATH)
-      env_vars: APM_NAME=mt-web APM_ACTIVE=True APM_URL=$(APM_URL)
+      envVars: 'APM_NAME=mt-web APM_ACTIVE=True APM_URL=$(APM_URL)'
 
   - template: web/build.yml@templates
     parameters:
@@ -36,4 +36,4 @@ jobs:
       jobName: build_packaging_staging
       feedId: $(FEED_ID)
       buildPath: $(BUILD_DEST_PATH)
-      env_vars: APM_NAME=mt-web-staging APM_ACTIVE=False APM_URL=$(APM_URL)
+      envVars: 'APM_NAME=mt-web-staging APM_ACTIVE=False APM_URL=$(APM_URL)'
