@@ -136,6 +136,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
         this.getShippingCost(this.cart, this.address);
       }
       this.gtag.setCheckoutOption(1, 'select address');
+      this.gaCheckoutProgress(1, 'Select Address');
     }
   }
 
@@ -163,15 +164,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
     this.cartTotals.shippingTotal = 0;
     this.cartTotals.shippingTotal += $event.costChange;
     this.cartTotals.grandTotal = (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal;
-    this.gtag.checkoutProgress({
-      value: (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal,
-      currency: 'IDR',
-      tax: 0,
-      shipping: this.cartTotals.shippingTotal,
-      items: this.itemList,
-      checkout_step: 2,
-      checkout_option: 'shipping method'
-    });
+    this.gaCheckoutProgress(2, 'Select Shipping');
   }
 
   ngDoCheck(): void {
@@ -349,6 +342,18 @@ export class CheckoutComponent implements OnInit, DoCheck {
       return false;
     }
     return true;
+  }
+
+  gaCheckoutProgress(step: number, option: string) {
+    this.gtag.checkoutProgress({
+      value: (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal,
+      currency: 'IDR',
+      tax: 0,
+      shipping: this.cartTotals.shippingTotal,
+      items: this.itemList,
+      checkout_step: step,
+      checkout_option: option
+    });
   }
 
 }
