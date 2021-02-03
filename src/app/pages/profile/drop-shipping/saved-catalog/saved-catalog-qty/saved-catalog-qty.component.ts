@@ -28,6 +28,7 @@ export class SavedCatalogQtyComponent implements OnInit, DoCheck {
       this.isZero = true;
     } else if (value !== this.selectedQty) {
       this.catalogItem.quantity = value;
+      this.getShipment.emit();
       this.isNull = false;
       this.isZero = false;
     }
@@ -38,12 +39,10 @@ export class SavedCatalogQtyComponent implements OnInit, DoCheck {
 
   increase() {
     this.selectedQty++;
-    this.getShipment.emit();
   }
 
   decrease() {
     this.selectedQty--;
-    this.getShipment.emit();
   }
 
   ngDoCheck(): void {
