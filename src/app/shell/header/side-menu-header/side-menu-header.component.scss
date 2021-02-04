@@ -19,6 +19,7 @@
       width: 28px;
       height: auto;
       display: block;
+      text-decoration: none;
 
       img {
         width: 100%;
@@ -74,6 +75,8 @@
         font-size: 14px;
         line-height: 19px;
         font-weight: bold;
+        text-decoration: none;
+        color: $color-primary;
       }
 
       mat-icon {
@@ -124,6 +127,8 @@
       a {
         display: block;
         height: 100%;
+        text-decoration: none;
+        color: $color-primary;
 
         img {
           width: 100%;

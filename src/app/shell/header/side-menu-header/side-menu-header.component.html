@@ -15,7 +15,8 @@
   <div class="menu-navbar">
     <ng-container *ngFor="let nav of navigation$|async">
       <div class="nav" >
-        <a (click)="showMenu(nav.title, level, '')">{{nav.title}}</a>
+        <a (click)="showMenu(nav.title, level, '')" *ngIf="nav.children.length>0">{{nav.title}}</a>
+        <a [href]="nav.url" *ngIf="nav.children.length === 0">{{nav.title}}</a>
         <mat-icon *ngIf="nav.children.length !== 0" (click)="showMenu(nav.title, level, '')">keyboard_arrow_right</mat-icon>
       </div>
     </ng-container>
