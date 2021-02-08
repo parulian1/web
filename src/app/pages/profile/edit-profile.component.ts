@@ -59,7 +59,8 @@ import { AlertDialogComponent } from "@app/shared/alert-dialog";
               >
                 <div *ngIf="phoneNumber.hasError('required')"> No. Telepon harus diisi </div>
                 <div *ngIf="phoneNumber.hasError('pattern')"> No. Telepon harus numerik </div>
-                <div *ngIf="phoneNumber.hasError('minlength')"> No. Telepon harus lebih dari 10 karakter </div>
+                <div *ngIf="phoneNumber.hasError('minlength')"> No. Telepon lebih dari 10 karakter </div>
+                <div *ngIf="phoneNumber.hasError('maxlength')"> No. Telepon kurang dari 15 karakter </div>
                 <div *ngIf="phoneNumber.hasError('fromServer')">{{ phoneNumber.errors["fromServer"] }}</div>
               </div>
             </div>
@@ -143,7 +144,10 @@ export class EditProfileComponent implements OnInit {
         [Validators.minLength(3)],
       ],
       phoneNumber: [data.profile?.phoneNumber,
-        [Validators.required, Validators.pattern("^[0-9]*$"),Validators.minLength(10)]
+        [
+          Validators.required, Validators.pattern("^[0-9]*$"),
+          Validators.minLength(10), Validators.maxLength(15)
+        ]
       ],
       profile: this.fb.group({
         gender: [data.profile?.profile?.gender, []],

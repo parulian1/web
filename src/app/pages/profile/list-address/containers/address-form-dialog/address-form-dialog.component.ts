@@ -49,7 +49,10 @@ export class AddressFormDialogComponent implements OnInit {
       name: [this.data.address.name || this.defaultName, [Validators.required]],
       shipToName: [this.data.address.shipToName || null, [Validators.required]],
       phoneNumber: [this.data.address.phoneNumber || null,
-        [Validators.required, Validators.pattern("^[0-9]*$"),Validators.minLength(10)]
+        [
+          Validators.required, Validators.pattern("^[0-9]*$"),
+          Validators.minLength(10), Validators.maxLength(15),
+        ]
       ],
 
       // fill when selected method triggered
