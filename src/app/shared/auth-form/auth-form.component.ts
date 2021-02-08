@@ -12,8 +12,7 @@ import { AuthUserService } from "@app/services/auth-user.service";
 
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AlertDialogComponent } from "@app/shared/alert-dialog";
-import {standardEmailValidator} from "@app/core/validators";
-import {Configuration} from "@app/models";
+import { Configuration } from "@app/models";
 import { GtagService } from "@app/library/gtagjs/gtag.service";
 
 
@@ -80,7 +79,7 @@ export class AuthFormComponent implements OnInit {
     this.mtForm = this.fb.group({
       email: ["", [
         Validators.required,
-        standardEmailValidator('email'),
+        Validators.email,
       ]],
       password: ["", [Validators.required]],
     });
@@ -92,7 +91,10 @@ export class AuthFormComponent implements OnInit {
 
   defaultAuth() {
     this.submitted = true;
-    const payload = { email: this.email.value, password: this.password.value };
+    const payload = {
+      email: this.email.value.toLowerCase(),
+      password: this.password.value
+    };
 
     if (this.mtForm.valid) {
       if (this.formType === "Register") {

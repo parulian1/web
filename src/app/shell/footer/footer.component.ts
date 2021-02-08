@@ -3,7 +3,6 @@ import { Navigation } from '@app/models/navigation';
 import { NavigationService } from '@app/services/navigation.service';
 import { Router } from "@angular/router";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { standardEmailValidator } from "@app/core/validators";
 import { NewsletterService } from "@app/services/newsletter.service";
 import { titleCase } from "@app/shared/helpers";
 
@@ -81,7 +80,7 @@ export class FooterComponent implements OnInit {
     this.form = this.fb.group({
       email: ["", [
         Validators.required,
-        standardEmailValidator('email'),
+        Validators.email,
       ]]
     })
   }
@@ -94,10 +93,17 @@ export class FooterComponent implements OnInit {
     }
   }
 
+  get formValue(): any {
+    return {
+      ...this.form.value,
+      email: this.email.value.toLowerCase(),
+    }
+  }
+
   subscribe() {
     this.submitted = true;
     if (this.form.valid) {
-      this.newsletterService.create(this.form.value).subscribe(
+      this.newsletterService.create(this.formValue).subscribe(
         (response) => {
           alert('Berhasil subscribe newsletter');
           this.reset();
