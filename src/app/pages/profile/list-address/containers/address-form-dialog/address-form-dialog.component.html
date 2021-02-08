@@ -59,14 +59,12 @@
                 [formControl]="phoneNumber"
               />
             </div>
-            <p *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)" class="help is-danger">
-              <span *ngIf="phoneNumber.hasError('required')">
-                No. Handphone harus diisi
-              </span>
-              <span *ngIf="phoneNumber.hasError('fromServer')">
-                {{ phoneNumber.errors?.fromServer }}
-              </span>
-            </p>
+            <div *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)" class="help is-danger">
+              <div *ngIf="phoneNumber.hasError('required')"> No. Telepon harus diisi </div>
+              <div *ngIf="phoneNumber.hasError('pattern')"> No. Telepon harus numerik </div>
+              <div *ngIf="phoneNumber.hasError('minlength')"> No. Telepon harus lebih dari 10 karakter </div>
+              <div *ngIf="phoneNumber.hasError('fromServer')">{{ phoneNumber.errors["fromServer"] }}</div>
+            </div>
           </div>
         </div>
       </div>

@@ -49,7 +49,9 @@ export class CheckoutAddressFormDialogComponent implements OnInit, DoCheck {
     this.form = this.fb.group({
       name: [this.data.address.name || this.defaultName, [Validators.required]],
       shipToName: [this.data.address.shipToName || null, [Validators.required]],
-      phoneNumber: [this.data.address.phoneNumber || null, [Validators.required]],
+      phoneNumber: [this.data.address.phoneNumber || null,
+        [Validators.required, Validators.pattern("^[0-9]*$"),Validators.minLength(10)]
+      ],
 
       // fill when selected method triggered
       state: [this.data.address.state ||null, [Validators.required]],
