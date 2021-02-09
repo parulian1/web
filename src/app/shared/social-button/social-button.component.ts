@@ -10,6 +10,7 @@ import { Logger } from "@app/core";
 import { AuthUserService } from "@app/services";
 import { AuthenticationService } from "@app/core/authentication";
 import {AuthSocialService} from '@app/services/auth-social.service';
+import { GtagService } from '@app/library/gtagjs/gtag.service';
 
 
 const logger = new Logger('social-button.coponents.ts');
@@ -32,7 +33,8 @@ export class SocialButtonComponent implements OnInit {
     private authUserService: AuthUserService,
     private authService: AuthenticationService,
     private router: Router,
-    private authSocialService: AuthSocialService
+    private authSocialService: AuthSocialService,
+    private gtag: GtagService
   ) {}
 
   ngOnInit(): void {
@@ -57,8 +59,14 @@ export class SocialButtonComponent implements OnInit {
           access: value.access,
           email: user.email,
           refresh: value.refresh,
+        }).subscribe(() => {
+          if (this.currentMode === 'Daftar') {
+            this.gtag.signUp('Facebook');
+          } else {
+            this.gtag.login('Facebook');
+          }
+          this.router.navigateByUrl('/');
         });
-        this.router.navigateByUrl('/');
       });
     }).catch(err => this._handleError(err));
   }
@@ -71,8 +79,14 @@ export class SocialButtonComponent implements OnInit {
           access: value.access,
           email: user.email,
           refresh: value.refresh,
+        }).subscribe(() => {
+          if (this.currentMode === 'Daftar') {
+            this.gtag.signUp('Google');
+          } else {
+            this.gtag.login('Google');
+          }
+          this.router.navigateByUrl('/');
         });
-        this.router.navigateByUrl('/');
       });
     }).catch(err => this._handleError(err));
   }

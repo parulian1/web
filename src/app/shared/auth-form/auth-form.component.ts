@@ -14,6 +14,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { AlertDialogComponent } from "@app/shared/alert-dialog";
 import {standardEmailValidator} from "@app/core/validators";
 import {Configuration} from "@app/models";
+import { GtagService } from "@app/library/gtagjs/gtag.service";
 
 
 @Component({
@@ -44,7 +45,8 @@ export class AuthFormComponent implements OnInit {
     private store: Store<AppState>,
     private router: Router,
     private fb: FormBuilder,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private gtag: GtagService
   ) {}
 
   ngOnInit(): void {
@@ -98,6 +100,7 @@ export class AuthFormComponent implements OnInit {
           (resp) => {
             this.authenticationService.register(resp).subscribe(() => {
               this.showSuccess();
+              this.gtag.signUp('Onsite');
               this.router.navigate(['.']);
             });
           },
@@ -109,6 +112,7 @@ export class AuthFormComponent implements OnInit {
         this.service.login(payload.email, payload.password).subscribe(
           (resp) => {
             this.authenticationService.login(resp).subscribe(() => {
+              this.gtag.login('Onsite');
               this.router.navigate(['.']);
             });
           },
