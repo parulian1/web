@@ -59,8 +59,8 @@ import { AlertDialogComponent } from "@app/shared/alert-dialog";
               >
                 <div *ngIf="phoneNumber.hasError('required')"> No. Telepon harus diisi </div>
                 <div *ngIf="phoneNumber.hasError('pattern')"> No. Telepon harus numerik </div>
-                <div *ngIf="phoneNumber.hasError('minlength')"> No. Telepon lebih dari 10 karakter </div>
-                <div *ngIf="phoneNumber.hasError('maxlength')"> No. Telepon kurang dari 15 karakter </div>
+                <div *ngIf="phoneNumber.hasError('minlength')"> No. Telepon lebih dari 9 karakter </div>
+                <div *ngIf="phoneNumber.hasError('maxlength')"> No. Telepon kurang dari 16 karakter </div>
                 <div *ngIf="phoneNumber.hasError('fromServer')">{{ phoneNumber.errors["fromServer"] }}</div>
               </div>
             </div>
