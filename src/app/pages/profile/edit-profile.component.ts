@@ -53,18 +53,16 @@ import { AlertDialogComponent } from "@app/shared/alert-dialog";
                 />
               </div>
 
-              <p
+              <div
                 *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched || submitted)"
                 class="help is-danger"
               >
-                <span *ngIf="phoneNumber.hasError('required')">
-                  Nomor Telepon harus diisi
-                </span>
-
-                <span *ngIf="phoneNumber.hasError('pattern')">
-                  Nomor Telepon invalid
-                </span>
-              </p>
+                <div *ngIf="phoneNumber.hasError('required')"> No. Telepon harus diisi </div>
+                <div *ngIf="phoneNumber.hasError('pattern')"> No. Telepon harus numerik </div>
+                <div *ngIf="phoneNumber.hasError('minlength')"> No. Telepon lebih dari 9 karakter </div>
+                <div *ngIf="phoneNumber.hasError('maxlength')"> No. Telepon kurang dari 16 karakter </div>
+                <div *ngIf="phoneNumber.hasError('fromServer')">{{ phoneNumber.errors["fromServer"] }}</div>
+              </div>
             </div>
 
             <div class="field">
@@ -145,7 +143,12 @@ export class EditProfileComponent implements OnInit {
         `${data.profile?.firstName} ${data.profile?.lastName}`.trim(),
         [Validators.minLength(3)],
       ],
-      phoneNumber: [data.profile?.phoneNumber, [Validators.required, Validators.pattern("^[0-9]*$"),]],
+      phoneNumber: [data.profile?.phoneNumber,
+        [
+          Validators.required, Validators.pattern("^[0-9]*$"),
+          Validators.minLength(10), Validators.maxLength(15)
+        ]
+      ],
       profile: this.fb.group({
         gender: [data.profile?.profile?.gender, []],
         birthDate: [data.profile?.profile?.birthDate, []],
