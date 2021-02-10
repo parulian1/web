@@ -5,8 +5,8 @@
 // Note that as usual, any environment variables you expose through it will end up in your
 // bundle, and you should not use it for any sensitive information like passwords or keys.
 import { env } from './.env';
-import {IEnvironment} from '@env/environment.interface';
-import {version} from '../../package.json';
+import { IEnvironment } from '@env/environment.interface';
+import { version } from '../../package.json';
 
 export const environment: IEnvironment = {
   production: true,
@@ -16,11 +16,11 @@ export const environment: IEnvironment = {
   SHIPPING_COUNTRY_CODE: 'IDN',
   YOUTUBE_API_KEY: 'AIzaSyB7m0r7paaV5I5U6vjf0pDmocvD8-K-D-w',
   elasticAPM: {
-    serviceName: 'Nusantara-Web-MT',
-    serverUrl: 'https://f51291eec6a94ce2a7309a312be33aa7.apm.ap-southeast-1.aws.cloud.es.io:443',
+    serviceName: env.APM_NAME || 'MT-Web',
+    serverUrl: env.APM_URL || 'http//apm.bhisma.cloud/',
     serviceVersion: version,
     debug: false,
-    active: true,
+    active: env.APM_ACTIVE ? env.APM_ACTIVE.toLowerCase() === 'true' : false,
     environment: 'production',
     breakdownMetrics: true,
     distributedTracingOrigins: [ ],

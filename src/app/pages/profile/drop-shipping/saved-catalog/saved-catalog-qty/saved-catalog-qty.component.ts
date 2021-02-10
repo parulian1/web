@@ -4,8 +4,8 @@ import { ResellerSavedCatalogItem } from '@app/models';
 @Component({
   selector: 'app-saved-catalog-qty',
   templateUrl: './saved-catalog-qty.component.html',
-  // styleUrls: ['./saved-catalog-qty.component.scss']
 })
+
 export class SavedCatalogQtyComponent implements OnInit, DoCheck {
   @Input() catalogItem: ResellerSavedCatalogItem;
   @Output() quantityFilled = new EventEmitter<boolean>();
@@ -39,10 +39,12 @@ export class SavedCatalogQtyComponent implements OnInit, DoCheck {
 
   increase() {
     this.selectedQty++;
+    this.getShipment.emit();
   }
 
   decrease() {
     this.selectedQty--;
+    this.getShipment.emit();
   }
 
   ngDoCheck(): void {
