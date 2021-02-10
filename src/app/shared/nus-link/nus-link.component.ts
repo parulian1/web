@@ -32,7 +32,6 @@ export class NusLinkComponent implements OnInit, OnChanges {
     if (this.grandChild === true) {
       this.lastChildren = 'last-child';
     }
-    console.log(this.href)
   }
 
   theLink() {
