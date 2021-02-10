@@ -11,12 +11,17 @@ export * from './brand.service';
 export * from './wishlist.service';
 export * from './review.service';
 export * from './checkout.service';
+export * from './sla.service';
+export * from './cookie.service';
 
 export * from './client.service';
 export * from './state-checkout.service.';
 
 export * from './cart.service';
+export * from './reseller/reseller-catalog.service';
+export * from './reseller/reseller-saved-catalog.service';
 
 export * from './product-promotion.service';
 
 export * from './reseller';
+export * from './onboarding.service';

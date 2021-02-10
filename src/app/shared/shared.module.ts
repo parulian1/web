@@ -41,12 +41,14 @@ import { ClickOutsideSearchDirective } from './search-bar/click-outside-search.d
 import { FocusInputMobileDirective } from './search-bar/focus-input-mobile.directive';
 import { ResponsiveImgChooserDirective } from './responsive-img-chooser.directive';
 import { VideoPlayerComponent } from './video-player/video-player.component';
-import { ImgResizeDirective } from './nus-img-resize/img-resize.directive';
 import {
   ShareSocialButtonsComponent,
   ShareSocialButtonsDialogComponent
 } from './share-social-buttons';
 import { SharedShippingMethodComponent } from "@app/shared/shared-shipping-method.component";
+import {ImgResizeDirective} from "@app/shared/nus-img-resize";
+import { OnboardingDialogComponent } from './onboarding-dialog/onboarding-dialog.component';
+
 
 @NgModule({
   imports: [
@@ -102,6 +104,7 @@ import { SharedShippingMethodComponent } from "@app/shared/shared-shipping-metho
     ShareSocialButtonsComponent,
     ShareSocialButtonsDialogComponent,
     SharedShippingMethodComponent,
+    OnboardingDialogComponent
   ],
     exports: [
         LoaderComponent,

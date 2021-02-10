@@ -8,7 +8,7 @@ import { PagedResponse } from '../pagination';
  * Same as the abstract-crud service in admin, but skips the choice
  * fields support
  */
-export abstract class AbstractCrudService<T extends {href: string}> {
+export abstract class AbstractCrudService<T extends {href?: string}> {
 
   protected httpClient: HttpClient;
   protected baseUrl: string;  // this would be best set from crawling the API root, but maybe later for that.

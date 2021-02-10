@@ -1,8 +1,8 @@
-import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
-import {AbstractCrudService} from "@app/core/http/abstract-crud-service";
-import {Addresses} from "@app/models/addresses";
+import { AbstractCrudService } from '@app/core/http/abstract-crud-service';
+import { Addresses } from '@app/models/addresses';
 
 
 /**
