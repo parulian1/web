@@ -86,29 +86,17 @@
       flex-direction: column;
       width: 260px;
 
-      .title {
-        font-size: 16px;
-        line-height: 22px;
-        font-weight: bold;
-      }
-
-      .payment-logo {
+      app-footer-payment, .list {
         display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        margin: 4px 0 16px 0;
+        flex-direction: column;
+        margin: 0 24px 0 0;
 
-        img {
-          width: 44px;
-          height: 44px;
-          border: solid 1px #E5E5E5;
-          border-radius: $border-radius;
-          margin: 0 8px 8px 0;
-          padding: 1px;
+        .title {
+          font-size: 16px;
         }
-      }
 
-      .shipping-logo {
+      }
+      .list .shipping-logo {
         display: flex;
         flex-direction: row;
         margin: 4px 0 16px 0;
@@ -218,22 +206,26 @@
         width: 100%;
         margin: 12px 0 0 0;
 
-        .title {
-          font-size: 14px;
-          line-height: 19px;
-        }
+        app-footer-payment {
+          margin: 12px 0 0 0;
+          .list {
+            .title {
+              font-size: 14px;
+              line-height: 19px;
+            }
 
-        .payment-logo {
-          img {
-            width: 60px;
-            height: 60px;
+            .payment-logo {
+              margin: 0;
+            }
           }
-        }
 
-        .shipping-logo {
-          img {
-            width: 60px;
-            height: 60px;
+        }
+        .list {
+          margin: 12px 0 0 0;
+
+          .title {
+            font-size: 14px;
+            line-height: 19px;
           }
         }
       }

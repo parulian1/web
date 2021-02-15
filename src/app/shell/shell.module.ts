@@ -18,16 +18,16 @@ import { MenuBrandComponent } from './header/menu-brand/menu-brand.component';
 import { HighlightCategoryComponent } from './highlight-category/highlight-category.component';
 import { BlogComponent } from './blog/blog.component';
 import { SocialMediaComponent } from './social-media/social-media.component';
-import { CopyrightComponent, FooterComponent } from './footer';
+import { CopyrightComponent, FooterComponent, PaymentComponent } from './footer';
 import { SingleBannerComponent } from './single-banner/single-banner.component';
 import { ProductLineComponent } from './product-line/product-line.component';
 import { StripHtmlPipe } from '@app/shell/strip-html.pipe';
 import { ProductLineNoImageComponent } from './product-line-no-image/product-line-no-image.component';
 import { PromoBannerComponent } from './promo-banner/promo-banner.component';
 import { SideMenuHeaderComponent } from '@app/shell/header/side-menu-header';
-import { EntityToSlugPipe } from "@app/shared/utils/entity-to-slug.pipe";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { DefaultPipe } from "@app/shell/default.pipe";
+import { EntityToSlugPipe } from '@app/shared/utils/entity-to-slug.pipe';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DefaultPipe } from '@app/shell/default.pipe';
 
 
 @NgModule({
@@ -63,6 +63,7 @@ import { DefaultPipe } from "@app/shell/default.pipe";
     PromoBannerComponent,
     SideMenuHeaderComponent,
     DefaultPipe,
+    PaymentComponent,
   ],
   exports: [
     ShellComponent,
@@ -82,6 +83,7 @@ import { DefaultPipe } from "@app/shell/default.pipe";
     PromoBannerComponent,
     SideMenuHeaderComponent,
     DefaultPipe,
+    PaymentComponent,
   ],
   providers: [
     DatePipe,

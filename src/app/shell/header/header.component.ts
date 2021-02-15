@@ -24,8 +24,8 @@ import { ProductsService } from '@app/services';
 import { EntityToSlugPipe } from '@app/shared/utils';
 import { Router } from '@angular/router';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { ConfigService } from "@app/core";
-import { Configuration } from "@app/models";
+import { ConfigService } from '@app/core';
+import { Configuration } from '@app/models';
 
 @Component({
   selector: 'app-header',
