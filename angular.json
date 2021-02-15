@@ -38,6 +38,11 @@
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/slick-carousel/slick/slick.min.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "opentracing/lib/tracer",
+              "opentracing/lib/span",
+              "error-stack-parser"
             ]
           },
           "configurations": {
