@@ -4,6 +4,7 @@ import { ResellerSavedCatalogItem } from '@app/models';
 @Component({
   selector: 'app-saved-catalog-qty',
   templateUrl: './saved-catalog-qty.component.html',
+  styleUrls: ['./saved-catalog-qty.scss']
 })
 
 export class SavedCatalogQtyComponent implements OnInit, DoCheck {
