@@ -6,7 +6,7 @@ import { PaymentMethodType } from '@app/models/payment-method';
 @Component({
   selector: 'app-footer-payment',
   template: `
-    <div class="list" id="payment-footer">
+    <div class="list" id="payment-footer" *ngIf="childPaymentMethods.length > 0">
       <div class="title">
         <span>Pembayaran</span>
       </div>
@@ -32,7 +32,7 @@ export class PaymentComponent implements  OnInit {
   fetchPaymentMethods() {
     this.paymentMethodService.fetchList().subscribe((resp) => {
       resp.forEach((record) => {
-        record.paymentMethods.forEach((_paymentMethod) => {
+        record?.paymentMethods?.forEach((_paymentMethod) => {
           if (_paymentMethod.isActive) {
             this.childPaymentMethods.push(_paymentMethod);
           }
