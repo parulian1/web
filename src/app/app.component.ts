@@ -127,24 +127,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  private loadScript(url: string, id: string = '') {
-    return new Promise((resolve, reject) => {
-      const script = this.renderer2.createElement('script');
-      script.type = 'text/javascript';
-      script.src = url;
-      script.text = ``;
-      script.async = true;
-      script.defer = true;
-      script.onload = resolve;
-      script.onerror = reject;
-      if (id !== '') {
-        script.id = id;
-      }
-      console.log('script', script);
-      this.renderer2.appendChild(this.document.body, script);
-    })
-  }
-
   private addFavIcon() {
     const defaultFavIco = 'assets/favicon.ico';
     let iconLinkElement = document.createElement('link');

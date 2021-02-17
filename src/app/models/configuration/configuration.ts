@@ -1,5 +1,5 @@
-import { ExtraConfig } from "@app/models";
-import {SocialMediaPage} from "@app/models/social-media";
+import { ExtraConfig } from '@app/models';
+import { SocialMediaPage } from '@app/models/social-media';
 
 
 export interface IConfigChatService {
