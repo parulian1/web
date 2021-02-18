@@ -65,12 +65,23 @@ import { VideoDialogComponent } from '@app/pages/product-detail/video-dialog';
       opacity: 0.5;
     }
 
+    ::ng-deep .mt-video-dialog {
+      width: 60vw;
+      height: auto;
+    }
+
     @media only screen and (max-width: 500px) {
       .video-cell {
         width: 100vw;
         height: 190px;
         margin: 0;
         justify-content: center;
+      }
+
+      ::ng-deep .mt-video-dialog {
+        max-width: none !important;
+        width: 100vw;
+        height: auto;
       }
     }
   `]
@@ -113,11 +124,9 @@ export class VideoCardComponent implements OnInit {
       data: {
         id: this.videoId,
         name: this.videoData?.title,
-        width: this.videoData?.thumbnail_width,
-        height: this.videoData?.thumbnail_height
+        minWidth: '80vw',
       },
-      width: '480',
-      height: 'auto'
+      panelClass: 'mt-video-dialog'
     })
   }
 }

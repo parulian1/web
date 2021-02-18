@@ -13,7 +13,7 @@ export class VideoDialogComponent implements OnInit, AfterViewInit {
   videoWidth: number;
   player: YT.Player;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { id: string, name: string, width?: number, height?: number }) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { id: string, name: string, width?: number, height?: number}) {
   }
 
   ngOnInit(): void {
@@ -31,12 +31,12 @@ export class VideoDialogComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.youtubePlayer) {
-      this.youtubePlayer.nativeElement._config.width = '100vw';
-      this.onResize();
     }
   }
 
   playerReady($event: YT.Player) {
     this.player = $event;
+    // @ts-ignore
+    this.player.setSize(this.youtubePlayer.nativeElement.clientWidth, (this.youtubePlayer.nativeElement.clientWidth * 0.6));
   }
 }
