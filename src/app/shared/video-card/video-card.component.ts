@@ -66,7 +66,7 @@ import { VideoDialogComponent } from '@app/pages/product-detail/video-dialog';
     }
 
     ::ng-deep .mt-video-dialog {
-      width: 60vw;
+      width: 50vw;
       height: auto;
     }
 

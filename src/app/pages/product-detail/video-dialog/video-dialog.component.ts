@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogContainer } from "@angular/material/dialog";
+import { ResponsiveBreakpointsService } from "@app/core/responsive-breakpoints";
 
 @Component({
   selector: 'app-video-dialog',
@@ -13,7 +14,8 @@ export class VideoDialogComponent implements OnInit, AfterViewInit {
   videoWidth: number;
   player: YT.Player;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { id: string, name: string, width?: number, height?: number}) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { id: string, name: string, width?: number, height?: number},
+              private breakpointService: ResponsiveBreakpointsService) {
   }
 
   ngOnInit(): void {
@@ -36,7 +38,16 @@ export class VideoDialogComponent implements OnInit, AfterViewInit {
 
   playerReady($event: YT.Player) {
     this.player = $event;
+    let playerHeight = 0;
+
+    if (this.breakpointService.isDesktop) {
+      playerHeight = 470;
+    } else {
+      // @ts-ignore
+      playerHeight = (this.youtubePlayer.nativeElement.clientWidth * 0.6);
+    }
     // @ts-ignore
-    this.player.setSize(this.youtubePlayer.nativeElement.clientWidth, (this.youtubePlayer.nativeElement.clientWidth * 0.6));
+    this.player.setSize(this.youtubePlayer.nativeElement.clientWidth, playerHeight);
+    this.player.playVideo();
   }
 }

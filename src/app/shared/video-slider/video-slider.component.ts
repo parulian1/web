@@ -11,8 +11,7 @@ import { IHomeVideo, IHomeVideoContents } from '@app/models';
           [config]="slideConfig"
           class="home-video-desktop-carousel">
           <ng-container *ngFor="let item of videoContents; index as i">
-            <app-video-card ngxSlickItem [videoId]="item.youtubeVideoId"
-                            (isVideoAvailable)="isVideoAvailable($event)"></app-video-card>
+            <app-video-card ngxSlickItem [videoId]="item.youtubeVideoId"></app-video-card>
           </ng-container>
         </ngx-slick-carousel>
       </div>
@@ -24,8 +23,7 @@ import { IHomeVideo, IHomeVideoContents } from '@app/models';
           [config]="slideConfigMobile"
           class="home-video-mobile-carousel">
           <div ngxSlickItem *ngFor="let item of videoContents; index as i" class="video-slide" #videoRef>
-            <app-video-card [videoId]="item.youtubeVideoId"
-                            (isVideoAvailable)="isVideoAvailable($event)"></app-video-card>
+            <app-video-card [videoId]="item.youtubeVideoId"></app-video-card>
           </div>
         </ngx-slick-carousel>
       </div>
@@ -74,9 +72,5 @@ export class VideoSliderComponent implements OnInit {
     if (this.homeVideo) {
       this.videoContents = this.homeVideo.contentItems.filter(m => m.isActive === true);
     }
-  }
-
-  isVideoAvailable($event: any) {
-
   }
 }
