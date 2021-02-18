@@ -35,7 +35,7 @@ import { Subscription } from "rxjs";
         [highlight]="highlight">
       </app-product-carousel>
 
-      <section class="video" *ngIf="homeVideo">
+      <section class="video" *ngIf="!!homeVideo && homeVideo.contentItems.length > 0">
         <app-video-slider [homeVideo]="homeVideo"></app-video-slider>
       </section>
 

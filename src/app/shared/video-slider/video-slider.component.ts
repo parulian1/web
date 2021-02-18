@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { IHomeVideo, IHomeVideoContents } from '@app/models';
 
 @Component({
@@ -10,9 +10,10 @@ import { IHomeVideo, IHomeVideoContents } from '@app/models';
         <ngx-slick-carousel
           [config]="slideConfig"
           class="home-video-desktop-carousel">
-          <div ngxSlickItem *ngFor="let item of videoContents" class="video-slide">
-            <app-video-card [videoId]="item.youtubeVideoId"></app-video-card>
-          </div>
+          <ng-container *ngFor="let item of videoContents; index as i">
+            <app-video-card ngxSlickItem [videoId]="item.youtubeVideoId"
+                            (isVideoAvailable)="isVideoAvailable($event)"></app-video-card>
+          </ng-container>
         </ngx-slick-carousel>
       </div>
     </div>
@@ -22,8 +23,9 @@ import { IHomeVideo, IHomeVideoContents } from '@app/models';
         <ngx-slick-carousel
           [config]="slideConfigMobile"
           class="home-video-mobile-carousel">
-          <div ngxSlickItem *ngFor="let item of videoContents" class="video-slide">
-            <app-video-card [videoId]="item.youtubeVideoId"></app-video-card>
+          <div ngxSlickItem *ngFor="let item of videoContents; index as i" class="video-slide" #videoRef>
+            <app-video-card [videoId]="item.youtubeVideoId"
+                            (isVideoAvailable)="isVideoAvailable($event)"></app-video-card>
           </div>
         </ngx-slick-carousel>
       </div>
@@ -33,6 +35,7 @@ import { IHomeVideo, IHomeVideoContents } from '@app/models';
 })
 export class VideoSliderComponent implements OnInit {
   @Input() homeVideo: IHomeVideo;
+  @ViewChild('videoRef') videoRef: HTMLDivElement
 
   videoContents: IHomeVideoContents[];
 
@@ -55,7 +58,7 @@ export class VideoSliderComponent implements OnInit {
     'lazyLoad': 'ondemand',
     'slidesToShow': 1,
     'slidesToScroll': 1,
-    'centerMode': true,
+    'centerMode': false,
     'mobileFirst': true,
     'variableWidth': true,
     'infinite': false,
@@ -69,7 +72,11 @@ export class VideoSliderComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.homeVideo) {
-      this.videoContents = this.homeVideo.contentItems;
+      this.videoContents = this.homeVideo.contentItems.filter(m => m.isActive === true);
     }
+  }
+
+  isVideoAvailable($event: any) {
+
   }
 }

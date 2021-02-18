@@ -10,4 +10,7 @@ export interface IHomeVideoContents {
   contentGroup: string;
   youtubeVideoId: string;
   sortPriority: number;
+  type: string;
+  embededUrl: string;
+  isActive: boolean;
 }

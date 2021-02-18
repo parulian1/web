@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 
 import { HomeVideoService } from '@app/services';
 import { IYoutubeOembed } from '@app/models';
@@ -8,7 +8,10 @@ import { VideoDialogComponent } from '@app/pages/product-detail/video-dialog';
 @Component({
   selector: 'app-video-card',
   template: `
-    <div class="video-cell" (click)="popUpVideo()">
+    <div
+      *ngIf="isValid"
+      class="video-cell" (click)="popUpVideo()"
+      #videoCell>
       <div class="item">
         <span class="thumbnail">
           <img
@@ -64,7 +67,7 @@ import { VideoDialogComponent } from '@app/pages/product-detail/video-dialog';
 
     @media only screen and (max-width: 500px) {
       .video-cell {
-        width: 338px;
+        width: 100vw;
         height: 190px;
         margin: 0;
         justify-content: center;
@@ -74,8 +77,12 @@ import { VideoDialogComponent } from '@app/pages/product-detail/video-dialog';
 })
 export class VideoCardComponent implements OnInit {
   @Input() videoId: string;
+  @Output() isVideoAvailable = new EventEmitter<any>();
+
+  @ViewChild('videoCell') videoCell: any;
 
   videoData: IYoutubeOembed;
+  isValid = false;
 
   constructor(private service: HomeVideoService,
               public dialog: MatDialog) {
@@ -89,9 +96,15 @@ export class VideoCardComponent implements OnInit {
 
   fetchVideoDetails() {
     this.service.getOembedData(this.videoId).subscribe(result => {
-      if (result.body) {
-        this.videoData = result.body;
+      if (result.status === 200) {
+        if (result.body) {
+          this.isValid = true;
+          this.videoData = result.body;
+        }
       }
+    }, error => {
+      this.isValid = false;
+      this.isVideoAvailable.emit(false);
     })
   }
 

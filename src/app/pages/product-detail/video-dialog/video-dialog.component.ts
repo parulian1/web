@@ -8,8 +8,10 @@ import { MAT_DIALOG_DATA, MatDialogContainer } from "@angular/material/dialog";
 })
 export class VideoDialogComponent implements OnInit, AfterViewInit {
   @ViewChild('youtubePlayer') youtubePlayer: ElementRef<MatDialogContainer>;
+
   videoHeight: number;
   videoWidth: number;
+  player: YT.Player;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { id: string, name: string, width?: number, height?: number }) {
   }
@@ -29,7 +31,12 @@ export class VideoDialogComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.youtubePlayer) {
+      this.youtubePlayer.nativeElement._config.width = '100vw';
       this.onResize();
     }
+  }
+
+  playerReady($event: YT.Player) {
+    this.player = $event;
   }
 }
