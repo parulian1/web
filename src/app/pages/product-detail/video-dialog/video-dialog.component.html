@@ -6,6 +6,7 @@
   <mat-dialog-content #youtubePlayer>
     <youtube-player
       class="youtube-video"
+      (ready)="playerReady($event)"
       [videoId]="data.id"
       [height]="videoHeight"
       [width]="videoWidth"></youtube-player>

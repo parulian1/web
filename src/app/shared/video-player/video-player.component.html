@@ -1,6 +1,5 @@
 <div class="video-player" (click)="popUpVideo()">
   <div class="video-player-top">
-    <img src="{{ channelIcon }}" *ngIf="channelIcon" />
     <span class="title" *ngIf="!!title">{{ title.length > 15 ? (title | slice:0:15) + '...' : title }}</span>
   </div>
   <i class="material-icons play-icon">play_arrow</i>

@@ -157,31 +157,4 @@ export class ProductsService {
     return this.http
       .get<any>(`/catalog/product-search/`, {observe: 'response', params: parameters})
   }
-
-  fetchVideo(id: string): Observable<any> {
-    const apiKey = environment.YOUTUBE_API_KEY;
-    const url = `https://www.googleapis.com/youtube/v3/videos?id=${id}&key=${apiKey}
-     &part=snippet,contentDetails,statistics,status`;
-
-    return this.http
-      .get<any>(url)
-      .pipe(
-        map((res) => {
-          return res;
-        })
-      )
-  }
-
-  fetchVideoChannel(id: string): Observable<any> {
-    const apiKey = environment.YOUTUBE_API_KEY;
-    const url = `https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${id}&fields=items%2Fsnippet%2Fthumbnails&key=${apiKey}`;
-
-    return this.http
-      .get<any>(url)
-      .pipe(
-        map((res) => {
-          return res;
-        })
-      )
-  }
 }

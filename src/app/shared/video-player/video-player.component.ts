@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ProductsService} from "@app/services";
+import { HomeVideoService, ProductsService } from "@app/services";
 import {MatDialog} from "@angular/material/dialog";
 import {VideoDialogComponent} from "@app/pages/product-detail/video-dialog";
 
@@ -16,7 +16,7 @@ export class VideoPlayerComponent implements OnInit {
   channelId: string;
   channelIcon: string;
 
-  constructor(private service: ProductsService,
+  constructor(private service: HomeVideoService,
               public dialog: MatDialog,
   ) {
   }
@@ -28,20 +28,12 @@ export class VideoPlayerComponent implements OnInit {
   }
 
   getVideoDetails() {
-    this.service.fetchVideo(this.videoId).subscribe(result => {
-      if (result) {
-        this.thumbnail = result.items[0].snippet.thumbnails.high.url;
-        this.title = result.items[0].snippet.title;
-        this.channelId = result.items[0].snippet.channelId;
-        this.getChannelImages(this.channelId);
+    this.service.getOembedData(this.videoId).subscribe(result => {
+      if (result.body) {
+        this.thumbnail = result.body.thumbnail_url;
+        this.title = result.body.title;
+        this.channelId = result.body.author_name;
       }
-    })
-  }
-
-  getChannelImages(id: string) {
-    // get channel icon
-    this.service.fetchVideoChannel(id).subscribe(result => {
-      this.channelIcon = result.items[0].snippet.thumbnails.high.url;
     })
   }
 

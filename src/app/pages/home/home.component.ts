@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Banner } from '@app/models/banner';
@@ -7,9 +7,11 @@ import { HighlightService } from '@app/services/highlight.service';
 import { DatePipe } from '@angular/common';
 import { TestimonialService } from '@app/services/testimonial.service';
 import { Testimonial } from '@app/models/testimonial';
-import { Configuration } from '@app/models';
-import { Meta, Title} from '@angular/platform-browser';
+import { Configuration, IHomeVideo } from '@app/models';
+import { Meta, Title } from '@angular/platform-browser';
 import { ConfigService } from '@app/core';
+import { HomeVideoService } from "@app/services";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-home',
@@ -33,6 +35,10 @@ import { ConfigService } from '@app/core';
         [highlight]="highlight">
       </app-product-carousel>
 
+      <section class="video" *ngIf="!!homeVideo && homeVideo.contentItems.length > 0">
+        <app-video-slider [homeVideo]="homeVideo"></app-video-slider>
+      </section>
+
       <section class="brands">
         <app-brands class="brand"></app-brands>
       </section>
@@ -53,8 +59,8 @@ export class HomeComponent implements OnInit {
   banners: Array<Banner>;
   bannersPromo: Banner[];
   highlights: Array<HighlightList> = [];
-
   testimonials: Testimonial[];
+  homeVideo: IHomeVideo;
 
   config: Configuration;
 
@@ -63,6 +69,7 @@ export class HomeComponent implements OnInit {
               private datePipe: DatePipe,
               private testimonialService: TestimonialService,
               private appConfigService: ConfigService,
+              private homeVideoService: HomeVideoService,
               public title: Title,
               private meta: Meta) {
   }
@@ -79,6 +86,7 @@ export class HomeComponent implements OnInit {
       }
     });
     this.fetchHighlight();
+    this.fetchHomeVideo();
     this.checkTestimonials();
     this.setSeoTitle();
     this.setSeoMeta();
@@ -105,7 +113,7 @@ export class HomeComponent implements OnInit {
   }
 
   checkTestimonials() {
-    this.testimonialService.fetchTestimonial({ perPage: 4, page: 1, is_active: true }).subscribe(result => {
+    this.testimonialService.fetchTestimonial({perPage: 4, page: 1, is_active: true}).subscribe(result => {
       this.testimonials = result.body;
     })
   }
@@ -118,7 +126,14 @@ export class HomeComponent implements OnInit {
     if (!!this.config?.tagLine) {
       title += ` ${this.config.tagLine}`;
     }
-    this.title.setTitle(`Home - ${ title }`);
+    this.title.setTitle(`Home - ${title}`);
+  }
+
+  fetchHomeVideo() {
+    this.homeVideoService.getHomeVideo()
+      .subscribe((obs) => {
+        this.homeVideo = obs.body;
+      });
   }
 
   private setSeoMeta() {

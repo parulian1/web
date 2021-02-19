@@ -32,23 +32,24 @@ import { FieldErrorsComponent } from './field-errors.component';
 import { SocialIconDirective } from './social-icon.directive';
 import { ProductCardComponent, ProductCarouselComponent, ProductDiscountHighlightComponent } from './product';
 import { PaginateComponent } from './paginate/paginate.component';
-import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
-import { VoucherCardComponent } from './voucher-card/voucher-card.component';
+import { AlertDialogComponent } from '@app/shared/alert-dialog';
+import { VoucherCardComponent } from '@app/shared/voucher-card';
 import { StarRatingComponent } from '@app/shared/star-rating';
-import { AddReviewComponent } from './add-review/add-review.component';
+import { AddReviewComponent } from '@app/shared/add-review';
 import { PasswordToggleIconDirective } from './password-toggle-icon.directive';
 import { ClickOutsideSearchDirective } from './search-bar/click-outside-search.directive';
 import { FocusInputMobileDirective } from './search-bar/focus-input-mobile.directive';
 import { ResponsiveImgChooserDirective } from './responsive-img-chooser.directive';
-import { VideoPlayerComponent } from './video-player/video-player.component';
+import { VideoPlayerComponent } from '@app/shared/video-player';
 import {
   ShareSocialButtonsComponent,
   ShareSocialButtonsDialogComponent
 } from './share-social-buttons';
-import { SharedShippingMethodComponent } from "@app/shared/shared-shipping-method.component";
-import {ImgResizeDirective} from "@app/shared/nus-img-resize";
-import { OnboardingDialogComponent } from './onboarding-dialog/onboarding-dialog.component';
-
+import { SharedShippingMethodComponent } from '@app/shared/shared-shipping-method.component';
+import {ImgResizeDirective} from '@app/shared/nus-img-resize';
+import { OnboardingDialogComponent } from '@app/shared/onboarding-dialog';
+import { VideoSliderComponent } from '@app/shared/video-slider';
+import { VideoCardComponent } from './video-card/video-card.component';
 
 @NgModule({
   imports: [
@@ -104,7 +105,9 @@ import { OnboardingDialogComponent } from './onboarding-dialog/onboarding-dialog
     ShareSocialButtonsComponent,
     ShareSocialButtonsDialogComponent,
     SharedShippingMethodComponent,
-    OnboardingDialogComponent
+    OnboardingDialogComponent,
+    VideoSliderComponent,
+    VideoCardComponent,
   ],
     exports: [
         LoaderComponent,
@@ -146,6 +149,7 @@ import { OnboardingDialogComponent } from './onboarding-dialog/onboarding-dialog
         ShareSocialButtonsComponent,
         ShareSocialButtonsDialogComponent,
         SharedShippingMethodComponent,
+        VideoSliderComponent,
     ],
 })
 export class SharedModule {
