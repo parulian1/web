@@ -10,6 +10,8 @@ export * from './area';
 export * from './promotions';
 export * from './voucher';
 export * from './review';
+export * from './reseller';
+export * from './onboarding';
 
 export { store, customer, drf, auth, order, socialMedia };
 

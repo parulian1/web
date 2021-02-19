@@ -1,0 +1,181 @@
+@import "src/theme/base";
+
+::ng-deep .mat-dialog-container {
+  overflow: hidden;
+  border-radius: 24px;
+  background: linear-gradient(#00AEEF 35%, white 30%) no-repeat;
+}
+
+.onboarding-container {
+  padding: 24px;
+
+  ::ng-deep .mat-dialog-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+
+    .images {
+      margin-top: 10px;
+      width: 295px;
+      height: 184px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+      line-height: 24px;
+      text-align: center;
+    }
+
+    .description {
+      margin: 16px 0 0 0;
+      font-size: 14px;
+      line-height: 22px;
+      text-align: center;
+    }
+  }
+
+  .top-skip {
+    display: flex;
+    justify-content: flex-end;
+
+    a {
+      cursor: pointer;
+      text-decoration: none;
+      color: $white;
+      font-size: 14px;
+      line-height: 18px;
+    }
+  }
+
+  .step-indicator {
+    margin-top: 36px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      margin: 0 8px;
+      padding: 4px;
+      cursor: pointer;
+
+      i {
+        font-size: 10px;
+        color: #C4C4C4;
+
+        &.active {
+          color: $color-accent;
+        }
+      }
+    }
+  }
+
+  .dialog-button {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+
+    .btn-main {
+      width: 200px;
+      padding: 10px 0;
+      text-transform: uppercase;
+      outline: none;
+      cursor: pointer;
+      border-radius: 18px;
+      background: #00AEEF;
+      border: none;
+      color: $white;
+    }
+
+    .btn-status {
+      margin-right: 16px;
+      width: 200px;
+      padding: 10px 0;
+      text-transform: uppercase;
+      outline: none;
+      cursor: pointer;
+      border-radius: 18px;
+      background: $color-accent;
+      border: none;
+
+      a {
+        text-decoration: none;
+        color: $white;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-break) {
+  ::ng-deep html .cdk-overlay-container mat-dialog-container, body .cdk-overlay-container mat-dialog-container {
+    max-height: 100vh;
+  }
+
+  .onboarding-container {
+    .top-skip {
+      a {
+        font-size: 12px;
+        line-height: 16px;
+      }
+    }
+
+    .mat-dialog-content {
+      .images {
+        width: 240px;
+        height: 150px;
+        object-fit: contain;
+      }
+
+      .title {
+        margin-top: 36px;
+        font-size: 20px;
+        font-weight: bold;
+        line-height: 24px;
+        text-align: center;
+        max-width: 60vw;
+        overflow-wrap: break-word;
+      }
+
+      .description {
+        margin: 16px 0 0 0;
+        font-size: 14px;
+        line-height: 22px;
+        text-align: center;
+        max-height: 100%;
+      }
+    }
+
+    .step-indicator {
+      margin-top: 10px;
+    }
+
+    .dialog-button {
+      flex-direction: column;
+
+      .btn-main {
+        width: 100%;
+      }
+
+      .btn-status {
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 16px;
+        width: 100%;
+      }
+    }
+  }
+}
+
+

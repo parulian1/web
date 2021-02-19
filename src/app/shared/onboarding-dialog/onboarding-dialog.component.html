@@ -1,0 +1,35 @@
+<div class="onboarding-container">
+  <div class="top-skip">
+    <a mat-dialog-close="true">Skip</a>
+  </div>
+
+  <div mat-dialog-content class="mat-dialog-content" *ngFor="let item of data; let i = index">
+    <ng-container *ngIf="currentIndex === i">
+      <div class="images">
+        <img src="{{item.image}}" alt="{{item.name}}"/>
+      </div>
+
+      <div class="title">
+        <span>{{item.name}}</span>
+      </div>
+
+      <div class="description">
+        <span>{{item.description}}</span>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="step-indicator">
+      <span *ngFor="let dots of data; let idx = index" (click)="goTo(idx)">
+        <i class="material-icons" [ngClass]="idx === currentIndex ? 'active' : '' ">circle</i>
+      </span>
+  </div>
+
+  <div class="dialog-button">
+    <button class="btn-main" (click)="goNext()">{{mainButtonText}}</button>
+    <button class="btn-status" *ngIf="isStatusButton">
+      <a [href]="statusButtonHref">{{statusButtonText}}</a>
+    </button>
+  </div>
+
+</div>

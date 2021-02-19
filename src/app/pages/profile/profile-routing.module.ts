@@ -10,7 +10,7 @@ import { EmailVerifyResolver } from './email-verify.resolver';
 import { ProfileComponent } from './profile.component';
 import { EditProfileComponent } from './edit-profile.component';
 import { UserProfileComponent } from './user-profile';
-import { ListAddressComponent, AddressListResolver } from "./list-address";
+import { ListAddressComponent, AddressListResolver } from './list-address';
 import { ChangePasswordComponent } from './change-password';
 import {
   ListWishlistComponent,
@@ -39,6 +39,7 @@ const routes: Routes = [
   {
     path: '',
     component: ProfileComponent,
+    data: {title: extract('EZ Shop')},
     canActivate: [authentication.AuthenticationGuard],
     children: [
       {
