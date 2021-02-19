@@ -195,7 +195,7 @@ export class DropShipListsComponent implements OnInit {
       if (result.body && result.body.length > 0) {
 
         const type = result.body[0].type;
-        const etag = JSON.parse(result.headers.get('etag'));
+        const etag = result.headers.get('etag');
 
         const isShowOnboarding = this.checkEtag(etag);
 
@@ -206,7 +206,8 @@ export class DropShipListsComponent implements OnInit {
             const onboardingDialog = this.dialog.open(OnboardingDialogComponent, {
               width: '800px',
               height: 'auto',
-              data: result.body[0].contents
+              data: result.body[0].contents,
+              panelClass: 'onboarding-dialog-container'
             })
 
             onboardingDialog.afterClosed().subscribe(m => {
