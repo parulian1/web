@@ -35,6 +35,7 @@ import {GTAG, GtagService} from '@app/library/gtagjs/gtag.service';
 import {AuthSocialService} from '@app/services/auth-social.service';
 import {Router} from '@angular/router';
 import { ApmService, ApmErrorHandler } from '@elastic/apm-rum-angular';
+import { MockApiInterceptor } from "@app/core/http/mock-api.interceptor";
 
 
 function load(configService: ConfigService) {

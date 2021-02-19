@@ -13,6 +13,7 @@ export * from './review.service';
 export * from './checkout.service';
 export * from './sla.service';
 export * from './cookie.service';
+export * from './home-video.service';
 
 export * from './client.service';
 export * from './state-checkout.service.';

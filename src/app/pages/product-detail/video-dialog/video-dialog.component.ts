@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogContainer} from "@angular/material/dialog";
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogContainer } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-video-dialog',
@@ -11,18 +11,25 @@ export class VideoDialogComponent implements OnInit, AfterViewInit {
   videoHeight: number;
   videoWidth: number;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {id: string, name: string}) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { id: string, name: string, width?: number, height?: number }) {
+  }
 
   ngOnInit(): void {
   }
 
   onResize() {
-    this.videoWidth = Number(this.youtubePlayer.nativeElement._config.width);
-
-    this.videoHeight = this.videoWidth * 0.6;
+    if (this.data.width && this.data.height) {
+      this.videoWidth = this.data.width;
+      this.videoHeight = this.data.height;
+    } else {
+      this.videoWidth = Number(this.youtubePlayer.nativeElement._config.width);
+      this.videoHeight = this.videoWidth * 0.6;
+    }
   }
 
   ngAfterViewInit(): void {
-    this.onResize();
+    if (this.youtubePlayer) {
+      this.onResize();
+    }
   }
 }

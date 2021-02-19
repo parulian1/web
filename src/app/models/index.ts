@@ -24,3 +24,6 @@ export * from './brand';
 export * from './highlight';
 
 export * from './banner';
+
+export * from './home-video';
+export * from './youtube-oembed';
