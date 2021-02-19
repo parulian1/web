@@ -12,7 +12,7 @@ import { PaginationService } from '@app/services/pagination.service';
 @Component({
   selector: 'app-promotion-list',
   template: `
-    <div class="container" *ngIf="!!entities; else emptyPromoList">
+    <div class="container" *ngIf="entities.length > 0; else emptyPromoList">
       <div class="card" *ngFor="let entity of entities">
         <a [routerLink]="['/promo', entity.href|entityToSlug]">
           <div class="card-item">
