@@ -1,9 +1,11 @@
 @import "src/theme/base";
 
-::ng-deep .mat-dialog-container {
-  overflow: hidden;
-  border-radius: 24px;
-  background: linear-gradient(#00AEEF 35%, white 30%) no-repeat;
+::ng-deep .onboarding-dialog-container {
+  .mat-dialog-container {
+    overflow: hidden;
+    border-radius: 24px;
+    background: linear-gradient(#00AEEF 35%, white 30%) no-repeat;
+  }
 }
 
 .onboarding-container {
