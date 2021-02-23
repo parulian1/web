@@ -1,9 +1,14 @@
 import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from "@angular/router";
-import { Observable, of } from "rxjs";
-
-import { WishlistService } from "@app/services";
 import { Injectable } from "@angular/core";
+import { HttpErrorResponse } from "@angular/common/http";
+
+import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
+
+import { Logger } from "@app/core";
+import { WishlistService } from "@app/services";
+
+const logging = new Logger('wishlist-list.resolver');
 
 @Injectable({
   providedIn: "root",
@@ -26,17 +31,22 @@ export class WishlistListResolver implements Resolve<any> {
         // if status code is 404 its cause by the page doesnt have item,
         // so that we need redirect user back to the first page.
         catchError(() => {
-          this.redirectToPreviousPage();
+          this.redirectToFirstPage();
           return of([]);
         })
       );
   }
 
-  redirectToPreviousPage(): void {
+  redirectToFirstPage(): void {
     this.router.navigate(["/profile/list-wishlist"], {
-      queryParams: { page: this.page - 1 },
+      queryParams: { page: 1 },
       queryParamsHandling: "merge",
       relativeTo: this.route,
     });
+  }
+
+  redirectToProfile(e: HttpErrorResponse): void {
+    logging.warn(`problem with warehouse, status: ${e.status}`);
+    this.router.navigate(["/profile"]);
   }
 }
