@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { AppState } from '@app/store/state/app.state';
 
-import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-social-login';
 import { Store } from '@ngrx/store';
 import { AuthFacebook, AuthGoogle } from '@app/store/actions/auth.actions';
 
@@ -52,8 +52,9 @@ export class SocialButtonComponent implements OnInit {
   }
 
   authFb() {
-    // this.store.dispatch(new AuthFacebook()); # error happens to auth-effect
     this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID).then((user) => {
+      if (!this.checkSocialProvideEmail(user)) { return; }
+
       return this.authUserService.socialConnectFb(user.authToken).toPromise().then(value => {
         this.authService.login({
           access: value.access,
@@ -72,8 +73,9 @@ export class SocialButtonComponent implements OnInit {
   }
 
   authGoogle() {
-    // this.store.dispatch(new AuthGoogle()); # error happens to auth-effect
     this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user) => {
+      if (!this.checkSocialProvideEmail(user)) { return; }
+
       return this.authUserService.socialConnectGoogle(user.authToken).toPromise().then(value => {
         this.authService.login({
           access: value.access,
@@ -89,6 +91,20 @@ export class SocialButtonComponent implements OnInit {
         });
       });
     }).catch(err => this._handleError(err));
+  }
+
+  /**
+   * check if response from socialAuthService (signIn() method) provide email or not.
+   * if not, give customer an inform that customer cannot login.
+   */
+  checkSocialProvideEmail(user: SocialUser): boolean {
+    if (!user?.email) {
+      alert('please provide email for your facebook account ' +
+        'before `login with facebook` on this site.');
+      return false;
+    } else {
+      return true;
+    }
   }
 
   _handleError(err: any): void {
