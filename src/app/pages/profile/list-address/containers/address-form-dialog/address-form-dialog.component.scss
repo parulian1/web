@@ -106,6 +106,30 @@ $desktop: 960px + (2 * $gap) !default;
   }
 }
 
+.chosen-coordinate {
+  margin-bottom: 10px;
+  padding: 5px;
+  background-color: #F5F5F5;
+  size: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &-address {
+    max-width: 247px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  a {
+    text-decoration: underline;
+    margin: 5px;
+    color: $color-accent;
+    cursor: pointer;
+  }
+}
+
 google-map {
   position: relative;
 

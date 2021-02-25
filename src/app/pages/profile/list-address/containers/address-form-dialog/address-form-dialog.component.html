@@ -1,16 +1,17 @@
 <div class="address-form-wrapper">
   <div class="address-form-header">
-    <h1 class="title">
+    <h1 class="title text-title-1">
       {{ data.isUpdated ? "Update Alamat" : "Tambah Alamat" }}
     </h1>
 
-    <div style="" class="close-btn">
-      <span class="close" (click)="onClose()">X</span>
+    <div class="close-btn">
+      <span class="close" *ngIf="showMap === false" (click)="onClose()">X</span>
+      <span class="close" *ngIf="showMap === true" (click)="toggleShowMap()">X</span>
     </div>
     <div style="clear: both"></div>
   </div>
 
-  <div class="address-form-content">
+  <div class="address-form-content" *ngIf="showMap === false">
     <form [formGroup]="form" (submit)="onSubmit()" style="width: 100%">
       <!-- Name (Label of Address) -->
       <div class="field">
@@ -174,11 +175,14 @@
 
       <!-- Map -->
       <div class="field">
-        <label class="label">Pin Alamat*</label>
-        <div class="coordinate" *ngIf="!data.isUpdated && !showMap">
+        <div class="coordinate" *ngIf="!data.isUpdated && !showMap && !form.valid">
           <a (click)="toggleShowMap()">Pilih koordinat alamat</a>
         </div>
-        <app-address-map *ngIf="data.isUpdated || showMap" [parent]="form"> </app-address-map>
+        <div class="chosen-coordinate" *ngIf="data.isUpdated || form.valid">
+          <div class="chosen-coordinate-address">{{statusMessage}}</div>
+          <a  (click)="toggleShowMap()">Ubah</a>
+        </div>
+<!--        <app-address-map *ngIf="data.isUpdated || showMap" [parent]="form"> </app-address-map>-->
       </div>
 
       <div class="field">
@@ -189,5 +193,23 @@
         </div>
       </div>
     </form>
+  </div>
+  <div class="address-map" *ngIf="showMap">
+    <app-checkout-address-map [parent]="form"
+                              [data]="data"
+                              (latitude)="setLatitude($event)"
+                              (longitude)="setLongitude($event)"
+                              (infoMaps)="setInfoMap($event)"
+                              (status)="setStatusLocation($event)"
+                              [location]="{
+                                                     zipcode: form.value.district.postalCode,
+                                                     city: form.value.city,
+                                                     district:form.value.district,
+                                                     lat: form.value.lat,
+                                                     lng: form.value.lng
+                                                 }">
+    </app-checkout-address-map>
+    <div class="maps-error" *ngIf="statusLocation !== ''">{{statusLocation}}</div>
+    <button class="button-maps" (click)="toggleShowMap()" [disabled]="statusLocation !== ''">Pilih Lokasi Ini</button>
   </div>
 </div>

@@ -1,17 +1,17 @@
-import { ActivatedRoute, Router } from "@angular/router";
-import { Component, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
-import { Address } from "@app/models/addresses";
-import { AddressService } from "@app/services/address.service";
-import { ProfileService } from "@app/services/profile.service";
-import { PagedResponse } from "@app/core/pagination";
-import { AddressFormDialogComponent, AddressDeleteDialogComponent } from "./containers";
+import { Address } from '@app/models/addresses';
+import { AddressService } from '@app/services/address.service';
+import { ProfileService } from '@app/services/profile.service';
+import { PagedResponse } from '@app/core/pagination';
+import { AddressFormDialogComponent, AddressDeleteDialogComponent } from './containers';
 
 @Component({
-  selector: "app-list-address",
-  templateUrl: "./list-address.component.html",
-  styleUrls: ["./list-address.component.scss"],
+  selector: 'app-list-address',
+  templateUrl: './list-address.component.html',
+  styleUrls: ['./list-address.component.scss'],
 })
 export class ListAddressComponent implements OnInit {
   page: PagedResponse<Address>;
@@ -33,10 +33,10 @@ export class ListAddressComponent implements OnInit {
   }
 
   showFormDialog(address?: Address): void {
-    let dialog = this.dialog.open(AddressFormDialogComponent, {
+    const dialog = this.dialog.open(AddressFormDialogComponent, {
       data: { address: address || {}, isUpdated: !!address },
-      width: "540px",
-      height: "640px",
+      width: '540px',
+      height: '640px',
     });
 
     dialog.afterClosed().subscribe((result) => {
@@ -53,10 +53,10 @@ export class ListAddressComponent implements OnInit {
   }
 
   showDeleteDialog(address: Address): void {
-    let dialog = this.dialog.open(AddressDeleteDialogComponent, {
-      data: { address: address },
-      width: "464px",
-      height: "190px",
+    const dialog = this.dialog.open(AddressDeleteDialogComponent, {
+      data: { address },
+      width: '464px',
+      height: '190px',
     });
 
     dialog.afterClosed().subscribe((isDeleted) => {
@@ -82,14 +82,17 @@ export class ListAddressComponent implements OnInit {
             result.isDefaultShipping = false;
           });
 
-        let index = this.entities.findIndex((result) => result.href === address.href);
+        const index = this.entities.findIndex((result) => result.href === address.href);
         this.entities[index].isDefaultShipping = true;
-      })}
+      },
+      (err) => console.log('error', err)
+    );
+  }
 
   refreshPage(): void {
-    this.router.navigate(["./"], {
+    this.router.navigate(['./'], {
       queryParams: { page: this.page?.pageNumber || 1 },
-      queryParamsHandling: "merge",
+      queryParamsHandling: 'merge',
       relativeTo: this.activatedRoute,
     });
   }

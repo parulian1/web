@@ -1,20 +1,20 @@
-import {Form, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import { Component, Inject, OnInit, ViewChild } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import {Form, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import { AddressEntity } from "@app/pages/profile/list-address/entities/address.entity";
-import { AddressService } from "@app/services/address.service";
-import { Addresses } from "@app/models/addresses";
-import { Area, District } from "@app/models";
-import { AreaService } from "@app/services";
-import { Logger } from "@app/core";
+import { AddressEntity } from '@app/pages/profile/list-address/entities/address.entity';
+import { AddressService } from '@app/services/address.service';
+import { Addresses } from '@app/models/addresses';
+import { Area, District } from '@app/models';
+import { AreaService } from '@app/services';
+import { Logger } from '@app/core';
 
-const logger = new Logger("address-form-dialog.component.ts");
+const logger = new Logger('address-form-dialog.component.ts');
 
 @Component({
-  selector: "app-address-form-dialog",
-  templateUrl: "./address-form-dialog.component.html",
-  styleUrls: ["./address-form-dialog.component.scss"],
+  selector: 'app-address-form-dialog',
+  templateUrl: './address-form-dialog.component.html',
+  styleUrls: ['./address-form-dialog.component.scss'],
 })
 export class AddressFormDialogComponent implements OnInit {
   public address: AddressEntity;
@@ -28,7 +28,9 @@ export class AddressFormDialogComponent implements OnInit {
   subDistrictChoices: any[];
 
   // default
-  defaultName: string = "My Home";
+  defaultName = 'My Home';
+  statusMessage = 'Pilih koordinat alamat';
+  statusLocation: string;
 
   constructor(
     private fb: FormBuilder,
@@ -36,7 +38,7 @@ export class AddressFormDialogComponent implements OnInit {
     private addressService: AddressService,
 
     public dialogRef: MatDialogRef<AddressFormDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { address: Addresses; isUpdated: boolean }
+    @Inject(MAT_DIALOG_DATA) public data: { address: Addresses; isUpdated: boolean, isDefaultShipping?: boolean }
   ) {}
 
   ngOnInit() {
@@ -50,21 +52,23 @@ export class AddressFormDialogComponent implements OnInit {
       shipToName: [this.data.address.shipToName || null, [Validators.required]],
       phoneNumber: [this.data.address.phoneNumber || null,
         [
-          Validators.required, Validators.pattern("^[0-9]*$"),
-          Validators.minLength(10), Validators.maxLength(15),
+          Validators.required, Validators.pattern('^[0-9]*$'),
+          Validators.minLength(10), Validators.maxLength(15)
         ]
       ],
 
       // fill when selected method triggered
-      state: [null, [Validators.required]],
-      city: [null, [Validators.required]],
+      state: [this.data.address.state || null, [Validators.required]],
+      city: [this.data.address.city || null, [Validators.required]],
       subDistrict: [null, [Validators.required]],
-      district: [null, [Validators.required]],
+      district: [this.data.address.district || null, [Validators.required]],
 
       street: [this.data.address.street || null, [Validators.required, Validators.minLength(10)]],
       lat: [this.data.address?.latitude || null, [Validators.required]],
       lng: [this.data.address?.longitude || null, [Validators.required]],
     });
+
+    this.setInfo(this.form);
   }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
@@ -111,7 +115,7 @@ export class AddressFormDialogComponent implements OnInit {
       } else {
         this.addressService.create(address).subscribe(
           (result) => {
-            this.dialogRef.close({ address, isCreated: true, isSuccess: true, href: result.headers.get("location") });
+            this.dialogRef.close({ address, isCreated: true, isSuccess: true, href: result.headers.get('location') });
           },
           (err) => this._handleError(err)
         );
@@ -130,7 +134,7 @@ export class AddressFormDialogComponent implements OnInit {
     if (err.status === 400) {
       this._setErrors(err.error);
     } else {
-      logger.error("unexpected error:", err);
+      logger.error('unexpected error:', err);
     }
   }
   _setErrors(error: any) {
@@ -147,8 +151,8 @@ export class AddressFormDialogComponent implements OnInit {
       // when updated
       if (this.data.isUpdated) {
         const index = this.stateChoices.findIndex((state) => state.name === this.data.address.state);
-        if (index != -1) {
-          this.form.get("state").setValue(this.stateChoices[index]);
+        if (index !== -1) {
+          this.form.get('state').setValue(this.stateChoices[index]);
         }
       }
     });
@@ -161,15 +165,15 @@ export class AddressFormDialogComponent implements OnInit {
     this.areaService.fetchArea(state.href).subscribe((result) => {
       this.cityChoices = result.body;
 
-      this.form.get("city").setValue(null);
-      this.form.get("subDistrict").setValue(null);
-      this.form.get("district").setValue(null);
+      this.form.get('city').setValue(null);
+      this.form.get('subDistrict').setValue(null);
+      this.form.get('district').setValue(null);
 
       // when updated
       if (this.data.isUpdated) {
         const index = this.cityChoices.findIndex((city) => city.name === this.data.address.city);
-        if (index != -1) {
-          this.form.get("city").setValue(this.cityChoices[index]);
+        if (index !== -1) {
+          this.form.get('city').setValue(this.cityChoices[index]);
         }
       }
     });
@@ -180,27 +184,27 @@ export class AddressFormDialogComponent implements OnInit {
       this.areaService.fetchSubDistrict(city?.href).subscribe((result) => {
         this.subDistrictChoices = [...new Map(result.map((item) => [JSON.stringify(item), item])).values()]; // remove duplicate
 
-        this.form.get("subDistrict").setValue(null);
-        this.form.get("district").setValue(null);
+        this.form.get('subDistrict').setValue(null);
+        this.form.get('district').setValue(null);
 
         // when updated
         if (this.data.isUpdated) {
           // set value
           this.areaService.fetchDistrict(city.href).subscribe((result) => {
             const index = result.body.findIndex((district) => district.district === this.data.address.district);
-            if (index != -1) {
+            if (index !== -1) {
               this.districtChoices = result.body.filter(
                 (district) => district.subDistrict === result.body[index].subDistrict
               );
               const iDistrict = this.districtChoices.findIndex(
                 (district) => district.district === this.data.address.district
               );
-              if (iDistrict != -1) {
+              if (iDistrict !== -1) {
                 const iSubDistrict = this.subDistrictChoices.findIndex(
                   (subDistrict) => subDistrict.name === this.districtChoices[iDistrict].subDistrict
                 );
-                if (iSubDistrict != -1) {
-                  this.form.get("subDistrict").setValue(this.subDistrictChoices[iSubDistrict]);
+                if (iSubDistrict !== -1) {
+                  this.form.get('subDistrict').setValue(this.subDistrictChoices[iSubDistrict]);
                 }
               }
             }
@@ -215,14 +219,53 @@ export class AddressFormDialogComponent implements OnInit {
       this.areaService.fetchDistrict(subDistrict.cityHref).subscribe((result) => {
         this.districtChoices = result.body.filter((district) => district.subDistrict === subDistrict.name);
 
-        this.form.get("district").setValue(null);
+        this.form.get('district').setValue(null);
 
         if (this.data.isUpdated) {
           const index = this.districtChoices.findIndex((district) => district.district === this.data.address.district);
-          if (index != -1) {
-            this.form.get("district").setValue(this.districtChoices[index]);
+          if (index !== -1) {
+            this.form.get('district').setValue(this.districtChoices[index]);
           }
         }
+      });
+    }
+  }
+
+  setLatitude(val: number) {
+    this.form.patchValue({
+      lat: Number(Math.round(Number(val + 'e' + 6)) + 'e-' + 6)
+    });
+  }
+
+  setLongitude(val: number) {
+    this.form.patchValue({
+      lng:Number(Math.round(Number(val + 'e' + 6)) + 'e-' + 6)
+    });
+  }
+
+  setStatusLocation(msg: string) {
+    this.statusLocation = msg;
+  }
+
+  setInfoMap(infoMap: string) {
+    if(infoMap) {
+      this.statusMessage = infoMap;
+    } else {
+      this.statusMessage = '';
+    }
+  }
+
+  setInfo(form: FormGroup) {
+    let address;
+    if (form.value.lat && form.value.lng) {
+      address = form.value.lat + ',' + form.value.lng;
+      this.areaService.getLngLat(address).subscribe((res: any) => {
+        if (res.results.length === 0) {
+          this.statusMessage = '';
+          return;
+        }
+        const data = res.results[0];
+        this.statusMessage = data.formatted_address;
       });
     }
   }

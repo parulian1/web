@@ -33,18 +33,18 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 
 
 @NgModule({
-  declarations: [
-    CheckoutComponent,
-    CheckoutAddressComponent,
-    CheckoutAddressFormDialogComponent,
-    CheckoutAddressMapComponent,
-    AddAddressDialogComponent,
-    ShippingMethodComponent,
-    PaymentMethodComponent,
-    SelectPriceComponent,
-    CartSummaryComponent,
-    CheckoutCreditCardChoiceComponent,
-  ],
+    declarations: [
+        CheckoutComponent,
+        CheckoutAddressComponent,
+        CheckoutAddressFormDialogComponent,
+        CheckoutAddressMapComponent,
+        AddAddressDialogComponent,
+        ShippingMethodComponent,
+        PaymentMethodComponent,
+        SelectPriceComponent,
+        CartSummaryComponent,
+        CheckoutCreditCardChoiceComponent,
+    ],
     imports: [
         CommonModule,
         CheckoutRoutingModule,
@@ -66,7 +66,10 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
         MatCheckboxModule,
       GtagModule
     ],
-  providers: [EntityToSlugPipe, TitleCasePipe]
+    exports: [
+        CheckoutAddressMapComponent
+    ],
+    providers: [EntityToSlugPipe, TitleCasePipe]
 })
 export class CheckoutModule {
 }

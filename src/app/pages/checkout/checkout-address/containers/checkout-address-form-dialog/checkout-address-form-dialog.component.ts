@@ -1,4 +1,4 @@
-import {Component, DoCheck, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {AddressEntity} from '@app/pages/profile/list-address/entities/address.entity';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Area, District} from '@app/models';
@@ -14,7 +14,7 @@ const logger = new Logger('checkout-address-from-dialog');
   templateUrl: './checkout-address-form-dialog.component.html',
   styleUrls: ['./checkout-address-form-dialog.component.scss']
 })
-export class CheckoutAddressFormDialogComponent implements OnInit, DoCheck {
+export class CheckoutAddressFormDialogComponent implements OnInit {
   public address: AddressEntity;
   public form: FormGroup;
   public showMap = false;
@@ -36,9 +36,8 @@ export class CheckoutAddressFormDialogComponent implements OnInit, DoCheck {
     private areaService: AreaService,
     private addressService: AddressService,
     public dialogRef: MatDialogRef<CheckoutAddressFormDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { address: Addresses; isUpdated: boolean }
-  ) {
-  }
+    @Inject(MAT_DIALOG_DATA) public data: { address: Addresses; isUpdated: boolean, isDefaultShipping: boolean }
+  ) {}
 
   ngOnInit() {
     this.initialForm();
@@ -51,16 +50,16 @@ export class CheckoutAddressFormDialogComponent implements OnInit, DoCheck {
       shipToName: [this.data.address.shipToName || null, [Validators.required]],
       phoneNumber: [this.data.address.phoneNumber || null,
         [
-          Validators.required, Validators.pattern("^[0-9]*$"),
+          Validators.required, Validators.pattern('^[0-9]*$'),
           Validators.minLength(10), Validators.maxLength(15),
         ]
       ],
 
       // fill when selected method triggered
-      state: [this.data.address.state ||null, [Validators.required]],
-      city: [this.data.address.city ||null, [Validators.required]],
+      state: [this.data.address.state || null, [Validators.required]],
+      city: [this.data.address.city || null, [Validators.required]],
       subDistrict: [null, [Validators.required]],
-      district: [this.data.address.district ||null, [Validators.required]],
+      district: [this.data.address.district || null, [Validators.required]],
 
       street: [this.data.address.street || null, [Validators.required, Validators.minLength(10)]],
       lat: [this.data.address?.latitude || null, [Validators.required]],
@@ -127,7 +126,8 @@ export class CheckoutAddressFormDialogComponent implements OnInit, DoCheck {
         district.postalCode,
         street,
         lat,
-        lng
+        lng,
+        this.data.isDefaultShipping
       );
 
       if (this.data.isUpdated) {
@@ -159,7 +159,7 @@ export class CheckoutAddressFormDialogComponent implements OnInit, DoCheck {
     this.showMap = !this.showMap;
   }
 
-  _handleError(err: any) {
+  _handleError(err) {
     if (err.status === 400) {
       this._setErrors(err.error);
     } else {
@@ -169,7 +169,7 @@ export class CheckoutAddressFormDialogComponent implements OnInit, DoCheck {
 
   _setErrors(error: any) {
     Object.keys(error).forEach((field: any) => {
-      this.form.controls[field].setErrors({ fromServer: error[field][0] });
+      this.form.controls[field].setErrors({fromServer: error[field][0]});
     });
   }
 
@@ -276,10 +276,6 @@ export class CheckoutAddressFormDialogComponent implements OnInit, DoCheck {
 
   setStatusLocation(msg: string) {
     this.statusLocation = msg;
-  }
-
-  ngDoCheck(): void {
-
   }
 
   setInfoMap(infoMap: string) {
