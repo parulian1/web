@@ -12,7 +12,10 @@ import { PaymentMethodType } from '@app/models/payment-method';
       </div>
       <div class="payment-logo">
         <ng-container *ngFor="let childPaymentMethod of childPaymentMethods;">
-          <img [src]="childPaymentMethod.logo" [alt]="childPaymentMethod.name"  appImgResize />
+          <img *ngIf="getIsCdnImage(childPaymentMethod.logo); else elseImage" [src]="childPaymentMethod.logo" [alt]="childPaymentMethod.name"  appImgResize />
+          <ng-template #elseImage>
+            <img [src]="childPaymentMethod.logo" [alt]="childPaymentMethod.name" />
+          </ng-template>
         </ng-container>
 
       </div>
@@ -39,6 +42,10 @@ export class PaymentComponent implements  OnInit {
         });
       });
     });
+  }
+
+  getIsCdnImage(logo: string): boolean {
+    return logo.includes('cdn');
   }
 
 }
