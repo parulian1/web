@@ -127,7 +127,6 @@ export class CheckoutAddressFormDialogComponent implements OnInit {
         street,
         lat,
         lng,
-        this.data.isDefaultShipping
       );
 
       if (this.data.isUpdated) {
