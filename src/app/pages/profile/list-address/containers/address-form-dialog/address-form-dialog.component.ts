@@ -99,7 +99,8 @@ export class AddressFormDialogComponent implements OnInit {
         district.postalCode,
         street,
         lat,
-        lng
+        lng,
+        this.data.isDefaultShipping
       );
 
       if (this.data.isUpdated) {

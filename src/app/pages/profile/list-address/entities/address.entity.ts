@@ -9,10 +9,11 @@ export class AddressEntity {
   street: string;
   lat: number;
   lng: number;
+  isDefaultShipping?: boolean;
 
   constructor(name: string, shipToName: string, phoneNumber: string | number, state: string,
               city: string, district: string, zipCode: number, street: string,
-              lat: number, lng: number) {
+              lat: number, lng: number, isDefaultShipping?: boolean) {
     this.name = name;
     this.shipToName = shipToName;
     this.phoneNumber = phoneNumber;
@@ -23,6 +24,7 @@ export class AddressEntity {
     this.street = street;
     this.lat = lat;
     this.lng = lng;
+    this.isDefaultShipping = isDefaultShipping;
   }
 
   toObject() {

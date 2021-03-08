@@ -90,6 +90,18 @@ $desktop: 960px + (2 * $gap) !default;
   }
 }
 
+.button-maps {
+  border: none;
+  outline: none;
+  width: 100%;
+  margin-top: 8px;
+  border-radius: $border-radius;
+  background-color: $color-accent;
+  cursor: pointer;
+  height: 40px;
+  color: $white;
+}
+
 
 /* 3. Coordinate */
 .coordinate {
