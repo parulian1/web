@@ -23,7 +23,7 @@ export class CredentialsService {
   private _notification: Notification | null = null;
 
   constructor(
-              private store: Store<AppState>) {
+    private store: Store<AppState>) {
     const savedCredentials = sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey);
     if (savedCredentials) {
       this._credentials = JSON.parse(savedCredentials);
@@ -97,6 +97,14 @@ export class CredentialsService {
    * @return The user credentials or null if the user is not authenticated.
    */
   get credentials(): Credentials | null {
+    const savedCreds = localStorage.getItem(credentialsKey);
+
+    if (savedCreds) {
+      this._credentials = JSON.parse(savedCreds);
+    } else {
+      this._credentials = null;
+    }
+
     return this._credentials;
   }
 

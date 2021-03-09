@@ -14,7 +14,7 @@ export class TokenInterceptor implements HttpInterceptor {
     const reqUrl: RegExp = /^\/api(.*)/i;
 
     if (req.url.startsWith(environment.BASE_API_URL) || req.url.startsWith('/api')) {
-      if (this.creds.isAuthenticated()) {
+      if (this.creds.isAuthenticated() && !this.creds.isTokenExpired && !this.creds.isRefreshTokenExpired) {
         req = req.clone({
           headers: req.headers
             .set('Authorization', 'Bearer ' + this.creds.token)

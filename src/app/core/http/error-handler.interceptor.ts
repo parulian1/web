@@ -9,6 +9,7 @@ import {Logger} from '../logger.service';
 import {Router} from "@angular/router";
 import {AppState} from "../../store/state/app.state";
 import {Logout} from "../../store/actions/auth.actions";
+import { AuthenticationService } from "@app/core/authentication";
 
 const log = new Logger('ErrorHandlerInterceptor');
 
@@ -21,7 +22,8 @@ const log = new Logger('ErrorHandlerInterceptor');
 export class ErrorHandlerInterceptor implements HttpInterceptor {
   constructor(
     private router: Router,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private authService: AuthenticationService
   ) {
   }
 
@@ -37,8 +39,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
         log.debug('error-handler', response);
       }
       if (response.status === 401 || response.status === 403) {
-          this.store.dispatch(new Logout());
-          this.router.navigate(['/login']);
+          this.authService.logout();
       }
     }
     throw response;

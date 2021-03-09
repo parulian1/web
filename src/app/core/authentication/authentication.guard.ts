@@ -7,6 +7,7 @@ import {Store} from '@ngrx/store';
 import {AppState} from 'src/app/store/state/app.state';
 import {Logout} from 'src/app/store/actions';
 import {AuthUserService} from '../../services/auth-user.service';
+import { AuthenticationService } from "@app/core/authentication/authentication.service";
 
 const log = new Logger('AuthenticationGuard');
 
@@ -17,6 +18,7 @@ export class AuthenticationGuard implements CanActivate {
 
   constructor(private router: Router,
               private credentialsService: CredentialsService,
+              private authService: AuthenticationService,
               private authUserService: AuthUserService,
               private store: Store<AppState>
   ) {
@@ -34,7 +36,7 @@ export class AuthenticationGuard implements CanActivate {
           return true
         }
         // TODO: Force user to login page for now
-        this.store.dispatch(new Logout());
+        this.authService.logout();
         this.router.navigate(['/login'], {queryParams: {redirect: state.url}, replaceUrl: true});
         return false
       }
@@ -42,7 +44,7 @@ export class AuthenticationGuard implements CanActivate {
     }
 
     if (this.credentialsService.isRefreshTokenExpired) {
-      this.store.dispatch(new Logout());
+      this.authService.logout();
     }
 
 
