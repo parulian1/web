@@ -45,6 +45,9 @@ export class PaymentComponent implements  OnInit {
   }
 
   getIsCdnImage(logo: string): boolean {
+    if (!logo) {
+      return false;
+    }
     return logo.includes('cdn');
   }
 
