@@ -41,9 +41,9 @@ import {ProductDetail} from '@app/models/product-detail';
         </h2>
       </a>
 
-      <a [routerLink]="['/brand', product?.vendor.href|entityToSlug]" class="vendor"
+      <a [routerLink]="['/brand', product?.vendor?.href|entityToSlug]" class="vendor"
          [ngStyle]="{'font-size': page === 'bdp-mobile'? '12px': ''}">
-        {{ product?.vendor.name }}
+        {{ product?.vendor?.name }}
       </a>
 
       <app-product-discount-highlight [product]="product" [page]="page"></app-product-discount-highlight>
@@ -56,7 +56,7 @@ import {ProductDetail} from '@app/models/product-detail';
         </div>
         <div class="right">
           <span class="title">{{product.name}}</span>
-          <span class="vendor">{{product.vendor.name}}</span>
+          <span class="vendor">{{product.vendor?.name}}</span>
           <app-product-discount-highlight [product]="product"
                                           (priceSelected)="getPriceSelected($event)"></app-product-discount-highlight>
           <button class="btn-cart" (click)="addToCart(product.href, product)">Tambah
