@@ -50,6 +50,7 @@ import {ImgResizeDirective} from '@app/shared/nus-img-resize';
 import { OnboardingDialogComponent } from '@app/shared/onboarding-dialog';
 import { VideoSliderComponent } from '@app/shared/video-slider';
 import { VideoCardComponent } from './video-card/video-card.component';
+import { OrderCancelDialogComponent } from './order-cancel-dialog/order-cancel-dialog.component';
 
 @NgModule({
   imports: [
@@ -108,6 +109,7 @@ import { VideoCardComponent } from './video-card/video-card.component';
     OnboardingDialogComponent,
     VideoSliderComponent,
     VideoCardComponent,
+    OrderCancelDialogComponent,
   ],
     exports: [
         LoaderComponent,
@@ -150,6 +152,7 @@ import { VideoCardComponent } from './video-card/video-card.component';
         ShareSocialButtonsDialogComponent,
         SharedShippingMethodComponent,
         VideoSliderComponent,
+        OrderCancelDialogComponent,
     ],
 })
 export class SharedModule {

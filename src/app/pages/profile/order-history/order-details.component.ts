@@ -4,13 +4,15 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Order} from '@app/models/order';
 import {OrderShipmentService} from '@app/services/order-shipment.service';
 import {Choice} from '@app/models/drf';
-import {CheckoutService} from '@app/services';
+import { CheckoutService, OrderHistoryService } from '@app/services';
 
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AlertDialogComponent} from '@app/shared/alert-dialog';
 import {getBank, AbstractBank} from '@app/pages/order-summary/utils';
 import { PaymentMethodService } from "@app/services/payment-method.service";
 import { PaymentMethodType, PaymentTypeChoices } from "@app/models/payment-method";
+import { OrderCancelDialogComponent } from "@app/shared/order-cancel-dialog/order-cancel-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 
 
 /**
@@ -352,11 +354,11 @@ import { PaymentMethodType, PaymentTypeChoices } from "@app/models/payment-metho
                       Lanjutkan Pembayaran
                   </button>
 
-                  <button class="cancel-order"
-                          (click)="onCancelOrder()"
-                          *ngIf="order.status === 'unpaid'">
-                      Batalkan Pesanan
-                  </button>
+                <button class="cancel-order"
+                        (click)="openOrderCancelDialog()"
+                        *ngIf="order.status === 'unpaid'">
+                  Batalkan Pesanan
+                </button>
 
                   <button class="confirm-order"
                           (click)="redirectToOrderConfirm()"
@@ -393,9 +395,11 @@ export class OrderDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private orderShipmentService: OrderShipmentService,
+    private orderHistoryService: OrderHistoryService,
     private paymentMethodService: PaymentMethodService,
     private service: CheckoutService,
     private snackbar: MatSnackBar,
+    private dialog: MatDialog,
   ) {
   }
 
@@ -503,10 +507,21 @@ export class OrderDetailsComponent implements OnInit {
     }, error => this._handleError(error));
   }
 
-  onCancelOrder(): void {
-    // this.service.cancelPayment(this.order.orderNumber).subscribe(resp => {
-    //   this._refreshPage();
-    // }, error => error => this._handleError(error));
+  openOrderCancelDialog(): void {
+    const dialogRef = this.dialog.open(OrderCancelDialogComponent, {
+      // height: '10vh',
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe(({ isCancel }: { isCancel: boolean }) => {
+      if (isCancel) { this.onOrderCancel(); }
+    })
+  }
+
+  onOrderCancel(): void {
+    this.orderHistoryService.cancelOrder(this.order.orderNumber).subscribe(resp => {
+      this._refreshPage();
+    }, error => error => this._handleError(error));
   }
 
   isCCPayment(): boolean {

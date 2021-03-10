@@ -2,6 +2,10 @@ import {Component, Input, OnInit} from "@angular/core";
 import {OrderSummary, SummaryPayment} from "@app/models/checkout";
 import { PaymentMethodService } from "@app/services/payment-method.service";
 import { PaymentMethodType, PaymentTypeChoices } from "@app/models/payment-method";
+import { OrderHistoryService } from "@app/services";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
+import { OrderCancelDialogComponent } from "@app/shared/order-cancel-dialog/order-cancel-dialog.component";
 
 @Component({
   selector: "app-order-manual-transfer",
@@ -98,7 +102,7 @@ import { PaymentMethodType, PaymentTypeChoices } from "@app/models/payment-metho
                 </a>
               </div>&nbsp;
               <div class="box has-text-centered">
-                <a class="button-cancel" [routerLink]="['/profile/orders/', orderSummary.orderNumber]">
+                <a class="button-cancel" (click)="openOrderCancelDialog()">
                   Batalkan Pesanan
                 </a>
               </div>
@@ -130,11 +134,16 @@ import { PaymentMethodType, PaymentTypeChoices } from "@app/models/payment-metho
 export class OrderSummaryManualTransferComponent implements OnInit {
   @Input() orderSummary: OrderSummary;
 
+  orderNumber: string;
   payment: SummaryPayment;
   manualTransfers: PaymentMethodType[] = [];
 
   constructor(
     private paymentMethodService: PaymentMethodService,
+    private orderHistory: OrderHistoryService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -148,6 +157,8 @@ export class OrderSummaryManualTransferComponent implements OnInit {
       ...this.orderSummary.payment,
       dateExpired: this.dateAddDays(this.orderSummary.created),
     };
+
+    this.orderNumber = this.route.snapshot.queryParams.order_id;
   }
 
 
@@ -166,5 +177,24 @@ export class OrderSummaryManualTransferComponent implements OnInit {
     const dateFormatted = new Date(this.orderSummary.created);
     dateFormatted.setDate(dateFormatted.getDate() + days);
     return dateFormatted.toISOString();
+  }
+
+  openOrderCancelDialog(): void {
+    const dialogRef = this.dialog.open(OrderCancelDialogComponent, {
+      // height: '10vh',
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe(({ isCancel }: { isCancel: boolean }) => {
+      if (isCancel) { this.onOrderCancel(); }
+    })
+  }
+  onOrderCancel(): void {
+    if (this.orderNumber) {
+      this.orderHistory.cancelOrder(this.orderNumber).subscribe(() => {
+        //
+        this.router.navigateByUrl(`profile/orders/${this.orderNumber}`)
+      });
+    }
   }
 }
