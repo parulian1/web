@@ -9,7 +9,7 @@ variables:
   FEED_ID: 61101818-286e-47e5-b86b-ef800ee02eea
   # Don't forget add trailing slash ('/').
   BUILD_DEST_PATH: dist/martha-web/browser/
-  APM_URL: https://f51291eec6a94ce2a7309a312be33aa7.apm.ap-southeast-1.aws.cloud.es.io:443
+  APM_URL: https://apm.bhisma.cloud/
 
 resources:
   repositories:
@@ -18,22 +18,41 @@ resources:
       name: Operations/pipeline-templates
 
 jobs:
-  - template: web/unit_test.yml@templates
-    parameters:
-      feedId: $(FEED_ID)
+  - job: unit_test
+    displayName: Run Unit Test
+    steps:
+      - template: web/unit_test.yml@templates
+        parameters:
+          feedId: $(FEED_ID)
 
-  - template: web/build.yml@templates
-    parameters:
-      appEnv: production
-      jobName: build_packaging_prod
-      feedId: $(FEED_ID)
-      buildPath: $(BUILD_DEST_PATH)
-      envVars: 'APM_NAME=mt-web APM_ACTIVE=True APM_URL=$(APM_URL)'
+  - job: build_prod
+    displayName: Build & Packaging PROD
+    dependsOn: unit_test
+    condition: |
+      and(
+        succeeded(),
+        ne(variables['Build.Reason'], 'PullRequest')
+      )
+    steps:
+    - template: web/build.yml@templates
+      parameters:
+        appEnv: production
+        feedId: $(FEED_ID)
+        buildPath: $(BUILD_DEST_PATH)
+        envVars: 'APM_NAME=mt-web APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
 
-  - template: web/build.yml@templates
-    parameters:
-      appEnv: staging
-      jobName: build_packaging_staging
-      feedId: $(FEED_ID)
-      buildPath: $(BUILD_DEST_PATH)
-      envVars: 'APM_NAME=mt-web-staging APM_ACTIVE=False APM_URL=$(APM_URL)'
+  - job: build_staging
+    displayName: Build & Packaging Staging
+    dependsOn: unit_test
+    condition: |
+      and(
+        succeeded(),
+        ne(variables['Build.Reason'], 'PullRequest')
+      )
+    steps:
+    - template: web/build.yml@templates
+      parameters:
+        appEnv: staging
+        feedId: $(FEED_ID)
+        buildPath: $(BUILD_DEST_PATH)
+        envVars: 'APM_NAME=mt-web-staging APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL)'
