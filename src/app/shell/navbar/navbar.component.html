@@ -3,8 +3,6 @@
     <span>
       <a href="#" *ngIf="!!item && item.children.length > 0">{{item.title}}</a>
       <a [href]="item.url" *ngIf="!item.children || item.children.length ===0">{{item.title}}</a>
-<!--      <app-nus-link class="menu-navbar-item" *ngIf="!item.children || item.children.length ===0" [href]="item.url"-->
-<!--                    [title]="item.title"></app-nus-link>-->
     </span>
     <div class="navbar-content" [class.has-child]="!!item.children && item.children.length > 0" *ngIf="!!item.children && item.children.length > 0">
       <div class="side">
