@@ -130,21 +130,22 @@ import { PaymentMethodType, PaymentTypeChoices } from "@app/models/payment-metho
                   </div>
 
                   <div class="payment-deadline-box" *ngIf="order.status === 'unpaid'">
+                    <div style="flex: 1">
+                      <span class="payment-deadline-label">Batas Pembayaran</span>
+                    </div>
                       <div style="flex: 1">
-                          <span class="payment-deadline-label">Batas Pembayaran</span>
-                      </div>
-                      <div style="flex: 1">
-                          <ng-container *ngIf="order.orderPayment?.meta; else orderCreated">
-                            <span class="payment-deadline-datetime">
-                              {{ order.orderPayment?.meta.dateExpired | date:'dd/MM/yyyy HH:mm' }}
-                            </span>
-                          </ng-container>
+                        <span *ngIf="order.orderPayment.paymentGateway.type === 'manual_transfer'" class="payment-deadline-datetime">{{ manualPaymentExpiredDate | date: "EEEE, d/MM/yyyy HH:mm" }}</span>
+                        <ng-container *ngIf="order.orderPayment?.meta">
+                          <span class="payment-deadline-datetime">
+                            {{ order.orderPayment?.meta.dateExpired | date:'dd/MM/yyyy HH:mm' }}
+                          </span>
+                        </ng-container>
 
-                          <div #orderCreated>
-                              <span class="payment-deadline-datetime">
-                                {{ manualExpiredTime | date:'dd/MM/yyyy HH:mm' }}
-                              </span>
-                          </div>
+<!--                          <div #orderCreated>-->
+<!--                              <span class="payment-deadline-datetime">-->
+<!--                                {{ manualExpiredTime | date:'dd/MM/yyyy HH:mm' }}-->
+<!--                              </span>-->
+<!--                          </div>-->
                       </div>
                   </div>
 
@@ -383,6 +384,7 @@ export class OrderDetailsComponent implements OnInit {
   status: Choice[];
   bank: AbstractBank;
   mobile = false;
+  manualPaymentExpiredDate: string;
 
   manualTransfers: PaymentMethodType[] = [];
   manualExpiredTime: string;
@@ -447,6 +449,8 @@ export class OrderDetailsComponent implements OnInit {
         .filter(pList => pList.type === PaymentTypeChoices.MANUAL_TRANSFER)
         .map(payment => payment.paymentMethods)[0];
     });
+
+    this.manualPaymentExpiredDate = this.dateAddDays(this.order.created);
   }
 
   copyToClipboard(vaNumber: string, text?: string) {
@@ -462,6 +466,12 @@ export class OrderDetailsComponent implements OnInit {
         alert(text);
       }
     }
+  }
+
+  dateAddDays(datetime: string, days: number = 1): string {
+    const dateFormatted = new Date(this.order.created);
+    dateFormatted.setDate(dateFormatted.getDate() + days);
+    return dateFormatted.toISOString();
   }
 
   changeSource($event: any) {
