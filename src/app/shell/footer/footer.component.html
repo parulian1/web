@@ -48,15 +48,7 @@
     </div>
     <div class="payment-shipping">
       <app-footer-payment></app-footer-payment>
-      <div class="list">
-        <div class="title">
-          <span>Pengiriman</span>
-        </div>
-        <div class="shipping-wrapper">
-          <app-footer-shipping [shippings]="shippings$ | async">
-          </app-footer-shipping>
-        </div>
-      </div>
+      <app-footer-shipping [shippings]="shippings$ | async"></app-footer-shipping>
     </div>
   </div>
 </div>

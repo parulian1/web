@@ -6,8 +6,14 @@ import { DEFAULT_SHIPPING_ICON_NOT_FOUND } from "@app/shell/footer/constants";
 @Component({
   selector: 'app-footer-shipping',
   template: `
-    <div style="display: inline;">
-      <img *ngFor="let shipping of shippings" [src]="getIconOrDefault(shipping)"/>
+    <div class="list">
+      <div class="title">
+        <span>Pengiriman</span>
+      </div>
+
+      <div class="shipping-logo">
+        <img *ngFor="let shipping of shippings" [src]="getIconOrDefault(shipping)"/>
+      </div>
     </div>
   `,
   styleUrls: [`./footer-shipping.component.scss`],
