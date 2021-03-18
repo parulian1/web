@@ -1,13 +1,15 @@
-import {Component, DoCheck, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {PaymentMethod, PaymentMethodType} from '@app/models/payment-method';
-import {MatExpansionPanel} from "@angular/material/expansion";
-import {MatRadioChange} from "@angular/material/radio";
-import {StateCheckout} from "@app/services";
-import {Logger} from "@app/core";
-import {EntityToSlugPipe} from "@app/shared/utils/entity-to-slug.pipe";
-import { MatDialog } from "@angular/material/dialog";
-import { CheckoutCreditCardChoiceComponent } from "@app/pages/checkout/containers";
+import { Component, DoCheck, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { PaymentMethod, PaymentMethodType } from '@app/models/payment-method';
+import { MatExpansionPanel } from '@angular/material/expansion';
+import { MatRadioChange } from '@angular/material/radio';
+import { StateCheckout } from '@app/services';
+import { ConfigService, Logger } from '@app/core';
+import { EntityToSlugPipe } from '@app/shared/utils/entity-to-slug.pipe';
+import { MatDialog } from '@angular/material/dialog';
+import { CheckoutCreditCardChoiceComponent } from '@app/pages/checkout/containers';
+import { GtagService } from '@app/library/gtagjs/gtag.service';
+import { AnalyticGtmService } from "@app/services/web-analytic";
 
 const log = new Logger('Payment');
 
@@ -25,11 +27,16 @@ export class PaymentMethodComponent implements OnInit, DoCheck {
   payments: PaymentMethodType;
   mode = 'idle';
   isDisabled: boolean;
+  gaAccountType = '';
+
 
   constructor(private route: ActivatedRoute,
               public stateService: StateCheckout,
               private pipe: EntityToSlugPipe,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              public gtag: GtagService,
+              private appConfigService: ConfigService,
+              private analyticGtmService: AnalyticGtmService) {
   }
 
   ngOnInit(): void {
@@ -38,6 +45,9 @@ export class PaymentMethodComponent implements OnInit, DoCheck {
         this.paymentLists = data.payment;
       });
     this.isDisabled = true;
+
+    this.gaAccountType = this.appConfigService.config?.gaAccountType;
+
   }
 
   ngDoCheck(): void {
@@ -62,6 +72,11 @@ export class PaymentMethodComponent implements OnInit, DoCheck {
     this.stateService.statePaymentMethod = this.paymentChosen;
     this.stateService.statePayment = this.payments;
     this.mode = 'default';
+    if (this.gaAccountType === 'gtm') {
+      this.analyticGtmService.setCheckoutEvents(3,'Select Payment');
+    } else {
+      this.gtag.setCheckoutOption(3, 'Select Payment');
+    }
   }
 
   changeMode() {
@@ -71,8 +86,8 @@ export class PaymentMethodComponent implements OnInit, DoCheck {
   openCreditCardChoiceDialog(item: PaymentMethod) {
     let dialog = this.dialog.open(CheckoutCreditCardChoiceComponent, {
       data: {},
-      width: "540px",
-      height: "600px",
+      width: '540px',
+      height: '600px',
     });
 
     dialog.afterClosed().subscribe(result => {

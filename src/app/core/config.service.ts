@@ -1,14 +1,16 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
 import { Configuration, IConfigChatService } from '@app/models/configuration';
-import { catchError, map, tap } from 'rxjs/operators';
 import { EMPTY, forkJoin } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigService {
   config: Configuration = new Configuration();
+  analyticToolBaseUrl = '/client/analytic-tool';
 
   chatBaseUrl = '/client/chat-service'
 
@@ -45,6 +47,7 @@ export class ConfigService {
       map((result: { commonConfig, chatConfig }) => result.commonConfig),
     ).toPromise();
   }
+
 
   loadConfig(): Promise<Configuration> {
     return this.processConfig();

@@ -141,6 +141,11 @@ export class GtagService {
   }
 
   public setCheckoutOption(checkout_step?: number, checkout_option?: string) {
-    return this.event('set_checkout_option', {checkout_step, checkout_option});
+    return this.event('set_checkout_events', {checkout_step, checkout_option});
   }
+
+  public setShippingInformation(checkout_step?: number, checkout_option?: string) {
+    return this.event('choose_shipping_information', {checkout_step, checkout_option});
+  }
+
 }

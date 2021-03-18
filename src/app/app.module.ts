@@ -1,5 +1,5 @@
 import '@angular/common/locales/global/id';
-import {APP_INITIALIZER, ErrorHandler, Inject, LOCALE_ID, NgModule, Optional} from '@angular/core';
+import { APP_INITIALIZER, ErrorHandler, Inject, LOCALE_ID, NgModule, Optional } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -9,19 +9,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { environment } from '@env/environment';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import {
-  FacebookLoginProvider,
-  GoogleLoginProvider,
-  SocialAuthServiceConfig,
-  SocialLoginModule
-} from 'angularx-social-login';
+import { SocialLoginModule } from 'angularx-social-login';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { GoogleMapsModule } from '@angular/google-maps';
 
 import { AuthModule } from '@app/auth/auth.module';
 import { ConfigService, CoreModule, TokenInterceptor } from '@app/core';
 import { ShellModule } from '@app/shell';
-import { AuthUserService}  from '@app/services';
+import { AuthUserService } from '@app/services';
 import { SharedModule } from '@app/shared';
 import { effects } from '@app/store';
 import { reducers } from '@app/store/state/app.state';
@@ -29,13 +24,16 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MaterialModule } from './material.module';
 import { FocusedLayoutComponent, MainLayoutComponent } from '@app/layouts';
-import {GtagModule} from '@app/library/gtagjs/gtag.module';
-import {GtagConfigToken, gtagFactory} from '@app/library/gtagjs/gtag-factory';
-import {GTAG, GtagService} from '@app/library/gtagjs/gtag.service';
-import {AuthSocialService} from '@app/services/auth-social.service';
-import {Router} from '@angular/router';
-import { ApmService, ApmErrorHandler } from '@elastic/apm-rum-angular';
-import { MockApiInterceptor } from "@app/core/http/mock-api.interceptor";
+import { GtagModule } from '@app/library/gtagjs/gtag.module';
+import { GtagConfigToken, gtagFactory } from '@app/library/gtagjs/gtag-factory';
+import { GTAG, GtagService } from '@app/library/gtagjs/gtag.service';
+import { AuthSocialService } from '@app/services/auth-social.service';
+import { Router } from '@angular/router';
+import { ApmErrorHandler, ApmService } from '@elastic/apm-rum-angular';
+import { IWebAnalyticConfig } from '@app/shared/web-analytic/schemas';
+
+
+import { WEB_ANALYTIC_LOCAL_CONFIG_TOKEN } from '@app/shared/web-analytic/tokens';
 
 
 function load(configService: ConfigService) {
@@ -94,14 +92,15 @@ function loadSocial(authSocialService: AuthSocialService) {
       deps: [AuthSocialService],
       multi: true
     },
+    // Analytic Tools
     GtagService,
     {
       provide: GtagConfigToken,
       deps: [ConfigService, APP_INITIALIZER],
       useFactory: (configService: ConfigService) => {
         return {
-          targetId: configService?.config.gaAccountId
-      }
+          targetId: configService.config?.gaAccountId || 'GTMID',
+        }
       }
     },
     {
@@ -110,13 +109,31 @@ function loadSocial(authSocialService: AuthSocialService) {
       deps: [[new Optional(), new Inject(GtagConfigToken)]]
     },
     {
+      provide: 'googleTagManagerId',
+      deps: [ConfigService, APP_INITIALIZER],
+      useFactory: (configService: ConfigService) => {
+        return configService.config?.gaAccountId || 'GTMID';
+      }
+    },
+    {
+      provide: WEB_ANALYTIC_LOCAL_CONFIG_TOKEN,
+      deps: [ConfigService, APP_INITIALIZER],
+      useFactory: (configService: ConfigService): IWebAnalyticConfig => {
+        return {
+          id: configService.config?.gaAccountId || 'GTMID',
+          type: configService.config?.gaAccountType || 'gtm'
+        };
+      }
+    },
+    // ----- /
+    {
       provide: 'SocialAuthServiceConfig',
       deps: [AuthSocialService, APP_INITIALIZER],
       useFactory: (authSocialService: AuthSocialService) => {
         return authSocialService.fetchConfig();
       },
     },
-    {provide: LOCALE_ID, useValue: 'id'},
+    { provide: LOCALE_ID, useValue: 'id' },
     {
       provide: ApmService,
       useClass: ApmService,

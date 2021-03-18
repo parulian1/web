@@ -5,8 +5,10 @@ import {Router} from '@angular/router';
 import {CartService} from '@app/services/cart.service';
 import {MatDialog} from '@angular/material/dialog';
 import {DeleteCartDialogComponent} from '@app/pages/cart/delete-cart-dialog';
-import {GtagService} from '@app/library/gtagjs/gtag.service';
-import {Action} from '@app/library/gtagjs/gtag-definitions';
+import { AnalyticGtmService } from '@app/services/web-analytic';
+import { GtagService } from '@app/library/gtagjs/gtag.service';
+import { Action } from '@app/library/gtagjs/gtag-definitions';
+import { ConfigService } from "@app/core";
 
 @Component({
   selector: 'app-cart-quantity',
@@ -18,16 +20,21 @@ export class CartQuantityComponent implements OnInit {
   line: LineItems;
   id: string;
 
+  gaAccountType = '';
+
   constructor(private pipe: EntityToSlugPipe,
               private service: CartService,
               private router: Router,
               private dialog: MatDialog,
-              private gtag: GtagService) {
+              private gtag: GtagService,
+              private configService: ConfigService,
+              private analyticGtmService: AnalyticGtmService) {
     // TODO: Refactor to Store Based
   }
 
   ngOnInit(): void {
     this.id = this.pipe.transform(this.line.href);
+    this.gaAccountType = this.configService.config?.gaAccountType;
   }
 
   public get selectedQuantity(): number {
@@ -54,15 +61,19 @@ export class CartQuantityComponent implements OnInit {
     } else {
       this.selectedQuantity--;
       this.service.updateCart(itemId, this.selectedQuantity).subscribe(res => {
-        this.gtag.removeFromCart({
-          items: [{
-            id: this.line.href,
-            name: this.line.product.name,
-            brand: this.line.product?.brand?.name || '',
-            quantity: 1,
-            price: this.line.product?.unitPrice?.current || 0,
-          }]
-        } as Action)
+        if (this.gaAccountType === 'gtm') {
+          this.analyticGtmService.trackRemoveFromCart(this.line.product, 1);
+        } else {
+          this.gtag.removeFromCart({
+            items: [{
+              id: this.line.href,
+              name: this.line.product.name,
+              brand: this.line.product?.brand?.name || '',
+              quantity: 1,
+              price: this.line.product?.unitPrice?.current || 0,
+            }]
+          } as Action);
+        }
         this.router.navigateByUrl('/cart');
       });
     }

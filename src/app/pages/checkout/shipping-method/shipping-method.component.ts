@@ -8,6 +8,7 @@ import {ShippingMethodService} from '@app/services/shipping-method.service';
 import {EntityToSlugPipe} from '@app/shared/utils/entity-to-slug.pipe';
 import {Logger} from '@app/core';
 import {StateCheckout} from "@app/services";
+import { AnalyticGtmService } from "@app/services/web-analytic";
 
 const log = new Logger('ShippingMethod');
 
@@ -40,7 +41,8 @@ export class ShippingMethodComponent implements OnInit {
               private shippingServices: ShippingMethodService,
               private pipe: EntityToSlugPipe,
               private router: Router,
-              public stateService: StateCheckout) {
+              public stateService: StateCheckout,
+              private analyticGtmService: AnalyticGtmService) {
   }
 
   ngOnInit(): void {

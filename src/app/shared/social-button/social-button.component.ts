@@ -11,6 +11,7 @@ import { AuthUserService } from "@app/services";
 import { AuthenticationService } from "@app/core/authentication";
 import {AuthSocialService} from '@app/services/auth-social.service';
 import { GtagService } from '@app/library/gtagjs/gtag.service';
+import { WebAnalyticService } from '@app/services/web-analytic.service';
 
 
 const logger = new Logger('social-button.coponents.ts');
@@ -34,7 +35,8 @@ export class SocialButtonComponent implements OnInit {
     private authService: AuthenticationService,
     private router: Router,
     private authSocialService: AuthSocialService,
-    private gtag: GtagService
+    private gtag: GtagService,
+    private webAnalyticService: WebAnalyticService,
   ) {}
 
   ngOnInit(): void {
@@ -61,11 +63,7 @@ export class SocialButtonComponent implements OnInit {
           email: user.email,
           refresh: value.refresh,
         }).subscribe(() => {
-          if (this.currentMode === 'Daftar') {
-            this.gtag.signUp('Facebook');
-          } else {
-            this.gtag.login('Facebook');
-          }
+          this.analyticAuth('Facebook');
           this.router.navigateByUrl('/');
         });
       });
@@ -82,11 +80,7 @@ export class SocialButtonComponent implements OnInit {
           email: user.email,
           refresh: value.refresh,
         }).subscribe(() => {
-          if (this.currentMode === 'Daftar') {
-            this.gtag.signUp('Google');
-          } else {
-            this.gtag.login('Google');
-          }
+          this.analyticAuth('Google');
           this.router.navigateByUrl('/');
         });
       });
@@ -104,6 +98,17 @@ export class SocialButtonComponent implements OnInit {
       return false;
     } else {
       return true;
+    }
+  }
+
+  // analytic
+  analyticAuth(method) {
+    if (this.currentMode === 'Daftar') {
+      this.gtag.signUp(method);
+      this.webAnalyticService.signup(method.toLowerCase() as any);
+    } else {
+      this.gtag.login(method);
+      this.webAnalyticService.login(method.toLowerCase() as any);
     }
   }
 

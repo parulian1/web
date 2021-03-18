@@ -1,4 +1,4 @@
-import { Component, DoCheck, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ProductsService } from '@app/services/products.service';
 import {
   PriceRanges,
@@ -21,10 +21,11 @@ import { CredentialsService } from '@app/core/authentication';
 import { EntityToSlugPipe } from '@app/shared/utils/entity-to-slug.pipe';
 import { ConfigService, Logger } from '@app/core';
 import { Configuration, RatingSummary, Review } from '@app/models';
-import { animate, state, style, transition, trigger } from "@angular/animations";
-import {Meta, Title} from "@angular/platform-browser";
-import { StoreWithStock } from "@app/models/store";
-import {GtagService} from '@app/library/gtagjs/gtag.service';
+import { Meta, Title } from '@angular/platform-browser';
+import { StoreWithStock } from '@app/models/store';
+import { GtagService } from '@app/library/gtagjs/gtag.service';
+import { AnalyticGtmService } from '@app/services/web-analytic';
+import { WebAnalyticService } from '@app/services/web-analytic.service';
 
 const log = new Logger('VariantsResolver');
 
@@ -32,22 +33,6 @@ const log = new Logger('VariantsResolver');
   selector: 'app-product-detail',
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss'],
-  animations: [
-    trigger('openClose', [
-      state('open', style({
-        display: 'flex'
-      })),
-      state('closed', style({
-        display: 'none',
-      })),
-      transition('open => closed', [
-        animate(100, style({ transform: 'translateX(100%)' }))
-      ]),
-      transition('closed => open', [
-        animate(300, style({ transform: 'translateX(-100%)' }))
-      ]),
-    ]),
-  ],
 })
 export class ProductDetailComponent implements OnInit, DoCheck {
   @ViewChild('quantity', {static: true})
@@ -57,8 +42,8 @@ export class ProductDetailComponent implements OnInit, DoCheck {
   productDetail: ProductDetail;
   listWarehouses: Store[] = [];
   products: any;
-  defaultQty: number = 1;
-  disabled: boolean = false;
+  defaultQty = 1;
+  disabled = false;
   warehouseName: string;
   video: Array<ProductDetailMedia>;
   priceSelected: number;
@@ -70,13 +55,14 @@ export class ProductDetailComponent implements OnInit, DoCheck {
   slideProductImg2: Array<ProductDetailMedia> = [];
   productClass: ProductClass[];
   variants: any;
-  page: string = 'pdp';
+  page = 'pdp';
   priceInfo: Array<any> = [];
   review: Review[];
   ratingSummary: RatingSummary;
   startingListRange: PriceRanges;
   endingListRange: PriceRanges;
-  isOpen: boolean = false;
+  isOpen = false;
+  gaAccountType = '';
 
   richTextAttributes: Array<{ meta: ProductAttributes, value: string }> = [];
 
@@ -99,7 +85,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
     'prevArrow': '<button class="slick-prev"><span class="material-icons">\n' +
       'keyboard_arrow_left\n' +
       '</span></button>',
-    'variableWidth': true,
+    'variableWidth': 88,
   };
   mobileMenu: string;
 
@@ -112,12 +98,15 @@ export class ProductDetailComponent implements OnInit, DoCheck {
               public router: Router,
               public dialog: MatDialog,
               private storeService: StoreService,
-              private credentialsService: CredentialsService,
+              public credentialsService: CredentialsService,
               private localStorage: LocalStorage,
               private pipe: EntityToSlugPipe,
               public title: Title,
+              private webAnalytic: WebAnalyticService,
+              @Inject(PLATFORM_ID) private platformId: any,
               private appConfigService: ConfigService,
               private meta: Meta,
+              private analyticGtmService: AnalyticGtmService,
               private gtag: GtagService) {
   }
 
@@ -130,6 +119,8 @@ export class ProductDetailComponent implements OnInit, DoCheck {
     if (this.localStorage.getItem('attributes')) {
       this.localStorage.removeItem('attributes');
     }
+
+    this.gaAccountType = this.config.gaAccountType;
 
     this.route.data.subscribe((data: {
         product: ProductDetail,
@@ -144,11 +135,11 @@ export class ProductDetailComponent implements OnInit, DoCheck {
         this.productDetail = data.product;
         this.review = data.review;
         this.ratingSummary = data.rating;
-        this.storeService.getAvailableStock(this.productDetail.href).subscribe( resp => {
+        this.storeService.getAvailableStock(this.productDetail.href).subscribe(resp => {
           log.info(resp);
           this.listWarehouses = resp;
 
-          const foundWarehouseFromPreferred = this.listWarehouses.filter( warehouse => {
+          const foundWarehouseFromPreferred = this.listWarehouses.filter(warehouse => {
             return warehouse.href === this.storeService.preferredStore.href;
           });
           if (foundWarehouseFromPreferred.length > 0) {
@@ -157,7 +148,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
             this.currentWarehouse = this.listWarehouses[0];
           }
         });
-        if (!!this.currentWarehouse && this.defaultQty > this.currentWarehouse.quantity ) {
+        if (!!this.currentWarehouse && this.defaultQty > this.currentWarehouse.quantity) {
           this.defaultQty = this.currentWarehouse.quantity;
         }
         this.productAttribute = data.attribute.filter(attr => attr.type !== 'markdown');
@@ -185,13 +176,17 @@ export class ProductDetailComponent implements OnInit, DoCheck {
         this.setPriceTag(data.product);
         this.setPriceInformation(this.priceLists);
 
-        this.title.setTitle(this.productDetail.name + ` - ${ title }`);
+        this.title.setTitle(this.productDetail.name + ` - ${title}`);
 
-        this.trackAnalyticView(this.productDetail);
+        if (this.gaAccountType === 'gtm') {
+          this.analyticGtmService.pageView(this.title.getTitle(), this.router.url);
+          this.analyticGtmService.trackView(this.productDetail);
+        } else {
+          this.gtag.pageView(this.title.getTitle(), this.router.url);
+        }
       }
     );
     this.slideProductImg2 = this.slideProductImg;
-
     this.setSeo();
   }
 
@@ -224,7 +219,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
   }
 
   increase() {
-    let isValidToIncrease = (!!this.currentWarehouse && !!this.currentWarehouse.quantity &&
+    const isValidToIncrease = (!!this.currentWarehouse && !!this.currentWarehouse.quantity &&
       this.defaultQty < this.currentWarehouse.quantity);
     if (isValidToIncrease) {
       return this.defaultQty++;
@@ -280,21 +275,22 @@ export class ProductDetailComponent implements OnInit, DoCheck {
       this.cartService.addToCart(payload).subscribe(resp => {
           if (resp.status === 201) {
             payload.status = resp.status;
+            this.webAnalytic.trackAddToCart(products, this.defaultQty)
             this.dialog.open(AddToCartDialogComponent, {
               data: payload,
               width: '464px',
               height: '363px'
             });
-           this.cartService.fetchCart().subscribe(cart => {
-             const _cartItems = cart.body.cartItems;
-             let _itemCount = 0;
-             for (const _cartItem  of _cartItems) {
-               _itemCount += _cartItem.quantity;
-             }
-             this.localStorage.setItem('cart-quantity', _itemCount);
-           });
+            this.cartService.fetchCart().subscribe(cart => {
+              const _cartItems = cart.body.cartItems;
+              let _itemCount = 0;
+              for (const _cartItem of _cartItems) {
+                _itemCount += _cartItem.quantity;
+              }
+              this.localStorage.setItem('cart-quantity', _itemCount);
+            });
 
-           this.trackAnalyticCart(products, this.priceSelected, this.defaultQty);
+            this.trackAnalyticCart(products, this.priceSelected, this.defaultQty);
           }
 
         },
@@ -356,7 +352,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
 
   setPriceInformation(priceLists: Array<PriceRanges>) {
     this.priceInfo = priceLists.map(priceData => {
-      const { minQuantity, maxQuantity, price } = priceData;
+      const {minQuantity, maxQuantity, price} = priceData;
       const priceDiscount = priceData.activePromotionalPrices[0]?.netPrice || 0;
 
       return {
@@ -369,24 +365,19 @@ export class ProductDetailComponent implements OnInit, DoCheck {
   }
 
   popUpVideo($event: MouseEvent) {
-
   }
 
   playerReady($event: YT.Player) {
-
   }
 
   onStateChange($event: YT.PlayerEvent) {
-
   }
 
   getVideoThumbnail(video: Array<ProductDetailMedia>) {
-
     if (video) {
       for (const item of video) {
         if (item.youtubeVideoId) {
           const thumbnail = `http://img.youtube.com/vi/${item.youtubeVideoId}/default.jpg`;
-
         }
       }
     }
@@ -409,7 +400,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
     }
     let seoContentDescription = '';
     if (!!this.productDetail?.seoDescription) {
-      seoContentDescription += ` ${this.productDetail.seoDescription}`;
+      seoContentDescription += `${this.productDetail.seoDescription}`;
     }
     if (!!this.config?.extraConfig?.description) {
       seoContentDescription += ` ${this.config.extraConfig.description}`;
@@ -425,15 +416,15 @@ export class ProductDetailComponent implements OnInit, DoCheck {
   }
 
   private trackAnalyticCart(product: ProductDetail, price: number, qty: number = 1) {
-   this.gtag.addToCart({
-     items: [{
-       id: product.href,
-       name: product.name,
-       brand: product.vendor?.name || '',
-       quantity: qty,
-       price,
-     }]
-   })
+    this.gtag.addToCart({
+      items: [{
+        id: product.href,
+        name: product.name,
+        brand: product.vendor?.name || '',
+        quantity: qty,
+        price,
+      }]
+    })
   }
 
   private trackAnalyticView(product: ProductDetail) {

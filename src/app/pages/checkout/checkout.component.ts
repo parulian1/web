@@ -5,21 +5,21 @@ import { Cart, CartTotals } from '@app/models/cart';
 import { Area } from '@app/models/area';
 import { ConfigService, Logger } from '@app/core';
 import { ShippingMethodService } from '@app/services/shipping-method.service';
-import { ShippingCost } from '@app/models/shipping-method';
+import { DropshipOption, ShippingCost } from '@app/models/shipping-method';
 import { EntityToSlugPipe } from '@app/shared/utils/entity-to-slug.pipe';
-import {CartService, StateCheckout} from '@app/services';
+import { CartService, StateCheckout } from '@app/services';
 import { CheckoutService } from '@app/services/checkout.service';
 import { environment } from '@env/environment.staging';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertDialogComponent } from '@app/shared/alert-dialog';
-import { Configuration } from '@app/models';
-import { PaymentTypeChoices } from '@app/models/payment-method';
-import { HttpErrorResponse } from '@angular/common/http';
-import { CredentialsService } from '@app/core/authentication';
 import { Checkout } from '@app/models/checkout';
-import { Action, Product as GtagProduct } from '@app/library/gtagjs/gtag-definitions';
 import { Title } from '@angular/platform-browser';
+import { Configuration } from '@app/models';
+import { CredentialsService } from '@app/core/authentication';
+import { Action, Product as GtagProduct } from '@app/library/gtagjs/gtag-definitions';
 import { GtagService } from '@app/library/gtagjs/gtag.service';
+import { AnalyticGtmService } from '@app/services/web-analytic';
+import { PaymentTypeChoices } from '@app/models/payment-method';
 
 const log = new Logger('Checkout');
 
@@ -40,8 +40,11 @@ export class CheckoutComponent implements OnInit, DoCheck {
   total = [];
   shippingMethodMode: 'idle' | 'edit' | 'default' = 'idle';
   canCheckout: boolean;
+  dropshipOption: DropshipOption;
   errorMessages: object = {};
   itemList: Array<GtagProduct>;
+  gaAccountType = '';
+
 
   @Output() checkoutEmitter: EventEmitter<any> = new EventEmitter<any>();
 
@@ -54,15 +57,24 @@ export class CheckoutComponent implements OnInit, DoCheck {
               private stateService: StateCheckout,
               private service: CheckoutService,
               private snackbar: MatSnackBar,
-              private appConfigService: ConfigService,
-              public credentialsService: CredentialsService,
+              private title: Title,
               private cartService: CartService,
-              public title: Title,
-              public gtag: GtagService) {
+              public credentialsService: CredentialsService,
+              private appConfigService: ConfigService,
+              public gtag: GtagService,
+              private analyticGtmService: AnalyticGtmService) {
   }
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
+    let title = 'Nusantara Platform';
+    if (!!this.config?.name) {
+      title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
+    }
+
+    this.gaAccountType = this.appConfigService.config?.gaAccountType;
+
+    this.title.setTitle(`Checkout - ${title}`);
     this.route.data
       .subscribe((data: {
         cart: Cart,
@@ -93,22 +105,40 @@ export class CheckoutComponent implements OnInit, DoCheck {
               }
             }
           }
-          this.gtag.beginCheckout({
-            items: this.itemList,
-          } as Action)
+          if (this.gaAccountType === 'gtm') {
+            this.analyticGtmService.trackStartCheckout(this.cart, this.cart.cartDiscounts);
+          } else {
+            this.gtag.beginCheckout({
+              items: this.itemList,
+            } as Action);
+          }
         } else {
           const params = {
             message: 'Your cart is empty. Redirecting back to cart...',
+            icon: 'error_outline',
           };
-          this.showAlertDialog(params);
+          this.snackbar.openFromComponent(AlertDialogComponent, {
+            data: params,
+            duration: 7 * 1000, // 5 seconds
+            verticalPosition: 'top',
+            horizontalPosition: 'right',
+            panelClass: ['mt-alert--is-info', 'mt-alert--has-text-centered'],
+          });
           this.router.navigateByUrl('/cart');
         }
 
+        // set address and other requirements
         if (data.addresses.length > 0) {
-          this.address = data.addresses[0];
+          this.address = data.addresses.filter(addr => addr.isDefaultShipping === true)[0];
           this.stateService.stateAddress = this.address;
+          this.getShippingCost(this.cart, this.address);
           this.changeShippingMethodMode('edit');
-          this.gtag.setCheckoutOption(1, 'select address');
+          if (this.gaAccountType === 'gtm') {
+            this.analyticGtmService.setCheckoutEvents(1, 'select address');
+          } else {
+            this.gaCheckoutProgress(1,'select address');
+
+          }
         }
       });
 
@@ -116,32 +146,45 @@ export class CheckoutComponent implements OnInit, DoCheck {
       this.cartTotals = this.cart.cartTotals;
     }
     this.canCheckout = this.stateService.canCheckout;
-    this.title.setTitle('Checkout - Martha Tilaar Shop');
+  }
+
+  getPayment($event: any) {
+    this.stateService.statePaymentMethod = null;
+    this.stateService.statePaymentMethod = $event;
   }
 
   getAddress($event: Addresses) {
     if ($event) {
       this.address = $event;
       this.checkoutParams.push({address: this.address});
+      this.getShippingCost(this.cart, this.address);
       this.total = [];
       this.cartTotals.shippingTotal = 0;
 
       if (this.address) {
         this.stateService.stateAddress = this.address;
+        this.changeShippingMethodMode('edit');
 
         if (this.shippingMethod$.length) {
           this.shippingMethod$ = [];  // if shippingMethod$ already have values, clear it.
+          this.getShippingCost(this.cart, this.address);
         }
-
-        this.getShippingCost(this.cart, this.address);
       }
-      this.gtag.setCheckoutOption(1, 'select address');
-      this.gaCheckoutProgress(1, 'Select Address');
+      if (this.gaAccountType === 'gtm') {
+        this.analyticGtmService.setCheckoutEvents( 1, 'select address');
+      } else {
+        this.gaCheckoutProgress(1, 'select address');
+      }
     }
   }
 
   getShipping($event: any) {
-    this.gtag.setCheckoutOption(2, 'shipping method');
+    if (this.gaAccountType === 'gtm') {
+      this.analyticGtmService.setCheckoutEvents(2,'shipping method');
+    } else {
+      this.gaCheckoutProgress(2, 'Select Shipping');
+
+    }
     if (this.tempShippingMethod.length === 0) {
       this.tempShippingMethod.push($event);
     } else {
@@ -164,7 +207,12 @@ export class CheckoutComponent implements OnInit, DoCheck {
     this.cartTotals.shippingTotal = 0;
     this.cartTotals.shippingTotal += $event.costChange;
     this.cartTotals.grandTotal = (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal;
-    this.gaCheckoutProgress(2, 'Select Shipping');
+    if (this.gaAccountType === 'gtm') {
+      this.analyticGtmService.setCheckoutEvents(2,'shipping method');
+      this.analyticGtmService.chooseShippingInformation(this.stateService, this.formattedShipping);
+    } else {
+      this.gaCheckoutProgress(2, 'Select Shipping');
+    }
   }
 
   ngDoCheck(): void {
@@ -221,6 +269,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
       order.dropship = stateDropship.meta;
     }
 
+    log.debug(order);
 
     if (this.cart.cartItems.length !== 0) {
       this.service.createOrder(order).subscribe(res => {
@@ -228,6 +277,8 @@ export class CheckoutComponent implements OnInit, DoCheck {
           const orderNumber = {
             order_number: this.pipe.transform(res.headers.get('location')),
           };
+
+
           const purchaseEvent = {
             transaction_id: orderNumber.order_number,
             value: (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal,
@@ -235,11 +286,21 @@ export class CheckoutComponent implements OnInit, DoCheck {
             tax: 0,
             shipping: this.cartTotals.shippingTotal,
             items: this.itemList,
+            coupon: this.cart.cartDiscounts
           }
-          this.gtag.purchase(purchaseEvent as Action)
 
 
-          if (this.stateService.getStatePayment.type !== PaymentTypeChoices.MANUAL_TRANSFER) {
+
+          if (this.gaAccountType === 'gtm') {
+            this.analyticGtmService.purchaseOrder(purchaseEvent);
+            this.analyticGtmService.chooseShippingInformation(this.stateService, this.formattedShipping);
+          } else {
+            this.gtag.purchase(purchaseEvent as Action);
+          }
+
+
+
+          if (!this.isCheckoutWithManualTransfer()) {
             this.service.fetchPaymentRequest(orderNumber).subscribe(resp => {
               if (resp.status === 200) {
                 window.location.href = resp.body.redirectUrl;
@@ -252,9 +313,10 @@ export class CheckoutComponent implements OnInit, DoCheck {
               this.router.navigate(['/profile/orders', orderNumber.order_number]);
             });
           } else {
-            this.router.navigate(
-              ['order-summary'], { queryParams: { order_id: orderNumber.order_number } }
-              );
+            // just redirect to order summary
+            this.router.navigate(['/order-summary'], {
+              queryParams: {order_id: orderNumber.order_number}
+            });
           }
         }
       }, (error) => {
@@ -263,8 +325,15 @@ export class CheckoutComponent implements OnInit, DoCheck {
     } else {
       const params = {
         message: 'Your cart is empty. Redirecting back to cart...',
+        icon: 'error_outline',
       };
-      this.showAlertDialog(params);
+      this.snackbar.openFromComponent(AlertDialogComponent, {
+        data: params,
+        duration: 7 * 1000, // 5 seconds
+        verticalPosition: 'top',
+        horizontalPosition: 'right',
+        panelClass: ['mt-alert--is-info', 'mt-alert--has-text-centered'],
+      });
       this.router.navigateByUrl('/cart');
     }
   }
@@ -277,16 +346,19 @@ export class CheckoutComponent implements OnInit, DoCheck {
     }
 
     // force change.
-    if (force) { this.shippingMethodMode = value; }
+    if (force) {
+      this.shippingMethodMode = value;
+    }
   }
 
-  _handleError(err: HttpErrorResponse) {
+  _handleError(err: any) {
     if (err.status === 400) {
       this._setErrors(err.error);
     } else {
       log.error('unexpected error:', err);
     }
   }
+
   _setErrors(error: any) {
     log.error('error', error, Object.values(error));
     Object.keys(error).forEach((field: any) => {
@@ -299,7 +371,6 @@ export class CheckoutComponent implements OnInit, DoCheck {
     log.error('error', this.errorMessages);
   }
 
-
   public voucherApplied(event: boolean) {
     this.cartService.fetchCart().subscribe(resp => {
       this.cart = resp.body;
@@ -310,6 +381,35 @@ export class CheckoutComponent implements OnInit, DoCheck {
       }
       this.canCheckout = this.stateService.canCheckout;
     })
+  }
+
+  showAlertDialog(messageParams: { message: string, additionalMessage?: string }): void {
+    this.snackbar.openFromComponent(AlertDialogComponent, {
+      data: messageParams,
+      duration: 7 * 1000, // 5 seconds
+      verticalPosition: 'top',
+      horizontalPosition: 'right',
+    });
+  }
+
+  getIsReseller() {
+    return !(!this.credentialsService.isAuthenticated() || !this.credentialsService.getIsReseller());
+  }
+
+  isCheckoutWithManualTransfer(): boolean {
+    return this.stateService.getStatePayment.type === PaymentTypeChoices.MANUAL_TRANSFER;
+  }
+
+  gaCheckoutProgress(step: number, option: string) {
+    this.gtag.checkoutProgress({
+      value: (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal,
+      currency: 'IDR',
+      tax: 0,
+      shipping: this.cartTotals.shippingTotal,
+      items: this.itemList,
+      checkout_step: step,
+      checkout_option: option
+    });
   }
 
   private getShippingCost(cart: Cart, address: Addresses) {
@@ -326,34 +426,6 @@ export class CheckoutComponent implements OnInit, DoCheck {
         this.stateService.err.push(this.pipe.transform(item.href));
       });
     }
-  }
-
-  showAlertDialog(messageParams: {message: string, additionalMessage?: string}): void {
-    this.snackbar.openFromComponent(AlertDialogComponent, {
-      data: messageParams,
-      duration: 7 * 1000, // 5 seconds
-      verticalPosition: 'top',
-      horizontalPosition: 'right',
-    });
-  }
-
-  getIsReseller() {
-    if (!this.credentialsService.isAuthenticated() || !this.credentialsService.getIsReseller()) {
-      return false;
-    }
-    return true;
-  }
-
-  gaCheckoutProgress(step: number, option: string) {
-    this.gtag.checkoutProgress({
-      value: (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal,
-      currency: 'IDR',
-      tax: 0,
-      shipping: this.cartTotals.shippingTotal,
-      items: this.itemList,
-      checkout_step: step,
-      checkout_option: option
-    });
   }
 
 }
