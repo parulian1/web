@@ -47,8 +47,8 @@
       </div>
     </div>
     <div class="payment-shipping">
-      <app-footer-payment></app-footer-payment>
-      <app-footer-shipping [shippings]="shippings$ | async"></app-footer-shipping>
+      <app-footer-payment class="item"></app-footer-payment>
+      <app-footer-shipping class="item" [shippings]="shippings$ | async"></app-footer-shipping>
     </div>
   </div>
 </div>

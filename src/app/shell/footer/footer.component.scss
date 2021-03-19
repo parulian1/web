@@ -86,29 +86,16 @@
       flex-direction: column;
       width: 260px;
 
-      app-footer-payment, .list {
-        display: flex;
-        flex-direction: column;
-        margin: 0 24px 0 0;
+      .item {
+        .list {
+          display: flex;
+          flex-direction: column;
+          margin: 0 24px 0 0;
 
-        .title {
-          font-size: 16px;
-        }
+          .title {
+            font-size: 16px;
+          }
 
-      }
-      .list .shipping-logo {
-        display: flex;
-        flex-direction: row;
-        margin: 4px 0 16px 0;
-
-        img {
-          width: 44px;
-          height: 44px;
-          border: solid 1px #E5E5E5;
-          border-radius: $border-radius;
-          margin: 0 8px 8px 0;
-          padding: 1px;
-          object-fit: contain;
         }
       }
     }
@@ -206,7 +193,7 @@
         width: 100%;
         margin: 12px 0 0 0;
 
-        app-footer-payment {
+        .item {
           margin: 12px 0 0 0;
           .list {
             .title {
@@ -219,14 +206,6 @@
             }
           }
 
-        }
-        .list {
-          margin: 12px 0 0 0;
-
-          .title {
-            font-size: 14px;
-            line-height: 19px;
-          }
         }
       }
     }
