@@ -9,8 +9,6 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class CartResolverService implements Resolve<Cart> {
-  cartObservables: Observable<Cart>;
-  productObservables: Observable<any>;
 
   constructor(private service: CartService) {
   }
