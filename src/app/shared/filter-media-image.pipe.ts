@@ -9,7 +9,7 @@ export class FilterMediaImagePipe implements PipeTransform {
   public transform(value: ProductCart[], href: string): any {
     try {
       return value
-        .filter(m => m.href === href)[0].media[0].image;
+        .find(m => m.href === href ).media[0].image;
     } catch (e) {
       return 'assets/default-image.png';
     }

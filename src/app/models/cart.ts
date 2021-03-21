@@ -19,7 +19,7 @@ export interface ProductCart {
   media: Array<ProductDetailMedia>;
   name: string;
   vendor: string;
-  priceLists: Array<PriceLists>;
+  priceLists?: Array<PriceLists>;
 }
 
 export interface CartWeight {

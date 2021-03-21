@@ -1,5 +1,5 @@
 <div fxFlex [gtag]="title.getTitle()">
-  <div *ngIf="this.cart.cartItems.length > 0; else emptyCart" class="container">
+  <div *ngIf="cart.cartItems.length > 0; else emptyCart" class="container">
     <div class="cart">
       <div class="inner-container">
         <div class="main-cart">
@@ -16,7 +16,7 @@
                   <div class="line">
                     <div class="left">
                       <div class="image">
-                        <img src="{{ productModified | filterMediaImage:line.product.href }}" [class.empty]="line.isInStock === false"/>
+                        <img src="{{ productModified | filterMediaImage:line.product.href }}"/>
                         <span class="empty-stock" *ngIf="line.isInStock === false">Stok Habis</span>
                       </div>
                       <div class="desc" [class.empty]="line.isInStock === false">

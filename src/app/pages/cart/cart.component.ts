@@ -5,11 +5,12 @@ import { ConfigService, Logger } from '@app/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Cart, CartModified, CartTotals, LineItems, ProductCart } from '@app/models/cart';
-import { CartService, LocalStorage } from '@app/services';
+import { CartService, LocalStorage, ProductsService } from '@app/services';
 import { DeleteCartDialogComponent } from '@app/pages/cart/delete-cart-dialog';
 import { PriceLists } from '@app/models/product-detail';
 import { Title } from '@angular/platform-browser';
 import { Configuration } from '@app/models';
+import { EntityToSlugPipe } from '@app/shared/utils';
 
 
 const log = new Logger('Cart');
@@ -25,7 +26,7 @@ export class CartComponent implements OnInit {
   cart: Cart;
   cartTotals: CartTotals;
   cartItems: LineItems[] = [];
-  productModified: Array<ProductCart>;
+  productModified: Array<ProductCart> = [];
   warehouse: any = [];
   discountProduct: Array<{ product: string, discount: number, priceLists?: Array<PriceLists>, warehouse?: string }> = [];
 
@@ -43,7 +44,9 @@ export class CartComponent implements OnInit {
               public dialog: MatDialog,
               public title: Title,
               private appConfigService: ConfigService,
-              public cartService: CartService) {
+              public cartService: CartService,
+              public productService: ProductsService,
+              public pipe: EntityToSlugPipe) {
   }
 
   ngOnInit(): void {
@@ -52,20 +55,30 @@ export class CartComponent implements OnInit {
     if (!!this.config?.name) {
       title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
-    this.route.data.subscribe((data: { cart: CartModified }) => {
+    this.route.data.subscribe((data: { cart: Cart }) => {
       this.localStorage.removeItem('cart-quantity');
-      this.cart = data.cart[0].cart;
-      this.productModified = data.cart[0].product;
-      this.cartItems = data.cart[0].cart.cartItems;
+      this.cart = data.cart;
+      this.cartItems = data.cart.cartItems;
       this.warehouse = this.cart.weight;
       this.itemCount = 0;
-      for (const item of this.cart.cartItems) {
-        this.itemCount += item.quantity;
-      }
-      this.localStorage.setItem('cart-quantity', this.itemCount);
-      this.cartCount = this.localStorage.getItem('cart-quantity');
       this.productCount = this.cart.cartItems.length;
       this.cartTotals = this.cart.cartTotals;
+      this.cart.cartItems.forEach((cartItem) => {
+        this.itemCount += cartItem.quantity;
+        let productPriceLists = [];
+        this.productService.fetchProduct(this.pipe.transform(cartItem.product.href)).subscribe((result) => {
+            productPriceLists = result.body.priceLists;
+        });
+        this.productModified.push({
+          name: cartItem.product.name,
+          href: cartItem.product.href,
+          media: cartItem.product.media.filter((media) => { return media.type === 'image'; }),
+          vendor: this.pipe.transform(cartItem.product.brand.href),
+          priceLists: productPriceLists,
+        });
+      });
+      this.localStorage.setItem('cart-quantity', this.itemCount);
+      this.cartCount = this.localStorage.getItem('cart-quantity');
 
       this.setDiscountPrice(this.productModified);
       this.setPriceInfo();
