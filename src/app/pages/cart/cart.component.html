@@ -16,7 +16,7 @@
                   <div class="line">
                     <div class="left">
                       <div class="image">
-                        <img src="{{ productModified | filterMediaImage:line.product.href }}"/>
+                        <img src="{{ productModified | filterMediaImage:line.product.href }}" [class.empty]="line.isInStock === false"/>
                         <span class="empty-stock" *ngIf="line.isInStock === false">Stok Habis</span>
                       </div>
                       <div class="desc" [class.empty]="line.isInStock === false">
