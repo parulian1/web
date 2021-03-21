@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService, Logger } from '@app/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Cart, CartModified, CartTotals, LineItems, ProductCart } from '@app/models/cart';
+import { Cart, CartTotals, LineItems, ProductCart } from '@app/models/cart';
 import { CartService, LocalStorage, ProductsService } from '@app/services';
 import { DeleteCartDialogComponent } from '@app/pages/cart/delete-cart-dialog';
 import { PriceLists } from '@app/models/product-detail';
@@ -51,7 +51,7 @@ export class CartComponent implements OnInit {
 
   ngOnInit(): void {
     this.config = this.appConfigService.config;
-    let title = "Nusantara Platform";
+    let title = 'Nusantara Platform';
     if (!!this.config?.name) {
       title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
