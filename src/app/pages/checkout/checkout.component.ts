@@ -14,12 +14,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertDialogComponent } from '@app/shared/alert-dialog';
 import { Configuration } from '@app/models';
 import { PaymentTypeChoices } from '@app/models/payment-method';
-import {HttpErrorResponse} from '@angular/common/http';
-import {CredentialsService} from "@app/core/authentication";
-import {Checkout} from "@app/models/checkout";
-import {Action, Product as GtagProduct} from '@app/library/gtagjs/gtag-definitions';
-import {Title} from '@angular/platform-browser';
-import {GtagService} from '@app/library/gtagjs/gtag.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { CredentialsService } from '@app/core/authentication';
+import { Checkout } from '@app/models/checkout';
+import { Action, Product as GtagProduct } from '@app/library/gtagjs/gtag-definitions';
+import { Title } from '@angular/platform-browser';
+import { GtagService } from '@app/library/gtagjs/gtag.service';
 
 const log = new Logger('Checkout');
 
@@ -65,11 +65,11 @@ export class CheckoutComponent implements OnInit, DoCheck {
     this.config = this.appConfigService.config;
     this.route.data
       .subscribe((data: {
-        cart: CartModified,
+        cart: Cart,
         addresses: Addresses[],
         provinces: Area[]
       }) => {
-        this.cart = data.cart[0].cart;
+        this.cart = data.cart;
         if (this.cart.cartItems.length !== 0) {
           this.itemList = [];
 
