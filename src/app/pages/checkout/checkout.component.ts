@@ -1,7 +1,7 @@
 import { Component, DoCheck, EventEmitter, OnChanges, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Addresses } from '@app/models/addresses';
-import { Cart, CartModified, CartTotals } from '@app/models/cart';
+import { Cart, CartTotals } from '@app/models/cart';
 import { Area } from '@app/models/area';
 import { ConfigService, Logger } from '@app/core';
 import { ShippingMethodService } from '@app/services/shipping-method.service';
