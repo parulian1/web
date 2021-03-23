@@ -65,7 +65,7 @@
       <div class="columns">
         <div class="column is-8 is-offset-2">
           <div class="box has-text-centered">
-            <a class="button-cancel" [routerLink]="['/profile/orders/', orderSummary.orderNumber]">
+            <a class="button-cancel" (click)="openOrderCancelDialog()">
               Batalkan Pesanan
             </a>
           </div>
