@@ -47,16 +47,8 @@
       </div>
     </div>
     <div class="payment-shipping">
-      <app-footer-payment></app-footer-payment>
-      <div class="list">
-        <div class="title">
-          <span>Pengiriman</span>
-        </div>
-        <div class="shipping-logo">
-          <img src="assets/footer/logo/logo_kgx.png"/>
-          <img src="assets/footer/logo/logo-pickupinstore.svg"/>
-        </div>
-      </div>
+      <app-footer-payment class="item"></app-footer-payment>
+      <app-footer-shipping class="item" [shippings]="shippings$ | async"></app-footer-shipping>
     </div>
   </div>
 </div>

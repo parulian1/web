@@ -1,0 +1,19 @@
+@import "src/theme/base";
+
+.list {
+  .shipping-logo {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 4px 0 16px 0;
+
+    img {
+      width: 44px;
+      height: 44px;
+      border: solid 1px #E5E5E5;
+      border-radius: $border-radius;
+      margin: 0 8px 8px 0;
+      padding: 1px;
+    }
+  }
+}
