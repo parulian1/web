@@ -1,7 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {FormGroup} from '@angular/forms';
-import {AreaService} from '@app/services';
-import {Addresses} from "@app/models/addresses";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+
+import { Addresses } from '@app/models/addresses';
+import { AreaService } from '@app/services';
 
 declare var google: any;
 
@@ -9,7 +10,7 @@ declare var google: any;
   selector: 'app-checkout-address-map',
   template: `
     <div id="maps-search">
-      <input id="maps-input" class="controls" type="text" placeholder="Cari lokasi">
+      <input #mapsInput id="maps-input" class="controls" type="text" placeholder="Cari lokasi">
       <i class="ion-ios-search-strong"></i>
     </div>
     <div class="maps-tooltip">
@@ -17,7 +18,7 @@ declare var google: any;
       <div class="arrow"></div>
     </div>
     <div class="maps-marker">
-      <img src="../../../../../../assets/map-pin.svg">
+      <img src="../../../../../../assets/map-pin.svg" alt="map-marker">
     </div>
     <div #googleMap class="map" style="width: 100%;height: 300px;"></div>
     <div style="display:none">
@@ -30,17 +31,13 @@ declare var google: any;
   styleUrls: ['./checkout-address-map.component.scss']
 })
 export class CheckoutAddressMapComponent implements OnInit {
+  private static LOCATION_NOT_MATCH_ADDRESS = 'Lokasi yang Anda tandai tidak sesuai dengan alamat yang diisi';
+
   @ViewChild('googleMap') gmapElement: any;
+  @ViewChild('mapsInput') mapsInput: HTMLInputElement;
+
   @Input() parent: FormGroup;
-  @Output()
-  public latitude = new EventEmitter<any>();
-  @Output()
-  public longitude = new EventEmitter<any>();
-  @Output()
-  public status = new EventEmitter<any>();
-  @Output()
-  public infoMaps = new EventEmitter<any>();
-  map: google.maps.Map;
+  @Input() data: { address: Addresses; isUpdated: boolean };
   @Input()
   location: any = {
     zipcode: '',
@@ -49,8 +46,13 @@ export class CheckoutAddressMapComponent implements OnInit {
     lat: null,
     lng: null
   };
-  @Input() data: { address: Addresses; isUpdated: boolean }
 
+  @Output() public latitude = new EventEmitter<any>();
+  @Output() public longitude = new EventEmitter<any>();
+  @Output() public status = new EventEmitter<any>();
+  @Output() public infoMaps = new EventEmitter<any>();
+
+  map: google.maps.Map;
   infoMap: string;
   loadMap: any;
   window: any = window;
@@ -58,10 +60,14 @@ export class CheckoutAddressMapComponent implements OnInit {
   mapInfo: string;
   currentLatLng: string;
 
+  kec = false;
+
   constructor(private areaService: AreaService) {
   }
 
   ngOnInit(): void {
+    console.log('this.location', this.location);
+
     this.loadGoogleMapApi();
     this.loadMap = setTimeout(() => {
       if (typeof this.window.google === 'object' && typeof this.window.google.maps === 'object') {
@@ -73,13 +79,13 @@ export class CheckoutAddressMapComponent implements OnInit {
   }
 
   loadGoogleMapApi() {
-    const googleMapSript = document.getElementById('google-map-script');
-    if (!googleMapSript) {
-      const newGoogleMapSript = document.createElement('script');
-      newGoogleMapSript.setAttribute('id', 'google-map-script');
-      newGoogleMapSript.setAttribute('src',
+    const googleMapScript = document.getElementById('google-map-script');
+    if (!googleMapScript) {
+      const newGoogleMapScript = document.createElement('script');
+      newGoogleMapScript.setAttribute('id', 'google-map-script');
+      newGoogleMapScript.setAttribute('src',
         'https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyC-ct8PW5TS3qNEG1lY0Q09PEr7RDwoLIM');
-      document.head.appendChild(newGoogleMapSript);
+      document.head.appendChild(newGoogleMapScript);
     }
   }
 
@@ -103,23 +109,15 @@ export class CheckoutAddressMapComponent implements OnInit {
     this.setLocation(this.location);
 
     this.map.addListener('dragend', () => {
-      const place = this.map.getCenter();
-      const latitude = place.lat();
-      const longitude = place.lng();
-      this.setLocation({lat: latitude, lng: longitude});
+      this.setCenterLocation();
     });
 
     this.map.addListener('zoom_changed', () => {
-      const place = this.map.getCenter();
-      const latitude = place.lat();
-      const longitude = place.lng();
-      this.setLocation({lat: latitude, lng: longitude});
+      this.setCenterLocation();
     });
 
-    const input = document.getElementById('maps-input');
-    const mapsSearch = document.getElementById('maps-search');
-    const searchBox = new google.maps.places.SearchBox(input);
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(mapsSearch);
+    const searchBox = new google.maps.places.SearchBox(this.mapsInput);
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('maps-search'));
     this.map.addListener('bounds_changed', () => {
       searchBox.setBounds(this.map.getBounds());
     });
@@ -143,47 +141,58 @@ export class CheckoutAddressMapComponent implements OnInit {
     });
   }
 
-  setLocation(location: any) {
-    let address;
-    if (location.lat === null && location.lng === null) {
-      address = location.city.name + ' ' + location.district.district + ' ' + location.district.postalCode;
-    } else {
-      address = location.lat + ',' + location.lng;
+  setCenterLocation() {
+    const place = this.map.getCenter();
+    this.setLocation({lat: place.lat(), lng: place.lng()});
+  }
+
+  isLatLngAvailable(location: any): boolean {
+    return location.lat !== null && location.lng !== null;
+  }
+
+  setLocationParams(location: any): string {
+    if (!this.isLatLngAvailable(location)) {
+      return location.city.name + ',' + location.district.district + ',' + location.district.postalCode;
     }
-    this.areaService.getLngLat(address).subscribe((res: any) => {
+
+    return location.lat + ',' + location.lng;
+  }
+
+  isIncludePostalCode(item: any): boolean {
+    if (item.types.includes('administrative_area_level_3')) {
+      this.kec = item.long_name.toLowerCase() === this.location.district.subDistrict.toLowerCase();
+      return true;
+    }
+
+    return false;
+  }
+
+  setLocation(location: any) {
+    const locationParams = this.setLocationParams(location);
+
+    this.areaService.getLngLat(locationParams).subscribe((res: any) => {
       if (res.results.length === 0) {
         this.infoMap = '';
         return;
       }
-      const data = res.results[0];
-      let kec = false;
-      let zip = false;
-      this.infoMap = data.formatted_address;
-      if (data.formatted_address.includes('Indonesia')) {
-        data.address_components.some(item => {
-          if (item.types.includes('postal_code')) {
-            if (item.short_name === this.location.zipcode) {
-              zip = true;
-            }
-            return true;
-          } else {
-            if (item.types.includes('administrative_area_level_3')) {
-              if (item.long_name.toLowerCase() === this.location.district.district.toLowerCase()) {
-                kec = true;
-              }
-              return false;
-            }
-          }
-        });
+
+      const geocodeData = res.results[0];
+
+      this.infoMap = geocodeData.formatted_address;
+      this.infoMaps.emit(this.infoMap);
+
+      if (geocodeData.formatted_address.includes('Indonesia')) {
+        geocodeData.address_components.some(item => this.isIncludePostalCode(item));
       } else {
         this.map.panTo(new google.maps.LatLng(location.lat, location.lng));
-        this.status.emit('Lokasi yang Anda tandai tidak sesuai dengan alamat yang diisi');
+        this.status.emit(CheckoutAddressMapComponent.LOCATION_NOT_MATCH_ADDRESS);
       }
-      if (kec || zip) {
-        if (location.lat === null && location.lng === null) {
-          this.map.panTo(data.geometry.location);
-          this.latitude.emit(data.geometry.location.lat);
-          this.longitude.emit(data.geometry.location.lng);
+
+      if (this.kec) {
+        if (!this.isLatLngAvailable(location)) {
+          this.map.panTo(geocodeData.geometry.location);
+          this.latitude.emit(geocodeData.geometry.location.lat);
+          this.longitude.emit(geocodeData.geometry.location.lng);
         } else {
           this.map.panTo(new google.maps.LatLng(location.lat, location.lng));
           this.latitude.emit(location.lat);
@@ -191,11 +200,10 @@ export class CheckoutAddressMapComponent implements OnInit {
         }
         this.status.emit('');
       } else {
-        this.map.panTo(data.geometry.location);
-        this.status.emit('Lokasi yang Anda tandai tidak sesuai dengan alamat yang diisi');
+        this.map.panTo(geocodeData.geometry.location);
+        this.status.emit(CheckoutAddressMapComponent.LOCATION_NOT_MATCH_ADDRESS);
       }
-      this.infoMaps.emit(this.infoMap);
-    }, err => {
+
     });
   }
 
