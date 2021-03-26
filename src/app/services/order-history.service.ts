@@ -8,6 +8,7 @@ import {AbstractCrudService} from '@app/core/http/abstract-crud-service';
 import {PagedResponse} from '@app/core/pagination';
 import {order} from '@app/models';
 import {Choice, ChoiceField, OptionsResponse} from "@app/models/drf";
+import { OrderStatusChoices } from "@app/models/order";
 
 @Injectable({
   providedIn: 'root'
@@ -78,5 +79,11 @@ export class OrderHistoryService extends AbstractCrudService<order.Order> {
 
   createOrderPaymentConfirm(orderId: number, data: any): Observable<void> {
     return this.httpClient.post<void>(`${this.baseUrl}/${orderId}/payment-confirm/`, data);
+  }
+
+  cancelOrder(orderNumber: string): Observable<void> {
+    return this.httpClient.patch<void>(`${this.baseUrl}/${orderNumber}/`, {
+      status: OrderStatusChoices.CANCELLED
+    });
   }
 }
