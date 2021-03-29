@@ -128,15 +128,42 @@
 :root {
   --ck-image-style-spacing: 1.5em;
 }
+
+.container .content .text-content figure {
+  margin: 2px 2px;
+}
+
 .text-content {
   max-width: 100%;
+
+  .table {
+    width: 100%;
+    margin: 0;
+  }
+
+  .image {
+    margin: 2px 2px;
+  }
+
+  .image > a {
+    display: block;
+    width: 100%;
+
+    & img {
+      width: 100%;
+    }
+  }
 
   .image > img {
     max-width: 100%;
   }
 
+  .image img {
+    max-width: 100%;
+  }
+
   .image > figcaption {
-    display: table-caption;
+    display: none;
     caption-side: bottom;
     word-break: break-word;
     color: hsl(0, 0%, 20%);
