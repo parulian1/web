@@ -49,7 +49,7 @@
                             </app-cart-quantity>
                           </div>
                           <ng-container *ngFor="let product of productModified">
-                              <div *ngIf="product.priceLists.length > 1 && product.href === line.product.href"
+                              <div *ngIf="isMultiplePriceRange(product.priceLists) && product.href === line.product.href"
                                    class="price-info">
                                 <span class="text">Belanja banyak, lebih murah! <mat-icon>error_outline</mat-icon></span>
                                 <div class="price-info-list">

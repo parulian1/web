@@ -146,9 +146,7 @@ export class CartComponent implements OnInit {
     for (const item of cartItems) {
       const href = item.product.href;
       const media = productModified.filter(t => t.href === href).map(m => m.media);
-
       this.productsImage.push({href, media});
-
       if (this.productsImage) {
         this.productsImage = this.productsImage.filter((value, index, array) => array.indexOf(value) === index);
       }
@@ -193,6 +191,13 @@ export class CartComponent implements OnInit {
       this.setDiscountPrice();
       this.setPriceInfo();
       this.setProductImage(this.cartItems, this.productModified);
-    })
+    });
+  }
+
+  isMultiplePriceRange(priceLists: Array<PriceLists>) {
+    const defaultPrice = priceLists.find((priceList) => {
+      return priceList.type.toLowerCase() === 'default';
+    });
+    return defaultPrice?.ranges?.length > 1;
   }
 }
