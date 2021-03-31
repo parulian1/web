@@ -49,8 +49,7 @@
                             </app-cart-quantity>
                           </div>
                           <ng-container *ngFor="let product of productModified">
-                            <ng-container *ngFor="let item of product.priceLists">
-                              <div *ngIf="item.ranges.length > 1 && product.href === line.product.href"
+                              <div *ngIf="product.priceLists.length > 1 && product.href === line.product.href"
                                    class="price-info">
                                 <span class="text">Belanja banyak, lebih murah! <mat-icon>error_outline</mat-icon></span>
                                 <div class="price-info-list">
@@ -74,7 +73,6 @@
                                   </table>
                                 </div>
                               </div>
-                            </ng-container>
                           </ng-container>
                         </div>
                         <div class="totals">{{ line.lineTotals.price|currency: 'Rp ' : 'symbol' : '1.0-0' }}</div>

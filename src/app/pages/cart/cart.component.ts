@@ -63,28 +63,23 @@ export class CartComponent implements OnInit {
       this.itemCount = 0;
       this.productCount = this.cart.cartItems.length;
       this.cartTotals = this.cart.cartTotals;
+      this.productModified = [];
       this.cart.cartItems.forEach((cartItem) => {
         this.itemCount += cartItem.quantity;
-        let productPriceLists = [];
-        this.productService.fetchProduct(this.pipe.transform(cartItem.product.href)).subscribe((result) => {
-            productPriceLists = result.body.priceLists;
-        });
         this.productModified.push({
-          name: cartItem.product.name,
-          href: cartItem.product.href,
-          media: cartItem.product.media.filter((media) => { return media.type === 'image'; }),
-          vendor: this.pipe.transform(cartItem.product.brand.href),
-          priceLists: productPriceLists,
-        });
+            name: cartItem.product.name,
+            href: cartItem.product.href,
+            media: cartItem.product.media.filter((media) => { return media.type === 'image'; }),
+            vendor: this.pipe.transform(cartItem.product.brand.href),
+            priceLists: [],
+          });
       });
       this.localStorage.setItem('cart-quantity', this.itemCount);
       this.cartCount = this.localStorage.getItem('cart-quantity');
-
-      this.setDiscountPrice(this.productModified);
+      this.setDiscountPrice();
       this.setPriceInfo();
       this.setProductImage(this.cartItems, this.productModified);
     });
-
     this.title.setTitle(`Shopping Cart - ${ title }`);
   }
 
@@ -96,9 +91,8 @@ export class CartComponent implements OnInit {
     });
   }
 
-  setDiscountPrice(productModified: Array<ProductCart>) {
+  setDiscountPrice() {
     this.discountProduct = [];
-
     for (const items of this.cart.cartItems) {
       if (items.discount.length > 0) {
         // theres discount in it
@@ -113,41 +107,42 @@ export class CartComponent implements OnInit {
 
   setPriceInfo() {
     this.priceInfo = [];
+    this.productModified.map((product) => {
+        this.productService.fetchProduct(this.pipe.transform(product.href)).subscribe((result) => {
+          product.priceLists = result.body.priceLists;
+          const productHref = product.href;
+          const filteredPriceLists = product.priceLists.filter((priceList) => {
+            return priceList.ranges.length > 1;
+          }).map(_priceList => _priceList.ranges)[0];
 
-    for (const product of this.productModified) {
-      if (product.priceLists) {
-        const productHref = product.href;
-        const filteredPriceLists = product.priceLists.filter(m => m.ranges.length > 1).map(n => n.ranges)[0];
+          if (filteredPriceLists) {
+            for (const price of filteredPriceLists) {
+              const minQty = price.minQuantity;
+              const maxQty = price.maxQuantity;
+              const priceBase = price.price;
+              let priceDiscount = 0;
 
-        if (filteredPriceLists) {
-          for (const price of filteredPriceLists) {
-            const minQty = price.minQuantity;
-            const maxQty = price.maxQuantity;
-            const priceBase = price.price;
-            let priceDiscount = 0;
+              if (price.activePromotionalPrices.length !== 0) {
+                priceDiscount = price.activePromotionalPrices[0]?.netPrice || 0;
+              }
 
-            if (price.activePromotionalPrices.length !== 0) {
-              priceDiscount = price.activePromotionalPrices[0]?.netPrice || 0;
+              const info = {
+                minQty,
+                maxQty,
+                priceBase,
+                priceDiscount,
+                productHref
+              };
+
+              this.priceInfo.push(info);
             }
-
-            const info = {
-              minQty,
-              maxQty,
-              priceBase,
-              priceDiscount,
-              productHref
-            };
-
-            this.priceInfo.push(info);
           }
-        }
-      }
-    }
+        });
+    });
   }
 
   setProductImage(cartItems: LineItems[], productModified: Array<ProductCart>) {
     this.productsImage = [];
-
     for (const item of cartItems) {
       const href = item.product.href;
       const media = productModified.filter(t => t.href === href).map(m => m.media);
@@ -195,7 +190,7 @@ export class CartComponent implements OnInit {
       this.productCount = this.cart.cartItems.length;
       this.cartTotals = this.cart.cartTotals;
 
-      this.setDiscountPrice(this.productModified);
+      this.setDiscountPrice();
       this.setPriceInfo();
       this.setProductImage(this.cartItems, this.productModified);
     })
