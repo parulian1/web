@@ -1,7 +1,6 @@
 @import "src/theme/base";
 
 .main-carousel {
-  margin: 16px 0 60px 0;
   width: 100%;
 
   &:focus {
@@ -14,6 +13,7 @@
     margin-right: 24px;
     border-radius: 5px;
     display: flex;
+    justify-content: center;
 
     a {
       display: block;
