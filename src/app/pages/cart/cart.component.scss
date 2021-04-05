@@ -193,7 +193,7 @@
                     }
 
                     .price-info-list {
-                      width: auto;
+                      width: 203px;
                       padding: 8px;
                       background: $white;
                       display: none;
@@ -209,6 +209,9 @@
                           td {
                             font-size: 14px;
                             line-height: 19px;
+                          }
+                          td.price-info-qty {
+                            width: 40%;
                           }
                         }
                       }
@@ -231,6 +234,49 @@
             }
           }
 
+          .line-detail {
+            display: block;
+            font-size: 10px;
+            background-color: $color-google;
+            margin-left: 130px;
+            padding: 12px 8px;
+            overflow: hidden;
+            .title-detail {
+              font-size: 14px;
+              font-weight: bold;
+              line-height: 18px;
+            }
+            .header {
+              display: block;
+              overflow: hidden;
+              line-height: 14px;
+            }
+            .detail {
+              line-height: 17px;
+              display: block;
+              overflow: hidden;
+            }
+            .left {
+              float: left;
+              width: 15%;
+            }
+            .middle {
+              float: left;
+              width: 22%;
+            }
+            .right {
+              text-align: right;
+              float: left;
+              width: 23%;
+            }
+            .empty-space {
+              float: left;
+              width: 40%;
+            }
+            .base-price {
+              text-decoration: line-through;
+            }
+          }
           .additional {
             display: flex;
             justify-content: flex-end;
@@ -360,6 +406,27 @@
                 .quantity {
                   margin: 16px 0 0 0;
                 }
+              }
+            }
+            .line-detail {
+              display: block;
+              flex-direction: column;
+              margin-left: 0px;
+              .left {
+                width: 20%;
+              }
+              .middle {
+                width: 39%;
+              }
+              .right {
+                width: 40%;
+              }
+              .empty-space {
+                float: none;
+                width: 0%;
+              }
+              .base-price {
+                text-decoration: line-through;
               }
             }
           }
