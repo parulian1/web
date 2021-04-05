@@ -66,13 +66,19 @@ export class CartComponent implements OnInit {
       this.productModified = [];
       this.cart.cartItems.forEach((cartItem) => {
         this.itemCount += cartItem.quantity;
-        this.productModified.push({
+        const existingProduct = this.productModified.find((_product) => {
+          return _product.href === cartItem.product.href;
+        });
+        if (!existingProduct) {
+          this.productModified.push({
             name: cartItem.product.name,
             href: cartItem.product.href,
             media: cartItem.product.media.filter((media) => { return media.type === 'image'; }),
             vendor: this.pipe.transform(cartItem.product.brand.href),
             priceLists: [],
           });
+        }
+
       });
       this.localStorage.setItem('cart-quantity', this.itemCount);
       this.cartCount = this.localStorage.getItem('cart-quantity');
@@ -133,7 +139,6 @@ export class CartComponent implements OnInit {
                 priceDiscount,
                 productHref
               };
-
               this.priceInfo.push(info);
             }
           }
