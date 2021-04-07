@@ -1,38 +1,45 @@
 <div class="navbar">
-  <div class="menu-navbar" [class.has-child]="!!item.children && item.children.length > 0" *ngFor="let item of nav">
-    <span>
-      <a href="#" *ngIf="!!item && item.children.length > 0">{{item.title}}</a>
-      <a [href]="item.url" *ngIf="!item.children || item.children.length ===0">{{item.title}}</a>
-    </span>
-    <div class="navbar-content" [class.has-child]="!!item.children && item.children.length > 0" *ngIf="!!item.children && item.children.length > 0">
-      <div class="side">
-        <ng-container *ngFor="let item_child of item.children; index as i; first as isFirst">
-          <app-nus-link
-            [href]="item_child.url"
-            [title]="item_child.title"
-            (mouseover)="showChildren(item_child)"></app-nus-link>
-        </ng-container>
-      </div>
-      <div class="side-content" [fxShow]="hasChildren" *ngIf="!!listChildren && listChildren.length > 0">
-        <ng-container *ngFor="let child of listChildren; index as i; first as isFirst">
-          <div class="side-content-items">
-            <app-nus-link class="item"
-                          [href]="child.url"
-                          [title]="child.title"
-            ></app-nus-link>
-            <ng-container *ngIf="!!child.children">
-              <div class="side-content-items-children">
-                <ng-container *ngFor="let grandChild of child.children">
-                  <app-nus-link [grandChild]="true"
-                                [href]="grandChild.url"
-                                [title]="grandChild.title"></app-nus-link>
-                </ng-container>
-              </div>
-            </ng-container>
-          </div>
-        </ng-container>
-      </div>
-    </div>
+  <ng-container *ngIf="!!brands && brands.length > 0">
+    <app-menu-navbar [brands]="brands" class="menu-navbar"></app-menu-navbar>
+  </ng-container>
 
-  </div>
+  <ng-container *ngIf="!!nav && nav.length > 0">
+    <app-menu-navbar [navigation]="item" class="menu-navbar" *ngFor="let item of nav"></app-menu-navbar>
+  </ng-container>
+  <!--  <div class="menu-navbar" [class.has-child]="!!item.children && item.children.length > 0" *ngFor="let item of nav">-->
+  <!--    <span>-->
+  <!--      <a href="#" *ngIf="!!item && item.children.length > 0">{{item.title}}</a>-->
+  <!--      <a [href]="item.url" *ngIf="!item.children || item.children.length ===0">{{item.title}}</a>-->
+  <!--    </span>-->
+  <!--    <div class="navbar-content" [class.has-child]="!!item.children && item.children.length > 0"-->
+  <!--         *ngIf="!!item.children && item.children.length > 0">-->
+  <!--      <div class="side">-->
+  <!--        <ng-container *ngFor="let item_child of item.children; index as i; first as isFirst">-->
+  <!--          <app-nus-link-->
+  <!--            [href]="item_child.url"-->
+  <!--            [title]="item_child.title"-->
+  <!--            (mouseover)="showChildren(item_child)"></app-nus-link>-->
+  <!--        </ng-container>-->
+  <!--      </div>-->
+  <!--      <div class="side-content" [fxShow]="hasChildren" *ngIf="!!listChildren && listChildren.length > 0">-->
+  <!--        <ng-container *ngFor="let child of listChildren; index as i; first as isFirst">-->
+  <!--          <div class="side-content-items">-->
+  <!--            <app-nus-link class="item"-->
+  <!--                          [href]="child.url"-->
+  <!--                          [title]="child.title"-->
+  <!--            ></app-nus-link>-->
+  <!--            <ng-container *ngIf="!!child.children">-->
+  <!--              <div class="side-content-items-children">-->
+  <!--                <ng-container *ngFor="let grandChild of child.children">-->
+  <!--                  <app-nus-link [grandChild]="true"-->
+  <!--                                [href]="grandChild.url"-->
+  <!--                                [title]="grandChild.title"></app-nus-link>-->
+  <!--                </ng-container>-->
+  <!--              </div>-->
+  <!--            </ng-container>-->
+  <!--          </div>-->
+  <!--        </ng-container>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
 </div>

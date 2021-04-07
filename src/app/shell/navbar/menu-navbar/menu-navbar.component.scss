@@ -1,0 +1,162 @@
+@import "src/theme/base";
+
+.menu-navbar {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 20px;
+  cursor: pointer;
+  margin: 4px;
+
+  &:hover {
+    .navbar-content {
+      animation: toggleContent 0.3s ease-in-out forwards;
+      display: flex;
+    }
+
+    .chevron-down {
+      animation: spinChevron 0.2s ease-in-out forwards;
+    }
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  .navbar-content {
+    position: absolute;
+    top: 85px;
+    background: $white;
+    z-index: 99;
+    max-height: 472px;
+    overflow: hidden;
+    overflow-y: scroll;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.08);
+    border-radius: $border-radius;
+    opacity: 0;
+    transform: translateY(-1000%);
+
+    &::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      height: 2px;
+      background: grey;
+      border-radius: 10px;
+    }
+
+    .list-brands {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-gap: 24px;
+      padding: 24px 28px;
+
+      .brand {
+        a {
+          display: block;
+
+          img {
+            width: 200px;
+            height: 200px;
+            border-radius: $border-radius;
+            border: 1px solid $color-grey-2;
+          }
+        }
+      }
+    }
+
+    .list-children {
+      display: flex;
+      flex-flow: column;
+      padding: 24px 24px 100px 24px;
+
+      .side-children {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 259px;
+        padding: 10px 12px;
+        border-radius: $border-radius;
+        border: 1px solid transparent;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+          border: 1px solid $color-primary;
+
+          .chevron-right {
+            animation: moveChevron 0.4s ease-in-out forwards;
+          }
+        }
+      }
+    }
+
+    .side-content {
+      border-left: 1px solid $color-grey-2;
+      padding: 24px;
+      display: flex;
+      flex-flow: row wrap;
+      height: auto;
+      overflow: hidden;
+      flex-wrap: wrap;
+      place-content: flex-start;
+      background: #fff;
+
+      &-children {
+        border: 1px solid transparent;
+        margin: 0 8px;
+        padding: 4px;
+
+        &:hover {
+          border: 1px solid $color-primary;
+        }
+      }
+    }
+
+  }
+
+  .chevron-down {
+    margin-left: 4px;
+  }
+}
+
+@keyframes toggleContent {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: translateY(2%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spinChevron {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes moveChevron {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(25%);
+  }
+}
+
+

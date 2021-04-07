@@ -1,0 +1,70 @@
+<span class="menu-navbar" *ngIf="brands">
+  <a href="#">Brands</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 chevron-down" width="16px" height="16px" fill="none"
+       viewBox="0 0 24 24"
+       stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+</svg>
+
+  <div class="navbar-content">
+    <div class="list-brands">
+      <div class="brand" *ngFor="let brand of brands">
+        <a [routerLink]="['/brand', brand.href|entityToSlug]"><img [src]="brand.iconImage" [alt]="brand.name"/></a>
+      </div>
+    </div>
+  </div>
+
+</span>
+
+<span class="menu-navbar" *ngIf="navigation">
+        <a href="#" *ngIf="!!navigation && navigation.children.length > 0">{{navigation.title}}</a>
+        <a [href]="navigation.url"
+           *ngIf="!navigation.children || navigation.children.length === 0">{{navigation.title}}</a>
+  <svg
+    *ngIf="navigation.children.length > 0"
+    xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 chevron-down" width="16px" height="16px" fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+</svg>
+
+  <div class="navbar-content" *ngIf="navigation.children.length > 0" (mouseleave)="resetChildren()">
+    <div class="list-children">
+      <ng-container *ngFor="let firstChild of navigation.children">
+        <span class="side-children" (mouseover)="showChildren(firstChild)">
+          <app-nus-link
+            [href]="firstChild.url"
+            [title]="firstChild.title"
+          ></app-nus-link>
+          <svg
+            *ngIf="firstChild.children.length > 0"
+            xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 chevron-right" width="16px" height="16px" fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </ng-container>
+    </div>
+
+    <div class="side-content" [fxShow]="hasChildren" *ngIf="!!listChildren && listChildren.length > 0">
+      <ng-container *ngFor="let secondChild of listChildren">
+        <span class="side-content-children">
+          <app-nus-link
+            [href]="secondChild.url"
+            [title]="secondChild.title"
+          ></app-nus-link>
+            <ng-container *ngIf="secondChild.children.length > 0">
+              <span class="grandchildren" *ngFor="let grandChild of secondChild.children">
+                <app-nus-link [grandChild]="true" [href]="grandChild.url" [title]="grandChild.title"></app-nus-link>
+              </span>
+            </ng-container>
+        </span>
+      </ng-container>
+    </div>
+
+  </div>
+
+
+
+</span>

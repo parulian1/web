@@ -28,6 +28,7 @@ import { SideMenuHeaderComponent } from '@app/shell/header/side-menu-header';
 import { EntityToSlugPipe } from '@app/shared/utils/entity-to-slug.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DefaultPipe } from '@app/shell/default.pipe';
+import { MenuNavbarComponent } from './navbar/menu-navbar/menu-navbar.component';
 
 
 @NgModule({
@@ -65,6 +66,7 @@ import { DefaultPipe } from '@app/shell/default.pipe';
     SideMenuHeaderComponent,
     DefaultPipe,
     PaymentComponent,
+    MenuNavbarComponent,
   ],
   exports: [
     ShellComponent,

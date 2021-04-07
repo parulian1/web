@@ -7,8 +7,6 @@ a {
   font-weight: bold;
   text-decoration: none;
   color: $color-primary;
-  margin: 0 0 16px 0;
-  padding: 12px;
   border: solid 1px $white;
   width: 100%;
 
@@ -17,10 +15,5 @@ a {
     line-height: 19px;
     font-weight: normal;
     margin: 0 0 0 16px;
-  }
-
-  &:hover {
-    border: solid 1px $color-primary;
-    border-radius: $border-radius;
   }
 }

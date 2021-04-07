@@ -1,7 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {NavigationService} from '@app/services/navigation.service';
-import {Navigation} from '@app/models/navigation';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { Navigation } from '@app/models/navigation';
+import { NavigationService } from '@app/services/navigation.service';
+import { BrandService } from '@app/services';
+import { Brand } from '@app/models';
 
 @Component({
   selector: 'app-navbar',
@@ -10,23 +13,38 @@ import {Router} from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
 
-  nav: Array<Navigation> = [];
-  public readonly navigationType: string = 'navbar';
+  readonly NAVIGATION_TYPE = 'navbar';
+
+  nav: Navigation[];
+  listChildren: Navigation[];
+  brands: Brand[];
+
   hasChildren: boolean;
-  listChildren: Navigation[] = [];
   isActive: boolean;
 
-  constructor(private navigationService: NavigationService, private router: Router) {
+  constructor(private navigationService: NavigationService,
+              private router: Router,
+              private brandService: BrandService
+  ) {
   }
 
   ngOnInit(): void {
     this.getNavigation();
+    this.getHomeBrand();
   }
 
   getNavigation() {
-    this.navigationService.getNavigationByType(this.navigationType).subscribe(response => {
+    this.navigationService.getNavigationByType(this.NAVIGATION_TYPE).subscribe(response => {
       this.nav = response.body;
+    }, error => {
+      this.nav = []
     });
+  }
+
+  getHomeBrand() {
+    this.brandService.getHomeBrand(true).subscribe(response => {
+      this.brands = response.body;
+    }, error => this.brands = []);
   }
 
   getUrl(href: string) {
