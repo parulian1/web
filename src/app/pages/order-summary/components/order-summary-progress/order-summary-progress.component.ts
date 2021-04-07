@@ -4,6 +4,8 @@ import { OrderCancelDialogComponent } from '@app/shared/order-cancel-dialog/orde
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderHistoryService } from '@app/services';
 import { MatDialog } from '@angular/material/dialog';
+import { AlertDialogComponent } from '@app/shared/alert-dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-order-summary-progress',
@@ -23,6 +25,7 @@ export class OrderSummaryProgressComponent implements OnInit {
     private router: Router,
     private orderHistory: OrderHistoryService,
     private dialog: MatDialog,
+    private snackbar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -60,8 +63,28 @@ export class OrderSummaryProgressComponent implements OnInit {
     if (this.orderNumber) {
       this.orderHistory.cancelOrder(this.orderNumber).subscribe(() => {
         //
-        this.router.navigateByUrl(`profile/orders/${this.orderNumber}`)
+        this.router.navigateByUrl(`profile/orders/${this.orderNumber}`);
+      }, error => {
+        // handle error
+        this.orderCancelFailMessage(error);
+        this.router.navigateByUrl(`profile/orders/${this.orderNumber}`);
       });
     }
+  }
+
+  orderCancelFailMessage(error: any): void {
+    const params = {
+      status: error.status,
+      message: 'Failed to cancel order, maybe you already canceled it.',
+      additionalMessage: error.error.detail || error.error.message,
+      icon: 'error_outline',
+    };
+    this.snackbar.openFromComponent(AlertDialogComponent, {
+      data: params,
+      duration: 5 * 1000, // 5 seconds
+      verticalPosition: 'top',
+      horizontalPosition: 'right',
+      panelClass: ['mt-alert--is-info', 'mt-alert--has-text-centered'],
+    });
   }
 }
