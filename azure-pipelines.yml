@@ -26,6 +26,8 @@ jobs:
           feedId: $(FEED_ID)
 
   - job: build_prod
+    pool:
+      name: docker-agent
     displayName: Build & Packaging PROD
     dependsOn: unit_test
     condition: |
@@ -42,6 +44,8 @@ jobs:
         envVars: 'APM_NAME=mt-web APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
 
   - job: build_staging
+    pool:
+      name: docker-agent
     displayName: Build & Packaging Staging
     dependsOn: unit_test
     condition: |
