@@ -4,7 +4,7 @@
     <div class="dialog-content">
       <div class="product">
         <div class="left">
-          <img src="{{ !!data.products.media && data.products.media.length > 0 ? data.products.media[0].image : '' }}"
+          <img src="{{ isProductImgAvailable ? productImgSrc : '' }}"
                alt="{{ data.products.name }}"/>
         </div>
         <div class="right">
