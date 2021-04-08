@@ -13,9 +13,9 @@ header {
 
 @media all and (max-width: 768px) {
   header {
-    height: 96px;
     position: sticky;
-    top: 0px;
+    top: 0;
     z-index: 99;
+    box-shadow: 0 4px 6px rgb(0 0 0 / 8%), 0 4px 16px rgb(0 0 0 / 8%);
   }
 }
