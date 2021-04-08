@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-nus-link',
   template: `
-    <a class="link {{lastChildren}}" *ngIf="isInternal" [routerLink]="theLink()"
+    <a class="link {{contentChildren}} {{lastChildren}}" *ngIf="isInternal" [routerLink]="theLink()"
        [queryParams]="theParam()">{{title}}</a>
-    <a class="link {{lastChildren}}" style="cursor: pointer" *ngIf="!isInternal" (click)="goToPage(href)" target="_blank">{{title}}</a>
+    <a class="link {{contentChildren}} {{lastChildren}}" style="cursor: pointer" *ngIf="!isInternal" (click)="goToPage(href)" target="_blank">{{title}}</a>
   `,
   styleUrls: ['./nus-link.component.scss']
 })
@@ -15,11 +15,13 @@ export class NusLinkComponent implements OnInit, OnChanges {
   @Input() href: string;
   @Input() title: string;
   @Input() grandChild: boolean;
+  @Input() contentChild: boolean;
 
   isValid = false;
   isInternal = false;
   parsedUrl: any;
   lastChildren = '';
+  contentChildren = '';
 
   private INTERNAL_LINK = [
     'iam', 'cms', 'catalog', 'order', 'fulfillment'
@@ -31,6 +33,10 @@ export class NusLinkComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     if (this.grandChild === true) {
       this.lastChildren = 'last-child';
+    }
+
+    if (this.contentChild === true) {
+      this.contentChildren = 'content-child';
     }
   }
 

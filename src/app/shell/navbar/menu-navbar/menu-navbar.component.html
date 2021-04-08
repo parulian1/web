@@ -51,6 +51,7 @@
       <ng-container *ngFor="let secondChild of listChildren">
         <span class="side-content-children">
           <app-nus-link
+            [contentChild]="true"
             [href]="secondChild.url"
             [title]="secondChild.title"
           ></app-nus-link>

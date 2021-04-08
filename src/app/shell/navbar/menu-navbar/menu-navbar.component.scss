@@ -8,6 +8,7 @@
   line-height: 20px;
   cursor: pointer;
   margin: 4px;
+  position: relative;
 
   &:hover {
     .navbar-content {
@@ -27,7 +28,7 @@
 
   .navbar-content {
     position: absolute;
-    top: 85px;
+    top: 16px;
     background: $white;
     z-index: 99;
     max-height: 472px;
@@ -96,7 +97,8 @@
     .side-content {
       border-left: 1px solid $color-grey-2;
       padding: 24px;
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
       flex-flow: row wrap;
       height: auto;
       overflow: hidden;
@@ -108,10 +110,6 @@
         border: 1px solid transparent;
         margin: 0 8px;
         padding: 4px;
-
-        &:hover {
-          border: 1px solid $color-primary;
-        }
       }
     }
 
