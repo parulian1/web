@@ -4,9 +4,9 @@ import { ProductDetail } from '@app/models/product-detail';
 import { getSlugFromHref } from '@app/shared/helpers';
 import { Cart, CartDiscounts, CartProduct } from '@app/models/cart';
 import { AnalyticInterface } from '@app/services/web-analytic/analytic.interface';
-import { StateCheckout } from "@app/services";
-import { environment } from "@env/environment.staging";
-import { Product } from "@app/library/gtagjs/gtag-definitions";
+import { StateCheckout } from '@app/services';
+import { environment } from '@env/environment.staging';
+import { Product } from '@app/library/gtagjs/gtag-definitions';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class AnalyticGtmService implements AnalyticInterface {
   ) {
   }
 
-  public pageView(title: string, url: string, reset = true) {
+  public pageView(title: string, url: string, reset: boolean = true) {
     if (reset) {
       this.resetDataLayer();
     }
@@ -147,7 +147,7 @@ export class AnalyticGtmService implements AnalyticInterface {
     })
   }
 
-  public trackAddToCart(product: ProductDetail, qty = 1) {
+  public trackAddToCart(product: ProductDetail, qty: number = 1) {
     this.gtmService.pushTag({
       'event': 'add_to_cart',
       'ecommerce': {
@@ -167,7 +167,7 @@ export class AnalyticGtmService implements AnalyticInterface {
     })
   }
 
-  public trackRemoveFromCart(product: CartProduct, qty = 1) {
+  public trackRemoveFromCart(product: CartProduct, qty: number = 1) {
     this.gtmService.pushTag({
       'event': 'remove_from_cart',
       'ecommerce': {
@@ -209,41 +209,6 @@ export class AnalyticGtmService implements AnalyticInterface {
       'ecommerce': {
         'items': itemize,
         'coupon': cartDiscounts
-      }
-    })
-  }
-
-  public trackPurchase() {
-    this.gtmService.pushTag({
-      'event': 'purchase',
-      'ecommerce': {
-        'purchase': {
-          'transaction_id': 'T12345',
-          'affiliation': 'Online Store',
-          'value': '35.43',
-          'tax': '4.90',
-          'shipping': '5.99',
-          'currency': 'EUR',
-          'coupon': 'SUMMER_SALE',
-          'items': [{
-            'item_name': 'Triblend Android T-Shirt',
-            'item_id': '12345',
-            'item_price': '15.25',
-            'item_brand': 'Google',
-            'item_category': 'Apparel',
-            'item_variant': 'Gray',
-            'quantity': 1,
-            'item_coupon': ''
-          }, {
-            'item_name': 'Donut Friday Scented T-Shirt',
-            'item_id': '67890',
-            'item_price': '33.75',
-            'item_brand': 'Google',
-            'item_category': 'Apparel',
-            'item_variant': 'Black',
-            'quantity': 1
-          }]
-        }
       }
     })
   }
@@ -295,11 +260,11 @@ export class AnalyticGtmService implements AnalyticInterface {
     });
   }
 
-  public purchaseOrder(purchaseEvent: { transaction_id: string; shipping: number; currency: string; tax: number; value: number; items: Array<Product> }){
+  public purchaseOrder(purchaseEvent: { transaction_id: string; shipping: number; currency: string; tax: number; value: number; items: Array<Product> }) {
     this.gtmService.pushTag({
       'event': 'purchase',
       'ecommerce': {
-        'purchase' : purchaseEvent
+        'purchase': purchaseEvent
       }
     });
   }
@@ -315,5 +280,8 @@ export class AnalyticGtmService implements AnalyticInterface {
     this.gtmService.pushTag({
       event: 'sign_up', method,
     })
+  }
+
+  trackPurchase(): void {
   }
 }
