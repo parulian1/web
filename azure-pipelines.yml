@@ -1,6 +1,7 @@
 trigger:
   - release/*
   - hotfix/*
+  - master
 
 pool:
   vmImage: ubuntu-20.04
@@ -10,6 +11,9 @@ variables:
   # Don't forget add trailing slash ('/').
   BUILD_DEST_PATH: dist/martha-web/browser/
   APM_URL: https://apm.bhisma.cloud/
+
+  # runtime variables, automatically defined by agent when pipeline running
+  IS_NON_MASTER_BRANCH: $[ne(variables['Build.SourceBranch'], 'refs/heads/master')]
 
 resources:
   repositories:
@@ -26,13 +30,14 @@ jobs:
           feedId: $(FEED_ID)
 
   - job: build_prod
+    dependsOn: unit_test
     pool:
       name: docker-agent
     displayName: Build & Packaging PROD
-    dependsOn: unit_test
     condition: |
       and(
         succeeded(),
+        eq('True', variables.IS_NON_MASTER_BRANCH),
         ne(variables['Build.Reason'], 'PullRequest')
       )
     steps:
@@ -44,13 +49,14 @@ jobs:
         envVars: 'APM_NAME=mt-web APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
 
   - job: build_staging
+    dependsOn: build_prod
     pool:
       name: docker-agent
     displayName: Build & Packaging Staging
-    dependsOn: unit_test
     condition: |
       and(
         succeeded(),
+        eq('True', variables.IS_NON_MASTER_BRANCH),
         ne(variables['Build.Reason'], 'PullRequest')
       )
     steps:
