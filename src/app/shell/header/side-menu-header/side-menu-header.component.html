@@ -14,10 +14,11 @@
   </div>
   <div class="menu-navbar">
     <ng-container *ngFor="let nav of navigation$|async">
-      <div class="nav" >
+      <div class="nav">
         <a (click)="showMenu(nav.title, level, '')" *ngIf="nav.children.length>0">{{nav.title}}</a>
         <a [href]="nav.url" *ngIf="nav.children.length === 0">{{nav.title}}</a>
-        <mat-icon *ngIf="nav.children.length !== 0" (click)="showMenu(nav.title, level, '')">keyboard_arrow_right</mat-icon>
+        <mat-icon *ngIf="nav.children.length !== 0" (click)="showMenu(nav.title, level, '')">keyboard_arrow_right
+        </mat-icon>
       </div>
     </ng-container>
   </div>
@@ -31,10 +32,15 @@
   </span>
   <div class="brands-list">
     <div class="brands-item" *ngFor="let brandData of brands$|async; index as i; first as isFirst">
-      <a [routerLink]="['/brand', brandData.href|entityToSlug]" [mat-dialog-close]="true"><img [src]="brandData.iconImage"
-                                                                     (error)="getDefaultImage($event)"/></a>
+      <a [routerLink]="['/brand', brandData.href|entityToSlug]" [mat-dialog-close]="true"><img
+        [src]="brandData.iconImage"
+        (error)="getDefaultImage($event)"/></a>
     </div>
   </div>
+</div>
+
+<div class="reseller" *ngIf="getIsReseller()">
+  <a [routerLink]="['/drop-shipping']" (click)="closeSideMenu('')">Menu Reseller</a>
 </div>
 
 <div class="category" *ngIf="mode !== 'brands' && mode !== 'default'">

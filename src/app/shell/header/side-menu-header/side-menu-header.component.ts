@@ -108,6 +108,10 @@ export class SideMenuHeaderComponent implements OnInit {
     this.mode = 'default';
   }
 
+  getIsReseller(): boolean {
+    return this.creds.getIsReseller();
+  }
+
   logout() {
     this.authService.logout();
     this.router.navigateByUrl('.');

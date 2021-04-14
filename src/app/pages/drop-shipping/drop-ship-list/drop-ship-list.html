@@ -1,0 +1,160 @@
+<div class="container">
+  <div *ngIf="responsiveService.isDesktop || responsiveService.isTablet" class="reseller-container">
+    <div class="title-big">
+  <span class="active">
+    Order List
+  </span>
+      <span>
+    <a [routerLink]="['/drop-shipping/saved-catalog']">Saved Order</a>
+  </span>
+    </div>
+    <table>
+      <thead>
+      <tr>
+        <th><input (click)="selectAll()" [checked]="getIsSelectAll()" name="select-all" type="checkbox"/></th>
+        <th class="product-name">Product Name</th>
+        <th class="price"><span>Original</span> Price</th>
+        <th>Stock</th>
+        <th class="price">Reseller Price</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let catalogItem of resellerCatalog.resellerCatalogItems; let i = index">
+        <td>
+          <input (click)="selectProduct(catalogItem)" [checked]="getIsChecked(catalogItem)" name="product-selection"
+                 type="checkbox">
+        </td>
+        <td class="product-column">
+          <a [routerLink]="['/products', catalogItem.product.href | entityToSlug ]">
+            <img [src]="catalogItem.product.media[0].image" alt="Product Image" style='height: 102px; width: 102px'>
+          </a>
+          <div class="product-column-inner">
+          <span class="product-title"><a [routerLink]="['/products', catalogItem.product.href | entityToSlug ]">
+            {{ catalogItem.product.name | titlecase }}
+          </a></span>
+            <span class="product-attr"> <ng-container
+              *ngFor="let productAttribute of catalogItem.product.attributes | keyvalue;">
+            {{ productAttribute.key | entityToSlug | titlecase }} {{ productAttribute.value | titlecase }}
+          </ng-container></span>
+          </div>
+        </td>
+        <td>
+      <span class="print-hidden">
+        {{ catalogItem.product.unitPrice?.current|currency:'Rp ': 'symbol':'1.0' }}
+      </span>
+          <span class="print-only">
+        {{ catalogItem.product.unitPrice?.current|currency:'Rp ': 'symbol':'1.0' }}
+      </span>
+        </td>
+        <td>{{ catalogItem.availableStock }}</td>
+
+        <td class="print-hidden">
+          <div class="print-hidden-content">
+            <input [(ngModel)]="catalogItem.price"
+                   [disabled]="!getIsChecked(catalogItem)"
+                   [min]="catalogItem.product.unitPrice.current" placeholder="1.0"
+                   type="number">
+            <div class="print-hidden-remove">
+              <a (click)="removeProduct(catalogItem)">Hapus</a>
+            </div>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div *ngIf="selectedCatalog" class="reseller-row-info">
+      <div class="reseller-left-info">
+        <ng-container *ngIf="!selectedCatalogItems; else itemSelected">&nbsp;</ng-container>
+        <ng-template #itemSelected>
+          {{ selectedCatalogItems.length }} Produk dipilih
+        </ng-template>
+      </div>
+      <div class="reseller-right-info">
+        <button (click)="updateCatalogAndSaveAsNewSavedCatalog()" class="btn btn-primary btn-full" type="button">
+          Save as Catalog
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="responsiveService.isMobile" class="reseller-container-mobile">
+    <div class="title-big">
+    <span class="active">
+      Order List
+    </span>
+      <span>
+      <a [routerLink]="['/drop-shipping/saved-catalog']">Saved Order</a>
+    </span>
+    </div>
+    <table>
+      <thead>
+      <tr>
+        <th><input (click)="selectAll()" [checked]="getIsSelectAll()" name="select-all" type="checkbox"/></th>
+        <th colspan="2">Product Name</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let catalogItem of resellerCatalog.resellerCatalogItems; let i = index">
+        <td>
+          <input (click)="selectProduct(catalogItem)" [checked]="getIsChecked(catalogItem)" name="product-selection"
+                 type="checkbox">
+        </td>
+        <td class="reseller-content">
+          <div class="reseller-content-top">
+            <a [routerLink]="['/products', catalogItem.product.href | entityToSlug ]">
+              <img [src]="getCatalogItemProductImage(catalogItem)" alt="Product Image"
+                   style='height: 102px; width: 102px'>
+            </a>
+            <div class="product-title">
+              <a [routerLink]="['/products', catalogItem.product.href | entityToSlug ]" class="title">
+                {{ catalogItem.product.name | titlecase }}
+              </a>
+              <ng-container *ngFor="let productAttribute of catalogItem.product.attributes | keyvalue;">
+                <span
+                  class="weight">{{ productAttribute.key | entityToSlug | titlecase }} {{ productAttribute.value | titlecase }}</span>
+              </ng-container>
+            </div>
+          </div>
+          <div class="reseller-content-price">
+            <span class="label">Original Price</span>
+            <span class="print-hidden">
+              {{ catalogItem.product.unitPrice?.current|currency:'Rp ': 'symbol': '1.0' }}
+            </span>
+            <span class="print-only">
+              {{ catalogItem.product.unitPrice?.current|currency:'Rp ': 'symbol': '1.0' }}
+            </span>
+          </div>
+          <div class="reseller-content-stock">
+            <span class="label">Stock</span>
+            <span>{{ catalogItem.availableStock }}</span>
+          </div>
+          <div class="reseller-content-input">
+            <span class="label">Reseller Price</span>
+            <input [(ngModel)]="catalogItem.price"
+                   [disabled]="!getIsChecked(catalogItem)"
+                   [min]="catalogItem.product.unitPrice.current" placeholder="1.0"
+                   type="number">
+          </div>
+          <div class="reseller-content-remove">
+            <a (click)="removeProduct(catalogItem)">Hapus</a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="reseller-row-info" *ngIf="selectedCatalog">
+      <div class="reseller-left-info">
+        <ng-container *ngIf="!selectedCatalogItems; else itemSelected">&nbsp;</ng-container>
+        <ng-template #itemSelected>
+          {{ selectedCatalogItems.length }} Produk dipilih
+        </ng-template>
+      </div>
+      <div class="reseller-right-info">
+        <button (click)="updateCatalogAndSaveAsNewSavedCatalog()" class="btn btn-primary btn-full" type="button">
+          Save as Catalog
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

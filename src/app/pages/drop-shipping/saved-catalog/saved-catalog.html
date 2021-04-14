@@ -1,0 +1,141 @@
+<div class="container">
+  <div class="title-big">
+    <a [routerLink]="['/drop-shipping/saved-catalog']"><i class="material-icons">keyboard_arrow_left</i></a>
+    <span class="text-heading-2">Detail Save Order</span>
+  </div>
+  <div class="reseller-row saved-info">
+    <div class="reseller-column catalog-name">
+      <p class="text-subheading-2">Nama Katalog</p>
+      <span class="text-subheading-1">{{ entity.name | default: '-' }}</span>
+    </div>
+    <div class="reseller-column shipment-address">
+      <p class="text-subheading-2">Alamat pengiriman</p>
+      <ng-container *ngIf="!!entity.data?.savedAddress?.shipToName; else noAddress">
+        <span class="reseller-customer-info text-body-1"
+              name="customer-shiptoname">{{ entity.data?.savedAddress.shipToName }}</span>
+        <span class="reseller-customer-info text-body-1">
+          {{ entity.data?.savedAddress.street }} {{ entity.data?.savedAddress.district }} -
+          {{ entity.data?.savedAddress.city }} {{ entity.data?.savedAddress.state }} -
+          {{ entity.data?.savedAddress.zipCode }} {{ entity.data?.savedAddress.phoneNumber }}
+        </span>
+        <p class="reseller-customer-info text-body-1 accent-dark"><a (click)="showDialogAndGetShipmentMethod()">Ubah
+          alamat</a></p>
+      </ng-container>
+      <ng-template #noAddress>
+        <button type="button" class="btn btn-primary btn-full-mobile no-margin"
+                (click)="showDialogAndGetShipmentMethod()">+ Alamat Penerima
+        </button>
+      </ng-template>
+    </div>
+    <div class="reseller-column shipment-method">
+      <p class="text-subheading-2">Metode Pengiriman</p>
+      <label>
+        <ng-container *ngFor="let warehouseCatalogItem of warehouseCatalogItems">
+          <div class="saved-catalog-shipment-cost">
+            <label *ngIf="warehouseCatalogItems.length > 1">{{ warehouseCatalogItem.name }}</label>
+            <app-shared-shipping-method *ngIf="!!shippingMethod" [shippingMethod]="shippingMethod"
+                                        [item]="warehouseCatalogItem"
+                                        [shippingSelect]="shippingSelect"
+                                        [selectedShipmentCost]="getMethodOfShippingSelect()"
+                                        (shippingChosen)="getShippingChosen($event)">
+            </app-shared-shipping-method>
+          </div>
+        </ng-container>
+
+      </label>
+    </div>
+  </div>
+
+  <div class="divTable">
+    <div class="headRow">
+      <div class="divCell checkbox">
+        <input type="checkbox" (click)="selectAll()" [checked]="getIsSelectAll()" name="select-all"/>
+      </div>
+      <div class="divCell name">
+        <span class="text-subheading-2">Product Name</span>
+      </div>
+      <div class="divCell ori-price">
+        <span class="print-hidden text-subheading-2">Original Price</span>
+      </div>
+      <div class="divCell stock">
+        <span class="text-subheading-2">Stock</span>
+      </div>
+      <div class="divCell resel-price print-hidden">
+        <span class="text-subheading-2">Reseller Price</span>
+      </div>
+      <div class="divCell quantity">
+        <span class="text-subheading-2">Quantity</span>
+      </div>
+      <div class="divCell subtotal">
+        <span class="text-subheading-2">Subtotal</span>
+      </div>
+    </div>
+    <div class="divRow" *ngFor="let catalogItem of entity.items; let i = index">
+      <div class="divCell checkbox">
+        <input type="checkbox" [checked]="getIsChecked(catalogItem)" name="product-selection"
+               (click)="selectProductAndFetchShippingMethod(catalogItem)">
+      </div>
+      <div class="divCell name">
+        <div class="item-name">
+          <input class="show-mobile" type="checkbox" [checked]="getIsChecked(catalogItem)" name="product-selection"
+                 (click)="selectProductAndFetchShippingMethod(catalogItem)">
+          <a [routerLink]="['/products', catalogItem.product.href | entityToSlug]">
+            <img [src]="getCatalogItemProductImage(catalogItem)" alt="Product Image"></a>
+          <div>
+            <a [routerLink]="['/products', catalogItem.product.href | entityToSlug ]">
+              <span class="text-body-1">{{ catalogItem.product.name | titlecase }}</span>
+            </a>
+            <ng-container *ngFor="let productAttribute of catalogItem.product.attributes | keyvalue;">
+              <p
+                class="text-caption">{{ productAttribute.key | entityToSlug | titlecase }} {{ productAttribute.value | titlecase }}</p>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="divCell ori-price">
+        <span class="print-hidden text-caption show-mobile">Original Price</span>
+        <span
+          class="print-hidden text-body2">{{ catalogItem.product.unitPrice?.current|currency:'Rp. ' : 'symbol' : '1.0'}}</span>
+        <span
+          class="print-only text-body2">{{ catalogItem.product.unitPrice?.current|currency:'Rp. ' : 'symbol' : '1.0'}}</span>
+      </div>
+      <div class="divCell stock">
+        <span class="text-caption show-mobile">Stock</span>
+        <span class="text-body2">{{ catalogItem.availableStock }}</span>
+      </div>
+      <div class="divCell resel-price print-hidden">
+        <span class="text-caption show-mobile">Reseller Price</span>
+        <input type="number" [(ngModel)]="catalogItem.price" [min]="catalogItem.product.unitPrice.current"
+               placeholder="1.00">
+      </div>
+      <div class="divCell quantity print-hidden">
+        <span class="text-caption show-mobile">Quantity</span>
+        <app-saved-catalog-qty [catalogItem]="catalogItem" (quantityFilled)="quantityFilled($event)"
+                               (getShipment)="getShipmentMethod()"></app-saved-catalog-qty>
+      </div>
+      <div class="divCell subtotal">
+        <span class="text-caption show-mobile">Subtotal</span>
+        <span class="text-body2">
+        {{ catalogItem.price * catalogItem.quantity |currency:'Rp. ' : 'symbol' : '1.0'}}
+      </span>
+        <div class="print-hidden-remove">
+          <a (click)="removeProduct(catalogItem)">Hapus</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="reseller-row-info">
+    <div class="reseller-left-info">
+      <span class="text-body-1">Total belanja</span>
+      <span class="text-body-1 accent-dark">{{ getTotal()|currency: 'Rp. ' : 'symbol' : '1.0' }}</span>
+    </div>
+    <div class="reseller-right-info">
+      <a (click)="downloadQuotation()" class="text-body-1">Download Quotation</a>
+      <button type="button" class="btn btn-primary btn-full no-margin" [disabled]="isDisabledToCheckout()"
+              (click)="checkout()">
+        Checkout
+      </button>
+    </div>
+  </div>
+</div>
+

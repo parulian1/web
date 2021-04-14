@@ -37,6 +37,7 @@ const routes: Routes = [
       {path: 'errors', loadChildren: () => import('./errors').then(m => m.ErrorsModule)},
       {path: 'page', loadChildren: () => import('./page/page.module').then(m => m.PageModule)},
       {path: 'promo', loadChildren: () => import('./promotion/promotion.module').then(m => m.PromotionModule)},
+      {path: 'drop-shipping', loadChildren: () => import('./drop-shipping/drop-shipping.module').then(m => m.DropShippingModule)},
       {
         path: 'auth-confirm',
         loadChildren: () => import('./auth-confirm/auth-confirm.module').then(m => m.AuthConfirmModule)

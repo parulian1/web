@@ -20,9 +20,6 @@
   <button class="nav-item" [routerLink]="['list-review']" [routerLinkActive]="'active'">
     Ulasan
   </button>
-  <button class="nav-item" [routerLink]="['drop-shipping']" [routerLinkActive]="'active'" *ngIf="getIsReseller()">
-    Katalog Reseller
-  </button>
   <button class="nav-item" (click)="logout()">
     Keluar
   </button>
@@ -61,11 +58,6 @@
   <button class="nav-item" [ngClass]="{ 'active':getActiveStat('review') }" (click)="toggleMobileMenu()"
           [routerLink]="['list-review']">
     Ulasan
-  </button>
-  <button class="nav-item"  [ngClass]="{ 'active':getActiveStat('drop-shipping') }" (click)="toggleMobileMenu()"
-          *ngIf="getIsReseller()"
-          [routerLink]="['drop-shipping']">
-    Katalog Reseller
   </button>
   <button class="nav-item" (click)="logout()">
     Keluar

@@ -1,0 +1,140 @@
+@import "src/theme/base";
+
+:host {
+  width: 100%;
+}
+
+.container {
+  width: 1024px;
+  max-width: 100%;
+  margin: auto;
+  padding: 20px 0 40px 0;
+}
+
+.title-big {
+  display: flex;
+  width: 100%;
+
+  span {
+    cursor: default;
+    float: left;
+    color: $color-primary;
+    padding: 12px 24px;
+  }
+
+  .active {
+    border-bottom: 4px solid $color-accent;
+  }
+
+  a {
+    color: $color-secondary;
+
+    &:hover {
+      color: $color-light-black;
+    }
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+.saved-catalog-list {
+  width: 100%;
+}
+
+.saved-catalog-row {
+  width: 100%;
+  display: block;
+  border: 1px solid $color-light-grey;
+  padding: 16px 24px;
+  margin: 16px 0;
+  border-radius: $border-radius-double;
+
+  &:hover {
+    box-shadow: 0px 1px 4px 1px rgba(147, 175, 189, 0.85);
+  }
+}
+
+.saved-catalog-name {
+  border-bottom: 1px solid $color-light-grey;
+  padding-bottom: 16px;
+
+  span + span {
+    margin-left: 8px;
+  }
+}
+
+.item-detail {
+  display: grid;
+  grid-template-columns: auto 140px;
+  align-items: center;
+  padding-top: 16px;
+  grid-column-gap: 10px;
+}
+
+.saved-catalog-first-item {
+  display: grid;
+  grid-template-columns: 102px auto;
+  grid-column-gap: 10px;
+
+  .item-img {
+    img {
+      width: 102px;
+      height: 102px;
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+    }
+  }
+}
+
+.item-action {
+  display: flex;
+  justify-content: center;
+  vertical-align: center;
+}
+
+@media screen and (max-width: 768px) {
+  .title-big {
+    margin: 16px 0;
+  }
+
+  .container {
+    padding: 0 16px 36px 16px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .title-big {
+    .active {
+      border-bottom: 2px solid $color-accent;
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-break) {
+  .saved-catalog-row {
+    padding: 8px 16px;
+    margin: 8px 0;
+  }
+
+  .item-detail {
+    grid-template-columns: 100%;
+  }
+
+  .saved-catalog-first-item {
+    grid-template-columns: 64px auto;
+
+    .item-img {
+      img {
+        width: 64px;
+        height: 64px;
+      }
+    }
+  }
+
+  .btn-primary {
+    margin: 16px 0 0 0;
+  }
+}
