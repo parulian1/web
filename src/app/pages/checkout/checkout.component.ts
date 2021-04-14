@@ -137,7 +137,6 @@ export class CheckoutComponent implements OnInit, DoCheck {
             this.analyticGtmService.setCheckoutEvents(1, 'select address');
           } else {
             this.gaCheckoutProgress(1,'select address');
-
           }
         }
       });

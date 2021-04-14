@@ -1,11 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { ConfigService } from '@app/core';
 import { OrderSummary, SummaryPayment } from '@app/models/checkout';
 import { OrderCancelDialogComponent } from '@app/shared/order-cancel-dialog/order-cancel-dialog.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { OrderHistoryService } from '@app/services';
-import { MatDialog } from '@angular/material/dialog';
 import { AlertDialogComponent } from '@app/shared/alert-dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { OrderHistoryService } from '@app/services';
+import { AnalyticGtmService } from '@app/services/web-analytic';
+import { GtagService } from '@app/library/gtagjs/gtag.service';
 
 @Component({
   selector: 'app-order-summary-progress',
@@ -14,7 +18,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class OrderSummaryProgressComponent implements OnInit {
   @Input() orderSummary: OrderSummary;
+
   orderNumber: string;
+  gaAccountType = '';
 
   get payment(): SummaryPayment {
     return this.orderSummary.payment;
@@ -26,10 +32,17 @@ export class OrderSummaryProgressComponent implements OnInit {
     private orderHistory: OrderHistoryService,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
-  ) { }
+    private appConfigService: ConfigService,
+    private analyticGtmService: AnalyticGtmService,
+    private gtag: GtagService
+  ) {
+  }
 
   ngOnInit(): void {
     this.orderNumber = this.route.snapshot.queryParams.order_id;
+    this.gaAccountType = this.appConfigService.config?.gaAccountType;
+
+    this.setTag();
   }
 
   //
@@ -38,6 +51,7 @@ export class OrderSummaryProgressComponent implements OnInit {
     //        for now using status payment, (unpaid must be VA payment)...
     return this.payment.status === 'unpaid';
   }
+
   copyToClipboard(vaNumber: string) {
     if (vaNumber) {
       document.addEventListener('copy', (e: ClipboardEvent) => {
@@ -55,10 +69,13 @@ export class OrderSummaryProgressComponent implements OnInit {
       width: '400px',
     });
 
-    dialogRef.afterClosed().subscribe(({ isCancel }: { isCancel: boolean }) => {
-      if (isCancel) { this.onOrderCancel(); }
+    dialogRef.afterClosed().subscribe(({isCancel}: { isCancel: boolean }) => {
+      if (isCancel) {
+        this.onOrderCancel();
+      }
     })
   }
+
   onOrderCancel(): void {
     if (this.orderNumber) {
       this.orderHistory.cancelOrder(this.orderNumber).subscribe(() => {
@@ -86,5 +103,13 @@ export class OrderSummaryProgressComponent implements OnInit {
       horizontalPosition: 'right',
       panelClass: ['mt-alert--is-info', 'mt-alert--has-text-centered'],
     });
+  }
+
+  setTag() {
+    if (this.gaAccountType === 'gtm') {
+      this.analyticGtmService.pageView('Order Summary Progress', this.router.url);
+    } else {
+      this.gtag.pageView('Order Summary Progress', this.router.url);
+    }
   }
 }
