@@ -3,13 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { ConfigService } from '@app/core';
 import { OrderSummary, SummaryPayment } from '@app/models/checkout';
 import { OrderCancelDialogComponent } from '@app/shared/order-cancel-dialog/order-cancel-dialog.component';
 import { AlertDialogComponent } from '@app/shared/alert-dialog';
 import { OrderHistoryService } from '@app/services';
-import { AnalyticGtmService } from '@app/services/web-analytic';
-import { GtagService } from '@app/library/gtagjs/gtag.service';
 
 @Component({
   selector: 'app-order-summary-progress',
@@ -20,7 +17,6 @@ export class OrderSummaryProgressComponent implements OnInit {
   @Input() orderSummary: OrderSummary;
 
   orderNumber: string;
-  gaAccountType = '';
 
   get payment(): SummaryPayment {
     return this.orderSummary.payment;
@@ -31,18 +27,12 @@ export class OrderSummaryProgressComponent implements OnInit {
     private router: Router,
     private orderHistory: OrderHistoryService,
     private dialog: MatDialog,
-    private snackbar: MatSnackBar,
-    private appConfigService: ConfigService,
-    private analyticGtmService: AnalyticGtmService,
-    private gtag: GtagService
+    private snackbar: MatSnackBar
   ) {
   }
 
   ngOnInit(): void {
     this.orderNumber = this.route.snapshot.queryParams.order_id;
-    this.gaAccountType = this.appConfigService.config?.gaAccountType;
-
-    this.setTag();
   }
 
   //
@@ -103,13 +93,5 @@ export class OrderSummaryProgressComponent implements OnInit {
       horizontalPosition: 'right',
       panelClass: ['mt-alert--is-info', 'mt-alert--has-text-centered'],
     });
-  }
-
-  setTag() {
-    if (this.gaAccountType === 'gtm') {
-      this.analyticGtmService.pageView('Order Summary Progress', this.router.url);
-    } else {
-      this.gtag.pageView('Order Summary Progress', this.router.url);
-    }
   }
 }
