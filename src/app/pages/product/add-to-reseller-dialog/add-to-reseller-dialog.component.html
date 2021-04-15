@@ -1,0 +1,45 @@
+<div>
+  {{data | json}}
+</div>
+<div class="add-to-cart-success" *ngIf="data.status === 201; else elseCartDialog">
+  <h2 mat-dialog-title>Item sudah ditambahkan ke Katalog Reseller</h2>
+  <mat-dialog-content class="mat-typography">
+    <div class="dialog-content">
+      <div class="product">
+        <div class="left">
+          <img src="{{ isProductImgAvailable ? productImgSrc : '' }}"
+               alt="{{ data.products.name }}"/>
+        </div>
+        <div class="right">
+          <span class="title">{{ data.products.name }}</span>
+          <span class="vendor">{{ data.products.vendor?.href|entityToSlug }}</span>
+          <span class="price">{{ data.price|currency:'Rp ':'symbol':'1.0-0' }}</span>
+        </div>
+      </div>
+      <div class="detail">
+        <div class="left">
+          {{ data.warehouseName }}
+        </div>
+        <div class="right">
+          <span class="quantity">Qty {{ data.quantity }}</span>
+          <span class="total">{{ data.total|currency: 'Rp ' }}</span>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close class="btn-continue-shopping">Lanjut Belanja</button>
+    <button mat-button [mat-dialog-close]="true" class="btn-continue-cart" [routerLink]="['/drop-shipping']"
+            cdkFocusInitial>
+      Lanjut ke Katalog Reseller
+    </button>
+  </mat-dialog-actions>
+</div>
+<ng-template #elseCartDialog>
+  <h2 mat-dialog-title>There's a problem in adding to cart</h2>
+  <mat-dialog-content>
+    <p>{{ data.message }}</p>
+  </mat-dialog-content>
+</ng-template>
+
+

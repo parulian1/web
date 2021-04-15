@@ -1,11 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ProductDetail } from '@app/models/product-detail';
 import { ResellerCatalogService } from '@app/services';
-import { Router } from "@angular/router";
-import { getSlugFromHref } from "@app/shared/helpers";
-import { ResellerCatalogItem } from "@app/models";
-import { Store } from "@app/models/store";
-import { Logger } from "@app/core";
+import { Router } from '@angular/router';
+import { getSlugFromHref } from '@app/shared/helpers';
+import { ResellerCatalogItem } from '@app/models';
+import { Store } from '@app/models/store';
+import { Logger } from '@app/core';
+import { MatDialog } from '@angular/material/dialog';
+import { AddToResellerDialogComponent } from '@app/pages/product/add-to-reseller-dialog';
 
 const log = new Logger('ResellerCatalogButton');
 
@@ -38,11 +40,14 @@ export class ResellerCatalogButtonComponent implements OnInit {
 
   catalogItems: ResellerCatalogItem[] = [];
 
-  constructor(private resellerCatalogService: ResellerCatalogService, private router: Router) {
+  constructor(private resellerCatalogService: ResellerCatalogService,
+              private router: Router,
+              public dialog: MatDialog,) {
   }
 
   ngOnInit(): void {
     this.retrieveCatalog();
+    this.addToResellerCatalog();
   }
 
   /**
@@ -50,16 +55,21 @@ export class ResellerCatalogButtonComponent implements OnInit {
    */
   addToResellerCatalog() {
     if (!this.isProductInResellerCatalog && !!this.productDetail) {
-      let price = this.findPriceDefault(this.productDetail);
+      const price = this.findPriceDefault(this.productDetail);
       const payload = {
         product: this.productDetail.href,
         quantity: this.quantity,
         warehouse: this.warehouse.href,
-        price: price
+        price,
       };
       this.resellerCatalogService.addToCatalog(payload).subscribe(resp => {
           if (resp.status === 201) {
             this.setIsProductInResellerCatalog(true);
+            this.dialog.open(AddToResellerDialogComponent, {
+              data: payload,
+              width: '464px',
+              height: '363px'
+            });
           }
         },
         error => {
@@ -70,7 +80,7 @@ export class ResellerCatalogButtonComponent implements OnInit {
 
   findPriceDefault(productDetail: ProductDetail) {
     if (!!productDetail.priceLists) {
-      let foundPriceInfo = productDetail.priceLists.filter((priceInfo) => {
+      const foundPriceInfo = productDetail.priceLists.filter((priceInfo) => {
         return priceInfo.type === 'default';
       });
       let priceInfo = productDetail.priceLists[0].ranges[0];
