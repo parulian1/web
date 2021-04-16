@@ -1,13 +1,10 @@
-<div>
-  {{data | json}}
-</div>
 <div class="add-to-cart-success" *ngIf="data.status === 201; else elseCartDialog">
   <h2 mat-dialog-title>Item sudah ditambahkan ke Katalog Reseller</h2>
   <mat-dialog-content class="mat-typography">
     <div class="dialog-content">
       <div class="product">
         <div class="left">
-          <img src="{{ isProductImgAvailable ? productImgSrc : '' }}"
+          <img src="{{ !!data.products.media && data.products.media.length > 0 ? data.products.media[0].image : '' }}"
                alt="{{ data.products.name }}"/>
         </div>
         <div class="right">

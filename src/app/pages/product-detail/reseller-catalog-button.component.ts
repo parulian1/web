@@ -7,7 +7,7 @@ import { ResellerCatalogItem } from '@app/models';
 import { Store } from '@app/models/store';
 import { Logger } from '@app/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AddToResellerDialogComponent } from '@app/pages/product/add-to-reseller-dialog';
+import { AddToCatalogResellerDialogComponent } from '@app/pages/product/add-to-catalog-reseller-dialog';
 
 const log = new Logger('ResellerCatalogButton');
 
@@ -40,14 +40,14 @@ export class ResellerCatalogButtonComponent implements OnInit {
 
   catalogItems: ResellerCatalogItem[] = [];
 
-  constructor(private resellerCatalogService: ResellerCatalogService,
-              private router: Router,
-              public dialog: MatDialog,) {
-  }
+  constructor(
+    private resellerCatalogService: ResellerCatalogService,
+    public dialog: MatDialog,
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
     this.retrieveCatalog();
-    this.addToResellerCatalog();
   }
 
   /**
@@ -60,22 +60,35 @@ export class ResellerCatalogButtonComponent implements OnInit {
         product: this.productDetail.href,
         quantity: this.quantity,
         warehouse: this.warehouse.href,
-        price,
+        price
       };
       this.resellerCatalogService.addToCatalog(payload).subscribe(resp => {
           if (resp.status === 201) {
+            this.showResellerDialog({ price, status });
             this.setIsProductInResellerCatalog(true);
-            this.dialog.open(AddToResellerDialogComponent, {
-              data: payload,
-              width: '464px',
-              height: '363px'
-            });
           }
         },
         error => {
           log.debug(`Failed ${error.error.message}`);
         });
     }
+  }
+
+  showResellerDialog(otherData): void {
+    const payloadForDialog = {
+      ...otherData,
+      product: this.productDetail.href,
+      products: this.productDetail,
+      quantity: this.quantity,
+      warehouse: this.warehouse.href,
+      status: 201, // hacked
+    };
+
+    this.dialog.open(AddToCatalogResellerDialogComponent, {
+      data: payloadForDialog,
+      width: '464px',
+      height: '363px'
+    });
   }
 
   findPriceDefault(productDetail: ProductDetail) {
