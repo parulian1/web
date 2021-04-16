@@ -42,6 +42,14 @@
         </div>
       </div>
     </div>
+    <div *ngIf="page.totalResults <= 0" class="columns">
+      <div class="column is-12" style="text-align: center">
+        <figure class="has-text-centered">
+          <img class="not-order-img" src="/assets/order-empty.png" alt="not-order-data-img"/>
+          <h4 class="no-order-label">Tidak ada order tersimpan</h4>
+        </figure>
+      </div>
+    </div>
   </div>
 </div>
 

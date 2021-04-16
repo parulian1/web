@@ -186,6 +186,24 @@ a {
   text-decoration: none;
 }
 
+.not-order-img {
+  margin-top: 48px;
+  width: 300px;
+  height: auto;
+  max-width: 100%;
+  max-height: 80%;
+}
+
+.no-order-label {
+  font-family: $font-primary;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 22px;
+  font-feature-settings: 'liga' off;
+  color: $color-accent;
+}
+
 
 .reseller-container-mobile {
   width: 100%;
