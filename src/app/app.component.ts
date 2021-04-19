@@ -13,6 +13,7 @@ import {environment} from '@env/environment.prod';
 import {ConfigService, Logger} from '@app/core';
 import {Configuration} from '@app/models';
 import {GtagService} from '@app/library/gtagjs/gtag.service';
+import {GoogleTagManagerService} from 'angular-google-tag-manager';
 
 
 declare let fbq: Function;
@@ -42,7 +43,8 @@ export class AppComponent implements OnInit, OnDestroy {
               @Inject(DOCUMENT) private document: Document,
               private renderer2: Renderer2,
               private meta: Meta,
-              private gtag: GtagService) {
+              private gtag: GtagService,
+              private gtmService: GoogleTagManagerService,) {
   }
 
   ngOnInit() {
@@ -61,7 +63,9 @@ export class AppComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.startRefreshTokenCheck();
       this.startNavigationChangeListener();
-
+      if (this.config.gaAccountType === 'gtm') {
+       this.gtmService.addGtmToDom();
+      }
       this.appConfigService.loadChatService(
         this.renderer2, this.document, this.config,
       )

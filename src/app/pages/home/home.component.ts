@@ -12,6 +12,8 @@ import { Meta, Title } from '@angular/platform-browser';
 import { ConfigService } from '@app/core';
 import { HomeVideoService } from "@app/services";
 import { Subscription } from "rxjs";
+import {AnalyticGtmService} from '@app/services/web-analytic';
+import {GtagService} from '@app/library/gtagjs/gtag.service';
 
 @Component({
   selector: 'app-home',
@@ -71,7 +73,9 @@ export class HomeComponent implements OnInit {
               private appConfigService: ConfigService,
               private homeVideoService: HomeVideoService,
               public title: Title,
-              private meta: Meta) {
+              private meta: Meta,
+              private analyticGtmService: AnalyticGtmService,
+              private gtag: GtagService) {
   }
 
   ngOnInit() {
@@ -84,12 +88,19 @@ export class HomeComponent implements OnInit {
         this.banners = data.banners.filter(m => m.type === 'utama' && m.isActive === true && m.displayHomepage === true && this.fromDateFilter(now, m.validFrom) && this.toDateFilter(now, m.validTo))
         this.bannersPromo = data.banners.filter(m => m.type === 'promo' && m.displayHomepage === true);
       }
+      if (this.config.gaAccountType === 'gtm') {
+        this.analyticGtmService.pageView(this.title.getTitle(), '/');
+      } else {
+        this.gtag.pageView(this.title.getTitle(), '/');
+      }
     });
     this.fetchHighlight();
     this.fetchHomeVideo();
     this.checkTestimonials();
     this.setSeoTitle();
     this.setSeoMeta();
+
+
   }
 
   fetchHighlight() {

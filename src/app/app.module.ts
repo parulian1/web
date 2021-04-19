@@ -98,8 +98,12 @@ function loadSocial(authSocialService: AuthSocialService) {
       provide: GtagConfigToken,
       deps: [ConfigService, APP_INITIALIZER],
       useFactory: (configService: ConfigService) => {
-        return {
-          targetId: configService.config?.gaAccountId || 'GTMID',
+        if (configService.config?.gaAccountType === 'ga') {
+          return {
+            targetId: configService.config?.gaAccountId || 'GTMID',
+          }
+        } else {
+          return {};
         }
       }
     },
@@ -112,7 +116,11 @@ function loadSocial(authSocialService: AuthSocialService) {
       provide: 'googleTagManagerId',
       deps: [ConfigService, APP_INITIALIZER],
       useFactory: (configService: ConfigService) => {
-        return configService.config?.gaAccountId || 'GTMID';
+        if (configService.config?.gaAccountType === 'gtm') {
+          return configService.config?.gaAccountId || 'GTMID';
+        } else {
+          return 'GTMID';
+        }
       }
     },
     {
