@@ -1,5 +1,4 @@
-import {PriceLists, ProductDetailMedia} from "@app/models/product-detail";
-import {ProductPriceRange} from "@app/models/product-lists";
+import { PriceLists, PriceRanges, ProductDetailMedia } from '@app/models/product-detail';
 
 export class Cart {
   modified: string;
@@ -53,6 +52,7 @@ export interface LineItems {
   discount: Array<Discount>;
   product: CartProduct;
   warehouse: CartWarehouse;
+  matchedPriceRanges?: Array<MatchedPriceRanges>;
 }
 
 export interface LineTotals {
@@ -95,3 +95,7 @@ export interface CartWarehouse {
   href: string;
 }
 
+export interface MatchedPriceRanges extends PriceRanges {
+  calculatedQty?: number;
+  promoPrice?: number;
+}

@@ -521,7 +521,7 @@
           }
 
           .price-info-list {
-            width: auto;
+            width: 203px;
             padding: 8px;
             background: $white;
             display: none;
@@ -537,6 +537,9 @@
                 td {
                   font-size: 14px;
                   line-height: 19px;
+                }
+                td.price-info-qty {
+                    width: 40%;
                 }
               }
             }
@@ -931,6 +934,9 @@
                 td {
                   font-size: 14px;
                   line-height: 19px;
+                }
+                td.price-info-qty {
+                  width: 40%;
                 }
               }
             }

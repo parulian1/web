@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService, Logger } from '@app/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Cart, CartTotals, LineItems, ProductCart } from '@app/models/cart';
+import { Cart, CartTotals, LineItems, MatchedPriceRanges, ProductCart } from '@app/models/cart';
 import { CartService, LocalStorage, ProductsService } from '@app/services';
 import { DeleteCartDialogComponent } from '@app/pages/cart/delete-cart-dialog';
 import { PriceLists } from '@app/models/product-detail';
@@ -63,8 +63,8 @@ export class CartComponent implements OnInit {
       this.itemCount = 0;
       this.productCount = this.cart.cartItems.length;
       this.cartTotals = this.cart.cartTotals;
-      this.productModified = [];
-      this.cart.cartItems.forEach((cartItem) => {
+      this.cart.cartItems.map((cartItem) => {
+        cartItem.matchedPriceRanges = [];
         this.itemCount += cartItem.quantity;
         const existingProduct = this.productModified.find((_product) => {
           return _product.href === cartItem.product.href;
@@ -78,14 +78,15 @@ export class CartComponent implements OnInit {
             priceLists: [],
           });
         }
-
       });
       this.localStorage.setItem('cart-quantity', this.itemCount);
       this.cartCount = this.localStorage.getItem('cart-quantity');
+
       this.setDiscountPrice();
       this.setPriceInfo();
       this.setProductImage(this.cartItems, this.productModified);
     });
+
     this.title.setTitle(`Shopping Cart - ${ title }`);
   }
 
@@ -99,6 +100,7 @@ export class CartComponent implements OnInit {
 
   setDiscountPrice() {
     this.discountProduct = [];
+
     for (const items of this.cart.cartItems) {
       if (items.discount.length > 0) {
         // theres discount in it
@@ -114,44 +116,80 @@ export class CartComponent implements OnInit {
   setPriceInfo() {
     this.priceInfo = [];
     this.productModified.map((product) => {
-        this.productService.fetchProduct(this.pipe.transform(product.href)).subscribe((result) => {
-          product.priceLists = result.body.priceLists;
+      product.priceLists = [];
+      this.productService.fetchProduct(this.pipe.transform(product.href)).subscribe((result) => {
           const productHref = product.href;
-          const filteredPriceLists = product.priceLists.filter((priceList) => {
-            return priceList.ranges.length > 1;
-          }).map(_priceList => _priceList.ranges)[0];
-
-          if (filteredPriceLists) {
-            for (const price of filteredPriceLists) {
-              const minQty = price.minQuantity;
-              const maxQty = price.maxQuantity;
-              const priceBase = price.price;
-              let priceDiscount = 0;
-
-              if (price.activePromotionalPrices.length !== 0) {
-                priceDiscount = price.activePromotionalPrices[0]?.netPrice || 0;
+          const defaultPriceLists = result.body.priceLists.filter((priceList) => {
+            return priceList.ranges.length > 1 && priceList.type === 'default';
+          });
+          const filteredPriceLists = defaultPriceLists ? defaultPriceLists[0] : null;
+          if (!!filteredPriceLists) {
+            product.priceLists.push(filteredPriceLists);
+            const filteredPriceRanges = filteredPriceLists.ranges;
+            if (!!filteredPriceRanges) {
+              for (const price of filteredPriceRanges) {
+                const minQty = price.minQuantity;
+                const maxQty = price.maxQuantity;
+                const priceBase = price.price;
+                let priceDiscount = 0;
+                if (price.activePromotionalPrices.length !== 0) {
+                  priceDiscount = price.activePromotionalPrices[0]?.netPrice || 0;
+                }
+                const info = {
+                  minQty,
+                  maxQty,
+                  priceBase,
+                  priceDiscount,
+                  productHref
+                };
+                this.priceInfo.push(info);
               }
+            }
+            if (filteredPriceLists.isProgressive) {
+              this.cart.cartItems.filter((cartItem) => {
+                return cartItem.product.href === product.href;
+              }).map((_cartItem) => {
+                let prevMaxRangeQty = 0;
+                filteredPriceRanges.forEach((priceRange) => {
+                  let _price: MatchedPriceRanges = Object.assign({}, priceRange);
+                  const itemQtyEqGtMin = _cartItem.quantity >= priceRange.minQuantity;
+                  const itemQtyEqLtMax = _cartItem.quantity <= priceRange.maxQuantity;
+                  const itemQtyGtMax = _cartItem.quantity > priceRange.maxQuantity;
 
-              const info = {
-                minQty,
-                maxQty,
-                priceBase,
-                priceDiscount,
-                productHref
-              };
-              this.priceInfo.push(info);
+                  if (itemQtyEqGtMin && (itemQtyEqLtMax || itemQtyGtMax)) {
+                    if (!!priceRange.maxQuantity) {
+                      _price.calculatedQty = priceRange.maxQuantity - prevMaxRangeQty;
+                    } else {
+                      _price.calculatedQty = _cartItem.quantity - prevMaxRangeQty;
+                      _price.maxQuantity = _cartItem.quantity;
+                    }
+                    if (!!priceRange.maxQuantity && itemQtyEqLtMax) {
+                      _price.maxQuantity = _cartItem.quantity;
+                      _price.calculatedQty = _cartItem.quantity - prevMaxRangeQty;
+                    }
+                    if (_cartItem.quantity === _price.minQuantity || _price.minQuantity === _price.maxQuantity) {
+                      _price.maxQuantity = null;
+                    }
+                    _cartItem.matchedPriceRanges.push(_price);
+                    prevMaxRangeQty = priceRange.maxQuantity;
+                  }
+                });
+              });
             }
           }
-        });
+      });
     });
   }
 
   setProductImage(cartItems: LineItems[], productModified: Array<ProductCart>) {
     this.productsImage = [];
+
     for (const item of cartItems) {
       const href = item.product.href;
       const media = productModified.filter(t => t.href === href).map(m => m.media);
+
       this.productsImage.push({href, media});
+
       if (this.productsImage) {
         this.productsImage = this.productsImage.filter((value, index, array) => array.indexOf(value) === index);
       }
@@ -196,13 +234,6 @@ export class CartComponent implements OnInit {
       this.setDiscountPrice();
       this.setPriceInfo();
       this.setProductImage(this.cartItems, this.productModified);
-    });
-  }
-
-  isMultiplePriceRange(priceLists: Array<PriceLists>) {
-    const defaultPrice = priceLists.find((priceList) => {
-      return priceList.type.toLowerCase() === 'default';
-    });
-    return defaultPrice?.ranges?.length > 1;
+    })
   }
 }

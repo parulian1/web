@@ -147,11 +147,18 @@
                 <div class="price-info-list">
                   <table>
                     <tr>
-                      <td><b>Qty</b></td>
-                      <td><b>Harga</b></td>
+                      <td class="price-info-qty"><b>Qty</b></td>
+                      <td><b>Harga Bertingkat</b></td>
                     </tr>
                     <tr *ngFor="let price of priceInfo">
-                      <td>{{ price.minQty }}-{{ price.maxQty }}</td>
+                      <td class="price-info-qty">
+                        <ng-container *ngIf="price.minQty !== price.maxQty; else infoWithoutMax;">
+                          {{ price.minQty }}-{{ price.maxQty }}
+                        </ng-container>
+                        <ng-template #infoWithoutMax>
+                          {{ price.minQty }}
+                        </ng-template>
+                      </td>
                       <td *ngIf="price.priceDiscount">
                         {{ price.priceDiscount|currency:'Rp ': 'symbol' : '1.0-0' }}
                         <span style="text-decoration-line: line-through">

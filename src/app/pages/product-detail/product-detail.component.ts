@@ -49,6 +49,7 @@ export class ProductDetailComponent implements OnInit, DoCheck {
   priceSelected: number;
   priceBase: number;
   priceLists: Array<PriceRanges>;
+  isProgressive = false;
   currentWarehouse: StoreWithStock;
   productAttribute: ProductAttributes[];
   slideProductImg: Array<ProductDetailMedia> = [];
@@ -138,7 +139,6 @@ export class ProductDetailComponent implements OnInit, DoCheck {
         this.storeService.getAvailableStock(this.productDetail.href).subscribe(resp => {
           log.info(resp);
           this.listWarehouses = resp;
-
           const foundWarehouseFromPreferred = this.listWarehouses.filter(warehouse => {
             return warehouse.href === this.storeService.preferredStore.href;
           });
@@ -169,8 +169,10 @@ export class ProductDetailComponent implements OnInit, DoCheck {
 
         this.slideProductImg = data.product.media.filter(m => m.type === 'image');
         this.video = data.product.media.filter(m => m.type === 'you_tube');
-        if (data.product.priceLists.length !== 0) {
-          this.priceLists = data.product.priceLists[0].ranges;
+        if (data.product.priceLists.length > 0) {
+          const _priceList = data.product.priceLists[0];
+          this.isProgressive = _priceList.isProgressive;
+          this.priceLists = _priceList.ranges;
         }
 
         this.setPriceTag(data.product);
@@ -229,27 +231,32 @@ export class ProductDetailComponent implements OnInit, DoCheck {
 
   ngDoCheck(): void {
     if (this.priceLists) {
-      for (const price of this.priceLists) {
-        if (price.maxQuantity) {
-
-          if (this.defaultQty <= price.maxQuantity && this.defaultQty >= price.minQuantity) {
-
-            if (price.activePromotionalPrices.length) {
-              this.priceBase = price.price;
+      if (!this.isProgressive) {
+        for (const price of this.priceLists) {
+          if (price.maxQuantity) {
+            if (this.defaultQty <= price.maxQuantity && this.defaultQty >= price.minQuantity) {
+              if (price.activePromotionalPrices.length) {
+                this.priceBase = price.price;
+              }
+              this.priceSelected = price.activePromotionalPrices[0]?.netPrice || price.price;
+              break;
             }
-            this.priceSelected = price.activePromotionalPrices[0]?.netPrice || price.price;
-            break;
-          }
-        } else if (price.maxQuantity === null) {
-
-          if (this.defaultQty >= price.minQuantity) {
-            if (price.activePromotionalPrices.length) {
-              this.priceBase = price.price;
+          } else if (price.maxQuantity === null) {
+            if (this.defaultQty >= price.minQuantity) {
+              if (price.activePromotionalPrices.length) {
+                this.priceBase = price.price;
+              }
+              this.priceSelected = price.activePromotionalPrices[0]?.netPrice || price.price;
+              break;
             }
-            this.priceSelected = price.activePromotionalPrices[0]?.netPrice || price.price;
-            break;
           }
         }
+      } else {
+        const selectedPriceList = this.priceLists[0];
+        if (selectedPriceList.activePromotionalPrices.length) {
+          this.priceBase = selectedPriceList.price;
+        }
+        this.priceSelected = selectedPriceList.activePromotionalPrices[0]?.netPrice || selectedPriceList.price;
       }
     }
   }
@@ -354,7 +361,6 @@ export class ProductDetailComponent implements OnInit, DoCheck {
     this.priceInfo = priceLists.map(priceData => {
       const {minQuantity, maxQuantity, price} = priceData;
       const priceDiscount = priceData.activePromotionalPrices[0]?.netPrice || 0;
-
       return {
         priceBase: price,
         minQty: minQuantity,
