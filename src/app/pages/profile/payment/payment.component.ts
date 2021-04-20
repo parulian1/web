@@ -181,13 +181,12 @@ export class PaymentComponent implements OnInit, AfterViewInit {
 
   deleteCard() {
     this.service.delete(this.cardDetailInstance).subscribe(resp => {
-      log.debug(resp);
-      if (resp.ok) {
-        this.displayCardDetail = false;
-        this.refreshPayment();
-        this.toggleDeleteModal();
-      }
-      log.debug(resp);
+      this.displayCardDetail = false;
+      this.refreshPayment();
+      this.toggleDeleteModal();
+    }, error => {
+      log.warn('error happens', error);
+      alert('can\'t delete credit card, contact admin for detail.');
     })
   }
 
