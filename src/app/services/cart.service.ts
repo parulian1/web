@@ -11,9 +11,13 @@ export class CartService {
   constructor(private http: HttpClient) {
   }
 
-  fetchCart(): Observable<HttpResponse<Cart>> {
+  fetchCart(etag ?: string): Observable<HttpResponse<Cart>> {
+    let headers = new HttpHeaders();
+    if (!!etag) {
+      headers = headers.append('If-None-Match', etag);
+    }
     return this.http
-      .get<Cart>(`/order/cart/`, {observe: 'response'});
+      .get<Cart>(`/order/cart/`, {observe: 'response', headers});
   }
 
   addToCart(payload: { product: string, quantity: number, warehouse: string }): Observable<HttpResponse<any>> {
@@ -46,11 +50,4 @@ export class CartService {
     return this.http.delete(`/order/cart/delete-voucher/`, { observe: 'response'});
   }
 
-  compareEtagHeader(etag: string): Observable<HttpResponse<any>> {
-    const headers = new HttpHeaders().set('If-None-Match', etag);
-    return this.http.head('/order/cart/', {
-      headers: headers,
-      observe: 'response'
-    });
-  }
 }
