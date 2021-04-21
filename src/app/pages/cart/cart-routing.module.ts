@@ -11,7 +11,7 @@ const routes: Routes = [
     component: CartComponent,
     canActivate: [authentication.AuthenticationGuard],
     resolve: {
-      cart: CartResolverService
+      cartResponse: CartResolverService
     },
     runGuardsAndResolvers: 'always'
   }

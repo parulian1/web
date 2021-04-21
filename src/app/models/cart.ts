@@ -99,3 +99,8 @@ export interface MatchedPriceRanges extends PriceRanges {
   calculatedQty?: number;
   promoPrice?: number;
 }
+
+export interface CartResponse {
+  headers: any;
+  body: Cart;
+}

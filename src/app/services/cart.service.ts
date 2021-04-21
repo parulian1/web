@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpResponse} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {Cart} from "@app/models/cart";
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {Cart} from '@app/models/cart';
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +44,13 @@ export class CartService {
 
   clearVoucher(): Observable<HttpResponse<any>> {
     return this.http.delete(`/order/cart/delete-voucher/`, { observe: 'response'});
+  }
+
+  compareEtagHeader(etag: string): Observable<HttpResponse<any>> {
+    const headers = new HttpHeaders().set('If-None-Match', etag);
+    return this.http.head('/order/cart/', {
+      headers: headers,
+      observe: 'response'
+    });
   }
 }

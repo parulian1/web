@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService, Logger } from '@app/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Cart, CartTotals, LineItems, MatchedPriceRanges, ProductCart } from '@app/models/cart';
+import { Cart, CartResponse, CartTotals, LineItems, MatchedPriceRanges, ProductCart } from '@app/models/cart';
 import { CartService, LocalStorage, ProductsService } from '@app/services';
 import { DeleteCartDialogComponent } from '@app/pages/cart/delete-cart-dialog';
 import { PriceLists } from '@app/models/product-detail';
@@ -55,10 +55,10 @@ export class CartComponent implements OnInit {
     if (!!this.config?.name) {
       title = this.config.name.substr(0, 1).toUpperCase() + this.config.name.substr(1);
     }
-    this.route.data.subscribe((data: { cart: Cart }) => {
+    this.route.data.subscribe((data: { cartResponse: CartResponse }) => {
       this.localStorage.removeItem('cart-quantity');
-      this.cart = data.cart;
-      this.cartItems = data.cart.cartItems;
+      this.cart = data.cartResponse.body;
+      this.cartItems = this.cart.cartItems;
       this.warehouse = this.cart.weight;
       this.itemCount = 0;
       this.productCount = this.cart.cartItems.length;

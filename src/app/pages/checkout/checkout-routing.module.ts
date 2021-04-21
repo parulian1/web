@@ -19,7 +19,7 @@ const routes: Routes = [
       defaultAddress: DefaultAddressResolverService,
       shipping: ShippingMethodResolverService,
       payment: PaymentMethodResolverService,
-      cart: CartResolverService,
+      cartResponse: CartResolverService,
       provinces: ProvincesResolver,
     }
   }

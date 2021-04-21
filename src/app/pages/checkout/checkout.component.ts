@@ -1,7 +1,7 @@
 import { Component, DoCheck, EventEmitter, OnChanges, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Addresses } from '@app/models/addresses';
-import { Cart, CartTotals } from '@app/models/cart';
+import {Cart, CartResponse, CartTotals} from '@app/models/cart';
 import { Area } from '@app/models/area';
 import { ConfigService, Logger } from '@app/core';
 import { ShippingMethodService } from '@app/services/shipping-method.service';
@@ -9,7 +9,6 @@ import { DropshipOption, ShippingCost } from '@app/models/shipping-method';
 import { EntityToSlugPipe } from '@app/shared/utils/entity-to-slug.pipe';
 import { CartService, StateCheckout } from '@app/services';
 import { CheckoutService } from '@app/services/checkout.service';
-import { environment } from '@env/environment.staging';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertDialogComponent } from '@app/shared/alert-dialog';
 import { Checkout } from '@app/models/checkout';
@@ -20,6 +19,7 @@ import { Action, Product as GtagProduct } from '@app/library/gtagjs/gtag-definit
 import { GtagService } from '@app/library/gtagjs/gtag.service';
 import { AnalyticGtmService } from '@app/services/web-analytic';
 import { PaymentTypeChoices } from '@app/models/payment-method';
+import {HttpResponse} from "@angular/common/http";
 
 const log = new Logger('Checkout');
 
@@ -44,7 +44,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
   errorMessages: object = {};
   itemList: Array<GtagProduct>;
   gaAccountType = '';
-
+  cartEtag = '';
 
   @Output() checkoutEmitter: EventEmitter<any> = new EventEmitter<any>();
 
@@ -77,11 +77,12 @@ export class CheckoutComponent implements OnInit, DoCheck {
     this.title.setTitle(`Checkout - ${title}`);
     this.route.data
       .subscribe((data: {
-        cart: Cart,
+        cartResponse: CartResponse,
         addresses: Addresses[],
         provinces: Area[]
       }) => {
-        this.cart = data.cart;
+        this.cart = data.cartResponse.body;
+        this.cartEtag = data.cartResponse.headers.get('etag').replace('W/','');
         if (this.cart.cartItems.length !== 0) {
           this.itemList = [];
 
@@ -224,117 +225,125 @@ export class CheckoutComponent implements OnInit, DoCheck {
   }
 
   createOrder() {
-    if (this.canCheckout) {
-      log.debug(this.stateService.getStateShippingSelect);
-      this.formattedShipping = [];
-      for (const ship of this.stateService.getStateShippingSelect) {
-        const param = {
-          warehouse: ship.fullWarehouse,
-          method: ship.method.method,
-          service: ship.method.service,
-          cost: ship.method.cost,
-          separate_delivery: false
-        };
-        this.formattedShipping.push(param);
+    this.cartService.compareEtagHeader(this.cartEtag).subscribe((response) => {
+      if (response.status !== 304) {
+        console.log(`cart changed`);
+        this.router.navigateByUrl('/checkout');
+      } else {
+        console.log(`cart not changed`);
       }
-    }
-
-    const order = {
-      'totals': {
-        'subtotal': this.cartTotals.subTotal,
-        'shipping_cost': this.cartTotals.shippingTotal,
-        'discount': this.cartTotals.discountTotal,
-        'total': (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal
-      },
-      'shipping': this.formattedShipping,
-      'payment': {
-        'method': this.stateService.getStatePaymentMethod,
-        'savedTokenId': this.stateService.savedTokenId,
-      },
-      'address': {
-        'ship_to_name': this.stateService.getStateAddress.shipToName,
-        'country': environment.SHIPPING_COUNTRY_CODE,
-        'state': this.stateService.getStateAddress.state,
-        'city': this.stateService.getStateAddress.city,
-        'district': this.stateService.getStateAddress.district,
-        'street': this.stateService.getStateAddress.street,
-        'zipcode': this.stateService.getStateAddress.zipcode,
-        'phone_number': this.stateService.getStateAddress.phoneNumber,
-      }
-    } as Checkout;
-
-    const stateDropship = this.stateService.getStateDropshipOption;
-    if (stateDropship && stateDropship.active && this.getIsReseller()) {
-      order.dropship = stateDropship.meta;
-    }
-
-    log.debug(order);
-
-    if (this.cart.cartItems.length !== 0) {
-      this.service.createOrder(order).subscribe(res => {
-        if (res.status === 201) {
-          const orderNumber = {
-            order_number: this.pipe.transform(res.headers.get('location')),
-          };
-
-
-          const purchaseEvent = {
-            transaction_id: orderNumber.order_number,
-            value: (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal,
-            currency: 'IDR',
-            tax: 0,
-            shipping: this.cartTotals.shippingTotal,
-            items: this.itemList,
-            coupon: this.cart.cartDiscounts
-          }
-
-
-
-          if (this.gaAccountType === 'gtm') {
-            this.analyticGtmService.purchaseOrder(purchaseEvent);
-            this.analyticGtmService.chooseShippingInformation(this.stateService, this.formattedShipping);
-          } else {
-            this.gtag.purchase(purchaseEvent as Action);
-          }
-
-
-
-          if (!this.isCheckoutWithManualTransfer()) {
-            this.service.fetchPaymentRequest(orderNumber).subscribe(resp => {
-              if (resp.status === 200) {
-                window.location.href = resp.body.redirectUrl;
-              }
-            }, (error) => {
-              this.showAlertDialog({
-                message: 'Maaf, saat ini sedang ada gangguan dengan sistem pembayaran. ' +
-                  'Silakan lanjutkan pembayaran melalui Order Detail atau hubungi Customer Service kami.'
-              })
-              this.router.navigate(['/profile/orders', orderNumber.order_number]);
-            });
-          } else {
-            // just redirect to order summary
-            this.router.navigate(['/order-summary'], {
-              queryParams: {order_id: orderNumber.order_number}
-            });
-          }
-        }
-      }, (error) => {
-        this._handleError(error);
-      });
-    } else {
-      const params = {
-        message: 'Your cart is empty. Redirecting back to cart...',
-        icon: 'error_outline',
-      };
-      this.snackbar.openFromComponent(AlertDialogComponent, {
-        data: params,
-        duration: 7 * 1000, // 5 seconds
-        verticalPosition: 'top',
-        horizontalPosition: 'right',
-        panelClass: ['mt-alert--is-info', 'mt-alert--has-text-centered'],
-      });
-      this.router.navigateByUrl('/cart');
-    }
+    });
+    // if (this.canCheckout) {
+    //   log.debug(this.stateService.getStateShippingSelect);
+    //   this.formattedShipping = [];
+    //   for (const ship of this.stateService.getStateShippingSelect) {
+    //     const param = {
+    //       warehouse: ship.fullWarehouse,
+    //       method: ship.method.method,
+    //       service: ship.method.service,
+    //       cost: ship.method.cost,
+    //       separate_delivery: false
+    //     };
+    //     this.formattedShipping.push(param);
+    //   }
+    // }
+    //
+    // const order = {
+    //   'totals': {
+    //     'subtotal': this.cartTotals.subTotal,
+    //     'shipping_cost': this.cartTotals.shippingTotal,
+    //     'discount': this.cartTotals.discountTotal,
+    //     'total': (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal
+    //   },
+    //   'shipping': this.formattedShipping,
+    //   'payment': {
+    //     'method': this.stateService.getStatePaymentMethod,
+    //     'savedTokenId': this.stateService.savedTokenId,
+    //   },
+    //   'address': {
+    //     'ship_to_name': this.stateService.getStateAddress.shipToName,
+    //     'country': environment.SHIPPING_COUNTRY_CODE,
+    //     'state': this.stateService.getStateAddress.state,
+    //     'city': this.stateService.getStateAddress.city,
+    //     'district': this.stateService.getStateAddress.district,
+    //     'street': this.stateService.getStateAddress.street,
+    //     'zipcode': this.stateService.getStateAddress.zipcode,
+    //     'phone_number': this.stateService.getStateAddress.phoneNumber,
+    //   }
+    // } as Checkout;
+    //
+    // const stateDropship = this.stateService.getStateDropshipOption;
+    // if (stateDropship && stateDropship.active && this.getIsReseller()) {
+    //   order.dropship = stateDropship.meta;
+    // }
+    //
+    // log.debug(order);
+    //
+    // if (this.cart.cartItems.length !== 0) {
+    //   this.service.createOrder(order).subscribe(res => {
+    //     if (res.status === 201) {
+    //       const orderNumber = {
+    //         order_number: this.pipe.transform(res.headers.get('location')),
+    //       };
+    //
+    //
+    //       const purchaseEvent = {
+    //         transaction_id: orderNumber.order_number,
+    //         value: (this.cartTotals.subTotal + this.cartTotals.shippingTotal) - this.cartTotals.discountTotal,
+    //         currency: 'IDR',
+    //         tax: 0,
+    //         shipping: this.cartTotals.shippingTotal,
+    //         items: this.itemList,
+    //         coupon: this.cart.cartDiscounts
+    //       }
+    //
+    //
+    //
+    //       if (this.gaAccountType === 'gtm') {
+    //         this.analyticGtmService.purchaseOrder(purchaseEvent);
+    //         this.analyticGtmService.chooseShippingInformation(this.stateService, this.formattedShipping);
+    //       } else {
+    //         this.gtag.purchase(purchaseEvent as Action);
+    //       }
+    //
+    //
+    //
+    //       if (!this.isCheckoutWithManualTransfer()) {
+    //         this.service.fetchPaymentRequest(orderNumber).subscribe(resp => {
+    //           if (resp.status === 200) {
+    //             window.location.href = resp.body.redirectUrl;
+    //           }
+    //         }, (error) => {
+    //           this.showAlertDialog({
+    //             message: 'Maaf, saat ini sedang ada gangguan dengan sistem pembayaran. ' +
+    //               'Silakan lanjutkan pembayaran melalui Order Detail atau hubungi Customer Service kami.'
+    //           })
+    //           this.router.navigate(['/profile/orders', orderNumber.order_number]);
+    //         });
+    //       } else {
+    //         // just redirect to order summary
+    //         this.router.navigate(['/order-summary'], {
+    //           queryParams: {order_id: orderNumber.order_number}
+    //         });
+    //       }
+    //     }
+    //   }, (error) => {
+    //     this._handleError(error);
+    //   });
+    // } else {
+    //   const params = {
+    //     message: 'Your cart is empty. Redirecting back to cart...',
+    //     icon: 'error_outline',
+    //   };
+    //   this.snackbar.openFromComponent(AlertDialogComponent, {
+    //     data: params,
+    //     duration: 7 * 1000, // 5 seconds
+    //     verticalPosition: 'top',
+    //     horizontalPosition: 'right',
+    //     panelClass: ['mt-alert--is-info', 'mt-alert--has-text-centered'],
+    //   });
+    //   this.router.navigateByUrl('/cart');
+    // }
   }
 
   changeShippingMethodMode(value: 'edit' | 'default', force: boolean = false): void {
@@ -425,6 +434,10 @@ export class CheckoutComponent implements OnInit, DoCheck {
         this.stateService.err.push(this.pipe.transform(item.href));
       });
     }
+  }
+
+  private refreshCheckoutIfEtagNotMatch() {
+
   }
 
 }
