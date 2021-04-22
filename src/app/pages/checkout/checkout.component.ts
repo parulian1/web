@@ -20,6 +20,8 @@ import { GtagService } from '@app/library/gtagjs/gtag.service';
 import { AnalyticGtmService } from '@app/services/web-analytic';
 import { PaymentTypeChoices } from '@app/models/payment-method';
 import { environment } from '@env/environment.staging';
+import { MatDialog } from "@angular/material/dialog";
+import { ErrorCheckoutDialogComponent } from "@app/pages/checkout/error-checkout-dialog/error-checkout-dialog.component";
 
 const log = new Logger('Checkout');
 
@@ -58,6 +60,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
               private service: CheckoutService,
               private snackbar: MatSnackBar,
               private title: Title,
+              public dialog: MatDialog,
               private cartService: CartService,
               public credentialsService: CredentialsService,
               private appConfigService: ConfigService,
@@ -228,8 +231,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
   createOrder() {
     this.cartService.fetchCart(this.cartEtag).subscribe((response) => {
       if (response.status !== 304) {
-        this.showAlertDialog({message: 'Cart changed. Please check again'});
-        window.location.reload();
+        this.dialog.open(ErrorCheckoutDialogComponent)
       }
     });
     if (this.canCheckout) {
@@ -428,10 +430,6 @@ export class CheckoutComponent implements OnInit, DoCheck {
         this.stateService.err.push(this.pipe.transform(item.href));
       });
     }
-  }
-
-  private refreshCheckoutIfEtagNotMatch() {
-
   }
 
 }

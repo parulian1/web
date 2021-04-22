@@ -30,6 +30,7 @@ import {CartModule} from '@app/pages/cart/cart.module';
 import { CheckoutCreditCardChoiceComponent } from './containers';
 import {GtagModule} from '@app/library/gtagjs/gtag.module';
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import { ErrorCheckoutDialogComponent } from './error-checkout-dialog/error-checkout-dialog.component';
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
         SelectPriceComponent,
         CartSummaryComponent,
         CheckoutCreditCardChoiceComponent,
+        ErrorCheckoutDialogComponent,
     ],
     imports: [
         CommonModule,
