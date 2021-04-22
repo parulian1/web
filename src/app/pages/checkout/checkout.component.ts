@@ -228,6 +228,7 @@ export class CheckoutComponent implements OnInit, DoCheck {
   createOrder() {
     this.cartService.fetchCart(this.cartEtag).subscribe((response) => {
       if (response.status !== 304) {
+        this.showAlertDialog({message: 'Cart changed. Please check again'});
         window.location.reload();
       }
     });
