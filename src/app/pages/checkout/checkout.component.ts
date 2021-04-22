@@ -20,8 +20,8 @@ import { GtagService } from '@app/library/gtagjs/gtag.service';
 import { AnalyticGtmService } from '@app/services/web-analytic';
 import { PaymentTypeChoices } from '@app/models/payment-method';
 import { environment } from '@env/environment.staging';
-import { MatDialog } from "@angular/material/dialog";
-import { ErrorCheckoutDialogComponent } from "@app/pages/checkout/error-checkout-dialog/error-checkout-dialog.component";
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorCheckoutDialogComponent } from '@app/pages/checkout/error-checkout-dialog/error-checkout-dialog.component';
 
 const log = new Logger('Checkout');
 
