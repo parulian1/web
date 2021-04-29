@@ -186,10 +186,12 @@ export class ProductDetailComponent implements OnInit, DoCheck {
         } else {
           this.gtag.pageView(this.title.getTitle(), this.router.url);
         }
+
+        this.slideProductImg2 = this.slideProductImg;
+        this.setSeo();
       }
     );
-    this.slideProductImg2 = this.slideProductImg;
-    this.setSeo();
+
   }
 
   get displayedPromo(): PromotionalPrice | number {
