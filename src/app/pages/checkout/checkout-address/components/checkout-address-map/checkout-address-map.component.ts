@@ -84,7 +84,7 @@ export class CheckoutAddressMapComponent implements OnInit {
       const newGoogleMapScript = document.createElement('script');
       newGoogleMapScript.setAttribute('id', 'google-map-script');
       newGoogleMapScript.setAttribute('src',
-        'https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyC-ct8PW5TS3qNEG1lY0Q09PEr7RDwoLIM');
+        'https://maps.googleapis.com/maps/api/js?libraries=places&key=');
       document.head.appendChild(newGoogleMapScript);
     }
   }

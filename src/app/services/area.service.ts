@@ -47,7 +47,7 @@ export class AreaService {
 
     let params = new HttpParams();
     params = params.set('latlng', loc);
-    params = params.set('key', 'AIzaSyC-ct8PW5TS3qNEG1lY0Q09PEr7RDwoLIM');
+    params = params.set('key', '');
     return this.http
       .get<any>(`https://maps.googleapis.com/maps/api/geocode/json`, {params})
       .pipe(
@@ -67,7 +67,7 @@ export class AreaService {
 
   getLngLat(address: string): Observable<any> {
     return this.http.get<any>(`https://maps.googleapis.com/maps/api/geocode/json?address=
-        ${address}&sensor=true&key=AIzaSyC-ct8PW5TS3qNEG1lY0Q09PEr7RDwoLIM`).pipe(
+        ${address}&sensor=true&key=`).pipe(
       map((res: any) => res)
     );
   }
